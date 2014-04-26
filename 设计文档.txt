@@ -1,0 +1,878 @@
+先用yiic生成基本骨架。
+按照之前的设计思路，建立数据库
+union
+//管理员登陆信息
+tbl_admin
+  account varchar primary key
+  password varchar
+//新闻栏目一
+tbl_news1
+  id int  primary key auto
+  title varchar
+  content text
+  authod varchar
+  time varchar
+//新闻栏目二
+tbl_news2
+//新闻栏目三
+tbl_news3
+//个人中心
+tbl_person
+  account varchar primary key
+  name varchar
+  sex varchar
+  grade varchar
+  major varchar
+  phone varchar
+  short varchar
+  qq varchar
+  dorm varchar
+  birthyear varchar
+  birthmonth varchar
+  birthday varchar
+  password varchar
+  code varchar
+  mail varchar
+  apartment varchar
+  type varchar
+  position varchar
+  is_active default n
+  is_ganshi default n
+  is_buzhang default n
+  is_zhuxi default n
+  is_xiaoyou default n
+//评分管理
+tbl_eva
+  account varchar
+  month_id int primary key
+  month int
+  self_g int
+  mate_g int
+  up_g int
+  self_e text
+  mate_e text
+  up_e text
+//问卷
+tbl_quest
+  id int primary key
+  title varchar
+  choice_A varchar
+  choice_B varchar
+  choice_C varchar
+  choice_D varchar
+  A_g int
+  B_g int
+  C_g int
+  D_g int
+//个人课表
+tbl_timetable
+课表的设计已经有所不同了，有个pk account，其他都是A1、A2...A7的形式
+周一到周日分别是ABCDEFG
+有四种状态：有课，没课，单周有课，双周有课
+暂时先这样子将这四个直接写进库里
+use union;
+create table tbl_timetable(
+`account` VARCHAR( 20 ) NOT NULL ,
+`A1` VARCHAR( 20 )  NULL DEFAULT 'n',
+`A2` VARCHAR( 20 )  NULL DEFAULT 'n',
+`A3` VARCHAR( 20 )  NULL DEFAULT 'n',
+`A4` VARCHAR( 20 )  NULL DEFAULT 'n',
+`A5` VARCHAR( 20 )  NULL DEFAULT 'n',
+`A6` VARCHAR( 20 )  NULL DEFAULT 'n',
+`A7` VARCHAR( 20 )  NULL DEFAULT 'n',
+`A8` VARCHAR( 20 )  NULL DEFAULT 'n',
+`A9` VARCHAR( 20 )  NULL DEFAULT 'n',
+`A10` VARCHAR( 20 )  NULL DEFAULT 'n',
+`A11` VARCHAR( 20 )  NULL DEFAULT 'n',
+`A12` VARCHAR( 20 )  NULL DEFAULT 'n',
+`A13` VARCHAR( 20 )  NULL DEFAULT 'n',
+`A14` VARCHAR( 20 )  NULL DEFAULT 'n',
+`B1` VARCHAR( 20 )  NULL DEFAULT 'n',
+`B2` VARCHAR( 20 )  NULL DEFAULT 'n',
+`B3` VARCHAR( 20 )  NULL DEFAULT 'n',
+`B4` VARCHAR( 20 )  NULL DEFAULT 'n',
+`B5` VARCHAR( 20 )  NULL DEFAULT 'n',
+`B6` VARCHAR( 20 )  NULL DEFAULT 'n',
+`B7` VARCHAR( 20 )  NULL DEFAULT 'n',
+`B8` VARCHAR( 20 )  NULL DEFAULT 'n',
+`B9` VARCHAR( 20 )  NULL DEFAULT 'n',
+`B10` VARCHAR( 20 )  NULL DEFAULT 'n',
+`B11` VARCHAR( 20 )  NULL DEFAULT 'n',
+`B12` VARCHAR( 20 )  NULL DEFAULT 'n',
+`B13` VARCHAR( 20 )  NULL DEFAULT 'n',
+`B14` VARCHAR( 20 )  NULL DEFAULT 'n',
+`C1` VARCHAR( 20 )  NULL DEFAULT 'n',
+`C2` VARCHAR( 20 )  NULL DEFAULT 'n',
+`C3` VARCHAR( 20 )  NULL DEFAULT 'n',
+`C4` VARCHAR( 20 )  NULL DEFAULT 'n',
+`C5` VARCHAR( 20 )  NULL DEFAULT 'n',
+`C6` VARCHAR( 20 )  NULL DEFAULT 'n',
+`C7` VARCHAR( 20 )  NULL DEFAULT 'n',
+`C8` VARCHAR( 20 )  NULL DEFAULT 'n',
+`C9` VARCHAR( 20 )  NULL DEFAULT 'n',
+`C10` VARCHAR( 20 )  NULL DEFAULT 'n',
+`C11` VARCHAR( 20 )  NULL DEFAULT 'n',
+`C12` VARCHAR( 20 )  NULL DEFAULT 'n',
+`C13` VARCHAR( 20 )  NULL DEFAULT 'n',
+`C14` VARCHAR( 20 )  NULL DEFAULT 'n',
+`D1` VARCHAR( 20 )  NULL DEFAULT 'n',
+`D2` VARCHAR( 20 )  NULL DEFAULT 'n',
+`D3` VARCHAR( 20 )  NULL DEFAULT 'n',
+`D4` VARCHAR( 20 )  NULL DEFAULT 'n',
+`D5` VARCHAR( 20 )  NULL DEFAULT 'n',
+`D6` VARCHAR( 20 )  NULL DEFAULT 'n',
+`D7` VARCHAR( 20 )  NULL DEFAULT 'n',
+`D8` VARCHAR( 20 )  NULL DEFAULT 'n',
+`D9` VARCHAR( 20 )  NULL DEFAULT 'n',
+`D10` VARCHAR( 20 )  NULL DEFAULT 'n',
+`D11` VARCHAR( 20 )  NULL DEFAULT 'n',
+`D12` VARCHAR( 20 )  NULL DEFAULT 'n',
+`D13` VARCHAR( 20 )  NULL DEFAULT 'n',
+`D14` VARCHAR( 20 )  NULL DEFAULT 'n',
+`E1` VARCHAR( 20 )  NULL DEFAULT 'n',
+`E2` VARCHAR( 20 )  NULL DEFAULT 'n',
+`E3` VARCHAR( 20 )  NULL DEFAULT 'n',
+`E4` VARCHAR( 20 )  NULL DEFAULT 'n',
+`E5` VARCHAR( 20 )  NULL DEFAULT 'n',
+`E6` VARCHAR( 20 )  NULL DEFAULT 'n',
+`E7` VARCHAR( 20 )  NULL DEFAULT 'n',
+`E8` VARCHAR( 20 )  NULL DEFAULT 'n',
+`E9` VARCHAR( 20 )  NULL DEFAULT 'n',
+`E10` VARCHAR( 20 )  NULL DEFAULT 'n',
+`E11` VARCHAR( 20 )  NULL DEFAULT 'n',
+`E12` VARCHAR( 20 )  NULL DEFAULT 'n',
+`E13` VARCHAR( 20 )  NULL DEFAULT 'n',
+`E14` VARCHAR( 20 )  NULL DEFAULT 'n',
+`F1` VARCHAR( 20 )  NULL DEFAULT 'n',
+`F2` VARCHAR( 20 )  NULL DEFAULT 'n',
+`F3` VARCHAR( 20 )  NULL DEFAULT 'n',
+`F4` VARCHAR( 20 )  NULL DEFAULT 'n',
+`F5` VARCHAR( 20 )  NULL DEFAULT 'n',
+`F6` VARCHAR( 20 )  NULL DEFAULT 'n',
+`F7` VARCHAR( 20 )  NULL DEFAULT 'n',
+`F8` VARCHAR( 20 )  NULL DEFAULT 'n',
+`F9` VARCHAR( 20 )  NULL DEFAULT 'n',
+`F10` VARCHAR( 20 )  NULL DEFAULT 'n',
+`F11` VARCHAR( 20 )  NULL DEFAULT 'n',
+`F12` VARCHAR( 20 )  NULL DEFAULT 'n',
+`F13` VARCHAR( 20 )  NULL DEFAULT 'n',
+`F14` VARCHAR( 20 )  NULL DEFAULT 'n',
+`G1` VARCHAR( 20 )  NULL DEFAULT 'n',
+`G2` VARCHAR( 20 )  NULL DEFAULT 'n',
+`G3` VARCHAR( 20 )  NULL DEFAULT 'n',
+`G4` VARCHAR( 20 )  NULL DEFAULT 'n',
+`G5` VARCHAR( 20 )  NULL DEFAULT 'n',
+`G6` VARCHAR( 20 )  NULL DEFAULT 'n',
+`G7` VARCHAR( 20 )  NULL DEFAULT 'n',
+`G8` VARCHAR( 20 )  NULL DEFAULT 'n',
+`G9` VARCHAR( 20 )  NULL DEFAULT 'n',
+`G10` VARCHAR( 20 )  NULL DEFAULT 'n',
+`G11` VARCHAR( 20 )  NULL DEFAULT 'n',
+`G12` VARCHAR( 20 )  NULL DEFAULT 'n',
+`G13` VARCHAR( 20 )  NULL DEFAULT 'n',
+`G14` VARCHAR( 20 )  NULL DEFAULT 'n',
+PRIMARY KEY ( `account` )
+);
+
+//人力管理表（专用于外调）
+tbl_resource
+{
+account//对应的
+id //生成时间 自增
+code//序列号
+assess//评估
+}
+
+
+
+
+
+
+
+
+
+
+
+登陆phpmyadmin，进行编写
+
+进行后台开发，先用gii生成home模块
+在main.php添加'home'
+
+生成控制器
+admin
+news123
+person
+
+处理admin控制器
+ 有三个动作，index,login,check
+ 生成admin 对应的model
+先开启数据库支持
+
+控制器admin基本搞定，只欠index上编写连接
+
+接下来编写news1控制器
+有动作：
+添加add
+删除del
+编辑edit
+展示show
+
+不会用auto让我走不少弯路
+
+
+
+用户登录和新闻编辑模块基本完成了，先在需要着手解决的是绩效考核系统
+用户中心：
+用gii新建一个模块user，
+
+
+取消邮箱验证，改成is_active
+是时候解决权限问题了。
+
+整个人力管理系统的设计不单单是数据的存储这么简单
+除了主要的功能，还需要注意细节方面的东西
+第一，可以通过条件查找符合要求的人员。
+    从星期几，第几节课，性别这三个方面来限制
+第二，可以查看整个部门的空课情况
+第三，签到签离记录
+第四，空课表验证码
+查找出该时间段没课的干事之后，就得准备外调了，可能外调部分人，
+也可能全部都外调，也有可能后缺席来补上或者，所以针对该次外调，应该可以对人员进行
+增删，并且可以进行评价
+我的担忧是，可能确定外调之后想修改了，这种情况怎么办？决定了，提供一个可编辑的功能，暂时不考虑安全性问题
+照旧，在签到签离那里增加一个历史记录，然后要是想修改的话就得输入外调序列号
+修改包括删除外调，重新外调，删除人员
+而且还可以进行评价
+
+一下着重设计绩效考核系统
+测试需要：
+//干事自评表大项目,a表示干事
+tbl_atitle
+{
+title 大项目 private key
+text1
+text2
+text3 小项目
+}
+//干事自评表小项目及分数,a表示干事
+tbl_atext
+{
+title 前面的小项目private key
+text1
+text2
+text3
+text4  具体选项内容
+grade1
+grade2
+grade3
+grade4  具体选项得分
+}
+进行增删查改时，记得要同步操作
+
+由于考核表有六张基本相同，而采用上面的方式实现是太多了，但思路不错，所以进行整合：
+//大项目表
+tbl_titlemax
+{
+id //表的种类
+title1//大项目的标题，这种考核表最多只能开设5个大项目
+title2//每个大项目又是中项目的重要索引
+title3//可以为空
+title4
+title5
+}
+//中项目表
+tbl_titlemid
+{
+id//表的种类
+title//大项目
+title1//中项目，情况跟大项目差不多，最多5个
+title2
+title3
+title4
+title5
+}
+//小项目表
+tbl_titlemin
+{
+id//表的种类
+title//中项目
+title1//选项ABCD，规定只能有四个选项
+title2
+title3
+title4
+}
+还有一种考核表是没有大项目的，而且中项目多达7个，如果强制跟上面的表并起来会很吃力，所以单独开
+tbl_othermid
+{
+id//表的种类
+title1//规定最多只能有9个中项目，
+title2//鉴于每个中项目对应的小项目也是ABCD固定的，所以可以沿用上面的tbl_titlemin
+title3
+title4
+title5
+title6
+title7
+title8
+title9
+}
+
+为了方便，规定id为下列值时分别对应的表
+1：干事自评表（干事填）
+2：干事考核表（部长填）
+3：部长自评表（部长填）
+4：部长考核表（主席填）
+5：部门考核表（主席填）
+6：主席部门考核表
+其中第五张和第六张结构跟前四张不一样，需另外设计
+
+查了一下，默认访问的都是index.php，那么就可以将自定义的函数，类等
+放在protected/function中，然后在控制器中引入
+require_once('protected/function.php');
+
+protected/function/Classtitlemax.php暂时不想写魔法函数的限制和验证，先把大体功能完成再说
+
+其实可以考虑将add.php里面的全部信息整合到一个记录里面去
+SET character_set_client=gbk_chinese_ci;
+SET character_set_connection=gbk_chinese_ci;
+SET character_set_database=gbk_chinese_ci;
+SET character_set_results=gbk_chinese_ci;
+SET character_set_server=gbk_chinese_ci;
+SET collation_connection=gbk_chinese_ci;
+SET collation_server=gbk_chinese_ci;
+create table tbl_evaone
+{
+pkid primary int not NULL,//作为一个主键，没什么用
+id int not NULL,//表的种类
+titleid int not NULL,//大项目的编号，最多是5
+titlemax varchar(20),//大项目
+titlemid1 varchar(20),//中项目1
+titlemid2 varchar(20),
+titlemid3 varchar(20),
+titlemid4 varchar(20),
+titlemid5 varchar(20),
+titlemin1A varchar(100),
+titlemin1B varchar(100),
+titlemin1C varchar(100),
+titlemin1D varchar(100),
+titlemin2A varchar(100),
+titlemin2B varchar(100),
+titlemin2C varchar(100),
+titlemin2D varchar(100),
+titlemin3A varchar(100),
+titlemin3B varchar(100),
+titlemin3C varchar(100),
+titlemin3D varchar(100),
+titlemin4A varchar(100),
+titlemin4B varchar(100),
+titlemin4C varchar(100),
+titlemin4D varchar(100),
+titlemin5A varchar(100),
+titlemin5B varchar(100),
+titlemin5C varchar(100),
+titlemin5D varchar(100),
+titlemin1AG int,
+titlemin1BG int,
+titlemin1CG int,
+titlemin1DG int,
+titlemin2AG int,
+titlemin2BG int,
+titlemin2CG int,
+titlemin2DG int,
+titlemin3AG int,
+titlemin3BG int,
+titlemin3CG int,
+titlemin3DG int,
+titlemin4AG int,
+titlemin4BG int,
+titlemin4CG int,
+titlemin4DG int,
+titlemin5AG int,
+titlemin5BG int,
+titlemin5CG int,
+titlemin5DG int
+};
+
+按照当前的情况，绩效考核分三步走：
+第一，考核表格的生成。因为考核表格数量巨多，而且后期又会有所变动，需要进行数据库存储。
+第二，表格设计完成之后，接下来是设计数据库表，以实现干事，人力，部长，主席填写考核表
+     这里有两方面的内容，其一是调用各个数据库表，生成完整的考核页面。其二是设计数据库表，
+     存储考核结果，方便查询以及反馈。
+第三，根据第二设计的数据库表，抽取并运算其数据，生成排名，统计等反馈结果。
+
+时间方面的限制额外用一张表来承接。
+眼下重中之重是设计能容纳考核结果的表，而且要能容纳四种类型的考核，不同月份的考核
+
+由于strcmp()函数对中文的支持不是很好，所以person 中的type
+比较确定下面规则：
+a 干事
+b 人力干事
+c 部长级
+d 主席团
+
+由于strcmp()函数对中文的支持不是很理想，所以对部门的处理只能改成数字来代替，到时往
+前台发送数据的时候，再简单转化一下即可
+秘书处：1
+人力资源部：2
+宣传部：3
+信息编辑部：4
+学术部：5
+体育部：6
+KSC联盟：7
+组织部：8
+文娱部：9
+公关部：10
+心理服务部：11
+主席团：12
+
+
+没办法，视图确实得多点
+3张show表，showa,showb,showc
+5张edit表,edit1,eidt2,edit3,edit4,edit5处理不同的
+
+为了方便处理主席团主管部门的信息，新增一张表格
+tbl_president
+{
+account pk//学号，
+apartment1//部门1
+apartment2//部门2
+is_sub//是不是小boss,y表示主管两个部门，n表示主管所有部门
+}
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="language" content="en" />
+</head>
+<div>
+<a href="./index.php?r=user/message/index">个人中心</a>
+<a href="./index.php?r=home/admin/index">后台管理</a>
+<a href="./index.php?r=user/resource/index">人力资源管理系统</a>
+<a href="./index.php?r=user/evaluate/show">绩效考核系统</a>
+</div>
+</br>
+<?php echo $content;?>
+
+
+
+
+<!--
+<?php
+//var_dump($person_info);
+var_dump($person_info->name);
+foreach($person_info as $v)
+{
+    //echo $v->name;
+}
+?>
+<table>
+    <tr><td>账户信息</td></tr>
+    <tr><td>账号：</td><td><?php echo $v->account;?></td></tr>
+    <tr><td>姓名：</td><td><?php echo $v->name;?></td></tr>
+    <tr><td>用户类型：</td><td><?php echo $v->type;?></td></tr>
+    <tr><td>所属部门：</td><td><?php echo $v->apartment;?></td></tr>
+    <tr><td>职位：</td><td><?php echo $v->position;?></td></tr>
+</table>
+<table>
+    <tr><td>个人信息</td></tr>
+    <tr><td>性别：</td><td><?php echo $v->sex; ?></td></tr>
+    <tr><td>年级：</td><td><?php echo $v->grade; ?></td></tr>
+    <tr><td>专业：</td><td><?php echo $v->major; ?></td></tr>
+    <tr><td>生日：</td><td><?php echo $v->birthyear.$v->birthmonth.$v->birthday; ?></td></tr>
+</table>
+<table>
+    <tr><td>联系方式</td></tr>
+    <tr><td>长号：</td><td><?php echo $v->phone;?></td></tr>
+    <tr><td>短号：</td><td><?php echo $v->short;?></td></tr>
+    <tr><td>qq：</td><td><?php echo $v->qq;?></td></tr>
+    <tr><td>宿舍号：</td><td><?php echo $v->dorm;?></td></tr>
+    <tr><td>邮箱：</td><td><?php echo $v->mail;?></td></tr>
+</table>
+<a href="<?php echo './index.php?r=user/message/change'?>">修改个人信息</a>
+<a href="<?php echo './index.php?r=user/message/password'?>">修改密码</a>
+
+
+
+
+
+
+-->
+
+
+下面是绩效考核的设计说明
+为了方便，规定id为下列值时分别对应的表
+1：干事自评表（干事填）
+2：干事考核表（部长填）
+3：部长自评表（部长填）
+4：部长考核表（主席填）
+5：部门考核表（主席填）
+6：干事考核表
+7：跟进部门出勤统计表
+8：调研意见采纳表
+9：整体考核结果反馈表
+10：部长反馈表
+11：优秀部长评定表
+12：主席团反馈表
+
+干事自评表
+//将推优、部长评价外的所有东西集中起来
+tbl_gszp
+{
+ id //pk ai
+ account//账号
+ apartment//干事所属部门
+ year//考核的年份
+ month//考核的月份
+ zptext//自我评价//限定最多1000
+ total//考核的总分
+ DF1//总共有12个自评分
+ DF2
+ DF3
+ DF4
+ DF5 
+ DF6
+ DF7
+ DF8
+ DF9
+ DF10
+ DF11
+ DF12
+
+}
+//互动表，包括干事评价部长级，部长级评价干事，干事推优干事
+//部长评价同部门部长，部长评价主席，主席评价部长
+tbl_interact
+{
+ id//pk
+ year
+ month
+ waccount//写评价的账号
+ wapartment//写评价的部门
+ wposition//写评价的职位
+ raccount//被评价的账号
+ rapartment//被评价的人的部门
+ rposition//被评价的人的职位
+ text//评价的内容
+}
+//部长自评表，由部长级填写
+tbl_bzzp
+{
+ id//pk
+ waccount//填写考核表的部长账号
+ wapartment//所属部门
+ //raccount//被评价的账号
+ year//考核年份
+ month//考核月份
+ zptext//自我评价
+ total//总分
+ DF1//总共17个得分
+ DF2
+ DF3
+ DF4
+ DF5 
+ DF6
+ DF7
+ DF8
+ DF9
+ DF10
+ DF11
+ DF12
+ DF13
+ DF14
+ DF15 
+ DF16
+ DF17
+}
+
+//干事考核表，由部长级填写
+tbl_gskh
+{
+ id//pk
+ year
+ month
+ waccount//写评价的账号
+ wapartment//写评价的部长的部门
+ raccount//被评价的账号
+ total//总分
+ DF1//总共有13个得分
+ DF2
+ DF3
+ DF4
+ DF5 
+ DF6
+ DF7
+ DF8
+ DF9
+ DF10
+ DF11
+ DF12
+ DF13
+}
+//部长考核表，有主席团填写
+tbl_bzkh
+{
+ id//pk
+ waccount//填写考核表的主席账号
+ wapartment//主席团的部门
+ raccount//被评价的账号
+ rapartment//被评价的部长所属的部门
+ year//考核年份
+ month//考核月份
+ total//总分
+ DF1//共有15个得分
+ DF2
+ DF3
+ DF4
+ DF5 
+ DF6
+ DF7
+ DF8
+ DF9
+ DF10
+ DF11
+ DF12
+ DF13
+ DF14
+ DF15
+}
+
+//部门考核表，有主席填写
+tbl_bmkh
+{
+ id//pk
+ waccount//填写考核表的主席账号
+ wapartment//主席团部门
+ rapartment//被评价的部门
+ year//考核年份
+ month//考核月份
+ total//总分 
+ DF1//共有7个得分
+ DF2
+ DF3
+ DF4
+ DF5 
+ DF6
+ DF7 
+}
+
+//主席部门互动表
+tbl_oneway
+{
+ id//pk
+ year
+ month
+ waccount//填写考核表的主席账号
+ wapartment//填写考核表的主席部门
+ rapartment//被评价的部门
+ text//评价的内容
+}
+
+汇总一下
+//干事自评表
+//将推优、部长评价外的所有东西集中起来
+tbl_gszp
+//互动表，包括干事评价部长级，部长级评价干事，干事推优干事
+//部长评价同部门部长，部长评价主席，主席评价部长
+tbl_interact
+//部长自评表，由部长级填写
+tbl_bzzp
+//干事考核表，由部长级填写
+tbl_gskh
+//部长考核表，有主席团填写
+tbl_bzkh
+//部门考核表，有主席填写
+tbl_bmkh
+//主席部门互动表
+tbl_oneway
+
+接下来是模拟写入信息，然后整理出考核结果，也就是反馈表
+干事反馈表
+部长反馈表
+
+
+接下来是违规制度
+违规制度是针对部门而言的，有六种违规处罚
+分别是
+1、秘书处制度
+2、人力资源部制度
+3、宣传部制度
+4、信息编辑部制度
+5、公关部制度
+6、司仪礼仪队制度
+tbl_fine
+{
+ id//pk
+ year//年份
+ month//月份
+ type//所属扣分类型，参照上面六种
+ apartment//部门
+ KF//扣分
+ text//理由
+}
+
+
+最后补充人力外调
+被外调的人员会直接跟绩效考核挂钩
+tbl_resource
+{
+ id//pk
+ account//被外调的账号
+ year//
+ month//
+ code//外调的序列号
+ assess//外调的评价
+}
+
+最后一张是绩效权限表
+tbl_authority
+{
+ id //pk
+ year//
+ month
+ active//默认为n,只有等于y时才能算是激活
+ account//激活人的账号
+}
+
+专业：
+信息安全
+软件工程
+物联网工程
+包装工程
+电气工程及其自动化
+电子信息科学与技术
+
+1 干事
+2 人力干事
+3 部长级
+4 主席团
+
+由于strcmp()函数对中文的支持不是很理想，所以对部门的处理只能改成数字来代替，到时往
+前台发送数据的时候，再简单转化一下即可
+秘书处：1
+人力资源部：2
+宣传部：3
+信息编辑部：4
+学术部：5
+体育部：6
+KSC联盟：7
+组织部：8
+文娱部：9
+公关部：10
+心理服务部：11
+主席团：12
+好了，就这样默认上面这些表格，来跑一次，尝试整理出反馈表
+初始化：
+人员录入：
+干事，部长，主席
+指定主席团主管部门
+
+人力资源部（2）干事（b）
+2012052400 科比
+2012052401 奥多姆
+2012052402 加索尔
+2012052403 费舍尔
+2012052404 禅师 c
+2012052405 巴恩斯 c
+加上原来就有的秘书处（1）干事（a）：
+2012052300	黄秋燕	
+2012052301	熊梦雅
+
+2012052302	刘小洁
+
+2012052303	吴俊塔
+2012052304	吴英文
+
+2012052305	甘地(c)
+2012052306	吴李静(c)
+
+2012052307	邓蔓菁(c)
+
+2012052308	朱林杰
+
+2012052309	田淼蕾
+2012052310	田聪聪
+以及两个主席
+2012052311	罗祥华(12)（d）负责秘书处
+2012052312	林嘉雯(12)(d) 主席
+
+接着是进行外调任务，
+假设进行了三次外调
+序列1：
+2012052300	黄秋燕	4
+2012052301	熊梦雅  3
+
+2012052302	刘小洁  4
+2012052303	吴俊塔  2
+2012052304	吴英文  4
+序列2：
+2012052308	冯卡农  4
+
+2012052309	田淼蕾  3
+2012052310	田聪聪  3
+序列3：
+2012052400 科比  4
+2012052401 奥多姆 3
+2012052402 加索尔 2
+2012052403 费舍尔 1
+  
+INSERT INTO `union`.`tbl_resource` (`account`, `year`, `month`, `id`, `code`, `assess`) 
+VALUES ('2012052308', '2014', '4', NULL, '2', '4');
+
+
+第一步：后台激活本月的绩效考核
+往tbl_authority表赋值，允许本月绩效考核
+第二步：按部就班，各个角色填写各自的表格，暂时设定为两个主席，四个部门，每个部门4干事，2部长
+第三步：
+生成反馈信息：
+1、干事反馈：得分，自评和部长评，推优，外调加分，得分排名
+2、部长反馈：得分，自评和主席评，其他部长评，外调加分，得分排名
+3、部门反馈：得分，扣分
+第四步：停止本次绩效考核，tbl_authority中的active重置为n.
+
+
+天空是蓝的，是黑的，是开朗的，是抑郁的。
+人也一样，我的未来在哪里，一切似乎不可预知
+
+互评
+干事评部长：上帝是女孩
+
+INSERT INTO `union`.`tbl_interact` (`id`, `year`, `month`, `waccount`, `wapartment`, `wtype`, `raccount`, `rapartment`, `rtype`, `text`) 
+VALUES (NULL, '2014', '4', '2012052300', '1', 'a', '2012052307', '1', 'c', '上帝是女孩');
+
+部长评干事：幸福来敲门
+干事推优干事：专属天使
+
+部长评价同部门部长：生命有太多需要守护，一个也不能少
+
+部长评价主席：谁明浪子心
+
+主席评价部长：心瘾
+
+部门考核表
+
+部长自评表：找个外表吸引动人，天性自私的女人
+
+
+为了方便，规定id为下列值时分别对应的表
+1：干事自评表（干事填）
+2：干事考核表（部长填）
+3：部长自评表（部长填）
+4：部长考核表（主席填）
+5：部门考核表（主席填）
+6：干事考核反馈表
+7：跟进部门出勤统计表
+8：调研意见采纳表
+9：整体考核结果反馈表
+10：部长反馈表
+11：优秀部长评定表
+12：主席团反馈表
+
+用ip+account共同限制
+
+因为没有采用foreign key，所以在进行CRUD时，一定得注意account的同步性，否则极易出错
+
+
+
+
+

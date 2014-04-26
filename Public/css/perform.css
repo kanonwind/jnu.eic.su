@@ -1,0 +1,48 @@
+
+div#perform_hdr{width:100%;height:300px;background:#018f89;margin-top:140px;}
+div#perform_hdr h1{font-weight:normal;}
+div.perform_hdr_title{width:920px;margin-left:auto;margin-right:auto;color:white;}
+div.perform_hdr_title div{float:left;padding-top:20px;}
+div#user_info_for_perf p{line-height:50%;}
+div#perform_body{width:100%;margin-left:auto;margin-right:auto;}
+div#control_group{position:relative;width:20%;min-width:250px;float:left;height:100%;padding-left:5px;}
+button.perf_ctrl_button{border:none;width:250px;height:100px;background:#79c0be;margin-top:5px;color:white;font-size:20px;}
+img#zhibiao{position:absolute;right:-2px;top:43px;z-index: -1;}
+div#detail_table{width:79%;float:right;margin-top:5px;font-size:14px;border-left:2px #018f89 solid; padding-left:5px;}
+div#detail_table,div#perform_hdr{font-family:"Microsoft YaHei UI","Microsoft YaHei","微软雅黑","宋体";}
+div#detail_table h2,div#detail_table h3{font-weight:normal;}
+p.fill_in_tips{background:#f8d49e;line-height:200%;}
+div#detail_table table.yijibiao input{width:30px;background:#79c0be;border:1px solid white;color:white;font-weight:bold;font-size:24px;text-align:center;}
+table.yijibiao td,table.erjibiao td{border-width:1px;border-style:solid;border-color:white;background:#79c0be;padding-left:10px;padding-right:10px;font-size:14px;}
+table.yijibiao p{max-width:300px;line-height:100%;margin:5px;}
+table.yijibiao p1{max-width:600px;line-height:100%;margin:5px;}
+table.erjibiao td.normal_input{background:none;padding-left:0px;padding-right:0px;}
+table.yijibiao td.min_item{min-width:550px;background:#CCCCCC;}
+table.yijibiao td.blankline{height:0px;}
+table.yijibiao td.total_score{font-size:24px;color:white;text-align:center;}
+.perf_textarea{border:solid #79c0be 2px;}
+.perf_button{min-width:80px;height:25px;margin-top:30px;margin-bottom:30px;border:none;background:#018f89;color:white;font-weight:bold;font-size:14px;}
+.perf_button:hover{background:#79c0be;}
+.perf_hr{height:1px;border:solid;clear:both;background:#79c0be;color:#79c0be;padding-right:5px;margin-right:5px;margin-top:10px;}
+div#detail_table h3,ol span,ul span{color:#018f89;}
+p.self-assessment{width:600px;word-wrap:break-word;}
+li table td{width:100px;padding-bottom:0px;margin-bottom:0px;}
+
+div#pjbz{
+	position:fixed;
+	left:100px;
+	top: 300px;
+	
+	max-width:450px;
+	line-height:100%;
+	color: white;
+	background-color: #000;
+	width: 100%;
+	z-index: 100;
+	background:url(bgimg_title2.png) repeat;
+	}
+div#pjbz p{margin-left:10px;margin-right:10px;}
+
+div#pjbz h3{font-weight:bold;}
+
+div#hdr{position: fixed; top:0px;tabindex: 0;}
