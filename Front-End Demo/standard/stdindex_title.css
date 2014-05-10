@@ -31,7 +31,7 @@ div#search_bar{width:220px;height:25px;background-color:white;float:right;margin
 div#login_info{float:right;font-size:14px;margin-top:20px;}
 
 /*p样式*/
-p#chs_title,p#eng_title{font-family:幼圆,"Microsoft YaHei UI","Microsoft YaHei","微软雅黑","宋体";color:#B0C43A;}
+p#chs_title,p#eng_title{font-family:宋体,"Microsoft YaHei UI Light","Microsoft YaHei UI","Microsoft YaHei","微软雅黑","宋体";color:#B0C43A;font-weight:normal;}
 
 p#chs_title{font-size:28px;line-height:0;}
 

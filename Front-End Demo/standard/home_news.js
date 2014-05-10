@@ -34,7 +34,7 @@ var objLeftNewsTitle;//左边的隐藏新闻标题
 var objMidNewsTitle;//中间的显示的闻标题
 var objRightNewsTitle;//右边隐藏的闻标题
 
-var arrColor = new Array("#f00", "#2400ff", "#00c0ff", "#00ffd8", "#00ff6c", "#0cff00", "#f0ff00", "#ff7200");
+var arrColor = new Array("#940707", "#00a0e9", "#486a00", "#04caac", "#005982", "#959595", "#8c97cb", "#ff7200");
 //var iIndexPic = 0;
 
 var iPicSum = 8; //新闻图片的总数
@@ -81,6 +81,7 @@ function get_news()
 
 function NewsInit()
 {
+	search();
 	objLeftPic = document.getElementById("leftPic");
 	objMidPic = document.getElementById("midPic");
 	objRightPic = document.getElementById("rightPic");
