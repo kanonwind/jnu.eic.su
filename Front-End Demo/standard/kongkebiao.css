@@ -1,0 +1,15 @@
+*{font-family:"Microsoft YaHei UI","Microsoft YaHei","微软雅黑","宋体";}
+
+body{padding-left:30px;}
+
+td{border-width:3px;padding-left:10px;background:#bdddec;font-size:12px;text-align:left;}
+
+table{background:white;}
+
+tbody{background:#00a0e9;}
+
+thead{background:white;height:50px;}
+
+th{background:#00a0e9;color:white;min-width:200px;}
+
+caption{text-align:left;font-size:30px;line-height:200%;color:#00a0e9;}
