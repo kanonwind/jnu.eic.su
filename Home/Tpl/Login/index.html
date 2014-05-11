@@ -4,10 +4,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="EN" xml:lang="EN">
 	<head>
 	<meta http-equiv="content-type" content="text/html;charset=utf-8"/>
-	<link rel="shortcut icon" href="logo.jpg" />
+	<link rel="shortcut icon" href="__PUBLIC__/image/logo.jpg" />
 	<link href="__PUBLIC__/css/login.css" type="text/css" rel="stylesheet" />
-	<script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
-	<!--<script  type="text/javascript" src="__PUBLIC__/image/login.js"> </script>-->
+	<script  type="text/javascript" src="__PUBLIC__/js/login.js"> </script>
+	<script type="text/javascript">
+        var URL = "__URL__";
+        var APP = "__APP__";
+        var ROOT = "__ROOT__";
+		var PUBLIC = "__PUBLIC__";
+    </script>	
 	<title>登陆您的团委学生会账户</title>
 	</head>
 	<body>
@@ -53,9 +58,9 @@
 					</div>
 					<div>
 						<button id="login_button" type="submit" name="login" title="立即登陆账户" class="c_login_button">
-							登陆
+							登录
 						</button>
-						<button id="cancel_button" type="submit" name="cancel" title="取消并返回上一页面" class="c_login_button">
+						<button id="cancel_button" type="button" name="cancel" title="取消并返回上一页面" class="c_login_button">
 							取消
 						</button>	
 					</div>

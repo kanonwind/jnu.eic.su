@@ -1,5 +1,12 @@
 window.onload = PerformInit;
 
+var year;//年份
+var month;//月份
+
+var arrDepartName=new Array("秘书处","人力资源部","宣传部","信息编辑部","学术部",
+"体育部","KSC联盟","组织部","文娱部","公关部","心理服务部","主席团");
+
+
 function GetObjById(strId)//根据ID获取对象
 {
 	return document.getElementById(strId);
@@ -22,43 +29,122 @@ function CheckLegalStr(strCheck)//检查输入的字符串是否含有非法字�
 		return true;
 }
 
+//部门转为对应的数字
+function TranTextToDig(text)
+{
+	var iBumen;
+	switch(text)
+	{
+		case "秘书处":
+			iBuMen = 1;
+			break;
+		case "人力资源部":
+			iBuMen = 2;
+			break;
+		case "宣传部":
+			iBuMen = 3;
+			break;
+		case "信息编辑部":
+			iBuMen = 4;
+			break;
+		case "学术部":
+			iBuMen = 5;
+			break;
+		case "体育部":
+			iBuMen = 6;
+			break;
+		case "KSC联盟":
+			iBuMen = 7;
+			break;
+		case "组织部":
+			iBuMen = 8;
+			break;
+		case "文娱部":
+			iBuMen = 9;
+			break;
+		case "公关部":
+			iBuMen = 10;
+			break;
+		case "心理服务部":
+			iBuMen = 11;
+			break;
+		case "主席团":
+			iBuMen = 12;
+			break;
+	}
+	return iBuMen;
+}
+
+//对应的数字转成相应的部门
+function TranDigToText(iBuMen)
+{
+	var arrBuMen = new Array("秘书处", "人力资源部", "宣传部", "信息编辑部",
+							"学术部", "体育部", "KSC联盟", "组织部",
+							"文娱部", "公关部", "心理服务部", "主席团");
+	var text = arrBuMen[iBuMen-1];
+	return text;
+}
 
 //获取当前用户需要的各种考核表
 function GetTable()
 {
 	//测试用数据
 	//四种用户：YBGS RLGS BZJ ZXT
-	GetObjById("login_info_user_id").text;
+	//GetObjById("login_info_user_id").text;
 	//请求数据
-	
-	
+		var obj;
+	    $.ajax({
+		url:URL+"/funcqqlx",//请求用户类型
+		data:{'year':'2014','month':'6','nima':'a'},
+		async:false,
+		dataType:"json",
+		success:function(result){obj=result;}
+		});		
+		var arr=obj;
+		//alert(obj.type);
+	/*
 	var arr=
 	{
 	  "account":"2012052308",
 	  "type":"YBGS",
 	};
+	*/
+	/*
 	var arrCeShiTable = new Array("干事自评表","干事考核反馈表","跟进部门出勤统计表","调研意见采纳表",
 							  "整体考核结果反馈表","部长自评表","干事考核表","部长反馈表",
-							  "部长考核表","部门考核表","优秀部长评定表","主席团反馈表");
+							  "部长考核表","部门考核表","优秀部长评定表","主席团反馈表", "考核进程控制表");
 	var arrYBGS = new Array("干事自评表","干事考核反馈表");
 	var arrRLGS = new Array("干事自评表","干事考核反馈表","跟进部门出勤统计表","调研意见采纳表","整体考核结果反馈表");
 	var arrBZJ = new Array("整体考核结果反馈表","部长自评表","干事考核表","部长反馈表");
 	var arrZXT = new Array("部长考核表","部门考核表","优秀部长评定表","主席团反馈表","整体考核结果反馈表");
-	/*switch(arr.type)
+	*/
+	var arrCeShiTable = new Array("干事自评表","干事考核反馈表","跟进部门出勤统计表","调研意见采纳表",
+							  "整体考核结果反馈表","部长自评表","干事考核表","部长反馈表",
+							  "部长考核表","部门考核表","优秀部长评定表","主席团反馈表", "考核进程控制表");
+	var arrYBGS = new Array("干事考核反馈表");
+	var arrRLGS = new Array("干事考核反馈表","整体考核结果反馈表");
+	var arrBZJ = new Array("整体考核结果反馈表","部长反馈表");
+	var arrZXT = new Array("主席团反馈表","整体考核结果反馈表");
+	//alert(arr.type);
+	switch(arr.type)
 	{
 	  case "BZJ": return arrBZJ;
 	  case "YBGS": return arrYBGS;
+	  case "RLGS": return arrRLGS;
+	  case "ZXT": return arrZXT;
 	};
-	*/
-	return arrCeShiTable;
+	
+	//return arrCeShiTable;
 }
 //把获得的时间传回服务器
-function PostTimeToServer(year, month)
+/*function PostTimeToServer(year, month, buttonText)
 {
+	var iCurButton = PostTable(buttonText);
 	json_Time = 
 	{
 		"year":2014,
 		"month":4,
+		"button":iCurButton,
 	};
 	if(1)
 		return true;
@@ -108,11 +194,8 @@ function PostTable(buttonText)
 			iCurButton = 12;
 			break;
 	}
-	var json_butoon = 
-	{
-		"curButton":iCurButton,
-	};
-}
+	return iCurButton;
+}*/
 
 //干事自评表的考核项目和评分标准
 function GSZP_BZ()
@@ -234,7 +317,7 @@ function GSZP_BZ()
 				this.c = "C.协调能力较差，难以兼顾学习、工作与生活，但仍愿意完成任务";
 				this.d = "D.完全无法兼顾学习、工作与生活，严重影响到工作情绪";
 			}
-			function obj_XTNL()
+			function obj_ZWJDNL()
 			{
 				this.bz = "自我监督能力";
 				this.a = "A.无论是否有人监督，都能一丝不苟完成任务，自我监督能力强";
@@ -242,7 +325,7 @@ function GSZP_BZ()
 				this.c = "C.在没有监督的机制下工作毫无主动性，不自觉";
 				this.d = "D.不管是否有人监督对工作都缺乏认真度和自觉性";
 			}
-			this.arrObj = new Array(new obj_YBCLNL(), new obj_XTNL(), new obj_XTNL());
+			this.arrObj = new Array(new obj_YBCLNL(), new obj_XTNL(), new obj_ZWJDNL());
 		}		
 				
 		this.arrObj_GSZP = new Array(new obj_GZNL(), new obj_GZTD(), 
@@ -264,7 +347,10 @@ function Get_GSZP()
 	function obj_GSZP()
 	{		
 		this.objGSZP_BZ = objTemp;
-		//ajax请求Perform/funcgszp，接收当前账号的个人信息
+
+		
+        //alert("请求前");
+		//ajax请求，接收当前账号的个人信息
 		var obj;
 	    $.ajax({
 		url:URL+"/funcgszp",
@@ -273,12 +359,18 @@ function Get_GSZP()
 		dataType:"json",
 		success:function(result){obj=result;}
 		});
-		alert(obj.zongfen);
+
+		//alert("请求成功:"+obj.status);
+		//alert("干事得分："+obj.DF[0].df);
+		//alert("推优干事:"+obj.TYGS.tygs);
+		//alert("对部长评价:"+obj.DBZPJ[0].name);
 		
-		//这里进行请求，判断能否进行填表
 		var json_Get_GSZP=obj;
-		/*{
-		  "status":0,
+		//这里进行请求，判断能否进行填表
+		/*
+		var json_Get_GSZP=
+		{
+		  "status":1,
 		  "DF":
 		  [
 		    {"df":9},
@@ -314,7 +406,7 @@ function Get_GSZP()
 		  {
 			 "tygs":"同事C",
 			 "account":201205221,//学号
-			 "tyly":"理由是.....",
+			 "tyly":"理由是.....我勒个去",
 		  },
 		 
 		  "DBZPJ":
@@ -325,7 +417,7 @@ function Get_GSZP()
 		  ],
 		};
 		*/
-		this.status =  json_Get_GSZP.status;//0;//是否可以提交状态，“0”表示可以提交可以进行填写，“1”表示已提交不能再进行填写	
+		this.status =  0;//json_Get_GSZP.status;//0;//是否可以提交状态，“0”表示可以提交可以进行填写，“1”表示已提交不能再进行填写	
 
 		this.arrDF = new Array(); //得分数组
 		
@@ -338,8 +430,7 @@ function Get_GSZP()
 			}
 		}
 		
-		this.zongfen = json_Get_GSZP.zongfen;//总分
-		alert(this.zongfen);
+		this.zongfen = json_Get_GSZP.zongfen;//总分		
 		
 		this.zwpj = json_Get_GSZP.zwpj;//自我评价的评语
 		if(this.zwpj == "")
@@ -423,7 +514,18 @@ function Post_GSZP(obj_GSZP)//obj_GSZP为Get_GSZP()定义的对象
 		"TYGS" :{"tygs":obj_GSZP.TYGS.tygs , "account":obj_GSZP.TYGS.account , "tyly":obj_GSZP.TYGS.tyly},
 		"arrDBZPJ" : arrDBZPJTemp, //对本部门部长评价数组
 	};
-	alert(json_Post_GSZP.TYGS.account);
+	//alert(json_Post_GSZP.TYGS.account);
+	
+	    //ajax请求，发送干事自评表
+		var obj;
+	    $.ajax({
+		url:URL+"/post_gszp",
+		data:json_Post_GSZP,
+		async:false,
+		dataType:"json",
+		success:function(result){obj=result;}
+		});	
+	//alert(obj.status)
 	//服务器成功接收信息，则返回true，否则返回false
 	if(1)
 		return true;
@@ -436,6 +538,18 @@ function Get_GSKHFK()
 {
 	function obj_GSKHFK() 
 	{
+	
+	    //ajax请求，接收当前账号的个人信息
+		var obj;
+	    $.ajax({
+		url:URL+"/jsgskh",
+		data:{"year":year,"month":month,},
+		async:false,
+		dataType:"json",
+		success:function(result){obj=result;}
+		});
+		var json_Get_GSKHFK = obj;
+		/*
 		var json_Get_GSKHFK = 
 		{
 			"zongfen":"100",//总分
@@ -469,7 +583,7 @@ function Get_GSKHFK()
 				{"bzpj":"不错"},
 			],
 		};
-	
+	*/
 		this.zongfen = json_Get_GSKHFK.zongfen; //总分
 		this.paiming = json_Get_GSKHFK.paiming; //该月排名
 		this.yxgs = json_Get_GSKHFK.yxgs; //该月优秀干事
@@ -500,6 +614,19 @@ function Get_GJBMCQTJ()
 	//注意：JS这边和数据库那边的各对象和变量命名尽量保持一致，不然可能会出错
 	function obj_GJBMCQTJ()
 	{	
+	
+		//ajax请求，接收当前账号的个人信息
+		var obj;
+	    $.ajax({
+		url:URL+"/jsgjbmcqtj",
+		data:{"year":year,"month":month,},
+		async:false,
+		dataType:"json",
+		success:function(result){obj=result;}
+		});
+	    var json_Get_GJBMCQTJ = obj;
+		
+		/*
 		var json_Get_GJBMCQTJ = 
 		{
 			"gjbm":"KSC联盟",
@@ -518,15 +645,15 @@ function Get_GJBMCQTJ()
 				{"name":"邓作恒", "qj":0, "ct":0, "qx":0, "account":201205222},//名字,请假次数,迟到或早退次数,缺席	,学号
 			],
 		};
-	
+	*/
 		this.gjbm = json_Get_GJBMCQTJ.gjbm;//跟进部门
 		this.renshu = json_Get_GJBMCQTJ.renshu;//人数
 		this.status = json_Get_GJBMCQTJ.status;//是否可以提交状态，“0”表示可以提交可以进行填写，“1”表示已提交不能再进行填写
 		//出勤
-		this.chuqin = new Array();
+		this.chuqin = new Array();//alert(json_Get_GJBMCQTJ.renshu);
 		for(var i=0; i < json_Get_GJBMCQTJ.renshu; ++i)
 		{
-			this.chuqin[i] = new Array();
+			this.chuqin[i] = new Array();//alert(json_Get_GJBMCQTJ.chuqin[i].name);
 			this.chuqin[i][0] = json_Get_GJBMCQTJ.chuqin[i].name;//干事名字
 			this.chuqin[i][1] = json_Get_GJBMCQTJ.chuqin[i].qj;//请假次数
 			this.chuqin[i][2] = json_Get_GJBMCQTJ.chuqin[i].ct;//迟到或早退次数
@@ -557,6 +684,19 @@ function Post_GJBMCQTJ(obj_GJBMCQTJ)//obj_GJBMCQTJ为Get_GJBMCQTJ()定义的对�
 	};
 	//alert(json_Post_GJBMCQTJ.chuqin[2].account);
 	//服务器成功接收信息，则返回true，否则返回false
+	
+	    //ajax请求，发送部长自评表
+		
+		var obj;
+	    $.ajax({
+		url:URL+"/post_gjbmcqtj",
+		data:json_Post_GJBMCQTJ,
+		async:false,
+		dataType:"json",
+		success:function(result){obj=result;}
+		});
+		
+	
 	if(1)
 		return true;
 	else
@@ -568,6 +708,19 @@ function Get_DYYJCN()
 {
 	function obj_DYYJCN()
 	{
+	
+		//ajax请求，接收当前账号的个人信息
+		var obj;
+	    $.ajax({
+		url:URL+"/jsdyyjcn",
+		data:{"year":year,"month":month,},
+		async:false,
+		dataType:"json",
+		success:function(result){obj=result;}
+		});	
+	    var json_obj_DYYJCN = obj;
+		
+		/*
 		var json_obj_DYYJCN = 
 		{
 			"status":0,
@@ -743,7 +896,7 @@ function Get_DYYJCN()
 			
 		};
 	
-		
+		*/
 		this.status = json_obj_DYYJCN.status;//是否为课填写提交状态
 		this.bmsm = json_obj_DYYJCN.bmsm;//部门数目
 		
@@ -796,8 +949,19 @@ function Post_DYYJCN(obj_DYYJCN)//obj_DYYJCN为Get_DYYJCN()定义的对象
 		"bmsm":obj_DYYJCN.bmsm,
 		"arrBM": _arrBM,
 	};
-	alert(json_Post_DYYJCN.arrBM[3].arrCNJF[2].account);
-	//服务器成功接收信息，则返回true，否则返回false
+
+	
+		//ajax请求
+		var obj;
+	    $.ajax({
+		url:URL+"/post_dyyjcn",
+		data:json_Post_DYYJCN,
+		async:false,
+		dataType:"json",
+		success:function(result){obj=result;}
+		});
+	    //var json_Get_GJBMCQTJ = obj;	
+	
 	if(1)
 		return true;
 	else
@@ -809,6 +973,20 @@ function Get_ZTKHJGFK()
 {
 	function obj_ZTKHJGFK()
 	{
+	
+		//ajax请求，接收当前账号的个人信息
+		var obj;
+	    $.ajax({
+		url:URL+"/jsztkhjgfk",
+		data:{"year":year,"month":month,},
+		async:false,
+		dataType:"json",
+		success:function(result){obj=result;}
+		});		
+	    var json_Get_ZTKHJGFK = obj;
+		
+		
+		/*
 		var json_Get_ZTKHJGFK = 
 		{
 			"arrYXBM"://优秀部门
@@ -838,8 +1016,8 @@ function Get_ZTKHJGFK()
 						"GS"://一个部门多个干事
 						[//优秀干事名字,学号，得分,是否为月度优秀干事,1表示是月度优秀干事，0表示不是优秀干事
 							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":1,},
-							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":1,},
-							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":1,},
+							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":0,},
+							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":0,},
 						],
 					},
 					
@@ -849,8 +1027,8 @@ function Get_ZTKHJGFK()
 						"GS"://一个部门多个干事
 						[//优秀干事名字,学号，得分,是否为月度优秀干事,1表示是月度优秀干事，0表示不是优秀干事
 							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":1,},
-							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":1,},
-							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":1,},
+							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":0,},
+							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":0,},
 						],
 					},
 					
@@ -860,8 +1038,8 @@ function Get_ZTKHJGFK()
 						"GS"://一个部门多个干事
 						[//优秀干事名字,学号，得分,是否为月度优秀干事,1表示是月度优秀干事，0表示不是优秀干事
 							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":1,},
-							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":1,},
-							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":1,},
+							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":0,},
+							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":0,},
 						],
 					},
 					
@@ -871,8 +1049,8 @@ function Get_ZTKHJGFK()
 						"GS"://一个部门多个干事
 						[//优秀干事名字,学号，得分,是否为月度优秀干事,1表示是月度优秀干事，0表示不是优秀干事
 							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":1,},
-							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":1,},
-							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":1,},
+							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":0,},
+							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":0,},
 						],
 					},
 					
@@ -882,8 +1060,8 @@ function Get_ZTKHJGFK()
 						"GS"://一个部门多个干事
 						[//优秀干事名字,学号，得分,是否为月度优秀干事,1表示是月度优秀干事，0表示不是优秀干事
 							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":1,},
-							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":1,},
-							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":1,},
+							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":0,},
+							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":0,},
 						],
 					},
 					
@@ -893,8 +1071,8 @@ function Get_ZTKHJGFK()
 						"GS"://一个部门多个干事
 						[//优秀干事名字,学号，得分,是否为月度优秀干事,1表示是月度优秀干事，0表示不是优秀干事
 							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":1,},
-							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":1,},
-							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":1,},
+							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":0,},
+							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":0,},
 						],
 					},
 					
@@ -904,8 +1082,8 @@ function Get_ZTKHJGFK()
 						"GS"://一个部门多个干事
 						[//优秀干事名字,学号，得分,是否为月度优秀干事,1表示是月度优秀干事，0表示不是优秀干事
 							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":1,},
-							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":1,},
-							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":1,},
+							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":0,},
+							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":0,},
 						],
 					},
 					
@@ -915,8 +1093,8 @@ function Get_ZTKHJGFK()
 						"GS"://一个部门多个干事
 						[//优秀干事名字,学号，得分,是否为月度优秀干事,1表示是月度优秀干事，0表示不是优秀干事
 							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":1,},
-							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":1,},
-							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":1,},
+							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":0,},
+							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":0,},
 						],
 					},
 					
@@ -926,8 +1104,8 @@ function Get_ZTKHJGFK()
 						"GS"://一个部门多个干事
 						[//优秀干事名字,学号，得分,是否为月度优秀干事,1表示是月度优秀干事，0表示不是优秀干事
 							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":1,},
-							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":1,},
-							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":1,},
+							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":0,},
+							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":0,},
 						],
 					},
 					
@@ -937,8 +1115,8 @@ function Get_ZTKHJGFK()
 						"GS"://一个部门多个干事
 						[//优秀干事名字,学号，得分,是否为月度优秀干事,1表示是月度优秀干事，0表示不是优秀干事
 							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":1,},
-							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":1,},
-							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":1,},
+							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":0,},
+							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":0,},
 						],
 					},
 					
@@ -948,8 +1126,8 @@ function Get_ZTKHJGFK()
 						"GS"://一个部门多个干事
 						[//优秀干事名字,学号，得分,是否为月度优秀干事,1表示是月度优秀干事，0表示不是优秀干事
 							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":1,},
-							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":1,},
-							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":1,},
+							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":0,},
+							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":0,},
 						],
 					},
 				],				
@@ -1084,10 +1262,10 @@ function Get_ZTKHJGFK()
 				],				
 			},
 		};
-
+*/
 		function obj_YXBM(bm, df)//优秀部门
 		{
-			this.bm = bm;//部门名字
+			this.bm = arrDepartName[bm-1];//部门名字
 			this.df = df;//得分
 		}
 		this.arrObjYXBM = new Array();//保存优秀部门的数组
@@ -1101,7 +1279,7 @@ function Get_ZTKHJGFK()
 		{
 			this.bzmz = bzmz;//部长名字
 			this.account = account;//学号
-			this.ssbm = ssbm;//所属部门
+			this.ssbm = arrDepartName[ssbm-1];//所属部门
 			this.df = df;//得分
 		}
 		this.arrObjYXBZ = new Array();//保存优秀部长的数组
@@ -1113,7 +1291,7 @@ function Get_ZTKHJGFK()
 		
 		function obj_YXGS(BM)//各部门优秀干事
 		{
-			this.bm = BM.bm;//部门
+			this.bm = arrDepartName[BM.bm-1];//部门
 			function obj_GBMYXGS(GS)//一个部门优秀干事
 			{
 				this.name = GS.name;//优秀干事名字
@@ -1125,20 +1303,20 @@ function Get_ZTKHJGFK()
 					this.ydyxgs = "";
 			}
 			this.arrObjGBMYXGS = new Array();//保存一个部门优秀干事的数组
-			for(var i = 0; i < BM.sum; ++i)
+			for(var i = 0; i < BM.GS.length; ++i)
 			{
 				this.arrObjGBMYXGS.push(new obj_GBMYXGS(BM.GS[i]));
 			}
 		}
 		this.arrObjYXGS = new Array();//保存多个部门优秀干事的数组
-		for(var i = 0; i < json_Get_ZTKHJGFK.YXGS.bmsm; ++i)
+		for(var i = 0; i < json_Get_ZTKHJGFK.YXGS.arrBM.length; ++i)
 		{
 			this.arrObjYXGS.push(new obj_YXGS(json_Get_ZTKHJGFK.YXGS.arrBM[i]));
 		}
 		
 		function obj_WDJDRY(BM)//外调较多人员
 		{
-			this.bm = BM.bm;//部门
+			this.bm = arrDepartName[BM.bm-1];//部门
 			function obj_GBMWDJDRY(GS)//一个部门外调较多的干事
 			{
 				this.name = GS.name;//外调干事名字
@@ -1146,13 +1324,13 @@ function Get_ZTKHJGFK()
 				this.wdcs = GS.wdcs;//外调次数
 			}
 			this.arrObjGBMWDJDRY = new Array();//保存一个部门w外调较多干事的数组
-			for(var i = 0; i < BM.sum; ++i)
+			for(var i = 0; i < BM.GS.length; ++i)
 			{
 				this.arrObjGBMWDJDRY.push(new obj_GBMWDJDRY(BM.GS[i]));
 			}
 		}
 		this.arrObjWDJDRY = new Array();//保存多个部门外调较多干事的数组
-		for(var i = 0; i < 11; ++i)
+		for(var i = 0; i < json_Get_ZTKHJGFK.WDJDRY.arrBM.length; ++i)
 		{
 			this.arrObjWDJDRY.push(new obj_WDJDRY(json_Get_ZTKHJGFK.WDJDRY.arrBM[i]));
 		}		
@@ -1347,18 +1525,21 @@ function BZZP_BZ()
 //获取部长自评表数据
 function Get_BZZP()
 {
-		//ajax请求Perform/funcbzzp，接收当前账号的个人信息
+
+		//ajax请求，接收当前账号的个人信息
 		var obj;
 	    $.ajax({
 		url:URL+"/funcbzzp",
-		data:{},
+		data:{"year":year,"month":month,},
 		async:false,
 		dataType:"json",
 		success:function(result){obj=result;}
-		});
-		alert(obj.status);
-	var json_Get_BZZP = obj;
-	/*{
+		});	
+        var json_Get_BZZP = obj;
+	/*	
+
+	var json_Get_BZZP = 
+	{
 		"zongfen" : 0, //总分
 		"status" : 0, //是否为可提交状态
 		"arrDF" : //得分数组
@@ -1397,36 +1578,31 @@ function Get_BZZP()
 
 		"dzgfzxpj" : "很好", //对主管副主席评价
 		
-		"NMPJ"://对主席团成员的匿名评价
-		{
-			"sum":4,//人数
-			"arrNMPJ":
-			[
-				{"name":"主席", "account":2013042210, "depart":"副主席", "pj":"匿名评价"},
-				{"name":"主席", "account":2013042210, "depart":"副主席", "pj":"匿名评价"},
-				{"name":"主席", "account":2013042210, "depart":"副主席", "pj":"匿名评价"},
-				{"name":"主席", "account":2013042210, "depart":"副主席", "pj":"匿名评价"},
-				{"name":"主席", "account":2013042210, "depart":"副主席", "pj":"匿名评价"},
-			],
-		},
+		"NMPJ"://对主席团成员的匿名评价	
+		[
+			{"name":"主席", "account":2013042210, "depart":"副主席", "pj":"匿名评价"},
+			{"name":"主席", "account":2013042210, "depart":"副主席", "pj":"匿名评价"},
+			{"name":"主席", "account":2013042210, "depart":"副主席", "pj":"匿名评价"},
+			{"name":"主席", "account":2013042210, "depart":"副主席", "pj":"匿名评价"},
+			{"name":"主席", "account":2013042210, "depart":"副主席", "pj":"匿名评价"},
+		],
 	};
-	*/
+*/
 	var objBZZP =  BZZP_BZ();
 			
 	function obj_BZZP() 
 	{
-		
 		this.zongfen = json_Get_BZZP.zongfen;//总分
 		this.status = json_Get_BZZP.status;//是否为可提交状态
 		this.arrDF = new Array(); //得分数组
-		var iCount = 0;alert(json_Get_BZZP.arrDF[16].df+"jjjj");
+		var iCount = 0;
 		for (var i = 0; i < objBZZP.arrObj_BZZP.length; ++i) 
 		{
-			this.arrDF[i] = new Array();alert(objBZZP.arrObj_BZZP[i].arrObj.length+"kk");
+			this.arrDF[i] = new Array();
 			for (var j = 0; j <  objBZZP.arrObj_BZZP[i].arrObj.length; ++j) 
 			{
-				this.arrDF[i][j] = json_Get_BZZP.arrDF[iCount].df;iCount++;
-			}alert(iCount);
+				this.arrDF[i][j] = json_Get_BZZP.arrDF[iCount++].df;
+			}
 		}
 
 		this.zwpj = json_Get_BZZP.zwpj; //自我评价
@@ -1454,6 +1630,7 @@ function Get_BZZP()
 			this.dzgfzxpj = "请填写.....";
 		}
 		
+		//匿名评价
 		function obj_NMPJ(person)
 		{
 			this.name = person.name;
@@ -1462,9 +1639,9 @@ function Get_BZZP()
 			this.pj = person.pj;
 		}
 		this.arrNMPJ = new Array();
-		for(var i = 0; i < json_Get_BZZP.NMPJ.sum; ++i)
+		for(var i = 0; i < json_Get_BZZP.NMPJ.length; ++i)
 		{
-			this.arrNMPJ.push(new obj_NMPJ(json_Get_BZZP.NMPJ.arrNMPJ[i]));
+			this.arrNMPJ.push(new obj_NMPJ(json_Get_BZZP.NMPJ[i]));
 		}
 	}
 	var objReturn = new obj_BZZP();
@@ -1485,7 +1662,7 @@ function Post_BZZP(obj_BZZP)//obj_BZZP为Get_BZZP()定义的对象
 	var _arrBZ = new Array();
 	for(var i = 0; i < obj_BZZP.arrDQTBZPJ.length; ++i)
 	{
-		_arrBZ.push({"name":obj_BZZP.arrDQTBZPJ[i].name, "account":obj_BZZP.arrDQTBZPJ[i].account, "fs" : obj_BZZP.arrDQTBZPJ[i].fs0,"pj" : obj_BZZP.arrDQTBZPJ[i].pj,});
+		_arrBZ.push({"name":obj_BZZP.arrDQTBZPJ[i].name, "account":obj_BZZP.arrDQTBZPJ[i].account, "fs" : obj_BZZP.arrDQTBZPJ[i].fs,"pj" : obj_BZZP.arrDQTBZPJ[i].pj,});
 	}
 	
 	var _arrNMPJ = new Array();
@@ -1511,9 +1688,23 @@ function Post_BZZP(obj_BZZP)//obj_BZZP为Get_BZZP()定义的对象
 			"sum":obj_BZZP.arrNMPJ.length,//人数
 			"arrNMPJ":_arrNMPJ,
 		},
-	}
+	};//alert(json_Post_BZZP.NMPJ.arrNMPJ[0].pj);
 	//alert(json_Post_BZZP.NMPJ.arrNMPJ[2].account);
 	//服务器成功接收信息，则返回true，否则返回false
+	
+	    //ajax请求，发送部长自评表
+		
+		var obj;
+	    $.ajax({
+		url:URL+"/post_bzzp",
+		data:json_Post_BZZP,
+		async:false,
+		dataType:"json",
+		success:function(result){obj=result;}
+		});
+		
+	   
+		//alert(obj.status);
 	if(1)
 		return true;
 	else
@@ -1664,27 +1855,113 @@ function GSKH_BZ()
 function Get_GSKH()
 {
 	//部门特色，要从服务器获取
-		var strBMTS = "<div id=\"bmts\">"
-					+"<p><h3  style=\"text-align:center\">部门特色</h3></p>"
+		
+		var arrBMTS=new Array();
+		//秘书
+		arrBMTS[0]="<div id=\"bmts\">"
+					+"<p><h3  style=\"text-align:center\">秘书处职能</h3></p>"
 					+"<p>评价标准:</p>"
-					+"<p>A.每次都很认真完成任务，并细心、有耐心地尽自己的职责，乐于接受任务</p>"          
+					+"<p>文档制作能力、细致认真程度、协调应急能力</p>"          
+					+"<p>（每一项必须评，每项3.333333分，请直接写出以总分为10分的分数）</p>"
+					+"</div>";
+		//人力
+		arrBMTS[1]="<div id=\"bmts\">"
+					+"<p><h3  style=\"text-align:center\">人力职能</h3></p>"
+					+"<p>评价标准:</p>"
+					+"<p>软件使用（包括excel，ppt，word）</p>"  
+					+"<p>撰写能力（写策划的能力和发短信内容）</p>"
+					+"</div>";
+		//宣传
+		arrBMTS[2]="<div id=\"bmts\">"
+					+"<p><h3  style=\"text-align:center\">宣传部职能</h3></p>"
+					+"<p>立宣制作:</p>"
+					+"<p>A.立宣的制作方面很有想法，可行性很好</p>"          
+					+"<p>B.立宣的制作想法，可行性基本ok</p>"
+					+"<p>C.立宣制作方面很有想法，但可行性不足</p>"
+					+"<p>D.立宣的制作基本没什么想法，跟着别人想法走</p>"
+					+"<p>电宣制作:</p>"
+					+"<p>A.能熟练地运用PS制作电宣，作品效果很好</p>"          
+					+"<p>B.电宣制作基本ok，基本符合活动部门要求</p>"
+					+"<p>C.电宣制作想法很好，但制作欠佳</p>"
+					+"<p>D.电宣方面训练不够，作品欠佳</p>"
+					+"<p>（立宣制作和电宣制作每项5分，请直接写出以总分为10分的分数）</p>"
+					+"</div>";	
+		//信编
+		arrBMTS[3]="<div id=\"bmts\">"
+					+"<p><h3  style=\"text-align:center\">信编职能</h3></p>"
+					+"<p>评价说明:</p>"
+					+"<p>撰写新闻稿能力，拍照能力，制作视频能力</p>"          
+					+"<p>（请部长级选择自己了解的一项进行打分，直接写出以总分为10分的分数）</p>"
+					+"</div>";	
+		//学术		
+		arrBMTS[4]="<div id=\"bmts\">"
+					+"<p><h3  style=\"text-align:center\">部门特色</h3></p>"
+					+"<p>评价说明:</p>"
+					+"<p>您的部门没有设置部门特色评分项，请填写为0</p>"          
+					+"</div>";
+		//体育
+		arrBMTS[5]="<div id=\"bmts\">"
+					+"<p><h3  style=\"text-align:center\">部门特色</h3></p>"
+					+"<p>评价说明:</p>"
+					+"<p>您的部门没有设置部门特色评分项，请填写为0</p>"          
+					+"</div>";
+		//KSC
+		arrBMTS[6]="<div id=\"bmts\">"
+					+"<p><h3  style=\"text-align:center\">交流会表现得分</h3></p>"
+					+"<p>评价说明:</p>"
+					+"<p>根据小干事在交流会上学习的参与积极性以及会后任务题的完成度打分</p>"          
+					+"<p>（满分10分）</p>"
+					+"</div>";
+		//组织部
+		arrBMTS[7]="<div id=\"bmts\">"
+					+"<p><h3  style=\"text-align:center\">部门特色</h3></p>"
+					+"<p>活动方面:</p>"
+					+"<p>A.主动要求任务，对办活动充满热情，并认真负责地完成，并且对活动提出宝贵建议</p>"
+					+"<p>B.偶尔会提出自己的想法，会负责完成任务</p>"
+					+"<p>C.觉得无所谓，偶尔不愿意工作，但还是会完成自己的任务，不会提出自己的想法</p>"
+					+"<p>D.完全被动型，觉得很麻烦，有种被迫去做的感觉</p>"
+					+"<p>处理团务:</p>"
+					+"<p>A.每次都很认真完成任务，并细心、有耐心地尽自己的职责，乐于接受任务</p>"              
 					+"<p>B.会负责任地完成任务，工作效果良好</p>"
 					+"<p>C.欠缺耐心，有时候不想完成任务，属于被动型</p>"
 					+"<p>D.觉得团务很麻烦，完全不想完成任务，被催了才会去做</p>"
+					+"<p>（处理团务和活动方面每项5分，请直接写出以总分为10分的分数）</p>"
 					+"</div>";
-		//ajax请求Perform/funcgskh，接收当前账号的个人信息
+		//文娱
+		arrBMTS[8]="<div id=\"bmts\">"
+					+"<p><h3  style=\"text-align:center\">与部门内其他人联系情况</h3></p>"
+					+"<p>A.多，积极</p>"
+					+"<p>B.还行</p>"
+					+"<p>C.比较少</p>"
+					+"<p>D.很少</p>"
+					+"</div>";	
+
+		//公关
+		arrBMTS[9]="<div id=\"bmts\">"
+					+"<p><h3  style=\"text-align:center\">部门特色</h3></p>"
+					+"<p>评价说明:</p>"
+					+"<p>您的部门没有设置部门特色评分项，请填写为0</p>"          
+					+"</div>";
+		//心服
+		arrBMTS[10]="<div id=\"bmts\">"
+					+"<p><h3  style=\"text-align:center\">心服职能</h3></p>"
+					+"<p>评价说明:</p>"
+					+"<p>心理知识</p>"          
+					+"<p>（满分10分）</p>"
+					+"</div>";		
+		//ajax请求，接收当前账号的个人信息
 		var obj;
 	    $.ajax({
 		url:URL+"/funcgskh",
-		data:{},
+		data:{'year':year,'month':month,},
 		async:false,
 		dataType:"json",
 		success:function(result){obj=result;}
-		});
-	alert(obj.status);
-	
-	var json_Get_GSKH = obj;
+		});		
+		//alert(obj.status);
+	var json_Get_GSKH = obj;	
 	/*
+	var json_Get_GSKH = 
 	{
 		"status" : 0, //是否为可提交状态
 		"bmts" : strBMTS, //部门特色，要从服务器获取
@@ -1927,13 +2204,13 @@ function Get_GSKH()
 		],
 	};
 	*/
-	var obj = GSKH_BZ();
+	var obj_BZ = GSKH_BZ();
 	function obj_GSKH()
 	{
-		this.GSKH_BZ = obj;
+		this.GSKH_BZ = obj_BZ;
 		
 		this.status = json_Get_GSKH.status;//是否为可提交状态		
-		this.bmts = json_Get_GSKH.bmts;//部门特色
+		this.bmts = arrBMTS[json_Get_GSKH.apartment-1];//部门特色
 		
 		function obj_GSDF(GSDF)
 		{	
@@ -2026,7 +2303,19 @@ function Post_GSKH(obj_GSKH)//obj_GSKH为Get_GSKH()定义的对象
 			"arrDGSPJ" :_arrDGSPJ,
 		},
 	};
-	alert(json_Post_GSKH.GSDF.arrGSDF[0].name + json_Post_GSKH.DGSPJ.arrDGSPJ[3].account);
+	//alert(json_Post_GSKH.GSDF.arrGSDF[0].name + json_Post_GSKH.DGSPJ.arrDGSPJ[3].account);
+	
+	
+		//ajax请求
+		var obj;
+	    $.ajax({
+		url:URL+"/post_gskh",
+		data:json_Post_GSKH,
+		async:false,
+		dataType:"json",
+		type:"POST",
+		success:function(result){obj=result;}
+		});	
 	
 	//服务器成功接收信息，则返回true，否则返回false
 	if(1)
@@ -2042,9 +2331,21 @@ function Get_BZFK()
 	//主管副主席，干事自我评价数组
 	//部门得分，部门排名，部门得分细则数组、主席的部门评价，主管副主席的部门评价
 	
+		//ajax请求，接收当前账号的个人信息
+		var obj;
+	    $.ajax({
+		url:URL+"/jsbzfk",
+		data:{'year':'2014','month':'6','nima':'a'},
+		async:false,
+		dataType:"json",
+		success:function(result){obj=result;}
+		});		
+        var json_BZFK =obj; 
+		alert(obj.ZongFen);
+	/*
 	var json_BZFK = 
 	{
-		"ZongFe":1024,//总分
+		"ZongFen":1024,//总分
 		"arrDeFenXiZhe"://这是得分细则数组，共8项，具体对应参考该表格
 		{
 			"a":2, "b":4, "c":8, "d":16, "e":32, "f":64, "g":128, "h":256, 
@@ -2109,7 +2410,7 @@ function Get_BZFK()
 		"ZhuGuanFuZhuXiBuMenPinJia":"还好吧",//主管副主席的部门评价
 		"ZhuXiDeBuMenPinJia":"还好吧",//主席的部门评价
 	};
-	
+	*/
 	function classBZFK()
 	{
 		this.ZongFen = json_BZFK.ZongFen;
@@ -2124,8 +2425,8 @@ function Get_BZFK()
 			this.arrQiTaBuZhanPinJia.push(json_BZFK.QiTaBuZhanPinJia.arrQiTaBuZhanPinJia[i].pj);
 		}
 		
-		this.ZhuGaunFuZhuXiPinJia =  json_BZFK.ZhuGaunFuZhuXiPinJia;//主管副主席评价
-				
+		this.ZhuGuanFuZhuXiPinJia =  json_BZFK.ZhuGuanFuZhuXiPinJia;//主管副主席评价
+		
 		function classGanShi(GSZP)
 		{
 			this.name = GSZP.name;//干事姓名
@@ -2320,6 +2621,18 @@ function BZKH_BZ()
 //获取部长考核表数据
 function Get_BZKH()
 {
+
+		//ajax请求，接收当前账号的个人信息
+		var obj;
+	    $.ajax({
+		url:URL+"/funcbzkh",
+		data:{'year':'2014','month':'6','nima':'a'},
+		async:false,
+		dataType:"json",
+		success:function(result){obj=result;}
+		});	
+        var json_BZKH = obj;
+		/*
 	var json_BZKH = 
 	{
 		"status":0,//是否为可提交状态
@@ -2877,17 +3190,17 @@ function Get_BZKH()
 			],
 		}
 	}
-	
+	*/
 	
 	function obj_BZKH()
-	{
+	{//alert("jjj"+json_BZKH.BMBZ.arrBM[0].bm);
 		this.status = 0;//是否为可提交状态
 		
 		this.BZKH_BZ = new BZKH_BZ();
 		
 		function obj_BMBZ(BM)
 		{
-			this.bm = BM.bm;//部门名字
+			this.bm = TranDigToText(BM.bm);//部门名字
 			function obj_BZ(BZ)
 			{
 				this.bzmz = BZ.bzmz;//部长名字
@@ -2910,13 +3223,13 @@ function Get_BZKH()
 				this.df14 = BZ.df14;//部门感情
 			}
 			this.arrBZ = new Array();
-			for(var i = 0; i < BM.bzrs; ++i)
+			for(var i = 0; i < BM.arrBZ.length; ++i)
 			{
 				this.arrBZ.push(new obj_BZ(BM.arrBZ[i]));
 			}
 		}
 		this.arrBMBZ = new Array();
-		for(var i = 0; i < json_BZKH.BMBZ.bmsm; ++i)
+		for(var i = 0; i < json_BZKH.BMBZ.arrBM.length; ++i)
 		{
 			this.arrBMBZ.push(new obj_BMBZ(json_BZKH.BMBZ.arrBM[i]));
 		}				
@@ -2957,9 +3270,9 @@ function Post_BZKH(obj_BZKH)//obj_BZKH为Get_BZKH()定义的对象
 							}
 						);
 		}
-		_arrBM.push({"bm" : obj_BZKH.arrBMBZ[i].bm, "bzrs" : obj_BZKH.arrBMBZ[i].arrBZ.length, "arrBZ" :_arrBZ});
+		_arrBM.push({"bm" : TranTextToDig(obj_BZKH.arrBMBZ[i].bm), "bzrs" : obj_BZKH.arrBMBZ[i].arrBZ.length, "arrBZ" :_arrBZ});
 	}
-	
+	//alert(_arrBM[0].arrBZ[0].pj+"   kkk");
 	var json_Post_BZKH = 
 	{
 		"status":obj_BZKH.status,//是否为可提交状态
@@ -2969,9 +3282,21 @@ function Post_BZKH(obj_BZKH)//obj_BZKH为Get_BZKH()定义的对象
 			"arrBM":_arrBM,
 		}			
 	};
-	alert(json_Post_BZKH.BMBZ.arrBM[3].arrBZ[2].account);
+
+	//alert(json_Post_BZKH.BMBZ.arrBM[3].arrBZ[2].account);
 	
 	//服务器成功接收信息，则返回true，否则返回false
+	
+		//ajax请求
+		var obj;
+	    $.ajax({
+		url:URL+"/post_bzkh",
+		data:json_Post_BZKH,
+		async:false,
+		dataType:"json",
+		success:function(result){obj=result;}
+		});	
+	
 	if(1)
 		return true;
 	else
@@ -3060,7 +3385,19 @@ function BMKH_BZ()
 //获取部门考核表数据
 function Get_BMKH()
 {
-	var json_BMKH = 
+
+		//ajax请求，接收当前账号的个人信息
+		var obj;
+	    $.ajax({
+		url:URL+"/funcbmkh",
+		data:{'year':'2014','month':'6','nima':'a'},
+		async:false,
+		dataType:"json",
+		success:function(result){obj=result;}
+		});		
+	var json_BMKH = obj;
+	
+	/*var json_BMKH = 
 	{
 		"status":0,//是否为可提交状态
 		"BM":
@@ -3117,7 +3454,23 @@ function Get_BMKH()
 				},
 			],
 		},
-	};
+		
+		"BuMen"://推优部门
+		  [
+		    {"name":"部长A"},
+		    {"name":"部长B"},
+		    {"name":"部长C"},
+		    {"name":"部长D"},
+			{"name":"部长E"},
+		    {"name":"部长F"},
+		    {"name":"部长G"},
+		    {"name":"部长H"},
+			{"name":"部长I"},
+		    {"name":"部长J"},			
+		  ],
+		  
+		  "TYBM":"部门",
+	};*/
 	
 	function obj_BMKH()
 	{
@@ -3127,7 +3480,7 @@ function Get_BMKH()
 		
 		function obj_BM(BM)
 		{
-			this.bm = BM.bm; //部门名字
+			this.bm = TranDigToText(BM.bm); //部门名字
 			this.pj = BM.pj;
 			this.df0 = BM.df0; //工作量/工作难度
 			this.df1 = BM.df1; //工作完成效果
@@ -3137,11 +3490,19 @@ function Get_BMKH()
 			this.df5 = BM.df5; //沟通合作能力
 			this.df6 = BM.df6; //部门成员表现
 		}
-		this.arrBM = new Array();
-		for(var i = 0; i < json_BMKH.BM.sum; ++i)
+		this.arrBM = new Array();//alert(json_BMKH.BM.arrBM.length);
+		for(var i = 0; i < json_BMKH.BM.arrBM.length; ++i)
 		{
 			this.arrBM.push(new obj_BM(json_BMKH.BM.arrBM[i]));
 		}
+		
+		this.arrBuMen = new Array();
+		for(var i = 0; i < json_BMKH.BuMen.length; ++i)
+		{
+			this.arrBuMen.push({"name":TranDigToText(json_BMKH.BuMen[i].name)});
+		}
+
+		this.TYBM = TranDigToText(json_BMKH.TYBM);
 	}
 	
 	var objReturn = new obj_BMKH();
@@ -3155,19 +3516,25 @@ function Post_BMKH(obj_BMKH)//obj_BMKH为Get_BMKH()定义的对象
 	{
 		_arrBM.push(
 						{
-							"bm":"部门", //部门名字
-							"pj":"评价",
-							"df0":0, //工作量/工作难度
-							"df1":1, //工作完成效果
-							"df2":2, //工作态度
-							"df3":3, //纪律性
-							"df4":4, //部门凝聚力
-							"df5":5, //沟通合作能力
-							"df6":6, //部门成员表现
+							"bm":TranTextToDig(obj_BMKH.arrBM[i].bm), //部门名字
+							"pj":obj_BMKH.arrBM[i].pj,
+							"df0":obj_BMKH.arrBM[i].df0, //工作量/工作难度
+							"df1":obj_BMKH.arrBM[i].df1, //工作完成效果
+							"df2":obj_BMKH.arrBM[i].df2, //工作态度
+							"df3":obj_BMKH.arrBM[i].df3, //纪律性
+							"df4":obj_BMKH.arrBM[i].df4, //部门凝聚力
+							"df5":obj_BMKH.arrBM[i].df5, //沟通合作能力
+							"df6":obj_BMKH.arrBM[i].df6, //部门成员表现
 						}
 					);
 	}
 	
+	var _arrBuMen = new Array();
+	for(var i = 0; i < obj_BMKH.arrBuMen.length; ++i)
+	{
+		_arrBuMen.push({"name":TranTextToDig(obj_BMKH.arrBuMen[i].name)});
+	}
+
 	var json_Post_BMKH = 
 	{
 		"status":obj_BMKH.status,//是否为可提交状态
@@ -3175,10 +3542,24 @@ function Post_BMKH(obj_BMKH)//obj_BMKH为Get_BMKH()定义的对象
 		{
 			"sum":obj_BMKH.arrBM.length,//部门数目
 			"arrBM":_arrBM,
-		}
-	}
+		},
+		//"BuMen":_arrBuMen,//推优部门
+		"TYBM":TranTextToDig(obj_BMKH.TYBM),
+	};
 	//alert(json_Post_BMKH.BM.arrBM[2].bm);
 	//服务器成功接收信息，则返回true，否则返回false
+	
+		//ajax请求
+		var obj;
+	    $.ajax({
+		url:URL+"/post_bmkh",
+		data:json_Post_BMKH,
+		async:false,
+		dataType:"json",
+		success:function(result){obj=result;}
+		});
+			
+	//alert(obj.status);
 	if(1)
 		return true;
 	else
@@ -3189,107 +3570,79 @@ function Post_BMKH(obj_BMKH)//obj_BMKH为Get_BMKH()定义的对象
 //获取优秀部长评定表数据
 function Get_YXBZPD()
 {
+
+		//ajax请求，接收当前账号的个人信息
+		var obj;
+	    $.ajax({
+		url:URL+"/funcyxbz",
+		data:{'year':'2014','month':'6','nima':'a'},
+		async:false,
+		dataType:"json",
+		success:function(result){obj=result;}
+		});	
+		var json_YXBZPD = obj;
+		
+/*
 	var json_YXBZPD = 
 	{
 		"status":0,
-		"YXBZPDlist":
-		{
-			"sum":10,//部长人数
-			"arrYXBZPDlist":
-			[
-				{
-					"name" : "部长",
-					"account" : "201205220",
-					"Checked" : true, //true表示此人被选，false表示没选
-				},
-				
-				{
-					"name" : "部长",
-					"account" : "201205220",
-					"Checked" : true, //true表示此人被选，false表示没选
-				},
-				
-				{
-					"name" : "部长",
-					"account" : "201205220",
-					"Checked" : true, //true表示此人被选，false表示没选
-				},
-				
-				{
-					"name" : "部长",
-					"account" : "201205220",
-					"Checked" : true, //true表示此人被选，false表示没选
-				},
-				
-				{
-					"name" : "部长",
-					"account" : "201205220",
-					"Checked" : true, //true表示此人被选，false表示没选
-				},
-				
-				{
-					"name" : "部长",
-					"account" : "201205220",
-					"Checked" : true, //true表示此人被选，false表示没选
-				},
-				
-				{
-					"name" : "部长",
-					"account" : "201205220",
-					"Checked" : true, //true表示此人被选，false表示没选
-				},
-				
-				{
-					"name" : "部长",
-					"account" : "201205220",
-					"Checked" : true, //true表示此人被选，false表示没选
-				},
-				
-				{
-					"name" : "部长",
-					"account" : "201205220",
-					"Checked" : true, //true表示此人被选，false表示没选
-				},
-				
-				{
-					"name" : "部长",
-					"account" : "201205220",
-					"Checked" : true, //true表示此人被选，false表示没选
-				},
-			],
-		},
+		"arrYXBZPDlist":
+		[
+			{
+				"name" : "部长",
+				"account" : "201205220",
+				"Checked" : true, //true表示此人被选，false表示没选
+				"depart":"2",
+				"score":"9",
+			},
+			{
+				"name" : "部长",
+				"account" : "201205220",
+				"Checked" : true, //true表示此人被选，false表示没选
+				"depart":"2",
+				"score":"9",
+			},
+			{
+				"name" : "部长",
+				"account" : "201205220",
+				"Checked" : true, //true表示此人被选，false表示没选
+				"depart":"2",
+				"score":"9",
+			},
+			{
+				"name" : "部长",
+				"account" : "201205220",
+				"Checked" : true, //true表示此人被选，false表示没选
+				"depart":"2",
+				"score":"9",
+			},
+		],
 	};
-	
-	var currentUserID=GetObjById("login_info_user_id").innerHTML;
-	//返回优秀部长评定表的对象，包括表格数组和是否可修改的状态，数组内容是考核成绩升序的部长名和部长ID
-	
-	//下面是部长对象的示例，名字和ID和是否被选择是必须的
-	function classYXBZ(YXBZPDlist, i)
+*/
+	for(var i=0;i<json_YXBZPD.arrYXBZPDlist.length;i++)
 	{
-		this.name=YXBZPDlist.name;
-		this.account=YXBZPDlist.account + i;
-		this.Checked=YXBZPDlist.Checked;//true表示此人被选，false表示没选
+		var index=json_YXBZPD.arrYXBZPDlist[i].depart;
+		json_YXBZPD.arrYXBZPDlist[i].depart=arrDepartName[index-1];
 	}
-	//下面是优秀部长评定表对象的示例
-	function classYXBZPD()
-	{		
-		var arrYXBZlist = new Array();
-		for(var i=0;i<json_YXBZPD.YXBZPDlist.sum;i++)
-		{
-			arrYXBZlist[i]=new classYXBZ(json_YXBZPD.YXBZPDlist.arrYXBZPDlist[i], i);
-		}
-		this.arrYXBZPDlist = arrYXBZlist;
-		this.status = 0;//1表示不能提交更改，0表示能提交更改
-	}
-	var objYXBZPD = new classYXBZPD();
-	return objYXBZPD;
-	
+	return json_YXBZPD;
 }
 
 
 //获取主席团反馈表数据
 function Get_ZXTFK()
 {
+
+		//ajax请求，接收当前账号的个人信息
+		var obj;
+	    $.ajax({
+		url:URL+"/jszxtfk",
+		data:{"type":1},
+		async:false,
+		dataType:"json",
+		success:function(result){obj=result;}
+		});	
+        var json_ZXTFK = obj;
+		/*
 	var json_ZXTFK = 
 	{
 		"classSortDepart"://首先是部门排名情况，按排名给出部门名字，得分，是否优秀部门
@@ -3428,7 +3781,8 @@ function Get_ZXTFK()
 			{"anonymityFeedBack":"这人身高太逆天"},
 		],
 	};
-	
+	*/
+	/*
 	//切记主席团反馈表的数据是主席ID不同而不同的
 	var currentUserID=GetObjById("login_info_user_id").innerHTML;
 	
@@ -3473,17 +3827,22 @@ function Get_ZXTFK()
 	{
 		_arrMinFeedBack[i]=new classSituation(json_ZXTFK.classSituation.arrMinFeedBack[i]);
 	}
-	
+	*/
 	//这就是最后要返回的类了
 	function classZXTFK()
 	{
-		this.arrSorted=_arrSorted;
-		this.arrExcMin = _arrExcMin;
-		this.arrMinFeedBack = _arrMinFeedBack;
-		this.arrAnonymity = json_ZXTFK._arrAnonymity;
+		this.arrSorted=new Array();
+		this.arrExcMin = new Array();
+		this.arrMinFeedBack = new Array();
+		this.arrAnonymity = new Array();
 	}
 	
-	var objZXTFK = new classZXTFK();
+	var objZXTFK=new classZXTFK;
+	//alert(json_ZXTFK.classSortDepart.sum);
+	objZXTFK.arrSorted=json_ZXTFK.classSortDepart.arrSorted;
+	objZXTFK.arrExcMin =json_ZXTFK.ExcMinster;
+	objZXTFK.arrMinFeedBack=json_ZXTFK.classSituation.arrMinFeedBack;
+	objZXTFK.arrAnonymity=json_ZXTFK._arrAnonymity;
 	return objZXTFK;
 	
 }
@@ -3492,18 +3851,57 @@ function Get_ZXTFK()
 function Post_YXBZPD(arrIDlist)
 {	
 	//arrIDlist是一组学号（ID），学号对应的就是被推选为优秀部长的
+	
 	var jsonArr=new Array();
 	
 	for(var i=0;i<arrIDlist.length;i++)
 	{
 		var jsonID={"account":arrIDlist[i]};
+		jsonArr[i]=jsonID;
 	}
 	var jsonPost={"arrIDlist":jsonArr};
+	/*
+	var json={
+	"arrIDlist":
+	[
+		{"account":"2012052207"},
+		{"account":"2013052207"},
+	],
+	};
+	
+	*/
 	
 	//发送成功返回true，失败返回false
+		//ajax请求
+		var obj;
+	    $.ajax({
+		url:URL+"/post_yxbz",
+		data:jsonPost,
+		async:false,
+		dataType:"json",
+		success:function(result){obj=result;}
+		});
+		
 	return true;
 }
 
+
+//发送考核进程控制表的数据回数据库
+function Post_KHJCKZ(KHJCKZ)
+{
+	//确定开始本月考核，KHJCKZ=1
+	//确定开始优秀部长评定,KHJCKZ=2
+	//确定发布结果,KHJCKZ=3
+	//否则，KHJCKZ=0
+	var json_Post_KHJCKZ = 
+	{
+		"KHJCKZ":KHJCKZ,
+	};
+	if(1)
+		return true;
+	else
+		return false;
+}
 
 function PerformInit()
 {
@@ -3511,9 +3909,9 @@ function PerformInit()
 
 	var arrTable = GetTable();
 	GetObjById("table_name").innerHTML = arrTable[0];
-	
-	SelectTime(0);
+		
 	ActiveTableButton();
+	SelectTime(0);
 }
 
 //自动隐藏头部
@@ -3644,11 +4042,11 @@ function ActiveTableButton()
 	for(var i=0; i<arrTable.length; ++i)
 	{
 		var strId = "button_" + i;
-		strHTML += "<button type=\"button\" class=\"perf_ctrl_button\" id=" 
-				+ strId + " value=" + arrTable[i] + ">" + arrTable[i] + "</button>\n";
+		strHTML += "<button type=\"button\" class=\"perf_ctrl_button\" id=\"" 
+				+ strId + "\" value=\"" + arrTable[i] + "\">" + arrTable[i] + "</button>\n";
 	}
 	
-	strHTML += "<img id=\"zhibiao\" src=\"zhibiao2.png\" />"
+	strHTML += "<img id=\"zhibiao\" src=\""+PUBLIC+"/image/zhibiao2.png\" />"
 	
 	GetObjById("control_group").innerHTML = strHTML;	
 	
@@ -3666,9 +4064,9 @@ function ActiveTableButton()
 			iPreTable = iCurTable;
 			iCurTable = parseInt(arr[1]);
 			ChangStyle(iPreTable, iCurTable);//改变当前激活的按钮的样式
-			SelectTime(iCurTable);//处理当前被激活的按钮对应的信息
+			SelectTime(iCurTable, this.value);//处理当前被激活的按钮对应的信息
 			GetObjById("show_more").innerHTML = "";
-			PostTable(this.value);//把点击的表传给服务器			
+			//PostTable(this.value);//把点击的表传给服务器			
 		}
 	}
 }
@@ -3711,11 +4109,11 @@ function ZhiBiaoHuaDong(iPreTable, iCurTable)
 }
 
 //根据选择时间显示内容
-function SelectTime(iCurShowFunction)
+function SelectTime(iCurShowFunction, btnText)
 {
 	var date = new Date();
 	var curYear = date.getFullYear();
-	var curMonth = date.getMonth()+1;
+	var curMonth = date.getMonth();
 	
 	var objYear = GetObjById("year");
 	var objMonth = GetObjById("month");
@@ -3754,10 +4152,11 @@ function SelectTime(iCurShowFunction)
 
 	GetObjById("OK_button").onclick = function()
 	{
-		var year = objYear.options[objYear.selectedIndex].text;
-		var month = objMonth.options[objMonth.selectedIndex].text;
+		year = objYear.options[objYear.selectedIndex].text;
+		month = objMonth.options[objMonth.selectedIndex].text;
 		var arrShowFun = ArrShowTable();
-		PostTimeToServer(year, month );//把获取到的时间的表传回服务器
+		//if(PostTimeToServer(year, month, btnText ))//把获取到的时间的表传回服务器
+	
 		arrShowFun[iCurShowFunction]();//调用被激活的按钮对应的信息的函数
 	}
 }
@@ -3806,7 +4205,10 @@ function ArrShowTable()
 			break;
 			case "主席团反馈表":
 			arrShowFunction.push(Show_ZXTFK);
-			break;			
+			break;
+			case "考核进程控制表":
+			arrShowFunction.push(Show_KHJCKZ);
+			break;
 		}
 	}
 	return arrShowFunction;
@@ -3841,7 +4243,7 @@ function Show_GSZP()
 				
 			strHTML +="	<td rowspan=" + 4 + " scope=\"row\"><p1>" + obj_GSZP.objGSZP_BZ.arrObj_GSZP[i].arrObj[j].bz + "</p1></td><!--二级项目-->\n"
 			+"				<td class=\"min_item\"><p1>" + obj_GSZP.objGSZP_BZ.arrObj_GSZP[i].arrObj[j].a + "</p1></td>\n"
-			+"				<td rowspan=" + 4 + " scope=\"row\"><input name=\"#\" id=" + dfStrId + " value = " + obj_GSZP.arrDF[i][j] + "></td>\n"
+			+"				<td rowspan=" + 4 + " scope=\"row\"><input name=\"#\" id=\"" + dfStrId + "\" value = \"" + obj_GSZP.arrDF[i][j] + "\"></td>\n"
 			+"			</tr>\n"		
 			+"			<tr><td class=\"min_item\"><p1>" + obj_GSZP.objGSZP_BZ.arrObj_GSZP[i].arrObj[j].b + "</p1></td></tr>\n"
 			+"			<tr><td class=\"min_item\"><p1>" + obj_GSZP.objGSZP_BZ.arrObj_GSZP[i].arrObj[j].c + "</p1></td></tr>\n"
@@ -4101,8 +4503,8 @@ function Show_GSZP()
 		GetObjById("ziwopingjia").readOnly = true;
 		
 		GetObjById("tuiyou").options.length = 0;
-		GetObjById("tuiyou").options[0] = new Option(obj_GSZP.tygs);
-		GetObjById("tuiyouliyou").value = obj_GSZP.tyly;
+		GetObjById("tuiyou").options[0] = new Option(obj_GSZP.TYGS.tygs);
+		GetObjById("tuiyouliyou").value = obj_GSZP.TYGS.tyly;
 		GetObjById("tuiyouliyou").readOnly = true;
 		
 		for(var j=0; j<obj_GSZP.arrDBZPJ.length; ++j)
@@ -4215,9 +4617,9 @@ function Show_GJBMCQTJ()
 	{
 		strHTML += "<tr>\n"
 +"							<td>" + obj_GJBMCQTJ.chuqin[i][0] + "</td>\n"
-+"							<td class=\"normal_input\"><input class=\"perf_textarea\" name=\"#\" type=\"text\" id=cq_" + i + "_1" + " value=" + obj_GJBMCQTJ.chuqin[1][1] + " /></td>\n"
-+"							<td class=\"normal_input\"><input class=\"perf_textarea\" name=\"#\" type=\"text\" id=cq_" + i + "_2" + " value=" + obj_GJBMCQTJ.chuqin[1][2] + " /></td>\n"
-+"							<td class=\"normal_input\"><input class=\"perf_textarea\" name=\"#\" type=\"text\" id=cq_" + i + "_3" + " value=" + obj_GJBMCQTJ.chuqin[1][3] + " /></td>\n"
++"							<td class=\"normal_input\"><input class=\"perf_textarea\" name=\"#\" type=\"text\" id=cq_" + i + "_1" + " value=\"" + obj_GJBMCQTJ.chuqin[1][1] + "\" /></td>\n"
++"							<td class=\"normal_input\"><input class=\"perf_textarea\" name=\"#\" type=\"text\" id=cq_" + i + "_2" + " value=\"" + obj_GJBMCQTJ.chuqin[1][2] + "\" /></td>\n"
++"							<td class=\"normal_input\"><input class=\"perf_textarea\" name=\"#\" type=\"text\" id=cq_" + i + "_3" + " value=\"" + obj_GJBMCQTJ.chuqin[1][3] + "\" /></td>\n"
 +"						</tr>\n";
 	}
 	strHTML += "</table>\n"
@@ -4317,12 +4719,12 @@ function Show_DYYJCN()
 		{
 			var strId = "cnjf_" + i + "_" + j;
 			strHTML += "<tr>\n"
-			+ " <td>" + obj_DYYJCN.arrObjBM[i].arrObjCNJF[j].name  + "</td><td class=\"normal_input\"><input id=" + strId + " class=\"perf_textarea\" name=\"#\" type=\"text\" value=" + obj_DYYJCN.arrObjBM[i].arrObjCNJF[j].jiafen + " /></td>\n";
+			+ " <td>" + obj_DYYJCN.arrObjBM[i].arrObjCNJF[j].name  + "</td><td class=\"normal_input\"><input id=" + strId + " class=\"perf_textarea\" name=\"#\" type=\"text\" value=\"" + obj_DYYJCN.arrObjBM[i].arrObjCNJF[j].jiafen + "\" /></td>\n";
 			++j
 			if(j < obj_DYYJCN.arrObjBM[i].bmrs )
 			{
 				strId = "cnjf_" + i + "_" + j;
-				strHTML += "<td>" + obj_DYYJCN.arrObjBM[i].arrObjCNJF[j].name  + "</td><td class=\"normal_input\"><input id=" + strId + " class=\"perf_textarea\" name=\"#\" type=\"text\" value=" + obj_DYYJCN.arrObjBM[i].arrObjCNJF[j].jiafen + " /></td>\n";
+				strHTML += "<td>" + obj_DYYJCN.arrObjBM[i].arrObjCNJF[j].name  + "</td><td class=\"normal_input\"><input id=" + strId + " class=\"perf_textarea\" name=\"#\" type=\"text\" value=\"" + obj_DYYJCN.arrObjBM[i].arrObjCNJF[j].jiafen + "\" /></td>\n";
 			}
 			else
 				strHTML += "<td></td><td class=\"normal_input\"><input id=" + strId + " class=\"perf_textarea\" name=\"#\" type=\"text\" value=\" \"/></td>\n";
@@ -4331,7 +4733,7 @@ function Show_DYYJCN()
 			if(j < obj_DYYJCN.arrObjBM[i].bmrs )
 			{
 				strId = "cnjf_" + i + "_" + j;
-				strHTML += "<td>" + obj_DYYJCN.arrObjBM[i].arrObjCNJF[j].name  + "</td><td class=\"normal_input\"><input id=" + strId + " class=\"perf_textarea\" name=\"#\" type=\"text\" value=" + obj_DYYJCN.arrObjBM[i].arrObjCNJF[j].jiafen + " /></td>\n";
+				strHTML += "<td>" + obj_DYYJCN.arrObjBM[i].arrObjCNJF[j].name  + "</td><td class=\"normal_input\"><input id=" + strId + " class=\"perf_textarea\" name=\"#\" type=\"text\" value=\"" + obj_DYYJCN.arrObjBM[i].arrObjCNJF[j].jiafen + "\" /></td>\n";
 			}
 			else
 				strHTML += "<td></td><td class=\"normal_input\"><input id=" + strId + " class=\"perf_textarea\" name=\"#\" type=\"text\" value=\" \"/></td>\n";
@@ -4432,11 +4834,14 @@ function Show_ZTKHJGFK()
 	strHTML += "<p class=\"fill_in_tips\">各部门优秀干事</p>\n"
 			+"	<ul>\n";
 	for(var i = 0; i < obj_ZTKHJGFK.arrObjYXGS.length; ++i)
-	{
+	{	
+		
 		strHTML += "<li><span>" + obj_ZTKHJGFK.arrObjYXGS[i].bm + "</span>&emsp;\n"
 				+"		<ol>\n";
+		
 		for(var j = 0; j < obj_ZTKHJGFK.arrObjYXGS[i].arrObjGBMYXGS.length; ++j)
 		{
+			
 			strHTML += "<li>" + obj_ZTKHJGFK.arrObjYXGS[i].arrObjGBMYXGS[j].name + "&emsp;<span>得分：</span>" + obj_ZTKHJGFK.arrObjYXGS[i].arrObjGBMYXGS[j].df + "&emsp;<span>" + obj_ZTKHJGFK.arrObjYXGS[i].arrObjGBMYXGS[j].ydyxgs + "</span></li>\n"
 		}
 		strHTML += "</ol>\n"
@@ -4499,7 +4904,7 @@ function Show_BZZP()
 				
 			strHTML +="	<td rowspan=" + 4 + " scope=\"row\"><p1>" + objBZZP_BZ.arrObj_BZZP[i].arrObj[j].bz + "</p1></td><!--二级项目-->\n"
 			+"				<td class=\"min_item\"><p1>" + objBZZP_BZ.arrObj_BZZP[i].arrObj[j].a + "</p1></td>\n"
-			+"				<td rowspan=" + 4 + " scope=\"row\"><input name=\"#\" id=" + dfStrId + " value=" + obj_BZZP.arrDF[i][j] + "></td>\n"
+			+"				<td rowspan=" + 4 + " scope=\"row\"><input name=\"#\" id=" + dfStrId + " value=\"" + obj_BZZP.arrDF[i][j] + "\"></td>\n"
 			+"			</tr>\n"		
 			+"			<tr><td class=\"min_item\"><p1>" + objBZZP_BZ.arrObj_BZZP[i].arrObj[j].b + "</p1></td></tr>\n"
 			+"			<tr><td class=\"min_item\"><p1>" + objBZZP_BZ.arrObj_BZZP[i].arrObj[j].c + "</p1></td></tr>\n"
@@ -4570,7 +4975,7 @@ function Show_BZZP()
 	var nmpjStrHTML = "<tr><td>姓名</td><td>职位</td><td>匿名评价</td>\n";
 	for(var i = 0; i < obj_BZZP.arrNMPJ.length; ++i)
 	{
-		nmpjStrHTML += "<tr><td>" + obj_BZZP.arrNMPJ[i].name + "</td><td>" + obj_BZZP.arrNMPJ[i].depart + "</td><td class=\"normal_input\"><input id=" + ("nmpj"+i) + " type=\"text\" size=\"80\" class=\"perf_textarea\" /></td></tr>\n";
+		nmpjStrHTML += "<tr><td>" + obj_BZZP.arrNMPJ[i].name + "</td><td>" + obj_BZZP.arrNMPJ[i].depart + "</td><td class=\"normal_input\"><input id=" + ("nmpj_"+i) + " type=\"text\" size=\"80\" class=\"perf_textarea\" /></td></tr>\n";
 	}
 	GetObjById("nmpj").innerHTML = nmpjStrHTML;
 	
@@ -4672,11 +5077,11 @@ function Show_BZZP()
 		{
 
 			if(CheckLegalStr(this.value))
-				obj_BZZP.zwpj = this.value;
+				obj_BZZP.dzgfzxpj = this.value;
 			else
 			{
 				alert("您输入有非法字段，请重新输入");
-				obj_BZZP.zwpj = "";
+				obj_BZZP.dzgfzxpj = "";
 				this.value = "";
 			}
 		}
@@ -4684,9 +5089,9 @@ function Show_BZZP()
 		//对主席团的匿名评价
 		for(var i = 0; i < obj_BZZP.arrNMPJ.length; ++i)
 		{
-			var strId = "nmpj"+i;
+			var strId = "nmpj_"+i;
 			GetObjById(strId).value = obj_BZZP.arrNMPJ[i].pj;
-			GetObjById(strId).change = function(e)
+			GetObjById(strId).onchange = function(e)
 			{
 				var curId = GetId(e);
 				var curIndex = curId.split("_");
@@ -4762,20 +5167,20 @@ function Show_BZZP()
 		GetObjById("ziwopingjia").value = obj_BZZP.zwpj;
 		GetObjById("ziwopingjia").readOnly = true;
 		
-		for(var j=0; j<obj_bzZP.arrDQTBZPJ.length; ++j)
+		for(var j=0; j<obj_BZZP.arrDQTBZPJ.length; ++j)
 		{
 			var fsStrId = "fenshu" + "_" + j;
 			var pjStrId = "pingjia" + "_" + j;
-			GetObjById(fsStrId).value = obj_bzZP.arrDQTBZPJ[j].fs;
+			GetObjById(fsStrId).value = obj_BZZP.arrDQTBZPJ[j].fs;
 			GetObjById(fsStrId).readOnly = true;
-			GetObjById(pjStrId).value = obj_bzZP.arrDQTBZPJ[j].pj;
+			GetObjById(pjStrId).value = obj_BZZP.arrDQTBZPJ[j].pj;
 			GetObjById(pjStrId).readOnly = true;
 		}
 		
 		//对主席团的匿名评价
 		for(var i = 0; i < obj_BZZP.arrNMPJ.length; ++i)
 		{
-			var strId = "nmpj"+i;
+			var strId = "nmpj_"+i;
 			GetObjById(strId).value = obj_BZZP.arrNMPJ[i].pj;
 			GetObjById(strId).readOnly = true;
 		}
@@ -4824,7 +5229,7 @@ function Show_GSKH()
 						+"<td>" + obj_GSKH.arrGSDF[i].name + "</td>";
 		for(var j = 0 ; j < 7; ++j)
 		{
-			strHTML += "<td class=\"normal_input\"><input class=\"perf_textarea\" name=\"#\" type=\"text\" value=" + obj_GSKH.arrGSDF[i][("df"+j)] + " id =" + ("bzId_"+i+"_"+j) + " size=\"16\"/></td>";
+			strHTML += "<td class=\"normal_input\"><input class=\"perf_textarea\" name=\"#\" type=\"text\" value=\"" + obj_GSKH.arrGSDF[i][("df"+j)] + "\" id =" + ("bzId_"+i+"_"+j) + " size=\"16\"/></td>";
 		}
 		strHTML += "</tr>";
 	}
@@ -4854,7 +5259,7 @@ function Show_GSKH()
 						+"<td>" + obj_GSKH.arrGSDF[i].name + "</td>";
 		for(var j = 7 ; j < 14; ++j)
 		{
-			strHTML += "<td class=\"normal_input\"><input class=\"perf_textarea\" name=\"#\" type=\"text\" value=" + obj_GSKH.arrGSDF[i][("df"+j)] + " id =" + ("bzId_"+i+"_"+j) + " size=\"16\"/></td>";
+			strHTML += "<td class=\"normal_input\"><input class=\"perf_textarea\" name=\"#\" type=\"text\" value=\"" + obj_GSKH.arrGSDF[i][("df"+j)] + "\" id =" + ("bzId_"+i+"_"+j) + " size=\"16\"/></td>";
 		}
 		strHTML += "</tr>";
 	}
@@ -4869,7 +5274,7 @@ function Show_GSKH()
 					
 	for(var i = 0; i < obj_GSKH.arrDGSPJ.length; ++i)
 	{
-		strHTML += "<tr><td>" + obj_GSKH.arrDGSPJ[i].name + "</td><td class=\"normal_input\"><input id=" + ("pj_"+i) + " type=\"text\" size=\"100\" class=\"perf_textarea\" value=" + obj_GSKH.arrDGSPJ[i].pj + " /></td></tr>";
+		strHTML += "<tr><td>" + obj_GSKH.arrDGSPJ[i].name + "</td><td class=\"normal_input\"><input id=" + ("pj_"+i) + " type=\"text\" size=\"100\" class=\"perf_textarea\" value=\"" + obj_GSKH.arrDGSPJ[i].pj + "\" /></td></tr>";
 	}
 	strHTML += "</table>";
 	
@@ -5085,7 +5490,7 @@ function Show_BZFK()
 					+"<p class=\"fill_in_tips\">主管副主席评价</p>"
 					+"<ul class=\"ministerial\">"
 					+"<li>"
-					+obj_BZFK.ZhuGaunFuZhuXiPinJia
+					+obj_BZFK.ZhuGuanFuZhuXiPinJia
 					+"</li>"
 					+"</ul>"
 					+"<h3>干事自我评价部分</h3>"
@@ -5132,11 +5537,11 @@ function Show_BZFK()
 					
 					+"<p class=\"fill_in_tips\">主席的部门评价</p>"
 					+"<ul class=\"ministerial\">"
-					+"	<li><p class=\"self-assessment\">"+obj_BZFK.ZhuGuanFuZhuXiBuMenPinJia+"</p></li>"
+					+"	<li><p class=\"self-assessment\">"+obj_BZFK.ZhuXiDeBuMenPinJia+"</p></li>"
 					+"</ul>"
 					+"<p class=\"fill_in_tips\">主管副主席的部门评价</p>"
 					+"<ul class=\"ministerial\">"
-					+"	<li><p class=\"self-assessment\">"+obj_BZFK.ZhuXiDeBuMenPinJia+"</p></li>"
+					+"	<li><p class=\"self-assessment\">"+obj_BZFK.ZhuGuanFuZhuXiBuMenPinJia+"</p></li>"
 					+"</ul>"
 					+"<button type=\"button\" id=\"submit\" class=\"perf_button\">确定</button>";
 	GetObjById("show_more").innerHTML = strInnerHtml;
@@ -5183,7 +5588,7 @@ function Show_BZKH()
 				strHTML += "<td rowspan=" + obj_BZKH.arrBMBZ[i].arrBZ.length + " scope=\"row\">" + obj_BZKH.arrBMBZ[i].bm + "</td>";
 			strHTML += "<td>" + obj_BZKH.arrBMBZ[i].arrBZ[j].bzmz + "</td>";
 			for(var k = 0; k < 6; ++k)
-				strHTML += "<td class=\"normal_input\"><input id=" + ("df_"+i+"_"+j+"_"+k) + " class=\"perf_textarea\" name=\"#\" type=\"text\" value=" + obj_BZKH.arrBMBZ[i].arrBZ[j][("df"+k)] + " size=\"16\"/></td>";
+				strHTML += "<td class=\"normal_input\"><input id=" + ("df_"+i+"_"+j+"_"+k) + " class=\"perf_textarea\" name=\"#\" type=\"text\" value=\"" + obj_BZKH.arrBMBZ[i].arrBZ[j][("df"+k)] + "\" size=\"16\"/></td>";
 		}
 		strHTML += "</tr>";
 	}
@@ -5212,7 +5617,7 @@ function Show_BZKH()
 			
 			strHTML += "<td>" + obj_BZKH.arrBMBZ[i].arrBZ[j].bzmz + "</td>";
 			for(var k = 6; k < 12; ++k)
-				strHTML += "<td class=\"normal_input\"><input id=" + ("df_"+i+"_"+j+"_"+k) + " class=\"perf_textarea\" name=\"#\" type=\"text\" value=" + obj_BZKH.arrBMBZ[i].arrBZ[j][("df"+k)] + " size=\"16\"/></td>";
+				strHTML += "<td class=\"normal_input\"><input id=" + ("df_"+i+"_"+j+"_"+k) + " class=\"perf_textarea\" name=\"#\" type=\"text\" value=\"" + obj_BZKH.arrBMBZ[i].arrBZ[j][("df"+k)] + "\" size=\"16\"/></td>";
 		}
 		strHTML += "</tr>";
 	}
@@ -5238,7 +5643,7 @@ function Show_BZKH()
 			
 			strHTML += "<td>" + obj_BZKH.arrBMBZ[i].arrBZ[j].bzmz + "</td>";
 			for(var k = 12; k < 15; ++k)
-				strHTML += "<td class=\"normal_input\"><input id=" + ("df_"+i+"_"+j+"_"+k) + " class=\"perf_textarea\" name=\"#\" type=\"text\" value=" + obj_BZKH.arrBMBZ[i].arrBZ[j][("df"+k)] + " size=\"16\"/></td>";
+				strHTML += "<td class=\"normal_input\"><input id=" + ("df_"+i+"_"+j+"_"+k) + " class=\"perf_textarea\" name=\"#\" type=\"text\" value=\"" + obj_BZKH.arrBMBZ[i].arrBZ[j][("df"+k)] + "\" size=\"16\"/></td>";
 		}
 		strHTML += "</tr>";
 	}
@@ -5255,9 +5660,9 @@ function Show_BZKH()
 		for(var j = 0; j < obj_BZKH.arrBMBZ[i].arrBZ.length; ++j)
 		{
 			if(j == 0)
-				strHTML +=" <tr><td rowspan="+ obj_BZKH.arrBMBZ[i].arrBZ.length + " scope=\"row\">" + obj_BZKH.arrBMBZ[i].bm + "</td><td>" + obj_BZKH.arrBMBZ[i].arrBZ[j].bzmz + "</td><td class=\"normal_input\"><input id=" + ("pj_"+i+"_"+j) + " value=" + obj_BZKH.arrBMBZ[i].arrBZ[j].pj + " type=\"text\" size=\"80\" class=\"perf_textarea\" /></td></tr>";
+				strHTML +=" <tr><td rowspan="+ obj_BZKH.arrBMBZ[i].arrBZ.length + " scope=\"row\">" + obj_BZKH.arrBMBZ[i].bm + "</td><td>" + obj_BZKH.arrBMBZ[i].arrBZ[j].bzmz + "</td><td class=\"normal_input\"><input id=" + ("pj_"+i+"_"+j) + " value=\"" + obj_BZKH.arrBMBZ[i].arrBZ[j].pj + "\" type=\"text\" size=\"80\" class=\"perf_textarea\" /></td></tr>";
 			else
-				strHTML += "<tr><td>" + obj_BZKH.arrBMBZ[i].arrBZ[j].bzmz + "</td><td class=\"normal_input\"><input id=" + ("pj_"+i+"_"+j) + " value=" + obj_BZKH.arrBMBZ[i].arrBZ[j].pj + " type=\"text\" size=\"80\" class=\"perf_textarea\" /></td></tr>";
+				strHTML += "<tr><td>" + obj_BZKH.arrBMBZ[i].arrBZ[j].bzmz + "</td><td class=\"normal_input\"><input id=" + ("pj_"+i+"_"+j) + " value=\"" + obj_BZKH.arrBMBZ[i].arrBZ[j].pj + "\" type=\"text\" size=\"80\" class=\"perf_textarea\" /></td></tr>";
 		}
 	}
 	strHTML += "</table>";
@@ -5446,14 +5851,14 @@ function Show_BMKH()
 			+ "				<td>沟通合作能力</td>"
 			+ "				<td>部门成员表现</td>"
 			+ "			</tr>";
-			
+		
 	for(var i = 0; i < obj_BMKH.arrBM.length; ++i)
 	{
 		strHTML +=" <tr>"							
 				+ "		<td>" + obj_BMKH.arrBM[i].bm + "</td>";
 		for(var j = 0; j < 7; ++j)
 		{
-			strHTML +=" <td class=\"normal_input\"><input id=" + ("df_"+i+"_"+j) + " value=" + obj_BMKH.arrBM[i][("df"+j)] + " class=\"perf_textarea\" name=\"#\" type=\"text\" value=\"0\" size=\"16\"/></td>";
+			strHTML +=" <td class=\"normal_input\"><input id=" + ("df_"+i+"_"+j) + " value=\"" + obj_BMKH.arrBM[i][("df"+j)] + "\" class=\"perf_textarea\" name=\"#\" type=\"text\" value=\"0\" size=\"16\"/></td>";
 		}
 		strHTML +=" </tr>";
 	}
@@ -5463,9 +5868,27 @@ function Show_BMKH()
 			+ "		<tr><td>部门</td><td>对部门的评价</td>";
 	for(var i = 0; i < obj_BMKH.arrBM.length; ++i)
 	{
-		strHTML += "<tr><td>" + obj_BMKH.arrBM[i].bm + "</td><td class=\"normal_input\"><input id=" + ("pj_"+i) + " value=" + obj_BMKH.arrBM[i].pj + " type=\"text\" size=\"80\" class=\"perf_textarea\" /></td></tr>";
+		strHTML += "<tr><td>" + obj_BMKH.arrBM[i].bm + "</td><td class=\"normal_input\"><input id=" + ("pj_"+i) + " value=\"" + obj_BMKH.arrBM[i].pj + "\" type=\"text\" size=\"80\" class=\"perf_textarea\" /></td></tr>";
 	}
 	strHTML += "</table>";
+	
+	strHTML += "<h3>推优部分</h3>\n"
+			 + "<p class=\"fill_in_tips\">\n"
+			 + "	<span class=\"fill_part\">填写指引：</span>请推选一个本月表现突出的非本人主管部门，并说明理由，理由会反馈给该部长\n"
+			 + "</p>\n"
+			 + "<p>\n"
+			 + "	部门：\n"
+			 + "	<!--部门-->\n"
+			 + "	<select name=\"#\" id=\"tuiyou\">\n"
+			 + "		<option>部门A</option>\n"
+			 + "		<option>部门B</option>\n"
+			 + "		<option>部门c</option>\n"
+			 + "	</select>\n"
+			 + "</p>\n";
+			 //+ "<p>\n"
+			// + "	理由：\n"
+			 //+ "	<input id=\"tuiyouliyou\" class=\"perf_textarea\" type=\"text\" name=\"#\" size=\"80\" />\n"
+			 //+ "</p>";
 	
 	strHTML += "<!--预留报错位-->\n"
 			+ "	<div></div>\n"
@@ -5541,6 +5964,42 @@ function Show_BMKH()
 			}
 		}
 		
+		//推优部分
+		GetObjById("tuiyou").options.length = 0;
+		var iIndex = 0;
+		for(var i=0; i<obj_BMKH.arrBuMen.length; ++i)
+		{
+			GetObjById("tuiyou").options[i] = new Option(obj_BMKH.arrBuMen[i].name);
+			if(obj_BMKH.TYBM == obj_BMKH.arrBuMen[i].name)
+				iIndex = i;
+		}
+
+		GetObjById("tuiyou").selectedIndex = iIndex;
+		//GetObjById("tuiyouliyou").value = obj_BMKH.TYBZ.tyly;
+		
+		GetObjById("tuiyou").onchange = function()
+		{
+			//if(this.selectedIndex != iIndex)
+			//	GetObjById("tuiyouliyou").value = "请填写......";
+			//else
+			//	GetObjById("tuiyouliyou").value = obj_BMKH.TYBZ.tyly;
+				
+			obj_BMKH.TYBM = this.options[this.selectedIndex].text;
+			//obj_BMKH.TYBZ.account = obj_BMKH.arrBuZhang[this.selectedIndex].account;
+		}
+		/*GetObjById("tuiyouliyou").onchange = function()
+		{
+			if(CheckLegalStr(this.value))
+				obj_BMKH.TYBZ.tyly = this.value;
+			else
+			{
+				alert("您输入有非法字段，请重新输入");
+				obj_BMKH.TYBZ.tyly = "";
+				this.value = "";
+			}
+		}*/
+		
+		
 		function Finish()//判断是否全部完成需要填写的内容
 		{
 			for (var i = 0; i < obj_BMKH.arrBM.length; ++i) 
@@ -5559,6 +6018,10 @@ function Show_BMKH()
 				if(GetObjById(strId).value == "")
 					return false;
 			}
+			
+			//if(GetObjById("tuiyouliyou").value == "")
+			//	return false;
+			
 			return true;
 		}
 		
@@ -5596,6 +6059,11 @@ function Show_BMKH()
 			GetObjById(strId).readOnly = true;
 		}
 		
+		GetObjById("tuiyou").options.length = 0;
+		GetObjById("tuiyou").options[0] = new Option(obj_BMKH.TYBM);
+		//GetObjById("tuiyouliyou").value = obj_BMKH.TYBZ.tyly;
+		//GetObjById("tuiyouliyou").readOnly = true;		
+		
 		GetObjById("submit").value = "确定";
 		GetObjById("submit").onclick = function()
 		{
@@ -5607,6 +6075,7 @@ function Show_BMKH()
 //优秀部长评定
 function Show_YXBZPD()
 {
+	
 	var objYXBZPD = Get_YXBZPD();
 	var strCheckForm = new String();
 	strCheckForm += "<h3>评定本月优秀部长</h3>\n"
@@ -5617,20 +6086,23 @@ function Show_YXBZPD()
 	{
 		var strID=objYXBZPD.arrYXBZPDlist[i].account;
 		var strName=objYXBZPD.arrYXBZPDlist[i].name;
+		var strDepart=objYXBZPD.arrYXBZPDlist[i].depart;
+		var strScore=objYXBZPD.arrYXBZPDlist[i].score;
 		strCheckForm += "<li><label for=\""+strID+"\"><input type=\"checkbox\" id=\""+strID+"\" name=\""+strID+"\" value=\""+strID+"\""; 
 		if(true == objYXBZPD.arrYXBZPDlist[i].Checked)
 		{
 			strCheckForm += "checked=\"checked\"";
 		}
-		strCheckForm +="/>"+strName+"</label></li>\n";
+		strCheckForm +="/>"+strName+"<span>&emsp;部门:</span> "+strDepart+"<span>&emsp;得分:</span> "+strScore+"</label></li>\n";
 	}
 	if(0==objYXBZPD.status)
 	{
+		
 		strCheckForm+="<button type=\"button\" name=\"youxiubuzhan\" id=\"youxiubuzhan\" class=\"perf_button\">"
 					+"	提交\n"
 					+"</button>\n";
-		GetObjById("show_more").innerHTML=strCheckForm;
-		GetObjById("youxiubuzhan").onclick = function()
+		document.getElementById("show_more").innerHTML=strCheckForm;
+		document.getElementById("youxiubuzhan").onclick = function()
 		{
 			
 			var objYXBZNameList = document.forms["yxbzpdb"];
@@ -5644,8 +6116,9 @@ function Show_YXBZPD()
 					
 				}
 			}
-			if(4 == arrIDList.length)
+			if(4 >= arrIDList.length&&0<arrIDList.length)
 			{
+				
 				if(true == Post_YXBZPD(arrIDList) )
 				{
 					alert("提交成功！");
@@ -5659,7 +6132,7 @@ function Show_YXBZPD()
 			}
 			else
 			{
-				alert("必须且只能选4名部长！");
+				alert("你勾选的数量非法");
 			}
 		}
 	}
@@ -5687,7 +6160,7 @@ function Show_ZXTFK()
 	strFeedBack += "<p class=\"fill_int_tips\">部门排名情况</p>\n<ol>";
 	for(var i=0;i<objZXTFK.arrSorted.length;i++)
 	{
-		strFeedBack+="<li>"+objZXTFK.arrSorted[i].name+"&emsp;<span>得分：</span>"+objZXTFK.arrSorted[i].score;
+		strFeedBack+="<li>"+arrDepartName[objZXTFK.arrSorted[i].name-1]+"&emsp;<span>得分：</span>"+objZXTFK.arrSorted[i].score;
 		if(true == objZXTFK.arrSorted[i].isExc)
 		{
 			strFeedBack+="<span>&emsp;月度优秀部门</span>";
@@ -5703,7 +6176,7 @@ function Show_ZXTFK()
 		strFeedBack+="<li><span>月度优秀部长：</span>"
 					+objZXTFK.arrExcMin[i].name
 					+"&emsp;<span>所属部门：</span>"
-					+objZXTFK.arrExcMin[i].depart
+					+arrDepartName[objZXTFK.arrExcMin[i].depart-1]
 					+"&emsp;<span>得分：</span>"
 					+objZXTFK.arrExcMin[i].score
 					+"</li>";
@@ -5713,7 +6186,7 @@ function Show_ZXTFK()
 				
 	for(var i=0;i<objZXTFK.arrMinFeedBack.length;i++)
 	{
-		strFeedBack+="<li><span>"+objZXTFK.arrMinFeedBack[i].depart+":&emsp;</span>"
+		strFeedBack+="<li><span>"+arrDepartName[objZXTFK.arrMinFeedBack[i].depart-1]+":&emsp;</span>"
 					+objZXTFK.arrMinFeedBack[i].minister
 					+"<ul><li>自我评价：<br /><p class=\"self-assessment\">"
 					+objZXTFK.arrMinFeedBack[i].selfAssess
@@ -5736,6 +6209,87 @@ function Show_ZXTFK()
 	}	
 }
 
+//考核进程控制表
+function Show_KHJCKZ()
+{
+	var strHTML = "";
+	strHTML += "<h3>开始本月考核</h3>"
+			+"	<p class=\"fill_in_tips\">开始填写：点击后激活本月绩效考核，各项表格除《优秀部长考核表》外可填</p>"
+			+"	<button type=\"button\" name=\"kaishikaohe\" id=\"kaishikaohe\" class=\"perf_button\">"
+			+"	开始本月考核"
+			+"	</button>"
+			+"	<hr class=\"perf_hr\" />"
+			+"	<h3>开始优秀部长评定</h3>"
+			+"	<p class=\"fill_in_tips\">开始优秀部长评定：点击后关闭干事和部长的所有填写性表格，激活《优秀部长评定表》,激活后，除《优秀部长评定表》外所有表格不可填</p>"
+			+"	<button type=\"button\" name=\"kaishikaohe\" id=\"yxpzpd\" class=\"perf_button\">"
+			+"	开始优秀部长评定"
+			+"	</button>"
+			+"	<hr class=\"perf_hr\" />"
+			+"	<h3>发布结果</h3>"
+			+"	<p class=\"fill_in_tips\">发布结果：点击后所有反馈表发布，所有可填表关闭，结束本月考核</p>"
+			+"	<button type=\"button\" name=\"kaishikaohe\" id=\"fabujieguo\" class=\"perf_button\">"
+			+"	发布结果"
+			+"	</button>"
+			+"	<hr class=\"perf_hr\" />";
+			
+	GetObjById("show_more").innerHTML = strHTML;
+	
+	var KHJCKZ = 0;
+	//确定开始本月考核，KHJCKZ=1
+	//确定开始优秀部长评定,KHJCKZ=2
+	//确定发布结果,KHJCKZ=3
+	//否则，KHJCKZ=0
+	GetObjById("kaishikaohe").onclick = function()
+	{
+		if(confirm("确定开始本月考核?"))
+		{
+			KHJCKZ = 1;//确定
+			if(Post_KHJCKZ(KHJCKZ))
+				GetObjById("show_more").innerHTML = "";
+			else
+				alert("确定开始本月考核失败，请重试");
+		}
+		else
+		{
+			KHJCKZ = 0;//取消
+			GetObjById("show_more").innerHTML = "";
+		}
+	}
+	GetObjById("yxpzpd").onclick = function()
+	{
+		if(confirm("确定开始优秀部长评定?"))
+		{
+			KHJCKZ = 2;//确定
+			if(Post_KHJCKZ(KHJCKZ))
+				GetObjById("show_more").innerHTML = "";
+			else
+				alert("开始优秀部长评定失败，请重试");
+		}
+		else
+		{
+			KHJCKZ = 0;//取消
+			GetObjById("show_more").innerHTML = "";
+		}
+	}
+	GetObjById("fabujieguo").onclick = function()
+	{
+		if(confirm("确定发布结果?"))
+		{
+			KHJCKZ = 3;//确定
+			if(Post_KHJCKZ(KHJCKZ))
+				GetObjById("show_more").innerHTML = "";
+			else
+				alert("发布结果失败，请重试");
+		}
+		else
+		{
+			KHJCKZ = 0;//取消
+			GetObjById("show_more").innerHTML = "";
+		}
+	}
+
+	
+}
 
 
 

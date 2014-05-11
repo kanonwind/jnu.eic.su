@@ -1,0 +1,112 @@
+秘书处：1
+人力资源部：2
+宣传部：3
+信息编辑部：4
+学术部：5
+体育部：6
+KSC联盟：7
+组织部：8
+文娱部：9
+公关部：10
+心理服务部：11
+主席团：12
+
+12信安朱林杰 2014/4/30 15:54:37
+1 干事
+2 人力干事
+3 部长级
+4 主席团
+16:04:18
+12信安朱林杰 2014/4/30 16:04:18
+public function funcinsert($account,$name,$password,$type,$apartment)
+{
+$data['account']=account;//"2012052308";//账号
+$data['name']=$name;//"朱林杰";//名字
+$data['password']=$password;//"2012052308";//初始密码
+$data['type']=$type;//1;//类型
+$data['apartment']=$apartment;//1;//部门
+$person_model=new Model("Person");
+$person_model->add($data);
+}
+
+$this->funcinsert("2012052308","朱林杰","2012052308",1,1);
+//主席团
+$this->funcinsert("2012050100", "邓蔓菁", "2012050100", 4, 12);
+$this->funcinsert("", "何颖欣", "", 4, 12);
+$this->funcinsert("", "施国安", "", 4, 12);
+$this->funcinsert("", "陈浩龙", "", 4, 12);
+$this->funcinsert("", "盛茗珉", "", 4, 12);
+$this->funcinsert("", "区靖雯", "", 4, 12);
+
+//秘书处
+$this->funcinsert("", "田聪聪", "", 3, 1);
+$this->funcinsert("", "吴英文", "", 3, 1);
+$this->funcinsert("", "刘小洁", "", 3, 1);
+$this->funcinsert("2012050100", "张春梅", "2012050100", 1, 1);
+$this->funcinsert("2012050101", "韦长杰", "2012050101", 1, 1);
+$this->funcinsert("2012050102", "张雪", "2012050102", 1, 1);
+$this->funcinsert("2012050103", 周可慧", "2012050103", 1, 1);
+$this->funcinsert("2012050104", "温武佑", "2012050104", 1, 1);
+$this->funcinsert("2012050105", "黄芷然", "2012050105", 1, 1);
+$this->funcinsert("2012050106", "张舒婧", "2012050106", 1, 1);
+$this->funcinsert("2012050107", "李薛毅", "2012050107", 1, 1);
+$this->funcinsert("2012050108", "李辉峰", "2012050108", 1, 1);
+$this->funcinsert("2012050109", "张雨晨", "2012050109", 1, 1);
+
+//编辑部
+$this->funcinsert("", "周嘉林", "", 3, 4);
+$this->funcinsert("", "彭冬毡", "", 3, 4);
+$this->funcinsert("", "何景源", "", 3, 4);
+$this->funcinsert("2012050400", "薛梦钰", "2012050400", 1, 4);
+$this->funcinsert("2012050401", "李露", "2012050401", 1, 4);
+$this->funcinsert("2012050402", "罗婕", "2012050402", 1, 4);
+$this->funcinsert("2012050403", "张蕾", "2012050403", 1, 4);
+$this->funcinsert("2012050404", "周莹", "2012050404", 1, 4);
+$this->funcinsert("2012050405", "王嘉仪", "2012050405", 1, 4);
+$this->funcinsert("2012050406", "高耀源", "2012050406", 1, 4);
+$this->funcinsert("2012050407", "郭兆能", "2012050407", 1, 4);
+$this->funcinsert("2012050408", "杨卓权", "2012050408", 1, 4);
+$this->funcinsert("2012050409", "吕俊龙", "2012050409", 1, 4);
+$this->funcinsert("2012050410", "马坚津", "2012050410", 1, 4);
+$this->funcinsert("2012050411", "黄搁贤", "20120504011", 1, 4);
+
+//人力资源部
+$this->funcinsert("", "卢思翰", "", 3, 2);
+$this->funcinsert("", "陈蔚", "", 3, 2);
+$this->funcinsert("", "陈康明", "", 3, 2);
+$this->funcinsert("2012050200", "凌旺", "2012050200", 2, 2);
+$this->funcinsert("2012050201", "陈桂涛", "2012050201", 2, 2);
+$this->funcinsert("2012050202", "曾治金", "2012050202", 2, 2);
+$this->funcinsert("2012050203", "彭勃", "2012050203", 2, 2);
+$this->funcinsert("2012050204", "郑桂坤", "2012050204", 2, 2);
+$this->funcinsert("2012050205", "欧海杰", "2012050205", 2, 2);
+$this->funcinsert("2012050206", "董彩芹", "2012050206", 2, 2);
+$this->funcinsert("2012050207", "李慧婷", "2012050207", 2, 2);
+$this->funcinsert("2012050208", "高琳", "2012050208", 2, 2);
+$this->funcinsert("2012050209", "余臻", "2012050209", 2, 2);
+$this->funcinsert("2012050210", "陈玥轩", "2012050210", 2, 2);
+
+//组织部
+$this->funcinsert("", "陈慧莹", "", 3, 8);
+$this->funcinsert("", "叶伟珊", "", 3, 8);
+$this->funcinsert("", "李荣荣", "", 1, 8);
+$this->funcinsert("", "张锴翰", "", 1, 8);
+$this->funcinsert("", "王俊淞", "", 1, 8);
+$this->funcinsert("", "冯梦西", "", 1, 8);
+$this->funcinsert("", "张丹瑜", "", 1, 8);
+$this->funcinsert("", "何楚仪", "", 1, 8);
+$this->funcinsert("", "陈晓琳", "", 1, 8);
+$this->funcinsert("", "陆  涛", "", 1, 8);
+$this->funcinsert("", "曾  凯", "", 1, 8);
+$this->funcinsert("", "张伟龙", "", 1, 8);
+
+
+
+
+
+
+
+
+
+
+

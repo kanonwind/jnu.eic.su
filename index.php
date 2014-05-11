@@ -7,4 +7,5 @@
   define('APP_DEBUG',true);
   //4、引入核心文件，区分大小写
   require './ThinkPHP/ThinkPHP.php';
+
 ?>

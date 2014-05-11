@@ -40,7 +40,13 @@ function GetPersonalData()
 	var lunarMonthDays = new Array( "初一","初二","初三","初四","初五","初六","初七","初八","初九","初十",
 									"十一","十二","十三","十四","十五","十六","十七","十八","十九","二十",
 									"廿一","廿二","廿三","廿四","廿五","廿六","廿七","廿八","廿九","三十");
-									
+
+	//用户类型
+	var arrUserType = new Array("干事","人力干事","部长级","主席团");
+	//部门信息转化
+	var arrBuMen = new Array("秘书处", "人力资源部", "宣传部", "信息编辑部",
+							"学术部", "体育部", "KSC联盟", "组织部",
+							"文娱部", "公关部", "心理服务部", "主席团");
 	var arr = 
 	{
 		"birType":"1",
@@ -66,9 +72,9 @@ function GetPersonalData()
     //姓名
     var _name = obj.name;//"邓作恒6666";
     //用户类型
-    var _userType = obj.type;//"部长级";
+    var _userType = arrUserType[obj.type-1];//"部长级";
     //所属部门
-    var _depart = obj.apartment;//"KSC联盟";
+    var _depart = arrBuMen[obj.apartment-1];//"KSC联盟";
     //职位
     var _post =obj.position;// "KSC联盟技术负责人";
     ////////账户信息结束
@@ -283,7 +289,6 @@ function PostPersonalDataToServer(objPersonalData)
 	//alert(objPersonalData.birType+objPersonalData.month+objPersonalData.day);
 	alert("日："+objPersonalData.day);
 	//部门信息转化
-	
 	switch(objPersonalData.depart)
 	{
 		case "秘书处":
@@ -329,16 +334,16 @@ function PostPersonalDataToServer(objPersonalData)
 	switch(objPersonalData.userType)
 	{
 		case "部长级":
-			objPersonalData.userType = "c";
+			objPersonalData.userType = 3;
 			break;
 		case "主席团":
-			objPersonalData.userType = "d";
+			objPersonalData.userType = 4;
 			break;
 		case "干事":
-			objPersonalData.userType = "a";
+			objPersonalData.userType = 1;
 			break;
 		case "人力干事":
-			objPersonalData.userType = "b";
+			objPersonalData.userType = 2;
 			break;
 	}
 	//alert("用户类型"+objPersonalData.userType);
@@ -700,7 +705,7 @@ function PrintToHTML(objPersonalData, curYear)
 									+ "</select>\n"
 								+ "</p>\n"
 								+ "<p>\n"
-									+ "<input type=\"text\" id=\"modf_user_position\" name=\"modf_user_position\" value=" + objPersonalData.post + " />\n"
+									+ "<input type=\"text\" id=\"modf_user_position\" name=\"modf_user_position\" value=\"" + objPersonalData.post + "\" />\n"
 								+ "</p>\n"
 							+ "</div>\n"
 						+ "</div>\n"
@@ -716,19 +721,19 @@ function PrintToHTML(objPersonalData, curYear)
 							+ "</div>\n"
 							+ "<div class=\"info_item\" id=\"contact_info_detail\">\n"
 								+ "<p>\n"
-									+ "<input type=\"text\" id=\"modf_user_lphnum\" name=\"modf_user_lphnum\" value=" + objPersonalData.longPhoneNum + " />\n"
+									+ "<input type=\"text\" id=\"modf_user_lphnum\" name=\"modf_user_lphnum\" value=\"" + objPersonalData.longPhoneNum + "\" />\n"
 								+ "</p>\n"
 								+ "<p>\n"
-									+ "<input type=\"text\" id=\"modf_user_sphnum\" name=\"modf_user_sphnum\" value=" + objPersonalData.shortPhoneNum + " />\n"
+									+ "<input type=\"text\" id=\"modf_user_sphnum\" name=\"modf_user_sphnum\" value=\"" + objPersonalData.shortPhoneNum + "\" />\n"
 								+ "</p>\n"
 								+ "<p>\n"
-									+ "<input type=\"text\" id=\"modf_user_qq\" name=\"modf_user_qq\" value=" + objPersonalData.QQNum + " />\n"
+									+ "<input type=\"text\" id=\"modf_user_qq\" name=\"modf_user_qq\" value=\"" + objPersonalData.QQNum + "\" />\n"
 								+ "</p>\n"
 								+ "<p>\n"
-									+ "<input type=\"text\" id=\"modf_user_dorm\" name=\"modf_user_dorm\" value=" + objPersonalData.dormNO + " />\n"
+									+ "<input type=\"text\" id=\"modf_user_dorm\" name=\"modf_user_dorm\" value=\"" + objPersonalData.dormNO + "\" />\n"
 								+ "</p>\n"
 								+ "<p>\n"
-									+ "<input type=\"text\" id=\"modf_user_email\" name=\"modf_user_email\" value=" + objPersonalData.Email + " />\n"
+									+ "<input type=\"text\" id=\"modf_user_email\" name=\"modf_user_email\" value=\"" + objPersonalData.Email + "\" />\n"
 								+ "</p>\n"
 							+ "</div>\n"
 						+ "</div>\n"
@@ -750,9 +755,9 @@ function PrintToHTML(objPersonalData, curYear)
 								+ "</p>\n"
 								+ "<p>\n"
 									+ "<select id=\"modf_user_grade\">\n"
-										+ "<option value=" + (curYear-2) + ">" + (curYear - 2) + "</option>\n"
-										+ "<option value=" + (curYear-1) + ">" + (curYear-1) + "</option>\n"
-										+ "<option value=" + curYear + ">" + curYear + "</option>\n"
+										+ "<option value=\"" + (curYear-2) + "\">" + (curYear - 2) + "</option>\n"
+										+ "<option value=\"" + (curYear-1) + "\">" + (curYear-1) + "</option>\n"
+										+ "<option value=\"" + curYear + "\">" + curYear + "</option>\n"
 									+ "</select>\n"
 								+ "</p>\n"
 								+ "<p>\n"
@@ -818,7 +823,7 @@ function ChangePersonalData()
 	
 	////写入HTML文件
 	PrintToHTML(objPersonalData, curYear);
-
+alert(objPersonalData.dormNO);
 
 	//////////显示修改前个人信息
 	var userTp = new Array("主席团","部长级","人力干事","干事");

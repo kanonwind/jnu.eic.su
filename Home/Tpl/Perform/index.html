@@ -10,12 +10,14 @@
 	<link href="__PUBLIC__/css/stdindex_title.css" 	type="text/css" 	rel="stylesheet" />
 	<link href="__PUBLIC__/css/perform.css"			type="text/css"		rel="stylesheet" />
 	<script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
-	<script src="__PUBLIC__/js/perform.js" 	type="text/javascript"> </script>
+	<script type="text/javascript" src="__PUBLIC__/js/perform.js"></script>
     <script type="text/javascript">
         var URL = "__URL__";
         var APP = "__APP__";
         var ROOT = "__ROOT__";
 		var PUBLIC="__PUBLIC__";
+
+
     </script>
 	<title>暨南大学电气信息学院团委学生会</title>
 	</head>
@@ -49,17 +51,19 @@
 						<!--站内搜索框，样式和代码均未完成-->
 						<div tabindex="0" id="search_bar">
 							<input type="text" name="q" id="query" title="站内搜索" />
-							<button type="submit" name="qsub" id="searchsubmit" title="搜索" value="" ><img src="site_search.png" alt="搜索按钮徽标" /></button>
+							<button type="submit" name="qsub" id="searchsubmit" title="搜索" value="" ><img src="__PUBLIC__/image/site_search.png" alt="搜索按钮徽标" /></button>
 						</div>
-					
+
+						
 						<!--用户信息，未登陆是为“登陆”锚标签，登陆后为“用户名”，“个人中心”，“注销”3个锚标签-->
+						<!--
 						<div id="login_info">
 							<a class="user_info" id="login_info_user_name" href="#">邓作恒</a>
 							<a class="user_info" id="login_info_user_id" href="#">2012052207</a>
 							<a class="user_info" id="login_info_user_center" href="#">个人中心</a>
 							<a class="user_info" id="login_info_log_out" href="#">注销</a>
 						</div>
-						
+	-->					
 					</div>
 					
 				</div>
@@ -94,14 +98,14 @@
 		<div id="perform_hdr">
 			
 			<div class="perform_hdr_title">
-				
+
 				<div id="user_info_for_perf">
 					<h1>绩效考核系统</h1>
-					<p>用户名：邓作恒</p>
-					<p>所属部门：KSC联盟</p>
-					<p>用户类型：干事</p>
-					<p>职位：KSC联盟执行委员会干事</p>
-					<p>系统阶段：13月考核进行中</p>
+					<p>用户名：<?php echo $name;?></p>
+					<p>所属部门：<?php echo $apartment;?></p>
+					<p>用户类型：<?php echo $type;?></p>
+					<p>职位：<?php echo $position;?></p>
+					<p>系统阶段：4月考核进行中</p>
 				</div>
 				<div>
 					<img src="__PUBLIC__/image/performance_system_logo_big.png" />

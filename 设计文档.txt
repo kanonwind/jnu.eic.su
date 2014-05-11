@@ -437,7 +437,12 @@ apartment1//部门1
 apartment2//部门2
 is_sub//是不是小boss,y表示主管两个部门，n表示主管所有部门
 }
-
+不止是主席团要后台指定，人力干事的跟进也要后台指定
+tbl_rlgj
+{
+account
+apartment
+}
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -554,6 +559,7 @@ tbl_interact
  rapartment//被评价的人的部门
  rposition//被评价的人的职位
  text//评价的内容
+ nm//0表示正常，1表示匿名
 }
 //部长自评表，由部长级填写
 tbl_bzzp
@@ -721,7 +727,7 @@ tbl_resource
  year//
  month//
  code//外调的序列号
- assess//外调的评价
+ assess//外调的评价，1到4分别表示：缺席，迟到早退，一般，表现突出
 }
 
 最后一张是绩效权限表
@@ -860,17 +866,438 @@ VALUES (NULL, '2014', '4', '2012052300', '1', 'a', '2012052307', '1', 'c', '上帝
 3：部长自评表（部长填）
 4：部长考核表（主席填）
 5：部门考核表（主席填）
-6：干事考核反馈表
-7：跟进部门出勤统计表
-8：调研意见采纳表
-9：整体考核结果反馈表
-10：部长反馈表
-11：优秀部长评定表
-12：主席团反馈表
+6：干事考核反馈表（给干事看）
+7：跟进部门出勤统计表（跟进的人力干事填）
+8：调研意见采纳表（所有人力干事都可以填）
+9：整体考核结果反馈表（给主席团看，人力成员看）
+10：部长反馈表（给部长看）
+11：优秀部长评定表（主席团填）
+12：主席团反馈表（给主席团看）
 
 用ip+account共同限制
 
 因为没有采用foreign key，所以在进行CRUD时，一定得注意account的同步性，否则极易出错
+
+
+反馈这一块也是一个大坑来着
+
+忘了还有一张出勤表
+tbl_chuqin
+{
+id 
+year
+month
+waccount
+raccount
+rapartment
+qj//请假次数，默认为0
+ct//迟到或早退次数，默认为0
+qx//缺席次数，默认为0
+}
+出勤暂时只能测试2012052300的跟进部门1
+
+跟进部门出勤统计表，也就是tbl_chuqin要跟tbl_person里的一致
+也就是说，一键激活的时候，将全部部门的全部成员往里面塞
+
+
+还有一个调研意见采纳表，也是需要一键激活的时候，将每个部门的人
+的信息放里面去（其实可以不用）
+tbl_diaoyan
+{
+id
+year
+month
+waccount
+raccount
+rapartment
+caina//意见采纳次数
+}
+//优秀部长评定，默认是主席填的
+tbl_yxbz
+{
+id 
+year
+month
+waccount
+raccount
+checked//1表示被选中，0表示没有
+}
+
+一键激活的时候，需要将所有部门的所有部长弄进去
+
+最后攻坚：考核反馈
+干事篇：这里存的时候不能再是int型了
+tbl_gsfk
+{
+id 
+year
+month
+account
+total//总分
+rank//该月排名
+yxgs//0表示不是，1则为优秀干事
+zpdf//自评得分
+bzpjdf//部长评价
+cqdf//出勤得分
+wddf//外调得分
+tydf//推优得分
+fkdf//反馈得分
+qtdf//其他得分
+}
+部长篇
+tbl_bzfk
+{
+id 
+year
+month
+account
+total//总分
+rank//该月排名
+yxbz//0表示不是，1则为优秀部长
+
+没办法，还是得加一张表，记录外调次数
+tbl_wdcs
+{
+id
+year 
+month
+account
+apartment
+wdcs//默认为0
+rank//部门内排名
+}
+zpdf//自评得分
+zxpjdf//主管副主席评价得分
+gspjdf//干事评价得分
+bzpjdf//本部门其他部长评价得分
+cqdf//出勤得分
+wddf//外调得分
+fkdf//反馈得分
+qtdf//其他得分
+}
+部门篇：
+tbl_bmfk
+{
+id 
+year
+month
+total//总分
+rank//该月排名
+yxbm//0表示不是，1则为优秀部门
+zxpjdf//主席评价得分
+zgpjdf//主管副主席评价得分
+cqdf//出勤得分
+wgkf//违规扣分
+fkdf//干事部长反馈得分和
+tydf//主席团推优得分
+qtdf//其他得分
+yxbz//优秀部长，0为没有，1为有
+}
+
+
+如果出现干事的最终得分一样的话，该如何是好？
+答：按照学号大小排
+
+反馈表统一不加时间限制，因为当前只在4月测试，更主要是因为还没想到好的限制措施
+
+人力干事跟进部门用tbl_rlgj来表示
+暂时只有2012052400跟进秘书处
+
+一些可能会出现null 或 undefine 的得默认为0或空
+
+月度优秀干事，月度优秀部长，月度优秀部门，有些时候需要人为限制，
+额外添加一张表
+tbl_xzyx//限制优秀
+{
+id
+year 
+month
+account //默认为0,
+apartment  //默认为0
+}
+只要在当月能在tbl_xzyx中找到数据，就不能成为优秀
+与此对应，月度优秀成员需要存起来
+
+
+关于时间的限制，分为下面几种：
+1、干事、部长、主席团等需要填写的，从authority中获取active,只有激活，才能填写，也就是说status=1;
+而authority的激活之前是一种方式--》由后台指定，但后台难免会失误，所以应该添加访问指定功能，
+只要有人浏览就会触发时间判断，过期了自动将authority设置为n
+2、反馈表等只能看的，则根据前端传过来的时间请求，找到相应的月份返回输出
+如果要查询的月份不存在，返回错误
+
+关于优秀成员的评定和限制
+1、不能连续两个月优秀
+2、限制某些成员不能拿优秀称号
+
+
+		/*
+		//ajax请求，接收当前账号的个人信息
+		var obj;
+	    $.ajax({
+		url:URL+"Perform/funcgszp",
+		data:{},
+		async:false,
+		dataType:"json",
+		success:function(result){obj=result;}
+		});
+		var json_Get_GSZP=obj;
+		*/
+
+推优？
+tbl_bzty
+{
+id 
+year 
+month
+waccount
+raccount
+tyly
+}
+
+
+
+
+
+
+
+        data:{"year":year,"month":month,},
+
+
+
+
+	//获取请求的时间
+	$year=$_GET['year'];
+	$month=$_GET['month'];
+	//判断时间是否合理
+	$gsfk_model=new Model("Gsfk");
+	if($gsfk_info=$gsfk_model->where("year=$year and month=$month")->find())
+	{
+
+
+
+
+
+
+
+	}//合理空间结束
+	//没有找到该年月对应的话，返回错误信息
+	else{
+	
+	}
+
+
+
+
+		//ajax请求
+		var obj;
+	    $.ajax({
+		url:URL+"/post_gskh",
+		data:json_Post_GSKH,
+		async:false,
+		dataType:"json",
+		success:function(result){obj=result;}
+		});
+		alert(obj.status);
+
+
+delete from tbl_gszp;
+delete from tbl_gskh;
+delete from tbl_bzzp;
+delete from tbl_bzkh;
+delete from tbl_bmkh;
+delete from tbl_interact;	
+delete from tbl_person;
+delete from tbl_oneway;
+
+
+
+
+反馈信息重制版
+在诸多反馈信息中，其实最难的是干事排名、优秀干事、部长排名、
+优秀部长、部门排名、优秀部门
+
+排名基本上是按总分来确定的，时间截止之后，就能生成总分，然后
+依据总分排名
+
+优秀干事的产生：
+每个部门一名
+本部门得分最高者、
+上次考核不是优秀干事
+没受人力的额外限制
+优秀称号限制
+tbl_yxchxz
+{
+id 
+account
+}
+
+
+干事考核反馈表，给干事看的，包括：
+  总分：
+  该月排名：
+  该月优秀干事：
+  得分细节：
+        干事自评表得分
+        干事考核表得分
+        出勤得分
+        外调加分
+        推优加分
+        反馈加分
+        其他得分        
+  自我评价
+  其他干事的评价
+  部长级的评价
+
+
+部长考核反馈表，给部长看，包括
+  总分：
+  排名：
+  得分细节：
+         部长自评得分
+         部长考核表得分
+         干事评分
+         其他部长级评分
+         出勤得分
+         外调加分
+         反馈加分
+
+心理剧大赛取得好成绩，和每个人的努力都分不开，团队的力量才是最大的~决赛我们继续努力！
+
+由于时间紧迫，一键考核并没有完整，反馈表还没有自动生成
+完结之前需要整理出正式的一键考核
+
+优秀部长的评定需要注意顺序，
+1、算出总分
+2、算出排名（虽然不用显示）
+3、符合条件者进入候选名单（排名靠前，没被人力黑，不是上轮优秀）
+4、主席团勾选评定
+5、统计得票，生成优秀部长
+6、将优秀部长加入下轮限制名单中
+
+
+一键反馈：
+第一步：
+生成干事反馈表
+生成部长得分，生成部长排名
+生成部门得分，生成部门排名
+第二步：优秀称号处理
+生成优秀部长候选名单
+生成优秀部门候选名单
+第三步：最终敲定
+统计并确认优秀部长
+统计并确认优秀部门
+
+向前端发送反馈的json数据
+
+
+可能，是最后一张表了
+tbl_yxbzhx//优秀部长候选
+{
+id
+year
+month
+HX
+}
+
+
+干事考核表有误的地方：
+英文2012052345：
+110 117   119   115   117   110 122   117 113   115
+122 120   126.5 119.5 118.5 116 125   123 118.5 119
+116 118.5 122.5 117   117.5 113 123.5 120 115.7 117
+嘉琳2012052358：
+110 113 108 111 110 111 112 112 119 112 112 111
+123 120 115 111 105 105 112 113 109 91  114 103
+116.5
+116.5
+111.5
+111
+107.5
+108
+112
+112
+114
+101.5
+113
+107 
+2012052201
+
+杨帅2012053239：112、113、119、116、115、119、113
+
+
+
+
+tbl_bmwg//部门违规
+{
+ id
+ year
+ month
+ apartment
+ wgkf//违规总共的扣分，存正值
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

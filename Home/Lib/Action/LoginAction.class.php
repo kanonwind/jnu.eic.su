@@ -5,47 +5,50 @@
 class LoginAction extends Action
 {
 	//index为登录界面
+
 	public function index()
 	{
-		$this->display();
+
+	    //先判断session
+		   session_name('LOGIN');
+           session_start();
+        if(empty($_SESSION['account']))	
+		  $this->display();
+		else
+		  $this->redirect("Perform/index");
+
+	  // echo "暂时无法登录";
 	}
 	//check为登录验证界面
 	public function check()
 	{
-		$account=$_POST['user_login_name'];
-		$pw=$_POST['user_login_pw'];
-
-		//进行数据库查询之前，flag=1为正常，flag=0为异常
-		$flag=1;
-		//检查是否为空
-		if(empty($account)||empty($pw))
-			$flag=0;
-		//检查是否含有危险字符
-		//if()
-		//  $flag=0;
-		//没通过检查，返回登录页
-		if($flag==0)
-			$this->redirect("index");
-		//在tbl_person中查找是否有此人
+	    //先判断session
+		   session_name('LOGIN');
+           session_start();
+        if(!empty($_SESSION['account']))		
+            $this->redirect("Perform/index");		
+	    $account=$_POST['user_login_name'];
+	    $password=$_POST['user_login_pw'];
 		$person_model=new Model("Person");
-		$person_info=$person_model->select();
-		$is_exit=0;
-		foreach($person_info as $v)
-		{
-			if($v['account']==$account && $v['password']==$pw)
-				$is_exit=1;
-		}
-		if($is_exit==1)//登录成功
-		{
-			//设置session
-			 session_name('LOGIN');
-             session_start();
-             $_SESSION['account']=$account;
-			 //到达个人中心首页
-			 $this->redirect("Center/index");
-		}		
-		else//登录失败
-			$this->redirect("index");
+		if($person_info=$person_model->where("account=$account and password=$password")->find()) 
+         { 
+		   //如果当前有已经登录，直接跳转到绩效考核，只能通过注销或者关闭来退出	   
+
+           $_SESSION['account']=$account;
+		   $this->redirect("Perform/index");
+	    }
+		else
+		  $this->redirect("Login/index");
 	}
+	/*
+	public function test()
+	{
+	  $admin_model=new Model("Admin");
+	  var_dump($admin_model);
+	  echo "adf;lkj";
+	  $this->display();
+	  
+	}
+	*/
 }
 ?>

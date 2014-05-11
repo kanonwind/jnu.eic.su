@@ -33,12 +33,15 @@ class CenterAction extends Action
 		$person_model=new Model("Person");
 		$person_info=$person_model->where("account=$account")->find();
 		//$this->ajaxReturn("$person_info","查找成功",1);
-        switch($person_info['type'])
+/*       
+	   switch($person_info['type'])
 		{
 			case 'a':$type="干事";break;
 			case 'b':$type="部长级";break;
 			case 'c':$type="主席团";break;
 		}
+		*/
+		/*
 		switch($person_info['apartment'])
 		{
 			case '1':$apartment="秘书处";break;
@@ -54,12 +57,13 @@ class CenterAction extends Action
 			case '11':$apartment="心理服务部";break;
 			case '12':$apartment="主席团";break;
 		}
+		*/
         $arr=Array(
 			//账户信息
 			'account'=>$person_info['account'],
 		    'name'=>$person_info['name'],
-		    'type'=>$type,
-			'apartment'=>$apartment,
+		    'type'=>$person_info['type'],
+			'apartment'=>$person_info['apartment'],
 			'position'=>$person_info['position'],
 			//个人信息     
 		    'sex'=>$person_info['sex'],
@@ -75,8 +79,9 @@ class CenterAction extends Action
 			'dorm'=>$person_info['dorm'],
 			'mail'=>$person_info['mail'],
 		);
+		echo $this->_encode($arr);
 		//第二个参数JSON_UNESCAPED_UNICODE只适用于php版本5.4以上的，这个版本刚好合适
-        echo json_encode($arr,JSON_UNESCAPED_UNICODE);
+       // echo json_encode($arr,JSON_UNESCAPED_UNICODE);
 
 	}
 	//index的js脚本请求通讯录信息，address找到数据整理后返回json数据
@@ -150,7 +155,8 @@ class CenterAction extends Action
 		//$data=$_GET['name'];
 		$arr=Array('name'=>$_GET['name'],'account'=>$account,'status'=>$flag);
 		//$arr=Array('status'=>$flag.$_GET['birthmonth']);
-		echo json_encode($arr,JSON_UNESCAPED_UNICODE);
+		echo $this->_encode($arr);
+		//echo json_encode($arr,JSON_UNESCAPED_UNICODE);
 	}
 	//check 为帮助判断传过来的密码是否为正确的
 	public function check()
@@ -185,7 +191,8 @@ class CenterAction extends Action
 		//$data=$_GET['name'];
 		$arr=Array('status'=>$flag,'password'=>$_GET['password'],'account'=>$_SESSION['account']);
 		//$arr=Array('status'=>$flag.$_GET['birthmonth']);
-		echo json_encode($arr,JSON_UNESCAPED_UNICODE);
+		echo $this->_encode($arr);
+		//echo json_encode($arr,JSON_UNESCAPED_UNICODE);
 
 	}
 	public function change()
@@ -211,13 +218,34 @@ class CenterAction extends Action
 			$flag=0;
 		$arr=Array('account'=>$account,'status'=>$flag);
 		//$arr=Array('status'=>$flag.$_GET['birthmonth']);
-		echo json_encode($arr,JSON_UNESCAPED_UNICODE);
+		echo $this->_encode($arr);
+		//echo json_encode($arr,JSON_UNESCAPED_UNICODE);
 	}
 
 	//revise为修改空课表的数据库操作
 	public function revise()
 	{
 	}
+  //调用—_encode()函数，将数组进行编码转哈
+   public  function _encode($arr)
+  {
+    $na = array();
+    foreach ( $arr as $k => $value ) {  
+      $na[$this->_urlencode($k)] = $this->_urlencode ($value);  
+    }
+    //return addcslashes(urldecode(json_encode($na)),"\\r");
+	return urldecode(json_encode($na));
+  }
+   public function _urlencode($elem)
+  {
+    if(is_array($elem)){
+    foreach($elem as $k=>$v){
+      $na[$this->_urlencode($k)] = $this->_urlencode($v);
+    }
+    return $na;
+  }
+  return urlencode($elem);
+  }
 
 
 }
