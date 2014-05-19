@@ -3954,6 +3954,8 @@ function Get_QTQKJJF()
 			{"name":"姓名", "account":201202222, "depart":"职位", "jiajianfen":-3, "liyou":"理由",},
 			
 		],
+		//部门加减分
+		"bmjjf":{"name":"部门","jiajianfen":-3, "liyou":"理由",},
 	};
 	return json_Get_QYQKJJF;
 }
@@ -3962,7 +3964,7 @@ function POST_QTQKJJF(obj_QTQKJJF)
 {
 	//alert(obj_QTQKJJF.persons[3].jiajianfen);
 	
-	var arrPersons = new Array();
+	/*var arrPersons = new Array();
 	for(var i = 0; i < obj_QTQKJJF.persons.length; ++i)
 	{
 		arrPersons.push({"name":obj_QTQKJJF.persons[i].name, "account":obj_QTQKJJF.persons[i].account, 
@@ -3975,7 +3977,8 @@ function POST_QTQKJJF(obj_QTQKJJF)
 		"status":obj_QTQKJJF.status,//是否可填写状态
 		"gjbm":obj_QTQKJJF.gjbm,//跟进部门
 		"persons":arrPersons,
-	};
+	};*/
+	var json_POST_QTQKJJF = obj_QTQKJJF;
 	//alert(json_POST_QTQKJJF.persons[3].jiajianfen);
 	if(1)//发送成功返回true，否则返回false
 		return true;
@@ -4519,6 +4522,12 @@ function ArrShowTable()
 			case "考核进程控制表":
 			arrShowFunction.push(Show_KHJCKZ);
 			break;
+			case "其他情况加减分":
+			arrShowFunction.push(Show_QTQKJJF);
+			break;	
+			case "优秀评定限制表":
+			arrShowFunction.push(Show_YXPDXZ);
+			break;	
 		}
 	}
 	return arrShowFunction;
@@ -6638,6 +6647,10 @@ function Show_QTQKJJF()
 				+  "<td class=\"normal_input\"><input id=\"" + ("jiajianfen_"+i) + "\" type=\"text\" size=\"5\" class=\"perf_textarea\" value=\"" + obj_QTQKJJF.persons[i].jiajianfen + "\" /></td>"
 				+  "<td class=\"normal_input\"><input id=\"" + ("liyou_"+i) + "\" type=\"texteara\" size=\"80\" class=\"perf_textarea\" value=\"" + obj_QTQKJJF.persons[i].liyou + "\" /></td></tr>\n";
 	}
+	strHTML += "<tr><td>" + obj_QTQKJJF.bmjjf.name + "</td><td></td>"
+			+  "<td class=\"normal_input\"><input id=\"" + ("bmjjf") + "\" type=\"text\" size=\"5\" class=\"perf_textarea\" value=\"" + obj_QTQKJJF.bmjjf.jiajianfen + "\" /></td>"
+				+  "<td class=\"normal_input\"><input id=\"" + ("liyou") + "\" type=\"texteara\" size=\"80\" class=\"perf_textarea\" value=\"" + obj_QTQKJJF.bmjjf.liyou + "\" /></td></tr>\n";
+	
 	strHTML += "</table>";
 	
 	strHTML += "<input type=\"button\" value=\"提交\" id=\"submit\"  class=\"perf_button\" />\n"	
@@ -6669,6 +6682,19 @@ function Show_QTQKJJF()
 				obj_QTQKJJF.persons[iLiyou[1]].liyou = this.value;
 			}
 		}
+		GetObjById("bmjjf").onchange = function()
+		{
+			obj_QTQKJJF.bmjjf.jiajianfen = this.value;
+		}
+		GetObjById("liyou").onchange = function()
+		{
+			if( !CheckLegalStr(this.value) )
+			{
+				this.value = "";
+				alert("您输入有非法字段，请重新输入");					
+			}
+			obj_QTQKJJF.bmjjf.liyou = this.value;
+		}
 		function Finish()//判断是否全部完成需要填写的内容
 		{
 			for(var i = 0; i < obj_QTQKJJF.persons.length; ++i)
@@ -6680,6 +6706,10 @@ function Show_QTQKJJF()
 				if(GetObjById(liyouId).value == "")
 					return false;
 			}
+			if(GetObjById("bmjjf").value == "")
+				return false;
+			if(GetObjById("liyou").value == "")
+				return false;
 			
 			return true;
 		}
