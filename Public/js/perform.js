@@ -3864,6 +3864,15 @@ function Get_ZXTFK()
 	objZXTFK.arrExcMin =json_ZXTFK.ExcMinster;
 	objZXTFK.arrMinFeedBack=json_ZXTFK.classSituation.arrMinFeedBack;
 	objZXTFK.arrAnonymity=json_ZXTFK._arrAnonymity;
+	for(var i = 0; i < objZXTFK.arrMinFeedBack.length; ++i)
+	{
+		objZXTFK.arrMinFeedBack[i].selfAssess = TranStr_Get(objZXTFK.arrMinFeedBack[i].selfAssess);
+		objZXTFK.arrMinFeedBack[i].feedBack = TranStr_Get(objZXTFK.arrMinFeedBack[i].feedBack);
+	}
+	for(var i = 0; i < objZXTFK.arrAnonymity.length; ++i)
+	{
+		objZXTFK.arrAnonymity[i].anonymityFeedBack = TranStr_Get(objZXTFK.arrAnonymity[i].anonymityFeedBack);
+	}
 	return objZXTFK;
 	
 }
@@ -3957,6 +3966,10 @@ function Get_QTQKJJF()
 		//部门加减分
 		"bmjjf":{"name":"部门","jiajianfen":-3, "liyou":"理由",},
 	};
+	for(var i = 0; i < json_Get_QYQKJJF.persons.length; ++i)
+	{
+		json_Get_QYQKJJF.persons[i].liyou = TranStr_Get(json_Get_QYQKJJF.persons[i].liyou);
+	}
 	return json_Get_QYQKJJF;
 }
 //发送其他情况加减分数据
