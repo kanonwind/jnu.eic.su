@@ -114,6 +114,7 @@ function GetTable()
 		data:{'year':'2014','month':'6','nima':'a'},
 		async:false,
 		dataType:"json",
+		type:"POST",
 		success:function(result){obj=result;}
 		});		
 		var arr=obj;
@@ -374,6 +375,7 @@ function Get_GSZP()
 		data:{},
 		async:false,
 		dataType:"json",
+		type:"POST",
 		success:function(result){obj=result;}
 		});
 
@@ -521,6 +523,8 @@ function Post_GSZP(obj_GSZP)//obj_GSZP为Get_GSZP()定义的对象
 	
 	var json_Post_GSZP = 
 	{
+	    "year" : year,
+		"month" : month,
 		"status" : obj_GSZP.status,
 		"arrDF" : arrDFTemp,//得分数组
 		
@@ -540,6 +544,7 @@ function Post_GSZP(obj_GSZP)//obj_GSZP为Get_GSZP()定义的对象
 		data:json_Post_GSZP,
 		async:false,
 		dataType:"json",
+		type:"POST",
 		success:function(result){obj=result;}
 		});	
 	//alert(obj.status)
@@ -563,6 +568,7 @@ function Get_GSKHFK()
 		data:{"year":year,"month":month,},
 		async:false,
 		dataType:"json",
+		type:"POST",
 		success:function(result){obj=result;}
 		});
 		var json_Get_GSKHFK = obj;
@@ -641,6 +647,7 @@ function Get_GJBMCQTJ()
 		data:{"year":year,"month":month,},
 		async:false,
 		dataType:"json",
+		type:"POST",
 		success:function(result){obj=result;}
 		});
 	    var json_Get_GJBMCQTJ = obj;
@@ -712,6 +719,7 @@ function Post_GJBMCQTJ(obj_GJBMCQTJ)//obj_GJBMCQTJ为Get_GJBMCQTJ()定义的对�
 		data:json_Post_GJBMCQTJ,
 		async:false,
 		dataType:"json",
+		type:"POST",
 		success:function(result){obj=result;}
 		});
 		
@@ -735,6 +743,7 @@ function Get_DYYJCN()
 		data:{"year":year,"month":month,},
 		async:false,
 		dataType:"json",
+		type:"POST",
 		success:function(result){obj=result;}
 		});	
 	    var json_obj_DYYJCN = obj;
@@ -977,6 +986,7 @@ function Post_DYYJCN(obj_DYYJCN)//obj_DYYJCN为Get_DYYJCN()定义的对象
 		data:json_Post_DYYJCN,
 		async:false,
 		dataType:"json",
+		type:"POST",
 		success:function(result){obj=result;}
 		});
 	    //var json_Get_GJBMCQTJ = obj;	
@@ -1000,6 +1010,7 @@ function Get_ZTKHJGFK()
 		data:{"year":year,"month":month,},
 		async:false,
 		dataType:"json",
+		type:"POST",
 		success:function(result){obj=result;}
 		});		
 	    var json_Get_ZTKHJGFK = obj;
@@ -1552,6 +1563,7 @@ function Get_BZZP()
 		data:{"year":year,"month":month,},
 		async:false,
 		dataType:"json",
+		type:"POST",
 		success:function(result){obj=result;}
 		});	
         var json_Get_BZZP = obj;
@@ -1692,6 +1704,8 @@ function Post_BZZP(obj_BZZP)//obj_BZZP为Get_BZZP()定义的对象
 	
 	var json_Post_BZZP = 
 	{
+	    "year" : year,
+		"month" : month,
 		"zongfen" : obj_BZZP.zongfen, //总分
 		"status" : obj_BZZP.status, //是否为可提交状态
 		"arrDF" : _arrDF,//得分数组
@@ -1719,12 +1733,13 @@ function Post_BZZP(obj_BZZP)//obj_BZZP为Get_BZZP()定义的对象
 		data:json_Post_BZZP,
 		async:false,
 		dataType:"json",
+		type:"POST",
 		success:function(result){obj=result;}
 		});
 		
 	   
 		//alert(obj.status);
-	if(1)
+	if(obj.status)
 		return true;
 	else
 		return false;
@@ -1975,6 +1990,7 @@ function Get_GSKH()
 		data:{'year':year,'month':month,},
 		async:false,
 		dataType:"json",
+		type:"POST",
 		success:function(result){obj=result;}
 		});		
 		//alert(obj.status);
@@ -2308,6 +2324,8 @@ function Post_GSKH(obj_GSKH)//obj_GSKH为Get_GSKH()定义的对象
 	
 	var json_Post_GSKH = 
 	{
+	    "year" : year,
+		"month" : month,
 		"status" : obj_GSKH.status, //是否为可提交状态
 		//"bmts" : strBMTS, //部门特色，要从服务器获取
 		"GSDF" : //干事得分
@@ -2337,7 +2355,7 @@ function Post_GSKH(obj_GSKH)//obj_GSKH为Get_GSKH()定义的对象
 		});	
 	
 	//服务器成功接收信息，则返回true，否则返回false
-	if(1)
+	if(obj.status)
 		return true;
 	else
 		return false;
@@ -2357,6 +2375,7 @@ function Get_BZFK()
 		data:{'year':'2014','month':'6','nima':'a'},
 		async:false,
 		dataType:"json",
+		type:"POST",
 		success:function(result){obj=result;}
 		});		
         var json_BZFK =obj; 
@@ -2650,6 +2669,7 @@ function Get_BZKH()
 		data:{'year':'2014','month':'6','nima':'a'},
 		async:false,
 		dataType:"json",
+		type:"POST",
 		success:function(result){obj=result;}
 		});	
         var json_BZKH = obj;
@@ -3296,6 +3316,8 @@ function Post_BZKH(obj_BZKH)//obj_BZKH为Get_BZKH()定义的对象
 	//alert(_arrBM[0].arrBZ[0].pj+"   kkk");
 	var json_Post_BZKH = 
 	{
+	    "year" : year,
+		"month" : month,
 		"status":obj_BZKH.status,//是否为可提交状态
 		"BMBZ":
 		{
@@ -3315,10 +3337,11 @@ function Post_BZKH(obj_BZKH)//obj_BZKH为Get_BZKH()定义的对象
 		data:json_Post_BZKH,
 		async:false,
 		dataType:"json",
+		type:"POST",
 		success:function(result){obj=result;}
 		});	
 	
-	if(1)
+	if(obj.status)
 		return true;
 	else
 		return false;
@@ -3414,6 +3437,7 @@ function Get_BMKH()
 		data:{'year':'2014','month':'6','nima':'a'},
 		async:false,
 		dataType:"json",
+		type:"POST",
 		success:function(result){obj=result;}
 		});		
 	var json_BMKH = obj;
@@ -3558,6 +3582,8 @@ function Post_BMKH(obj_BMKH)//obj_BMKH为Get_BMKH()定义的对象
 
 	var json_Post_BMKH = 
 	{
+	    "year" : year,
+		"month" : month,
 		"status":obj_BMKH.status,//是否为可提交状态
 		"BM":
 		{
@@ -3577,11 +3603,12 @@ function Post_BMKH(obj_BMKH)//obj_BMKH为Get_BMKH()定义的对象
 		data:json_Post_BMKH,
 		async:false,
 		dataType:"json",
+		type:"POST",
 		success:function(result){obj=result;}
 		});
 			
 	//alert(obj.status);
-	if(1)
+	if(obj.status)
 		return true;
 	else
 		return false;
@@ -3599,6 +3626,7 @@ function Get_YXBZPD()
 		data:{'year':'2014','month':'6','nima':'a'},
 		async:false,
 		dataType:"json",
+		type:"POST",
 		success:function(result){obj=result;}
 		});	
 		var json_YXBZPD = obj;
@@ -3660,6 +3688,7 @@ function Get_ZXTFK()
 		data:{"type":1},
 		async:false,
 		dataType:"json",
+		type:"POST",
 		success:function(result){obj=result;}
 		});	
         var json_ZXTFK = obj;
@@ -3889,7 +3918,10 @@ function Post_YXBZPD(arrIDlist)
 		var jsonID={"account":arrIDlist[i]};
 		jsonArr[i]=jsonID;
 	}
-	var jsonPost={"arrIDlist":jsonArr};
+	var jsonPost={
+	"year" : year,
+	"month" : month,
+	"arrIDlist":jsonArr};
 	/*
 	var json={
 	"arrIDlist":
@@ -3909,10 +3941,15 @@ function Post_YXBZPD(arrIDlist)
 		data:jsonPost,
 		async:false,
 		dataType:"json",
+		type:"POST",
 		success:function(result){obj=result;}
 		});
 		
-	return true;
+	//alert(obj.status);
+	if(obj.status)
+		return true;
+	else
+		return false;
 }
 
 

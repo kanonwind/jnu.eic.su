@@ -91,7 +91,7 @@ class PerformAction extends Action
   //是否过了填表时间的判断
   public function check()
   {
-	//拒绝未登录访问
+/* 	//拒绝未登录访问
 	session_name('LOGIN');
     session_start();
     if(empty($_SESSION['account']))
@@ -110,14 +110,14 @@ class PerformAction extends Action
 	if($auth_info['active']=='y'&& (20<=$day&&$day<=24))
 	  $status=1;
 	//根据传送过来的表的id，决定要生成那些数据返回
-	$table_id=1;//$_GET['table_id'];
+	$table_id=1;//$_POST['table_id'];
 	switch($table_id)
 	{
 	  case "1":$table_info=$this->gszp($status);break;
 	}
 	$arr=Array('status'=>$status,);
 	echo $this->_encode($arr);
-	//echo json_encode($arr,JSON_UNESCAPED_UNICODE);
+	//echo json_encode($arr,JSON_UNESCAPED_UNICODE); */
   }
   //干事自评表
   public function funcgszp()
@@ -135,11 +135,13 @@ class PerformAction extends Action
 	//$account="2013053165";
 	//$year=date("Y");
 	//$month = date("n");
-	$year="2014";
-	$month="4";
+	//$year="2014";
+	//$month="4";
+	$year=$_POST['year'];
+	$month=$_POST['month'];
 	//获取请求的时间
-	//$year=$_GET['year'];
-	//$month=$_GET['month'];
+	//$year=$_POST['year'];
+	//$month=$_POST['month'];
 	//判断时间是否合理
 	$gszp_model=new Model("Gszp");
 
@@ -170,7 +172,7 @@ class PerformAction extends Action
 	//获取推优干事账号，名字，推优理由（该年该月，谁对谁）
 	$interact_model=new Model('Interact');
 	
-	$interact_info=$interact_model->where("waccount=$account and rtype=$type")->find();
+	$interact_info=$interact_model->where("(year=$year and month=$month) and waccount=$account and rtype=$type")->find();
 	if(!empty($interact_info['raccount']))
 	{
 	$tygs_account=$interact_info['raccount'];
@@ -201,7 +203,7 @@ class PerformAction extends Action
 	{
 	  $bz_account=$v['account'];
 	  $bz_name=$v['name'];
-	  $interact_info=$interact_model->where("waccount=$account and raccount=$bz_account")->find();
+	  $interact_info=$interact_model->where("(year=$year and month=$month) and waccount=$account and raccount=$bz_account")->find();
 	  if(!empty($interact_info['text']))
 	    $bz_pj=$interact_info['text'];
       else 
@@ -215,7 +217,7 @@ class PerformAction extends Action
 	//echo json_encode($arr_DBZPJ,JSON_UNESCAPED_UNICODE);
 	//按照当前账号找出干事自评表的信息
       $gszp_model=new Model("Gszp");
-	$gszp_info=$gszp_model->where("account=$account")->find();
+	$gszp_info=$gszp_model->where("(year=$year and month=$month) and account=$account")->find();
 	    $status=$this->judgetext($gszp_info['zptext']);
 	    //生成得分
 	    $arrDF[]=Array('df'=>$this->judgedf($gszp_info['DF1']),);
@@ -281,10 +283,10 @@ class PerformAction extends Action
 	//$month = date("n");
 	
 	//获取请求的时间
-	//$year=$_GET['year'];
-	//$month=$_GET['month'];
-	$year="2014";
-	$month="14";
+	$year=$_POST['year'];
+	$month=$_POST['month'];
+	//$year="2014";
+	//$month="14";
 	//判断时间是否合理
 	$gskh_model=new Model("Gskh");
 
@@ -304,7 +306,7 @@ class PerformAction extends Action
 	  $gs_name= $v['name'];
 	  //$interact_info=$interact_model->where("(year=$year and month=$month) and (waccount=$account and raccount=$gs_account)")->find();
 	  //echo $interact_info['waccount'].$interact_info['raccount'].$interact_info['text'].$interact_info['DF']."</br>";
-	  $gskh_info=$gskh_model->where(" waccount=$waccount and raccount=$gs_account")->find();
+	  $gskh_info=$gskh_model->where("(year=$year and month=$month) and  waccount=$waccount and raccount=$gs_account")->find();
 	  $arrGSDF[]=Array('account'=>$gs_account,'name'=>$gs_name,
 	    'df0'=>$gskh_info['DF1'],
 		'df1'=>$gskh_info['DF2'],
@@ -331,7 +333,7 @@ class PerformAction extends Action
 	{
 	  $gs_account=$v['account'];
 	  $gs_name=$v['name'];
-	  $interact_info=$interact_model->where("waccount=$waccount and raccount=$gs_account")->find();
+	  $interact_info=$interact_model->where("(year=$year and month=$month) and waccount=$waccount and raccount=$gs_account")->find();
 	  $arrDGSPJ[]=Array('account'=>$gs_account,'name'=>$gs_name,'pj'=>$interact_info['text'],
 	  );
 	}
@@ -368,12 +370,13 @@ class PerformAction extends Action
 	$status=$this->getStatus();
 	//账号，时间
 	$account=$_SESSION['account'];
-	$year=2014;//date("Y");
-	$month = 4;//date("n");
-	
+	//$year=2014;//date("Y");
+	//$month = 4;//date("n");
+	$year=$_POST['year'];
+	$month=$_POST['month'];
 	//获取请求的时间
-	//$year=$_GET['year'];
-	//$month=$_GET['month'];
+	//$year=$_POST['year'];
+	//$month=$_POST['month'];
 	//判断时间是否合理
 	$bzzp_model=new Model("Bzzp");
 	//if($bzzp_info=$bzzp_model->where("year=$year and month=$month")->find())
@@ -459,8 +462,8 @@ class PerformAction extends Action
 
  //生成将要返回的json数组
  $arr=Array(
-   'year'=>$_GET['year'],
-   'month'=>$_GET['month'],
+   'year'=>$_POST['year'],
+   'month'=>$_POST['month'],
    'zongfen'=>$zongfeng,
    'status'=>$status,
    'arrDF'=>$arrDF,
@@ -487,8 +490,10 @@ class PerformAction extends Action
 	$status=$this->getStatus();
 	//账号，时间
 	$account=$_SESSION['account'];
-	$year="2014";//date("Y");
-	$month = "4";//date("n");
+	//$year="2014";//date("Y");
+	//$month = "4";//date("n");
+	$year=$_POST['year'];
+	$month=$_POST['month'];
 	//获取部门，类型
 	$person_model=new Model("Person");
 	//echo $account;
@@ -587,8 +592,10 @@ class PerformAction extends Action
 	$account=$_SESSION['account'];
 	//$year=date("Y");
 	//$month = date("n");
-	$year="2014";
-	$month="4";
+	//$year="2014";
+	//$month="4";
+	$year=$_POST['year'];
+	$month=$_POST['month'];
 	//获取部门，类型
 	$person_model=new Model("Person");	//echo $account;
 	$person_info=$person_model->where("account=$account")->find();
@@ -647,7 +654,7 @@ class PerformAction extends Action
     //找到推优部门
 	  //推优部分
 	  $bmty_model=new Model("Bmty");
-	  $bmty_info=$bmty_model->where("waccount=$account")->find();
+	  $bmty_info=$bmty_model->where("(year=$year and month=$month) and waccount=$account")->find();
 	  $bm_account=$bmty_info['rapartment'];
 	  if(!empty($bm_account)) {//$person_info=$person_model->where("account=$bz_account")->find();
 	  //$bz_name=$person_info['name'];
@@ -685,8 +692,10 @@ class PerformAction extends Action
 	$status=$this->getStatus();
 	//账号，时间
 	$account=$_SESSION['account'];
-	$year=date("Y");
-	$month = date("n");
+	//$year=date("Y");
+	//$month = date("n");
+	$year=$_POST['year'];
+	$month=$_POST['month'];
 	//获取部门，类型
 	$person_model=new Model("Person");	//echo $account;
 	$person_info=$person_model->where("account=$account")->find();
@@ -732,8 +741,10 @@ class PerformAction extends Action
 	$status=$this->getStatus();
 	//账号，时间
 	$account=$_SESSION['account'];
-	$year=date("Y");
-	$month = date("n");
+	//$year=date("Y");
+	//$month = date("n");
+	$year=$_POST['year'];
+	$month=$_POST['month'];
 	//获取部门，类型
 	$person_model=new Model("Person");	//echo $account;
 	$person_info=$person_model->where("account=$account")->find();
@@ -793,8 +804,10 @@ class PerformAction extends Action
 	}	
 	// 
 	*/
-	$year="2014";
-	$month="4";
+	//$year="2014";
+	//$month="4";
+	$year=$_POST['year'];
+	$month=$_POST['month'];
 	//从tbl_yxbzhx中找出十个候选人
 	$yxbzhx_model=new Model("Yxbzhx");
 	$yxbz_model=new Model("Yxbz");
@@ -808,7 +821,7 @@ class PerformAction extends Action
 	  //echo $account."dgh";
 	  //echo "asd".$bz_account;
 	  $checked=0;
-	  $yxbz_info=$yxbz_model->where("waccount=$account and raccount=$bz_account")->find();
+	  $yxbz_info=$yxbz_model->where("(year=$year and month=$month) and waccount=$account and raccount=$bz_account")->find();
 	     //echo "adsf";
 	  
 
@@ -818,7 +831,7 @@ class PerformAction extends Action
 	  //echo $bz_account."部门:".$person_info['apartment'].",checked:".$checked."</br>";
 	  $name=$person_info['name'];
 	  $depart=$person_info['apartment'];
-	  $bzfk_info=$bzfk_model->where("account=$bz_account")->find();
+	  $bzfk_info=$bzfk_model->where("(year=$year and month=$month) and account=$bz_account")->find();
 	  $score=$bzfk_info['total'];
 	  //确定该分数在所有候选人中的排名
 	  $j=0;
@@ -828,7 +841,7 @@ class PerformAction extends Action
 	    if($bz_account==$hx_v2['HX'])
 		  continue;
 		$bz_account2=$hx_v2['HX'];
-		 $bzfk_info2=$bzfk_model->where("account=$bz_account2")->find();
+		 $bzfk_info2=$bzfk_model->where("(year=$year and month=$month) and account=$bz_account2")->find();
 	     if($score<$bzfk_info2['total'])
 	     {
 	       $j++;
@@ -917,7 +930,20 @@ class PerformAction extends Action
 	  $status=0;
 	}
 	*/
-	$status=0;
+	//可编辑性：直接从tbl_authority中获取，判断是否active为y
+	$status=0;//默认为0，表示可以编辑
+	//获取时间
+	$year=$_POST['year'];
+	$month=$_POST['month'];
+	$day=date("j");
+	if(empty($year)||empty($month))
+	  $status=1;
+    $auth_model=new Model("Authority");
+	$auth_info=$auth_model->where("year=$year and month=$month")->find();
+	if(empty($auth_info))
+	  $status=1;
+	if($auth_info['active']=='n')
+	  $status=1;	
 	return $status;
   }
   //在部长考核表中，需要根据主席团的 account,主管的部门 apartment,来生成arrBZ,
@@ -935,8 +961,10 @@ class PerformAction extends Action
 	$account=$_SESSION['account'];
 	//$year=date("Y");
 	//$month = date("n");
-	$year="2014";
-	$month="4";
+	//$year="2014";
+	//$month="4";
+	$year=$_POST['year'];
+	$month=$_POST['month'];
       //找到该本门部长
 	  $person_model=new Model("Person");
 	  $bzkh_model=new Model("Bzkh");
@@ -949,7 +977,7 @@ class PerformAction extends Action
 	    $bzkh_info=$bzkh_model->where("(year=$year and month=$month) and (raccount=$bz_account)")->find();
 	    //生成评价
 		$interact_model=new Model("Interact");
-		$interact_info=$interact_model->where("waccount=$account and raccount=$bz_account")->find();
+		$interact_info=$interact_model->where("(year=$year and month=$month) and waccount=$account and raccount=$bz_account")->find();
 		$arrBZ[]=Array(
 		  'account'=>$bz_account,
 		  'bzmz'=>$bz_name,
@@ -990,6 +1018,8 @@ class PerformAction extends Action
 	$account=$_SESSION['account'];
 	$year="2014";//date("Y");
 	$month = "4";//date("n");
+	$year=$_POST['year'];
+	$month=$_POST['month'];
 	$bmkh_model=new Model("Bmkh");
 	$bmkh_info=$bmkh_model->where("(year=$year and month=$month) and (waccount=$account and rapartment=$apartment)")->find();
 	$oneway_model=new Model("Oneway");
@@ -1046,10 +1076,10 @@ class PerformAction extends Action
 	$rname=$person_info['name'];
 	$apartment=$person_info['apartment'];
 	$bzfk_model=new Model("Bzfk");
-	$bzfk_info=$bzfk_model->where("account=$raccount")->find();
+	$bzfk_info=$bzfk_model->where("(year=$year and month=$month) and account=$raccount")->find();
 	$total=$bzfk_info['total'];
 	$yxbz_model=new Model("Yxbz");
-	$yxbz_info=$yxbz_model->where("waccount=$account and raccount=$raccount")->find();
+	$yxbz_info=$yxbz_model->where("(year=$year and month=$month) and waccount=$account and raccount=$raccount")->find();
     $arrBZ=Array(
 	  'account'=>$raccount,
 	  'name'=>$rname,
@@ -1066,8 +1096,10 @@ class PerformAction extends Action
  //自评后，反馈前，需要各种加分扣分，这次直接跑程序，回头再对接
  public function funcjfkf()
  {
-   $year="2014";
-   $month="4";
+   //$year="2014";
+   //$month="4";
+   $year=$_POST['year'];
+   $month=$_POST['month'];
    //出勤扣分
    //秘书处
    $this->funcchuqin("2013053193",1,1,0,0);
@@ -1226,8 +1258,10 @@ class PerformAction extends Action
  public function funcchuqin($raccount,$rapartment,$qj,$ct,$qx)
  { 
     $chuqin_model=new Model("Chuqin");
-    $year="2014";
-	$month="4";
+    //$year="2014";
+	//$month="4";
+	$year=$_POST['year'];
+	$month=$_POST['month'];
     $data['year']=$year;
 	$data['month']=$month;
 	$data['raccount']=$raccount;
@@ -1243,8 +1277,10 @@ class PerformAction extends Action
    for($i=1;$i<=$time;$i++)
    {
      $resource_model=new Model("Resource");
-     $year="2014";
-     $month="4";
+     //$year="2014";
+     //$month="4";
+	 $year=$_POST['year'];
+	 $month=$_POST['month'];
      $data['year']=$year;
      $data['month']=$month;
      $data['account']=$account;
@@ -1256,8 +1292,10 @@ class PerformAction extends Action
  public function funcdiaoyan($raccount,$rapartment,$caina)
  {
    $diaoyan_model=new Model("Diaoyan");
-   $year="2014";
-   $month="4";
+   //$year="2014";
+   //$month="4";
+   $year=$_POST['year'];
+   $month=$_POST['month'];
    $data['year']=$year;
    $data['month']=$month;
    $data['raccount']=$raccount;
@@ -1270,8 +1308,10 @@ class PerformAction extends Action
  //第一步之干事部分
  public function funcfkonegs()
  {
-	$year="2014";
-	$month="4";
+	//$year="2014";
+	//$month="4";
+	$year=$_POST['year'];
+	$month=$_POST['month'];
    //获取所有干事
     $yxchxz_model=new Model("Yxchxz");
    $person_model=new Model("Person");
@@ -1336,7 +1376,7 @@ class PerformAction extends Action
 	 
 	 while($flag)
 	 {
-	   $gsfk_info=$gsfk_model->where("rank=$j")->select();
+	   $gsfk_info=$gsfk_model->where("(year=$year and month=$month) and rank=$j")->select();
 	   foreach($gsfk_info as $v)
 	   {
 	     $gs_account=$v['account'];
@@ -1346,13 +1386,13 @@ class PerformAction extends Action
 	   }
 	   echo "部门".$i."的排名第".$j."的干事是：".$gs_account."</br>";
 	   //$gs_account=$gsfk_info['account'];
-	   $yxchxz_info=$yxchxz_model->where("account=$gs_account")->find();
+	   $yxchxz_info=$yxchxz_model->where("(year=$year and month=$month) and account=$gs_account")->find();
 	   if(empty($yxchxz_info))
 	   {
 	     echo $gs_account."没有被限制了</br>";
 	     unset($data);
 		 $data['yxgs']=1;
-		 $gsfk_model->where("account=$gs_account")->data($data)->save();
+		 $gsfk_model->where("(year=$year and month=$month) and account=$gs_account")->data($data)->save();
 	     $flag=0;
 	   }
 	   else{
@@ -1373,8 +1413,10 @@ class PerformAction extends Action
  //第一步之部长部分
  public function funcfkonebz()
  {
-   $year="2014";
-   $month="4";
+   //$year="2014";
+   //$month="4";
+   $year=$_POST['year'];
+   $month=$_POST['month'];
   //部长反馈表
    $person_model=new Model("Person");
    $bzfk_model=new Model("Bzfk");
@@ -1612,8 +1654,10 @@ class PerformAction extends Action
  //一键反馈第二步：生成优秀部长候选名单
  public function funcfktwo()
  {
-   $year="2014";
-   $month="4";
+   //$year="2014";
+   //$month="4";
+   $year=$_POST['year'];
+   $month=$_POST['month'];
    $person_model=new Model("Person");
    $bzfk_model=new Model("Bzfk");
    $yxchxz_model=new Model("Yxchxz");
@@ -1633,7 +1677,7 @@ class PerformAction extends Action
 	   $bz_sum=count($person_info);
 	   foreach($person_info as $person_v)
 	   {
-		 $bzfk_info=$bzfk_model->where("rank=$rank")->select();
+		 $bzfk_info=$bzfk_model->where("(year=$year and month=$month) and rank=$rank")->select();
 	     foreach($bzfk_info as $bzfk_v)
 	     {
 		   if($bzfk_v['account']==$person_v['account']){
@@ -1642,7 +1686,7 @@ class PerformAction extends Action
          
        }
 	   //判断是否出现在限制名单中
-	   $yxchxz_info=$yxchxz_model->where("account=$bz_account")->find();
+	   $yxchxz_info=$yxchxz_model->where("(year=$year and month=$month) and account=$bz_account")->find();
 	   if(empty($yxchxz_info))
 	   {
 	     $candidate=$bz_account;
@@ -1677,7 +1721,7 @@ class PerformAction extends Action
    foreach($yxbzhx_info as $v_hx)
    {
      $bz_account=$v_hx['HX'];
-	 $yxbz_info=$yxbz_model->where("raccount=$bz_account and checked=1")->select();
+	 $yxbz_info=$yxbz_model->where("(year=$year and month=$month) and raccount=$bz_account and checked=1")->select();
 	 echo $bz_account."被评优了：".count($yxbz_info)."次</br>";
 	 //将各个候选人的得票存起来
      //$arr=Array(
@@ -1691,7 +1735,7 @@ class PerformAction extends Action
    //将学号、票数、考核分数、综合排名合为一体
    foreach($arr as $k=>$v)
    {
-     $bzfk_info=$bzfk_model->where("account=$k")->find();
+     $bzfk_info=$bzfk_model->where("(year=$year and month=$month) and account=$k")->find();
 	 $info[]=Array(
 	   'account'=>$k,
 	   'ps'=>$v,
@@ -1741,16 +1785,18 @@ class PerformAction extends Action
   echo "三名优秀部长分别是：".$account1."	".$account2."	".$account3;
   //将三名优秀部长存入tbl_bzfk中
   $data['yxbz']=1;
-  $bzfk_model->where("account=$account1")->data($data)->save();
-  $bzfk_model->where("account=$account2")->data($data)->save();
-  $bzfk_model->where("account=$account3")->data($data)->save();
+  $bzfk_model->where("(year=$year and month=$month) and account=$account1")->data($data)->save();
+  $bzfk_model->where("(year=$year and month=$month) and account=$account2")->data($data)->save();
+  $bzfk_model->where("(year=$year and month=$month) and account=$account3")->data($data)->save();
  }
 
  //一键反馈第四步，生成优秀部门
  public function funcfkfour()
  {
-   $year="2014";
-   $month="4";
+   //$year="2014";
+   //$month="4";
+   $year=$_POST['year'];
+   $month=$_POST['month'];
    for($i=1;$i<=11;$i++)
    {
      $this->getbmfk($i,$year,$month);
@@ -1760,13 +1806,13 @@ class PerformAction extends Action
    for($i=1;$i<=11;$i++)
    {
      $rank=1;
-	 $bmfk_info=$bmfk_model->where("apartment=$i")->find();
+	 $bmfk_info=$bmfk_model->where("(year=$year and month=$month) and apartment=$i")->find();
 	 $total=$bmfk_info['total'];
 	 for($j=1;$j<=11;$j++)
 	 {
 	   if($i==$j)
 	     continue;
-	   $bmfk_info2=$bmfk_model->where("apartment=$j")->find();
+	   $bmfk_info2=$bmfk_model->where("(year=$year and month=$month) and apartment=$j")->find();
 	   $total2=$bmfk_info2['total'];
 	   if($total<$total2)
 	     $rank++;
@@ -1780,7 +1826,7 @@ class PerformAction extends Action
 	 echo "部门".$i."的总分是".$total."排名是：".$rank."</br>";
 	 unset($data);
 	 $data['rank']=$rank;
-	 if($bmfk_model->where("apartment=$i")->data($data)->save())
+	 if($bmfk_model->where("(year=$year and month=$month) and apartment=$i")->data($data)->save())
 	   echo "排名添加成功";
    }
 
@@ -1820,16 +1866,16 @@ class PerformAction extends Action
    }
 */
   //找到排名第一的
-  $bmfk_info=$bmfk_model->where("rank=1")->find();
+  $bmfk_info=$bmfk_model->where("(year=$year and month=$month) and rank=1")->find();
   $apartment=$bmfk_info['apartment'];
   unset($data);
   $data['yxbm']=1;
-  $bmfk_model->where("apartment=$apartment")->data($data)->save();
-  $bmfk_info=$bmfk_model->where("rank=2")->find();
+  $bmfk_model->where("(year=$year and month=$month) and apartment=$apartment")->data($data)->save();
+  $bmfk_info=$bmfk_model->where("(year=$year and month=$month) and rank=2")->find();
   $apartment=$bmfk_info['apartment'];
   unset($data);
   $data['yxbm']=1;
-  $bmfk_model->where("apartment=$apartment")->data($data)->save();
+  $bmfk_model->where("(year=$year and month=$month) and apartment=$apartment")->data($data)->save();
 
  }
  //一键反馈第五步，生成外调次数及其排名
@@ -1845,11 +1891,11 @@ class PerformAction extends Action
 	 foreach($person_info as $v)
 	 {
 	   $gs_account=$v['account'];
-	   $resource_info=$resource_model->where("account=$gs_account")->select();
+	   $resource_info=$resource_model->where("(year=$year and month=$month) and account=$gs_account")->select();
 	   $wdcs=count($resource_info);
 	   //echo $gs_account."本月被外调了".$wdcs."次</br>";
 	   $data['wdcs']=$wdcs;
-	   $wdcs_model->where("account=$gs_account")->data($data)->save();
+	   $wdcs_model->where("(year=$year and month=$month) and account=$gs_account")->data($data)->save();
 	 }
    }
    //生成排名，也是按部门来
@@ -1861,12 +1907,12 @@ class PerformAction extends Action
 	 {
 	   $rank=1;
 	   $gs_account=$v['account'];
-	   $wdcs_info=$wdcs_model->where("account=$gs_account")->find();
+	   $wdcs_info=$wdcs_model->where("(year=$year and month=$month) and account=$gs_account")->find();
 	   $wdcs=$wdcs_info['wdcs'];
 	   foreach($person_info2 as $v2)
 	   {
 	     $gs_account2=$v2['account'];
-		 $wdcs_info2=$wdcs_model->where("account=$gs_account2")->find();
+		 $wdcs_info2=$wdcs_model->where("(year=$year and month=$month) and account=$gs_account2")->find();
 		 $wdcs2=$wdcs_info2['wdcs'];
 		 if($wdcs<$wdcs2)
 		   $rank++;
@@ -1880,7 +1926,7 @@ class PerformAction extends Action
 	   //echo $gs_account."被外调".$wdcs."次，部门内排".$rank."</br>";
 	   unset($data);
 	   $data['rank']=$rank;
-	   $wdcs_model->where("account=$gs_account")->data($data)->save();
+	   $wdcs_model->where("(year=$year and month=$month) and account=$gs_account")->data($data)->save();
 	 }
    }
  }
@@ -1894,7 +1940,7 @@ class PerformAction extends Action
    $resource_model=new Model("Resource");
    $interact_model=new Model("Interact");
    $diaoyan_model=new Model("Diaoyan");
-   $gszp_info=$gszp_model->where("account=$waccount")->find();
+   $gszp_info=$gszp_model->where("(year=$year and month=$month) and account=$waccount")->find();
    
    $total=$gszp_info['total'];
    $zpdf=($total/(12*10))*2;
@@ -1911,7 +1957,7 @@ class PerformAction extends Action
    {
      
      $bz_account=$v['account'];
-     $gskh_info=$gskh_model->where("waccount=$bz_account and raccount=$waccount")->find();
+     $gskh_info=$gskh_model->where("(year=$year and month=$month) and waccount=$bz_account and raccount=$waccount")->find();
 	 //计算部长评价得分
      $total=
 	       $gskh_info['DF1']
@@ -1933,7 +1979,7 @@ class PerformAction extends Action
    }
    $bzpjdf=$bzpjdf/$sum;
    //获取出勤情况
-   $chuqin_info=$chuqin_model->where("raccount=$waccount")->find();
+   $chuqin_info=$chuqin_model->where("(year=$year and month=$month) and raccount=$waccount")->find();
    if(!empty($chuqin_info)){
      $qj=$chuqin_info['qj']*(-0.1);
      $ct=$chuqin_info['ct']*(-0.2);
@@ -1945,7 +1991,7 @@ class PerformAction extends Action
 	 $qx=0;
    }
    //获取外调无辜缺席情况
-   $resource_info=$resource_model->where("account=$waccount")->select();
+   $resource_info=$resource_model->where("(year=$year and month=$month) and account=$waccount")->select();
    $wgqx=0;//外调无辜缺席次数
    $yb=0;//外调表现一般次数
    $tc=0;//外调表现突出次数
@@ -1973,12 +2019,12 @@ class PerformAction extends Action
    $wdjf=$yb*0.1+$tc*0.2;
    //echo "外调加分：".$wdjf;
    //干事推优加分
-   $interact_info=$interact_model->where("raccount=$waccount and (wtype=1 or wtype=2)")->select();
+   $interact_info=$interact_model->where("(year=$year and month=$month) and raccount=$waccount and (wtype=1 or wtype=2)")->select();
    //echo $waccount."被推优次数：".count($interact_info)."</br>";
    $tycs=count($interact_info);//被推优次数
    $tyjf=$tycs*0.1;
    //反馈加分：调研意见采纳加分
-   $diaoyan_info=$diaoyan_model->where("raccount=$waccount")->find();
+   $diaoyan_info=$diaoyan_model->where("(year=$year and month=$month) and raccount=$waccount")->find();
    //echo count($diaoyan_info)."</br>";
    //var_dump($diaoyan_info);
    if(!empty($diaoyan_info)){
@@ -2013,7 +2059,7 @@ class PerformAction extends Action
    );
    //var_dump($data);
    //echo "</br>";
-   $gsfk_model->where("account=$waccount")->data($data)->save();
+   $gsfk_model->where("(year=$year and month=$month) and account=$waccount")->data($data)->save();
   // if($gsfk_model->add($data))
      //echo $waccount."修改成功</br>";
    //else  
@@ -2033,7 +2079,7 @@ class PerformAction extends Action
    $resource_model=new Model("Resource");
    $diaoyan_model=new Model("Diaoyan");
    
-   $bzzp_info=$bzzp_model->where("waccount=$waccount")->find();
+   $bzzp_info=$bzzp_model->where("(year=$year and month=$month) and waccount=$waccount")->find();
    $total=$bzzp_info['total'];
    $total=($total/(17*10))*2;
    $zpdf=$total;
@@ -2043,7 +2089,7 @@ class PerformAction extends Action
    $apartment=$person_info['apartment'];
    $president_info=$president_model->where("(apartment1=$apartment or apartment2=$apartment)")->find();
    $fzx_account=$president_info['account'];
-   $bzkh_info=$bzkh_model->where("waccount=$fzx_account and raccount=$waccount")->find();
+   $bzkh_info=$bzkh_model->where("(year=$year and month=$month) and waccount=$fzx_account and raccount=$waccount")->find();
    //;
    //计算主管副主席的给分
    //由于部长考核时没有计算总分，这里再计算一次
@@ -2077,7 +2123,7 @@ class PerformAction extends Action
    {
      //echo $waccount."干事：".$v['account']."</br>";
 	 $gs_account=$v['account'];
-	 $interact_info=$interact_model->where("waccount=$gs_account and raccount=$waccount")->find();
+	 $interact_info=$interact_model->where("(year=$year and month=$month) and waccount=$gs_account and raccount=$waccount")->find();
      //echo "得分：".$interact_info['DF']."</br>";
 	 $gsgf=$gsgf+$interact_info['DF']*0.2;
    }
@@ -2096,7 +2142,7 @@ class PerformAction extends Action
      if($bz_account==$waccount)
 	   continue;
      //echo $v['account']."</br>";
-	 $interact_info=$interact_model->where("waccount=$bz_account and raccount=$waccount")->find();
+	 $interact_info=$interact_model->where("(year=$year and month=$month) and waccount=$bz_account and raccount=$waccount")->find();
      $bzgf=$bzgf+$interact_info['DF'];
     }
 	$bzpjdf=$bzgf/$sum;
@@ -2111,7 +2157,7 @@ class PerformAction extends Action
    $ct=$chuqin_info['ct']*(-0.2);
    $qx=$chuqin_info['qx']*(-0.3);
    //获取外调无辜缺席情况
-   $resource_info=$resource_model->where("account=$waccount")->select();
+   $resource_info=$resource_model->where("(year=$year and month=$month) and account=$waccount")->select();
    $wgqx=0;//外调无辜缺席次数
    $yb=0;//外调表现一般次数
    $tc=0;//外调表现突出次数
@@ -2137,7 +2183,7 @@ class PerformAction extends Action
    //获取外调加分
    $wddf=$yb*0.1+$tc*0.2;
    //反馈加分：调研意见采纳加分
-   $diaoyan_info=$diaoyan_model->where("raccount=$waccount")->find();
+   $diaoyan_info=$diaoyan_model->where("(year=$year and month=$month) and raccount=$waccount")->find();
    //echo count($diaoyan_info)."</br>";
    //var_dump($diaoyan_info);
    $dycn=$diaoyan_info['caina'];
@@ -2164,7 +2210,7 @@ class PerformAction extends Action
 	 'qtdf'=>$qtdf,
    );
    $bzfk_model=new Model("Bzfk");
-   if($bzfk_model->where("account=$waccount")->data($data)->save())
+   if($bzfk_model->where("(year=$year and month=$month) and account=$waccount")->data($data)->save())
      echo "添加成功</br>";
  }
  //在主席团反馈表，根据传过来的部门apartment，year和month进行操作
@@ -2217,7 +2263,7 @@ class PerformAction extends Action
    if($cqdf<0)
      $cqdf=0;
    //主席团推优得分
-   $bmty_info=$bmty_model->where("rapartment=$apartment")->select();
+   $bmty_info=$bmty_model->where("(year=$year and month=$month) and rapartment=$apartment")->select();
    $tydf=count($bmty_info);
    $tydf=$tydf*0.3;
    echo $apartment."的主席团推优得分是：".$tydf."</br>";
@@ -2245,12 +2291,12 @@ class PerformAction extends Action
    foreach($person_info as $v)
    {
      $raccount=$v['account'];
-	 $diaoyan_info=$diaoyan_model->where("raccount=$raccount")->find();
+	 $diaoyan_info=$diaoyan_model->where("(year=$year and month=$month) and raccount=$raccount")->find();
 	 $fkdf=$fkdf+$diaoyan_info['caina'];
    }
    $fkdf=$fkdf*0.1;
    //违规扣分
-   $bmwg_info=$bmwg_model->where("apartment=$apartment")->find();
+   $bmwg_info=$bmwg_model->where("(year=$year and month=$month) and apartment=$apartment")->find();
    if(!empty($bmwg_info)){
      $wgkf=-$bmwg_info['wgkf'];}
    else{
@@ -2276,7 +2322,7 @@ class PerformAction extends Action
    );
    
    $bmfk_model=new Model("Bmfk");
-   if($bmfk_model->where("apartment=$apartment")->data($data)->save())
+   if($bmfk_model->where("(year=$year and month=$month) and apartment=$apartment")->data($data)->save())
      echo $apartment."添加成功</br>";
 	 
 
@@ -2296,8 +2342,8 @@ class PerformAction extends Action
       $this->redirect('Login/index'); 
 	  
 	//获取请求的时间
-	$year=$_GET['year'];
-	$month=$_GET['month'];
+	$year=$_POST['year'];
+	$month=$_POST['month'];
 	//判断时间是否合理
 	$gsfk_model=new Model("Gsfk");
   
@@ -2310,7 +2356,7 @@ class PerformAction extends Action
 	//基本信息
 	$name=$person_info['name'];
 	$apartment=$person_info['apartment'];
-	$gsfk_info=$gsfk_model->where("account=$account")->find();
+	$gsfk_info=$gsfk_model->where("(year=$year and month=$month) and account=$account")->find();
 	$zongfen=$gsfk_info['total'];
 	$paiming=$gsfk_info['rank'];
 	//获取该部门该月优秀干事
@@ -2331,7 +2377,7 @@ class PerformAction extends Action
 	foreach($person_info as $v)
 	{
 	  $gs_account=$v['account'];
-	  $gsfk_info=$gsfk_model->where("account=$gs_account")->find();
+	  $gsfk_info=$gsfk_model->where("(year=$year and month=$month) and account=$gs_account")->find();
 	  if($gsfk_info['yxgs']==1)
 	  {
 	    //echo "woshi ";
@@ -2349,7 +2395,7 @@ class PerformAction extends Action
 	}
 	//echo "优秀干事：".$yxgs_name;
 	//得分细节：
-	$gsfk_info=$gsfk_model->where("account=$account")->find();
+	$gsfk_info=$gsfk_model->where("(year=$year and month=$month) and account=$account")->find();
 	$DFXJ[]=Array(
 	  'a'=>$gsfk_info['zpdf'],
 	  'b'=>$gsfk_info['bzpjdf'],
@@ -2360,7 +2406,7 @@ class PerformAction extends Action
 	  'g'=>$gsfk_info['qtdf'],
 	);
 	//自我评价
-	$gszp_info=$gszp_model->where("account=$account")->find();
+	$gszp_info=$gszp_model->where("(year=$year and month=$month) and account=$account")->find();
 	$zwpj=$gszp_info['zptext'];
 	//其他干事评价
 	$person_info=$person_model->where("(type=1 or type=2) and apartment=$apartment")->select();
@@ -2369,7 +2415,7 @@ class PerformAction extends Action
 	  $gs_account=$v['account'];
 	  if($gs_account==$account)
 	    continue;
-	  $interact_info=$interact_model->where("waccount=$gs_account and raccount=$account")->find();
+	  $interact_info=$interact_model->where("(year=$year and month=$month) and waccount=$gs_account and raccount=$account")->find();
 	  $pj=$interact_info['text'];
 	  if(empty($pj))
 	    $pj="无";
@@ -2382,7 +2428,7 @@ class PerformAction extends Action
 	foreach($person_info as $v)
 	{
 	  $bz_account=$v['account'];
-	  $interact_info=$interact_model->where("waccount=$bz_account and raccount=$account")->find();
+	  $interact_info=$interact_model->where("(year=$year and month=$month) and waccount=$bz_account and raccount=$account")->find();
 	  $bzdpj=$interact_info['text'];
 	  $bzpj[]=Array(
 	    'bzpj'=>$bzdpj,
@@ -2428,7 +2474,7 @@ class PerformAction extends Action
     //获取总分
 
     
-	$bzfk_info=$bzfk_model->where("account=$account")->find();
+	$bzfk_info=$bzfk_model->where("(year=$year and month=$month) and account=$account")->find();
     $ZongFen=$bzfk_info['total'];
     //获取得分细则
     $arrDeFenXiZhe=Array(
@@ -2442,7 +2488,7 @@ class PerformAction extends Action
 	  'h'=>$bzfk_info['qtdf'],	 	  
 	);	
 	//获取自我评价
-	$bzzp_info=$bzzp_model->where("waccount=$account")->find();
+	$bzzp_info=$bzzp_model->where("(year=$year and month=$month) and waccount=$account")->find();
 	$ZiWoPingJia=$bzzp_info['zptext'];
 	//其他部长评价
 	$person_info=$person_model->where("apartment=$apartment and type=3")->select();
@@ -2452,7 +2498,7 @@ class PerformAction extends Action
 	  $bz_account=$v['account'];
 	  if($bz_account==$account)
 	    continue;
-	  $interact_info=$interact_model->where("waccount=$bz_account and raccount=$account")->find();
+	  $interact_info=$interact_model->where("(year=$year and month=$month) and waccount=$bz_account and raccount=$account")->find();
 	  $pj=$interact_info['text'];
       $arrQiTaBuZhanPinJia[]=Array(
 	    'pj'=>$pj,
@@ -2466,7 +2512,7 @@ class PerformAction extends Action
 	//主管副主席评价
 	$president_info=$president_model->where("apartment1=$apartment or apartment2=$apartment")->find();
 	$fzx_account=$president_info['account'];
-	$interact_info=$interact_model->where("waccount=$fzx_account and raccount=$account")->find();
+	$interact_info=$interact_model->where("(year=$year and month=$month) and waccount=$fzx_account and raccount=$account")->find();
 	$ZhuGuanFuZhuXiPinJia=$interact_info['text'];
 	//获取干事评价
 	$person_info=$person_model->where("apartment=$apartment and (type=1 or type=2)")->select();
@@ -2476,7 +2522,7 @@ class PerformAction extends Action
 	  $gs_account=$v['account'];
 	  $person_info=$person_model->where("account=$gs_account")->find();
 	  //$gs_name=$person_info['name'];
-	  $interact_info=$interact_model->where("waccount=$gs_account and raccount=$account")->find();
+	  $interact_info=$interact_model->where("(year=$year and month=$month) and waccount=$gs_account and raccount=$account")->find();
 	  $arrGanShiPingJia[]=Array(
 		'gspj'=>$interact_info['text'],
 	  );
@@ -2492,7 +2538,7 @@ class PerformAction extends Action
 	foreach($person_info as $v)
 	{
 	  $gs_account=$v['account'];
-	  $gszp_info=$gszp_model->where("account=$gs_account")->find();
+	  $gszp_info=$gszp_model->where("(year=$year and month=$month) and account=$gs_account")->find();
 	  $arrGSZP[]=Array(
 	    'name'=>$v['name'],
 		'account'=>$gs_account,
@@ -2505,7 +2551,7 @@ class PerformAction extends Action
 	);
 	//echo json_encode($GSZP,JSON_UNESCAPED_UNICODE);
 	//部门得分和部门排名
-	$bmfk_info=$bmfk_model->where("apartment=$apartment")->find();
+	$bmfk_info=$bmfk_model->where("(year=$year and month=$month) and apartment=$apartment")->find();
 	$BuMenDeFeng=$bmfk_info['total'];
 	$BuMenPaiMing=$bmfk_info['rank'];
 	//部门得分细则
@@ -2520,12 +2566,12 @@ class PerformAction extends Action
 	  'h'=>$bmfk_info['qtdf'],
 	);
 	//主管副主席的部门评价
-	$oneway_info=$oneway_model->where("waccount=$fzx_account and rapartment=$apartment")->find();
+	$oneway_info=$oneway_model->where("(year=$year and month=$month) and waccount=$fzx_account and rapartment=$apartment")->find();
 	$ZhuGuanFuZhuXiBuMenPinJia=$oneway_info['text'];
 	//主席的部门评价
 	$president_info=$president_model->where("is_sub='n'")->find();
 	$zx_account=$president_info['account'];
-	$oneway_info=$oneway_model->where("waccount=$zx_account and rapartment=$apartment")->find();
+	$oneway_info=$oneway_model->where("(year=$year and month=$month) and waccount=$zx_account and rapartment=$apartment")->find();
     //var_dump($oneway_info);
 	$ZhuXiDeBuMenPinJia=$oneway_info['text'];
 	//向前端发送json数据
@@ -2558,8 +2604,8 @@ class PerformAction extends Action
 	$account=$_SESSION['account'];
 	
 	//获取请求的时间
-	$year=$_GET['year'];
-	$month=$_GET['month'];
+	$year=$_POST['year'];
+	$month=$_POST['month'];
 	//判断时间是否合理
 	$chuqin_model=new Model("Chuqin");
 	if($chuqin_info=$chuqin_model->where("year=$year and month=$month")->find())
@@ -2621,8 +2667,8 @@ class PerformAction extends Action
 	$account=$_SESSION['account'];
 	
 	//获取请求的时间
-	$year=$_GET['year'];
-	$month=$_GET['month'];
+	$year=$_POST['year'];
+	$month=$_POST['month'];
 	//判断时间是否合理
 	$diaoyan_model=new Model("Diaoyan");
 	if($diaoyan_info=$diaoyan_model->where("year=$year and month=$month")->find())
@@ -2643,7 +2689,7 @@ class PerformAction extends Action
 	  {
 	    $raccount=$v['account'];
 		$rname=$v['name'];
-		$diaoyan_info=$diaoyan_model->where("raccount=$raccount")->find();
+		$diaoyan_info=$diaoyan_model->where("(year=$year and month=$month) and raccount=$raccount")->find();
 		$arrCNJF[]=Array(
 		  'name'=>$rname,
 		  'account'=>$raccount,
@@ -2687,7 +2733,7 @@ class PerformAction extends Action
     $bmfk_model=new Model("Bmfk");
 	$resource_model=new Model("Resource");
     //获取优秀部门
-    $bmfk_info=$bmfk_model->where("yxbm=1")->select();
+    $bmfk_info=$bmfk_model->where("(year=$year and month=$month) and yxbm=1")->select();
     foreach($bmfk_info as $v)
     {
 	  //echo "优秀部门".$v['apartment'];
@@ -2698,7 +2744,7 @@ class PerformAction extends Action
 	}
     //echo json_encode($arrYXBM,JSON_UNESCAPED_UNICODE);    
 	//获取优秀部长
-	$bzfk_info=$bzfk_model->where("yxbz=1")->select();
+	$bzfk_info=$bzfk_model->where("(year=$year and month=$month) and yxbz=1")->select();
 	foreach($bzfk_info as $v)
 	{
 	  $yxbz_account=$v['account'];
@@ -2722,7 +2768,7 @@ class PerformAction extends Action
 	  {
 	    //优秀干事人数
 		$sum=0;
-	    $gsfk_info=$gsfk_model->where("rank=$j")->select();
+	    $gsfk_info=$gsfk_model->where("(year=$year and month=$month) and rank=$j")->select();
 		$person_info=$person_model->where("apartment=$i and (type=1 or type=2)")->select();
 		foreach($person_info as $v)
 		{
@@ -2767,7 +2813,7 @@ class PerformAction extends Action
 	{
 	  for($j=1;$j<=3;$j++)
 	  {
-	    $wdcs_info=$wdcs_model->where("rank=$j")->select();
+	    $wdcs_info=$wdcs_model->where("(year=$year and month=$month) and rank=$j")->select();
 		$person_info=$person_model->where("apartment=$i and (type=1 or type=2)")->select();
 		//var_dump($person_info);
 		foreach($person_info as $v)
@@ -2824,7 +2870,7 @@ class PerformAction extends Action
    //获取部门排名
    for($i=1;$i<=11;$i++)
    {
-     $bmfk_info=$bmfk_model->where("rank=$i")->find();
+     $bmfk_info=$bmfk_model->where("(year=$year and month=$month) and rank=$i")->find();
 	 $score=$bmfk_info['total'];
 	 $apartment=$bmfk_info['apartment'];
 	 $isExc=$bmfk_info['yxbm'];
@@ -2842,7 +2888,7 @@ class PerformAction extends Action
    //获取优秀部长
    $bzfk_model=new Model("Bzfk");
    $person_model=new Model("Person");
-   $bzfk_info=$bzfk_model->where("yxbz=1")->select();
+   $bzfk_info=$bzfk_model->where("(year=$year and month=$month) and yxbz=1")->select();
    //var_dump($bzfk_info);
    foreach($bzfk_info as $v)
    {
@@ -2881,8 +2927,8 @@ class PerformAction extends Action
 	    //echo $account."PK".$bz_account."</br>";
 	    $bz_account=$v['account'];
 		$bz_name=$v['name'];
-		$bzzp_info=$bzzp_model->where("waccount=$bz_account")->find();
-	    $interact_info=$interact_model->where("(waccount=$bz_account and raccount=$account) and nm=0")->find();
+		$bzzp_info=$bzzp_model->where("(year=$year and month=$month) and waccount=$bz_account")->find();
+	    $interact_info=$interact_model->where("(year=$year and month=$month) and (waccount=$bz_account and raccount=$account) and nm=0")->find();
 	    //var_dump($interact_info);
 		$arrMinFeedBack[]=Array(
 		 'depart'=>$apartment1,
@@ -2900,8 +2946,8 @@ class PerformAction extends Action
 	    //echo $account."PK".$bz_account."</br>";
 	    $bz_account=$v['account'];
 		$bz_name=$v['name'];
-		$bzzp_info=$bzzp_model->where("waccount=$bz_account")->find();
-	    $interact_info=$interact_model->where("(waccount=$bz_account and raccount=$account) and nm=0")->find();
+		$bzzp_info=$bzzp_model->where("(year=$year and month=$month) and waccount=$bz_account")->find();
+	    $interact_info=$interact_model->where("(year=$year and month=$month) and (waccount=$bz_account and raccount=$account) and nm=0")->find();
 	    //var_dump($interact_info);
 		$arrMinFeedBack[]=Array(
 		 'depart'=>$apartment2,
@@ -2969,26 +3015,28 @@ class PerformAction extends Action
 	//$year=date("Y");
     //获取当前的月份，数字，1，或者23
     //$month = date("n");
-	$year="2014";
-	$month="4";
-    $status=$_GET['status'];
-	//$DF=$_GET['arrDF'];
+	//$year="2014";
+	//$month="4";
+	$year=$_POST['year'];
+	$month=$_POST['month'];
+    $status=1;//操作是否成功的返回值
+	//$DF=$_POST['arrDF'];
 	//自我评价
-	$data['zptext']=$_GET['zwpj'];
+	$data['zptext']=$_POST['zwpj'];
 	//得分细则
-    $data['DF1']=$_GET['arrDF'][0]['df'];
-	$data['DF2']=$_GET['arrDF'][1]['df'];
-	$data['DF3']=$_GET['arrDF'][2]['df'];
-	$data['DF4']=$_GET['arrDF'][3]['df'];
-	$data['DF5']=$_GET['arrDF'][4]['df'];
-	$data['DF6']=$_GET['arrDF'][5]['df'];
-	$data['DF7']=$_GET['arrDF'][6]['df'];
-	$data['DF8']=$_GET['arrDF'][7]['df'];
-	$data['DF9']=$_GET['arrDF'][8]['df'];
-	$data['DF10']=$_GET['arrDF'][9]['df'];
-	$data['DF11']=$_GET['arrDF'][10]['df'];
-	$data['DF12']=$_GET['arrDF'][11]['df'];
-	//$data['total']=$_GET['zongfen'];
+    $data['DF1']=$_POST['arrDF'][0]['df'];
+	$data['DF2']=$_POST['arrDF'][1]['df'];
+	$data['DF3']=$_POST['arrDF'][2]['df'];
+	$data['DF4']=$_POST['arrDF'][3]['df'];
+	$data['DF5']=$_POST['arrDF'][4]['df'];
+	$data['DF6']=$_POST['arrDF'][5]['df'];
+	$data['DF7']=$_POST['arrDF'][6]['df'];
+	$data['DF8']=$_POST['arrDF'][7]['df'];
+	$data['DF9']=$_POST['arrDF'][8]['df'];
+	$data['DF10']=$_POST['arrDF'][9]['df'];
+	$data['DF11']=$_POST['arrDF'][10]['df'];
+	$data['DF12']=$_POST['arrDF'][11]['df'];
+	//$data['total']=$_POST['zongfen'];
 	//总分
 	$data['total']=
     $data['DF1']+
@@ -3005,35 +3053,40 @@ class PerformAction extends Action
 	$data['DF12'];
 	//推优自评数据库操作
 	$gszp_model=new Model("Gszp");
-	$info=$gszp_model->where("(year=$year and month=$month ) and account=$account")->data($data)->save();
+	$gszp_info=$gszp_model->where("(year=$year and month=$month ) and account=$account")->data($data)->save();
+	if(!$gszp_info)
+	  $status=0;
 	unset($data);
 	//推优干事
 	$interact_model=new Model("Interact");
 	
 	//$interact_info=$interact_model->where("(year=$year and month=$month) and (waccount=$account and (rtype=1 or rtype=2))")->find();
 	  unset($data);
-	  $gs_account=$_GET['TYGS']['account'];
-	  $data['raccount']=$_GET['TYGS']['account'];
-	  $data['text']=$_GET['TYGS']['tyly'];
-	  $info=$interact_model->where("(year=$year and month=$month) and (waccount=$account and (rtype=1 or rtype=2))")->data($data)->save();
+	  $gs_account=$_POST['TYGS']['account'];
+	  $data['raccount']=$_POST['TYGS']['account'];
+	  $data['text']=$_POST['TYGS']['tyly'];
+	  $interact_info=$interact_model->where("(year=$year and month=$month) and (waccount=$account and (rtype=1 or rtype=2))")->data($data)->save();
     //部长评价
-	
-	for($i=0;$i<count($_GET['arrDBZPJ']);$i++)
+	if(!$interact_info)
+	  $status=0;
+	for($i=0;$i<count($_POST['arrDBZPJ']);$i++)
 	{
 	  unset($data);
-	  $bz_account=$_GET['arrDBZPJ'][$i]['account'];
+	  $bz_account=$_POST['arrDBZPJ'][$i]['account'];
 	  $data['raccount']=$bz_account;
-	  $data['DF']=$_GET['arrDBZPJ'][$i]['fs'];
-	  $data['text']=$_GET['arrDBZPJ'][$i]['pj'];
-	  $interact_model->where("(year=$year and month=$month) and (waccount=$account and raccount=$bz_account)")->data($data)->save();
+	  $data['DF']=$_POST['arrDBZPJ'][$i]['fs'];
+	  $data['text']=$_POST['arrDBZPJ'][$i]['pj'];
+	  $interact_info=$interact_model->where("(year=$year and month=$month) and (waccount=$account and raccount=$bz_account)")->data($data)->save();
+	  if(!$interact_info)
+	    $status=0;
 	}
    
     $arr=Array(
-	  'status'=>"nima",
-	  'df'=>$_GET['arrDF'][0]['df'],
-	  'zwpj'=>$_GET['zwpj'],
-	  'tygs'=>$_GET['TYGS']['tygs'],
-	  'zongfen'=>$_GET['zongfen'],
+	  'status'=>$status,
+	  'df'=>$_POST['arrDF'][0]['df'],
+	  'zwpj'=>$_POST['zwpj'],
+	  'tygs'=>$_POST['TYGS']['tygs'],
+	  'zongfen'=>$_POST['zongfen'],
 
 	);
 	echo $this->_encode($arr);
@@ -3054,30 +3107,34 @@ class PerformAction extends Action
 	$person_info=$person_model->where("account=$account")->find();
     $apartment=$person_info['apartment'];
 	//获取当前时间
-	$year="2014";//date("Y");
+	//$year="2014";//date("Y");
     //获取当前的月份，数字，1，或者23
-    $month = "4";//date("n");
+    //$month = "4";//date("n");
+	$year=$_POST['year'];
+	$month=$_POST['month'];
+	//记录数据库操作是否成功，默认为1表示成功
+	$status=1;
 	//自我评价
-	$data['zptext']=$_GET['zwpj'];
+	$data['zptext']=$_POST['zwpj'];
 	//各种得分
 	
-	$data['DF1']=$_GET['arrDF'][0]['df'];
-	$data['DF2']=$_GET['arrDF'][1]['df'];
-	$data['DF3']=$_GET['arrDF'][2]['df'];
-	$data['DF4']=$_GET['arrDF'][3]['df'];
-	$data['DF5']=$_GET['arrDF'][4]['df'];
-	$data['DF6']=$_GET['arrDF'][5]['df'];
-	$data['DF7']=$_GET['arrDF'][6]['df'];
-	$data['DF8']=$_GET['arrDF'][7]['df'];
-	$data['DF9']=$_GET['arrDF'][8]['df'];
-	$data['DF10']=$_GET['arrDF'][9]['df'];
-	$data['DF11']=$_GET['arrDF'][10]['df'];
-	$data['DF12']=$_GET['arrDF'][11]['df'];
-	$data['DF13']=$_GET['arrDF'][12]['df'];
-	$data['DF14']=$_GET['arrDF'][13]['df'];
-	$data['DF15']=$_GET['arrDF'][14]['df'];
-	$data['DF16']=$_GET['arrDF'][15]['df'];
-	$data['DF17']=$_GET['arrDF'][16]['df'];
+	$data['DF1']=$_POST['arrDF'][0]['df'];
+	$data['DF2']=$_POST['arrDF'][1]['df'];
+	$data['DF3']=$_POST['arrDF'][2]['df'];
+	$data['DF4']=$_POST['arrDF'][3]['df'];
+	$data['DF5']=$_POST['arrDF'][4]['df'];
+	$data['DF6']=$_POST['arrDF'][5]['df'];
+	$data['DF7']=$_POST['arrDF'][6]['df'];
+	$data['DF8']=$_POST['arrDF'][7]['df'];
+	$data['DF9']=$_POST['arrDF'][8]['df'];
+	$data['DF10']=$_POST['arrDF'][9]['df'];
+	$data['DF11']=$_POST['arrDF'][10]['df'];
+	$data['DF12']=$_POST['arrDF'][11]['df'];
+	$data['DF13']=$_POST['arrDF'][12]['df'];
+	$data['DF14']=$_POST['arrDF'][13]['df'];
+	$data['DF15']=$_POST['arrDF'][14]['df'];
+	$data['DF16']=$_POST['arrDF'][15]['df'];
+	$data['DF17']=$_POST['arrDF'][16]['df'];
 	//计算总分
 	$data['total']=
 	$data['DF1']+
@@ -3098,19 +3155,21 @@ class PerformAction extends Action
 	$data['DF16']+
 	$data['DF17'];
 	$bzzp_model=new Model("Bzzp");
-	$info=$bzzp_model->where("waccount=$account")->data($data)->save();
-    
-	
+	$bzzp_info=$bzzp_model->where("(year=$year and month=$month) and waccount=$account")->data($data)->save();
+    if(!$bzzp_info)
+	  $status=0;
 	$interact_model=new Model("Interact");
 	//对本部门其他部长的评价
-	$arrBZ=$_GET['DQTBZPJ']['arrBZ'];
+	$arrBZ=$_POST['DQTBZPJ']['arrBZ'];
 	for($i=0;$i<count($arrBZ);$i++)
 	{
 	  unset($data);
 	  $bz_account=$arrBZ[$i]['account'];
 	  $data['text']=$arrBZ[$i]['pj'];
 	  $data['DF']=$arrBZ[$i]['fs'];
-	  $interact_model->where("waccount=$account and raccount=$bz_account")->data($data)->save();
+	  $interact_info=$interact_model->where("waccount=$account and raccount=$bz_account")->data($data)->save();
+	  if(!$interact_info)
+	    $status=0;
    }
    
    //对主管副主席的评价，不匿名
@@ -3119,21 +3178,25 @@ class PerformAction extends Action
    $president_info=$president_model->where("apartment1=$apartment or apartment2=$apartment")->find();   
    $fzx_account=$president_info['account'];
    unset($data);
-   $data['text']=$_GET['dzgfzxpj'];
-   $interact_model->where("waccount=$account and raccount=$fzx_account and nm=0")->data($data)->save();
+   $data['text']=$_POST['dzgfzxpj'];
+   $interact_info=$interact_model->where("(year=$year and month=$month) and waccount=$account and raccount=$fzx_account and nm=0")->data($data)->save();
+   if(!$interact_info)
+     $status=0;
 	//对主席团的匿名评价
 
-	for($i=0;$i<count($_GET['NMPJ']['arrNMPJ']);$i++)
+	for($i=0;$i<count($_POST['NMPJ']['arrNMPJ']);$i++)
 	{
 	  unset($data);
-	  $zxt_account=$_GET['NMPJ']['arrNMPJ'][$i]['account'];
-	  $data['text']=$_GET['NMPJ']['arrNMPJ'][$i]['pj'];
-	  $info=$interact_model->where("waccount=$account and raccount=$zxt_account and nm=1")->data($data)->save();
+	  $zxt_account=$_POST['NMPJ']['arrNMPJ'][$i]['account'];
+	  $data['text']=$_POST['NMPJ']['arrNMPJ'][$i]['pj'];
+	  $interact_info=$interact_model->where("(year=$year and month=$month) and waccount=$account and raccount=$zxt_account and nm=1")->data($data)->save();
+	  if(!$interact_info)
+	    $status=0;
 	}
 
 	//返回信息
     $arr=Array(
-	  'status'=>$_GET['arrDF'][0]['df'],
+	  'status'=>$status,
 	);
 	echo $this->_encode($arr);
 	//echo json_encode($arr,JSON_UNESCAPED_UNICODE);
@@ -3150,9 +3213,9 @@ class PerformAction extends Action
 	$account=$_SESSION['account'];
 	//返回信息
     $arr=Array(
-	  'status'=>$_GET['chuqin'][0]['name'],
-	  'gjbm'=>$_GET['gjbm'],
-	  'renshu'=>$_GET['renshu'],
+	  'status'=>$_POST['chuqin'][0]['name'],
+	  'gjbm'=>$_POST['gjbm'],
+	  'renshu'=>$_POST['renshu'],
 	);
 	echo $this->_encode($arr);
 	//echo json_encode($arr,JSON_UNESCAPED_UNICODE);	
@@ -3169,9 +3232,9 @@ class PerformAction extends Action
 	$account=$_SESSION['account'];
 	//返回信息
     $arr=Array(
-	  'status'=>$_GET['arrBM'][0]['arrCNJF'][0]['name'],
-	  'gjbm'=>$_GET['gjbm'],
-	  'renshu'=>$_GET['renshu'],
+	  'status'=>$_POST['arrBM'][0]['arrCNJF'][0]['name'],
+	  'gjbm'=>$_POST['gjbm'],
+	  'renshu'=>$_POST['renshu'],
 	);
 	echo $this->_encode($arr);
 	//echo json_encode($arr,JSON_UNESCAPED_UNICODE);	
@@ -3190,6 +3253,10 @@ class PerformAction extends Action
 	$interact_model=new Model("Interact");
     //部长账号
 	 $waccount=$_SESSION['account'];
+	 //获取时间
+	 $year=$_POST['year'];
+	 $month=$_POST['month'];
+	 $status=1;//操作是否成功的返回值
 	 //遍历得分
 	 for($i=0;$i<count($_POST['GSDF']['arrGSDF']);$i++)
 	 {
@@ -3214,7 +3281,9 @@ class PerformAction extends Action
 	   $data['DF5']+$data['DF6']+$data['DF7']+$data['DF8']+
 	   $data['DF9']+$data['DF10']+$data['DF11']+$data['DF12']+
 	   $data['DF13']+$data['DF14'];
-	   $gskh_model->where("waccount=$waccount and raccount=$raccount")->data($data)->save();
+	   $gskh_info=$gskh_model->where("(year=$year and month=$month) and waccount=$waccount and raccount=$raccount")->data($data)->save();
+	   if(!$gskh_info)
+	     $status=0;
 	 }
 	 //遍历评价
 	 $info="";
@@ -3224,17 +3293,19 @@ class PerformAction extends Action
 	   unset($data);
 	   $raccount=$_POST['DGSPJ']['arrDGSPJ'][$i]['account'];
 	   $data['text']=$_POST['DGSPJ']['arrDGSPJ'][$i]['pj'];
-	   $interact_model->where("waccount=$waccount and raccount=$raccount")->data($data)->save();
+	   $interact_info=$interact_model->where("(year=$year and month=$month) and waccount=$waccount and raccount=$raccount")->data($data)->save();
+	   if(!$interact_info)
+	     $status=0;
 	 }
-	//$data['DF1']=$_GET['GSDF']['arrGSDF'][0]['df0'];
+	//$data['DF1']=$_POST['GSDF']['arrGSDF'][0]['df0'];
 	//$waccount=$_SESSION['account'];
-	//$raccount=$_GET['DGSPJ']['arrDGSPJ'][0]['account'];
+	//$raccount=$_POST['DGSPJ']['arrDGSPJ'][0]['account'];
 	//$gskh_model->where("waccount=$waccount and raccount=$raccount")->data($data)->save();
 	//返回信息
     $arr=Array(
-	  'status'=>$info,
-	  //'gjbm'=>$_GET['gjbm'],
-	  //'renshu'=>$_GET['renshu'],
+	  'status'=>$status,
+	  //'gjbm'=>$_POST['gjbm'],
+	  //'renshu'=>$_POST['renshu'],
 	);
 	echo $this->_encode($arr);
 	//echo json_encode($arr,JSON_UNESCAPED_UNICODE);	
@@ -3254,50 +3325,56 @@ class PerformAction extends Action
 	
 	//$year="2014";
 	//$month="4";
-	
+	$year=$_POST['year'];
+	$month=$_POST['month'];
+	$status=1;
     $bzkh_model=new Model("Bzkh");
 	$interact_model=new Model("Interact");
 	//部门数目
-	for($i=0;$i<count($_GET['BMBZ']['arrBM']);$i++)
+	for($i=0;$i<count($_POST['BMBZ']['arrBM']);$i++)
 	{
 	  //该部门部长数目
-      for($j=0;$j<count($_GET['BMBZ']['arrBM'][$i]['arrBZ']);$j++)	
+      for($j=0;$j<count($_POST['BMBZ']['arrBM'][$i]['arrBZ']);$j++)	
 	  {
-	    $raccount=$_GET['BMBZ']['arrBM'][$i]['arrBZ'][$j]['account'];
+	    $raccount=$_POST['BMBZ']['arrBM'][$i]['arrBZ'][$j]['account'];
 	    //得分细则
 		unset($data);
-		$data['DF1']=$_GET['BMBZ']['arrBM'][$i]['arrBZ'][$j]['df0'];
-		$data['DF2']=$_GET['BMBZ']['arrBM'][$i]['arrBZ'][$j]['df1'];
-		$data['DF3']=$_GET['BMBZ']['arrBM'][$i]['arrBZ'][$j]['df2'];
-		$data['DF4']=$_GET['BMBZ']['arrBM'][$i]['arrBZ'][$j]['df3'];
-		$data['DF5']=$_GET['BMBZ']['arrBM'][$i]['arrBZ'][$j]['df4'];
-		$data['DF6']=$_GET['BMBZ']['arrBM'][$i]['arrBZ'][$j]['df5'];
-		$data['DF7']=$_GET['BMBZ']['arrBM'][$i]['arrBZ'][$j]['df6'];
-		$data['DF8']=$_GET['BMBZ']['arrBM'][$i]['arrBZ'][$j]['df7'];
-		$data['DF9']=$_GET['BMBZ']['arrBM'][$i]['arrBZ'][$j]['df8'];
-		$data['DF10']=$_GET['BMBZ']['arrBM'][$i]['arrBZ'][$j]['df9'];
-		$data['DF11']=$_GET['BMBZ']['arrBM'][$i]['arrBZ'][$j]['df10'];
-		$data['DF12']=$_GET['BMBZ']['arrBM'][$i]['arrBZ'][$j]['df11'];
-		$data['DF13']=$_GET['BMBZ']['arrBM'][$i]['arrBZ'][$j]['df12'];
-		$data['DF14']=$_GET['BMBZ']['arrBM'][$i]['arrBZ'][$j]['df13'];
-		$data['DF15']=$_GET['BMBZ']['arrBM'][$i]['arrBZ'][$j]['df14'];
-		$bzkh_model->where("waccount=$waccount and raccount=$raccount")->data($data)->save();	
+		$data['DF1']=$_POST['BMBZ']['arrBM'][$i]['arrBZ'][$j]['df0'];
+		$data['DF2']=$_POST['BMBZ']['arrBM'][$i]['arrBZ'][$j]['df1'];
+		$data['DF3']=$_POST['BMBZ']['arrBM'][$i]['arrBZ'][$j]['df2'];
+		$data['DF4']=$_POST['BMBZ']['arrBM'][$i]['arrBZ'][$j]['df3'];
+		$data['DF5']=$_POST['BMBZ']['arrBM'][$i]['arrBZ'][$j]['df4'];
+		$data['DF6']=$_POST['BMBZ']['arrBM'][$i]['arrBZ'][$j]['df5'];
+		$data['DF7']=$_POST['BMBZ']['arrBM'][$i]['arrBZ'][$j]['df6'];
+		$data['DF8']=$_POST['BMBZ']['arrBM'][$i]['arrBZ'][$j]['df7'];
+		$data['DF9']=$_POST['BMBZ']['arrBM'][$i]['arrBZ'][$j]['df8'];
+		$data['DF10']=$_POST['BMBZ']['arrBM'][$i]['arrBZ'][$j]['df9'];
+		$data['DF11']=$_POST['BMBZ']['arrBM'][$i]['arrBZ'][$j]['df10'];
+		$data['DF12']=$_POST['BMBZ']['arrBM'][$i]['arrBZ'][$j]['df11'];
+		$data['DF13']=$_POST['BMBZ']['arrBM'][$i]['arrBZ'][$j]['df12'];
+		$data['DF14']=$_POST['BMBZ']['arrBM'][$i]['arrBZ'][$j]['df13'];
+		$data['DF15']=$_POST['BMBZ']['arrBM'][$i]['arrBZ'][$j]['df14'];
+		$bzkh_info=$bzkh_model->where("(year=$year and month=$month) and waccount=$waccount and raccount=$raccount")->data($data)->save();	
+		if(!$bzkh_info)
+		  $status=0;
 		unset($data);
-		$data['text']=$_GET['BMBZ']['arrBM'][$i]['arrBZ'][$j]['pj'];
+		$data['text']=$_POST['BMBZ']['arrBM'][$i]['arrBZ'][$j]['pj'];
 		$info.=$data['text'];
 		$info.=$waccount;
 		$info.=$raccount;
-		$info.=$interact_model->where("waccount=$waccount and raccount=$raccount")->data($data)->save();
+		$interact_info=$interact_model->where("(year=$year and month=$month) and waccount=$waccount and raccount=$raccount")->data($data)->save();
+		if(!$interact_info)
+		  $status=0;
 	  }
 	}
      
-	$_GET['NMPJ'][0]['name'];
+	$_POST['NMPJ'][0]['name'];
 	//返回信息
     $arr=Array(
-	  'status'=>$info,
-	  'info'=>$_GET['NMPJ'][0]['name'],
-	  'gjbm'=>$_GET['gjbm'],
-	  'renshu'=>$_GET['renshu'],
+	  'status'=>$status,
+	  'info'=>$_POST['NMPJ'][0]['name'],
+	  'gjbm'=>$_POST['gjbm'],
+	  'renshu'=>$_POST['renshu'],
 	);
 	echo $this->_encode($arr);
 	//echo json_encode($arr,JSON_UNESCAPED_UNICODE);	    
@@ -3316,35 +3393,44 @@ class PerformAction extends Action
 	
 	//$year="2014";
 	//$month="4";    
+	$year=$_POST['year'];
+	$month=$_POST['month'];
+	$status=1;
 	$bmkh_model=new Model("Bmkh");
 	$oneway_model=new Model("Oneway");
 	$bzty_model=new Model("Bzty");
 	$bmty_model=new Model("Bmty");
 	//获取部门数目
-	for($i=0;$i<count($_GET['BM']['arrBM']);$i++)
+	for($i=0;$i<count($_POST['BM']['arrBM']);$i++)
 	{
 	  //部门名字
-	  $rapartment=$_GET['BM']['arrBM'][$i]['bm'];
+	  $rapartment=$_POST['BM']['arrBM'][$i]['bm'];
 	  //得分细则
 	  unset($data);
-	  $data['DF1']=$_GET['BM']['arrBM'][$i]['df0'];
-	  $data['DF2']=$_GET['BM']['arrBM'][$i]['df1'];
-	  $data['DF3']=$_GET['BM']['arrBM'][$i]['df2'];
-	  $data['DF4']=$_GET['BM']['arrBM'][$i]['df3'];
-	  $data['DF5']=$_GET['BM']['arrBM'][$i]['df4'];
-	  $data['DF6']=$_GET['BM']['arrBM'][$i]['df5'];
-	  $data['DF7']=$_GET['BM']['arrBM'][$i]['df6'];
-	  $bmkh_model->where("waccount=$waccount and rapartment=$rapartment")->data($data)->save();
+	  $data['DF1']=$_POST['BM']['arrBM'][$i]['df0'];
+	  $data['DF2']=$_POST['BM']['arrBM'][$i]['df1'];
+	  $data['DF3']=$_POST['BM']['arrBM'][$i]['df2'];
+	  $data['DF4']=$_POST['BM']['arrBM'][$i]['df3'];
+	  $data['DF5']=$_POST['BM']['arrBM'][$i]['df4'];
+	  $data['DF6']=$_POST['BM']['arrBM'][$i]['df5'];
+	  $data['DF7']=$_POST['BM']['arrBM'][$i]['df6'];
+	  $bmkh_info=$bmkh_model->where("(year=$year and month=$month) and waccount=$waccount and rapartment=$rapartment")->data($data)->save();
 	  unset($data);
-	  $data['text']=$_GET['BM']['arrBM'][$i]['pj'];
-	  $oneway_model->where("waccount=$waccount and rapartment=$rapartment")->data($data)->save();
+	  if(!$bmkh_info)
+	    $status=0;
+	  $data['text']=$_POST['BM']['arrBM'][$i]['pj'];
+	  $oneway_info=$oneway_model->where("(year=$year and month=$month) and waccount=$waccount and rapartment=$rapartment")->data($data)->save();
+	  if(!$oneway_info)
+	    $status=0;
 	}
 	//部门推优
 	unset($data);
-    $data['rapartment']=$_GET['TYBM'];
-	$bmty_model->where("waccount=$waccount")->data($data)->save();
+    $data['rapartment']=$_POST['TYBM'];
+	$bmty_info=$bmty_model->where("(year=$year and month=$month) and waccount=$waccount")->data($data)->save();
+	if(!bmty_info)
+	  $status=0;
 	/*
-	//$arrBM=$_GET['BM']['arrBM'];
+	//$arrBM=$_POST['BM']['arrBM'];
 	//$arrBM[0]['df0'];
 	for($i=0;$i<count($arrBM);$i++)
 	{
@@ -3372,20 +3458,20 @@ class PerformAction extends Action
 	  $oneway_model->where("(year=$year and month=$month) and (waccount=$account and rapartment=($i+1))")->data($data)->save();
 
 	}
-	//$TYBZ=$_GET['TYBZ'];
+	//$TYBZ=$_POST['TYBZ'];
 	//$bz_account=$TYBZ['account'];
 	//$tyly=$TYBZ['tyly'];
 	unset($data);
 	$data['waccount']=$account;
-	$data['raccount']=$_GET['TYBM'];
+	$data['raccount']=$_POST['TYBM'];
 	//$data['tyly']=$tyly;
 	$bzty_model->where("(year=$year and month=$month) and (waccount=$account)")->data($data)->save();
 	*/
 	//返回信息
     $arr=Array(
-	  'status'=>$_GET['TYBM'],
-	  'gjbm'=>$_GET['gjbm'],
-	  'renshu'=>$_GET['renshu'],
+	  'status'=>$status,
+	  'gjbm'=>$_POST['gjbm'],
+	  'renshu'=>$_POST['renshu'],
 	);
 	echo $this->_encode($arr);
 	//echo json_encode($arr,JSON_UNESCAPED_UNICODE);	    
@@ -3403,611 +3489,86 @@ class PerformAction extends Action
 	//主席账号
 	$waccount=$_SESSION['account'];   
     $yxbz_model=new Model("Yxbz");	
+	//获取时间
+	$year=$_POST['year'];
+	$month=$_POST['month'];
 	//将传过来的数据保存到tbl_yxbz中
-	if(!empty($_GET['arrIDlist'][0]['account']))
+	if(!empty($_POST['arrIDlist'][0]['account']))
 	{
-	  $yxbz_info=$yxbz_model->where("waccount=$waccount")->select();
+	  $yxbz_info=$yxbz_model->where("(year=$year and month=$month) and waccount=$waccount")->select();
 	  foreach($yxbz_info as $v)
 	  {
 	    unset($data);
 	    $data['checked']=0;
 		$raccount=$v['raccount'];
-		$yxbz_model->where("waccount=$waccount and raccount=$raccount")->data($data)->save();
+		$yxbz_info=$yxbz_model->where("(year=$year and month=$month) and waccount=$waccount and raccount=$raccount")->data($data)->save();
+		if(!$yxbz_info)
+		  $status=0;
 	  }
-      for($i=0;$i<=count($_GET['arrIDlist']);$i++)
+      for($i=0;$i<=count($_POST['arrIDlist']);$i++)
 	  {
 	    unset($data);
 	    $data['checked']=1;
-		$raccount=$_GET['arrIDlist'][$i]['account'];
-	    $yxbz_model->where("waccount=$waccount and raccount=$raccount")->data($data)->save();
+		$raccount=$_POST['arrIDlist'][$i]['account'];
+	    $yxbz_info=$yxbz_model->where("(year=$year and month=$month) and waccount=$waccount and raccount=$raccount")->data($data)->save();
+		if(!yxbz_info)
+		  $status=0;
 	  }
 	}
 		
 	//返回信息
     $arr=Array(
-	  'status'=>$_GET['arrIDlist'][0]['account'],
-	  'gjbm'=>$_GET['gjbm'],
-	  'renshu'=>$_GET['renshu'],
+	  'status'=>$status,
+	  'gjbm'=>$_POST['gjbm'],
+	  'renshu'=>$_POST['renshu'],
 	);
 	echo $this->_encode($arr);
   }
-  //一键激活，包括：干事自评表，部长自评表，干事自评表，部长考核表，部门考核表
-  public function funcyjjh()
+  
+  //将下面的激活函数浓缩在一起
+  public function funcinitall()
   {
-    //设置年月
-	$year="2014";
-	$month="4";
-    //一键激活数据库表，包括：
-	
-	$person_model=new Model("Person");
+	//拒绝未登录访问
+	session_name('LOGIN');
+    session_start();
+    if(empty($_SESSION['account']))
+      $this->redirect('Login/index'); 
+    //对传过来的时间进行判断,看看数据库里是否已经激活过该时间了
+    $year=$_POST['year'];
+	$month=$_POST['month'];
 	$gszp_model=new Model("Gszp");
-	$interact_model=new Model("Interact");
-	$bzzp_model=new Model("Bzzp");
-	$gskh_model=new Model("Gskh");
-	$president_model=new Model("President");
-	$bzkh_model=new Model("Bzkh");
-	$bmkh_model=new Model("Bmkh");
-	$oneway_model=new Model("Oneway");
-	//出现bug了，应该是bmty
-	$bmty_model=new Model("Bzty");
-	//找出所有干事
-	$person_info=$person_model->where("type=1 or type=2")->select();
-	foreach($person_info as $v)
-	{
-	  $account=$v['account'];
-	  //基本信息
-	  $apartment=$v['apartment'];
-	  unset($data);
-	  $data['account']=$account;
-	  $data['apartment']=$v['apartment'];
-	  $data['year']=$year;
-	  $data['month']=$month;
-	  $data['zptext']="空";
-	  //干事自评表，每个部门的干事都要初始化
-	  $gszp_info=$gszp_model->add($data);
-	  //干事推优干事
-	  unset($data);
-	  $data['year']=$year;
-	  $data['month']=$month;
-	  $data['waccount']=$account;
-	  $data['wapartment']=$v['apartment'];
-	  $data['wtype']=$v['type'];
-	  $data['rapartment']=$v['apartment'];
-	  $data['rtype']=$v['type'];
-	  $data['text']="空";
-	  $interact_model->add($data);
-	  //干事对部长的评价
-	  //找出所有部长
-	  $person_info_bz=$person_model->where("apartment=$apartment and type=3")->select();
-	  foreach($person_info_bz as $v_bz)
-	  {
-        unset($data);
-	    $data['year']=$year;
-	    $data['month']=$month;
-	    $data['waccount']=$account;
-	    $data['wapartment']=$v['apartment'];
-	    $data['wtype']=$v['type'];
-		$data['raccount']=$v_bz['account'];
-	    $data['rapartment']=$v['apartment'];
-	    $data['rtype']=3;
-		$data['nm']=1;
-		$data['text']="空";
-		$interact_model->add($data);
-	  }
-	  
+	$flag=1;
+	//判断时间是否合理
+	if(empty($year)||empty($month))
+	  $this->redirect('Perform/index'); 
+	//干事自评表，部长自评表，干事考核表，部长考核表，部门考核表该月份必须为空
+	$gszp_info=$gszp_model->where("year=$year and month=$month")->select();
+	if(empty($gszp_info))
+	  $flag=0;
+	$bzzp_info=$bzzp_model->where("year=$year and month=$month")->select();
+	if(empty($bzzp_info))
+	  $flag=0;
+	$gskh_info=$gskh_model->where("year=$year and month=$month")->select();
+	if(empty($gskh_info))
+	  $flag=0;
+	$bmkh_info=$bmkh_model->where("year=$year and month=$month")->select();
+	if(empty($bmkh_info))
+	  $flag=0;
+	if($flag==1){
+	  $this->funcyjjh();
+	  $this->funcinitbmty();
+	  $this->funcinitgsfk();
+	  $this->funcinitbzfk();
+	  $this->funcinitbmfk();
+	  $this->funcinityxbz();
+	  $this->funcinitwdcs();
 	}
-	//干事初始化完成
-	//找出所有部长
-	$person_info=$person_model->where("type=3")->select();
-	foreach($person_info as $v)
-	{
-	  //基本信息
-	  $apartment=$v['apartment'];
-	  $account=$v['account'];
-	  //部长自评表
-	  unset($data);
-	  $data['year']=$year;
-	  $data['month']=$month;
-	  $data['waccount']=$account;
-	  $data['wapartment']=$apartment;
-	  $data['zptext']="空";
-	  $bzzp_model->add($data);
-	  //该部长对本部门其他部长的评价
-	  $person_info_bz=$person_model->where("apartment=$apartment and type=3")->select();
-	  foreach($person_info_bz as $v_bz)
-	  {
-	    if($v_bz['account']==$v['account'])
-		  continue;
-		unset($data);
-	    $data['year']=$year;
-	    $data['month']=$month;
-	    $data['waccount']=$account;
-	    $data['wapartment']=$apartment;
-	    $data['wtype']=3;
-		$data['raccount']=$v_bz['account'];
-	    $data['rapartment']=$apartment;
-	    $data['rtype']=3;
-		$data['nm']=1;
-		$data['text']="空";
-		$interact_model->add($data);
-	  }
-	  //该部长对其主管副主席的评价
-	  //找出主管副主席
-	  $person_info_zg=$president_model->where("apartment1=$apartment or apartment2=$apartment")->find();
-	  $zg_account=$person_info_zg['account'];
-      unset($data);
-	  $data['year']=$year;
-	  $data['month']=$month;
-	  $data['waccount']=$account;
-	  $data['wapartment']=$apartment;
-	  $data['wtype']=3;
-      $data['raccount']=$zg_account;
-	  $data['rapartment']=12;
-	  $data['rtype']=4;
-	  $data['text']="空";
-      $interact_model->add($data);	
-	  $person_info_zxt=$person_model->where("type=4")->select();
-	  foreach($person_info_zxt as $v_zxt)
-	  {
-	    $zxt_account=$v_zxt['account'];
-      unset($data);
-	  $data['year']=$year;
-	  $data['month']=$month;
-	  $data['waccount']=$account;
-	  $data['wapartment']=$apartment;
-	  $data['wtype']=3;
-      $data['raccount']=$zxt_account;
-	  $data['rapartment']=12;
-	  $data['rtype']=4;
-	  $data['text']="空";
-	  $data['nm']=1;
-	   $interact_model->add($data);	
-	  }
-      //干事考核表，对部门所有干事的给分
-      //找出该部长所有的干事
-      $person_info_gs=$person_model->where("apartment=$apartment and (type=1 or type=2)")->select();
-      foreach($person_info_gs as $v_gs)
-      {
-	    //给干事打分
-	    unset($data);
-	    $data['year']=$year;
-	    $data['month']=$month;	
-	    $data['waccount']=$account;	
-	    $data['wapartment']=$apartment;
-        $data['raccount']=$v_gs['account'];	
-			$data['total']=0;
-			$data['DF1']=0;
-			$data['DF2']=0;
-			$data['DF3']=0;
-			$data['DF4']=0;
-			$data['DF5']=0;
-			$data['DF6']=0;
-			$data['DF7']=0;
-			$data['DF8']=0;
-			$data['DF9']=0;
-			$data['DF10']=0;
-			$data['DF11']=0;
-			$data['DF12']=0;
-			$data['DF13']=0;
-			$data['DF14']=0	;			
-		$gskh_model->add($data);
-		//对干事评价
-		unset($data);
-	    $data['year']=$year;
-	    $data['month']=$month;
-	    $data['waccount']=$account;
-	    $data['wapartment']=$apartment;
-	    $data['wtype']=3;
-		$data['raccount']=$v_gs['account'];
-	    $data['rapartment']=$apartment;
-	    $data['rtype']=$v_gs['type'];
-		$data['text']="空";
-		$interact_model->add($data);
-	  }	  
+	else{
+	  echo "该月份已经激活了，请不要重复操作</br>";
 	}
-	//部长初始化完成
-	//找出所有主席团成员
-	$person_info=$person_model->where("type=4")->select();
-	var_dump($person_info);
-	foreach($person_info as $v)
-	{
-	  //每个主席团成员都要对其主管的部门的部长进行考核
-	  //而主席特殊点，要考核所有部长
-	  //基本信息
-	  $account=$v['account'];
-	  $president_info=$president_model->where("account=$account")->find();
-
-	  //不管是不是主席，都得对非主管部门推优
-	  unset($data);
-	  $data['year']=$year;
-	  $data['month']=$month;
-	  $data['waccount']=$account;
-	  //$data['raccount']
-	  $data['tyly']="空";
-	  $bmty_model->add($data);
-	    if($president_info['is_sub']=='y')//一般主管副主席
-		{
-		  $apartment_zxt_1=$president_info['apartment1'];
-		  //根据第一个部门，对部长、部门进行考核
-		  if($apartment_zxt_1!=0)
-		  {
-		    $person_info_bz=$person_model->where("apartment=$apartment_zxt_1 and type=3")->select();
-			foreach($person_info_bz as $v_bz)
-			{
-			  //进行评分
-			  unset($data);
-			  $data['waccount']=$account;
-			  $data['wapartment']=12;
-			  $data['raccount']=$v_bz['account'];
-			  $data['rapartment']=$apartment_zxt_1;
-			  $data['year']=$year;
-			  $data['month']=$month;
-			  $bzkh_model->add($data);
-			  //进行评价
-			  unset($data);
-	          $data['year']=$year;
-	          $data['month']=$month;
-	          $data['waccount']=$account;
-	          $data['wapartment']=12;
-	          $data['wtype']=4;
-		      $data['raccount']=$v_bz['account'];
-	          $data['rapartment']=$apartment_zxt_1;
-	          $data['rtype']=3;
-			  $data['text']="空";
-		      $interact_model->add($data);
-			}
-			//对部门1进行考核
-			unset($data);
-			$data['waccount']=$account;
-			$data['wapartment']=12;
-			$data['rapartment']=$apartment_zxt_1;
-			$data['year']=$year;
-			$data['month']=$month;
-			$data['total']=0;
-			$data['DF1']=0;
-			$data['DF2']=0;
-			$data['DF3']=0;
-			$data['DF4']=0;
-			$data['DF5']=0;
-			$data['DF6']=0;
-			$data['DF7']=0;
-			$bmkh_model->add($data);
-			//对部门的评价
-			unset($data);
-			$data['year']=$year;
-			$data['month']=$month;
-			$data['waccount']=$account;
-			$data['wapartment']=12;
-			$data['rapartment']=$apartment_zxt_1;
-			$data['text']="空";
-			$oneway_model->add($data);
-		  }
-		  $apartment_zxt_2=$president_info['apartment2'];
-		  //根据第二个部门，对部长进行考核
-		  if($apartment_zxt_2!=0)
-		  {
-		    $person_info_bz=$person_model->where("apartment=$apartment_zxt_2 and type=3")->select();
-			foreach($person_info_bz as $v_bz)
-			{
-			  //进行评分
-			  unset($data);
-			  $data['waccount']=$account;
-			  $data['wapartment']=12;
-			  $data['raccount']=$v_bz['account'];
-			  $data['rapartment']=$apartment_zxt_2;
-			  $data['year']=$year;
-			  $data['month']=$month;
-			  $bzkh_model->add($data);
-			  //进行评价
-			  unset($data);
-	          $data['year']=$year;
-	          $data['month']=$month;
-	          $data['waccount']=$account;
-	          $data['wapartment']=12;
-	          $data['wtype']=4;
-		      $data['raccount']=$v_bz['account'];
-	          $data['rapartment']=$apartment_zxt_2;
-	          $data['rtype']=3;
-			  $data['text']="空";
-		      $interact_model->add($data);
-			}
-			//对部门2进行考核
-			unset($data);
-			$data['waccount']=$account;
-			$data['wapartment']=12;
-			$data['rapartment']=$apartment_zxt_2;
-			$data['year']=$year;
-			$data['month']=$month;
-			$data['total']=0;
-			$data['DF1']=0;
-			$data['DF2']=0;
-			$data['DF3']=0;
-			$data['DF4']=0;
-			$data['DF5']=0;
-			$data['DF6']=0;
-			$data['DF7']=0;
-			$bmkh_model->add($data);
-			//对部门的评价
-			unset($data);
-			$data['year']=$year;
-			$data['month']=$month;
-			$data['waccount']=$account;
-			$data['wapartment']=12;
-			$data['rapartment']=$apartment_zxt_2;
-			$data['text']="空";
-			$oneway_model->add($data);
-		  }
-		}
-		else//略叼主席
-		{
-		  //对管辖内的部长进行评分评价
-		  $apartment_zxt_1=$president_info['apartment1'];
-		  //根据第一个部门，对部长、部门进行考核
-		  if($apartment_zxt_1!=0)
-		  {
-		    $person_info_bz=$person_model->where("apartment=$apartment_zxt_1 and type=3")->select();
-			foreach($person_info_bz as $v_bz)
-			{
-			  //进行评分
-			  unset($data);
-			  $data['waccount']=$account;
-			  $data['wapartment']=12;
-			  $data['raccount']=$v_bz['account'];
-			  $data['rapartment']=$apartment_zxt_1;
-			  $data['year']=$year;
-			  $data['month']=$month;
-			  $bzkh_model->add($data);
-			  //进行评价
-			  unset($data);
-	          $data['year']=$year;
-	          $data['month']=$month;
-	          $data['waccount']=$account;
-	          $data['wapartment']=12;
-	          $data['wtype']=4;
-		      $data['raccount']=$v_bz['account'];
-	          $data['rapartment']=$apartment_zxt_1;
-	          $data['rtype']=3;
-			  $data['text']="空";
-		      $interact_model->add($data);
-			}
-		  }
-		  $apartment_zxt_2=$president_info['apartment2'];
-		  //根据第二个部门，对部长进行考核
-		  if($apartment_zxt_2!=0)
-		  {
-		    $person_info_bz=$person_model->where("apartment=$apartment_zxt_2 and type=3")->select();
-			foreach($person_info_bz as $v_bz)
-			{
-			  //进行评分
-			  unset($data);
-			  $data['waccount']=$account;
-			  $data['wapartment']=12;
-			  $data['raccount']=$v_bz['account'];
-			  $data['rapartment']=$apartment_zxt_2;
-			  $data['year']=$year;
-			  $data['month']=$month;
-			  $bzkh_model->add($data);
-			  //进行评价
-			  unset($data);
-	          $data['year']=$year;
-	          $data['month']=$month;
-	          $data['waccount']=$account;
-	          $data['wapartment']=12;
-	          $data['wtype']=4;
-		      $data['raccount']=$v_bz['account'];
-	          $data['rapartment']=$apartment_zxt_2;
-	          $data['rtype']=3;
-			  $data['text']="空";
-		      $interact_model->add($data);
-			}
-		}
-		  //对11个部门进行考核
-		  echo $account."</br>";
-		  for($i=1;$i<=11;$i++)
-		  {
-			//对部门$i进行考核
-			unset($data);
-			$data['waccount']=$account;
-			$data['wapartment']=12;
-			$data['rapartment']=$i;
-			$data['year']=$year;
-			$data['month']=$month;
-			$data['total']=0;
-			$data['DF1']=0;
-			$data['DF2']=0;
-			$data['DF3']=0;
-			$data['DF4']=0;
-			$data['DF5']=0;
-			$data['DF6']=0;
-			$data['DF7']=0;
-			
-			$bmkh_model->add($data);
-			//对部门的评价
-			unset($data);
-			$data['year']=$year;
-			$data['month']=$month;
-			$data['waccount']=$account;
-			$data['wapartment']=12;
-			$data['rapartment']=$i;
-			$data['text']="空";
-			$oneway_model->add($data);
-		  }
-	  }
-	
-  }  
-} 
-//上面的一键激活中，部门推优写错了，写成部长推优
-//一键考核补充：主席团的部门推优
-public function funcinitbmty()
-{
-    $year="2014";
-	$month="4";
-	//找出所有主席团成员
-	$person_model=new Model("Person");
-	$bmty_model=new Model("Bmty");
-	$person_info=$person_model->where("type=4")->select();
-	//var_dump($person_info);
-	foreach($person_info as $v)
-	{
-	  //每个主席团成员都要对其主管的部门的部长进行考核
-	  //而主席特殊点，要考核所有部长
-	  //基本信息
-	  $account=$v['account'];
-
-
-	  //不管是不是主席，都得对非主管部门推优
-	  unset($data);
-	  $data['year']=$year;
-	  $data['month']=$month;
-	  $data['waccount']=$account;
-	  $data['rapartment']=1;
-	  $data['tyly']="空";
-	  if($bmty_model->add($data))
-	    echo "部长推优添加成功";
-	}
-}
-
-//一键考核补充：成该月份的干事反馈表
-public function funcinitgsfk()
-{
-  $year="2014";
-  $month="4";
-  $person_model=new Model("Person");
-  $gsfk_model=new Model("Gsfk");
-  //找到所有的干事
-  $person_info=$person_model->where("type=1 or type=2")->select();
-  foreach($person_info as $v)
-  {
-    echo $v['account']."</br>";
-    unset($data);
-	$data['year']=$year;
-	$data['month']=$month;
-	$data['account']=$v['account'];
-	$data['total']=0;
-	$data['rank']=0;
-	$data['yxgs']=0;
-	$data['zpdf']=0;
-	$data['bzpjdf']=0;
-	$data['cqdf']=0;
-	$data['wddf']=0;
-	$data['tydf']=0;
-	$data['fkdf']=0;
-	$data['qtdf']=0;
-	if($gsfk_model->add($data))
-	 echo $v['account']."初始成功";
-	else 
-	 echo $v['account']."初始错误";
+	//向前端返回status信息
   }
-}
-  //一键考核补充：该月份的部长反馈表
-  public function funcinitbzfk()
-  {
-    //找出所有的部长
-	$year="2014";
-	$month="4";
-	$person_model=new Model("Person");
-	$bzfk_model=new Model("Bzfk");
-	$person_info=$person_model->where("type=3")->select();
-	foreach($person_info as $v)
-	{
-	  $bz_account=$v['account'];
-	  unset($data);
-	  $data['year']=$year;
-	  $data['month']=$month;
-	  $data['account']=$bz_account;
-	  $data['total']=0;
-	  $data['rank']=0;
-	  $data['yxbz']=0;
-	  $data['zpdf']=0;
-	  $data['zxpjdf']=0;
-	  $data['gspjdf']=0;
-	  $data['bzpjdf']=0;
-	  $data['cqdf']=0;
-	  $data['wddf']=0;
-	  $data['fkdf']=0;
-	  $data['qtdf']=0;
-	  $bzfk_model->add($data);
-	}
-  }
- //一键考核补充，该月份的部门反馈表
- public function funcinitbmfk()
- {
-   $year="2014";
-   $month="4";
-   $bmfk_model=new Model("Bmfk");
-   //找出11个部门
-   for($i=1;$i<=11;$i++)
-   {
-     unset($data);
-	 $data['year']=$year;
-	 $data['month']=$month;
-	 $data['apartment']=$i;
-	 $data['total']=0;
-	 $data['rank']=0;
-	 $data['yxbm']=0;
-	 $data['zxpjdf']=0;
-	 $data['zgpjdf']=0;
-	 $data['cqdf']=0;
-	 $data['wgkf']=0;
-	 $data['fkdf']=0;
-	 $data['tydf']=0;
-	 $data['qtdf']=0;
-	 $data['yxbz']=0;
-	 $bmfk_model->add($data);
-   }
- }
- //一键考核补充：该月的优秀部长评定表
-  public function funcinityxbz()
-  {
-    $year="2014";
-	$month="4";
-    //找到所有主席
-	$person_model=new Model("Person");
-	$yxbz_model=new Model("Yxbz");
-	$president_model=new Model("President");
-	$yxbzhx_model=new Model("Yxbzhx");
-	$yxbzhx_info=$yxbzhx_model->select();
-    //从优秀部长候选中选
-	$person_model=$person_model->where("type=4")->select();
-	foreach($person_model as $v)
-	{
-	  //必须投四个部长
-	  foreach($yxbzhx_info as $v_hx)
-	  {
-	    unset($data);
-	    $data['year']=$year;
-	    $data['month']=$month;
-	    $data['waccount']=$v['account'];
-		$data['raccount']=$v_hx['HX'];
-		//被投部长默认为空，方便使用是用empty()判断
-	    $data['checked']=0;
-		$yxbz_model->add($data);
-     }
-   }
-  }
- //一键考核补充，该月的外调次数表
- public function funcinitwdcs()
- {
-   $year="2014";
-   $month="4";
-   $wdcs_model=new Model("Wdcs");
-   $person_model=new Model("Person");
-   //每个部门的干事初始化
-   for($i=1;$i<=11;$i++)
-   {
-     $person_info=$person_model->where("apartment=$i and (type=1 or type=2)")->select();
-	 foreach($person_info as $v)
-	 {
-	   unset($data);
-	   $data['year']=$year;
-	   $data['month']=$month;
-	   $data['account']=$v['account'];
-	   $data['wdcs']=0;
-	   $data['rank']=0;
-	   $wdcs_model->add($data);
-	 }
-   }
- }
+
   //成员的原始添加
   public function funcaddperson()
   {
@@ -4495,7 +4056,7 @@ $yxchxz_model->add($data);
 public function functest()
 {
   $arr=Array(
-    'status'=>$_GET['arrIDlist'][0]['account'],
+    'status'=>$_POST['arrIDlist'][0]['account'],
   );
   echo $this->_encode($arr);
 }	
