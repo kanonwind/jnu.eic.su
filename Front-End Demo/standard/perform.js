@@ -807,142 +807,23 @@ function Get_ZTKHJGFK()
 			"arrYXBM"://优秀部门
 			[
 				{"bm":"KSC联盟","df":1024,},//部门名字,得分
-				{"bm":"KSC联盟","df":1024,}//部门名字,得分
 				
 			],
 			
 			"arrYXBZ"://优秀部长
 			[
-				{"bm":"邓作恒", "account":2013021120, "ssbm":"KSC联盟", "df":1024,},//部长名字,所属部门,得分
-				{"bm":"邓作恒", "account":2013021120, "ssbm":"KSC联盟", "df":1024,},//部长名字,所属部门,得分
-				{"bm":"邓作恒", "account":2013021120, "ssbm":"KSC联盟", "df":1024,},//部长名字,所属部门,得分
-				
-				
+				{"bm":"邓作恒", "account":2013021120, "ssbm":"KSC联盟", "df":1024,},//部长名字,所属部门,得分	
 			],
 			
 			"YXGS"://各部门优秀干事
 			{
-				"bmsm":11,//部门数目
 				"arrBM":
 				[
 					{
-						"sum":3,//一个部门优秀干事人数
 						"bm":"KSC联盟",//部门
 						"GS"://一个部门多个干事
 						[//优秀干事名字,学号，得分,是否为月度优秀干事,1表示是月度优秀干事，0表示不是优秀干事
 							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":1,},
-							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":0,},
-							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":0,},
-						],
-					},
-					
-					{
-						"sum":3,//一个部门优秀干事人数
-						"bm":"KSC联盟",//部门
-						"GS"://一个部门多个干事
-						[//优秀干事名字,学号，得分,是否为月度优秀干事,1表示是月度优秀干事，0表示不是优秀干事
-							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":1,},
-							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":0,},
-							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":0,},
-						],
-					},
-					
-					{
-						"sum":3,//一个部门优秀干事人数
-						"bm":"KSC联盟",//部门
-						"GS"://一个部门多个干事
-						[//优秀干事名字,学号，得分,是否为月度优秀干事,1表示是月度优秀干事，0表示不是优秀干事
-							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":1,},
-							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":0,},
-							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":0,},
-						],
-					},
-					
-					{
-						"sum":3,//一个部门优秀干事人数
-						"bm":"KSC联盟",//部门
-						"GS"://一个部门多个干事
-						[//优秀干事名字,学号，得分,是否为月度优秀干事,1表示是月度优秀干事，0表示不是优秀干事
-							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":1,},
-							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":0,},
-							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":0,},
-						],
-					},
-					
-					{
-						"sum":3,//一个部门优秀干事人数
-						"bm":"KSC联盟",//部门
-						"GS"://一个部门多个干事
-						[//优秀干事名字,学号，得分,是否为月度优秀干事,1表示是月度优秀干事，0表示不是优秀干事
-							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":1,},
-							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":0,},
-							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":0,},
-						],
-					},
-					
-					{
-						"sum":3,//一个部门优秀干事人数
-						"bm":"KSC联盟",//部门
-						"GS"://一个部门多个干事
-						[//优秀干事名字,学号，得分,是否为月度优秀干事,1表示是月度优秀干事，0表示不是优秀干事
-							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":1,},
-							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":0,},
-							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":0,},
-						],
-					},
-					
-					{
-						"sum":3,//一个部门优秀干事人数
-						"bm":"KSC联盟",//部门
-						"GS"://一个部门多个干事
-						[//优秀干事名字,学号，得分,是否为月度优秀干事,1表示是月度优秀干事，0表示不是优秀干事
-							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":1,},
-							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":0,},
-							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":0,},
-						],
-					},
-					
-					{
-						"sum":3,//一个部门优秀干事人数
-						"bm":"KSC联盟",//部门
-						"GS"://一个部门多个干事
-						[//优秀干事名字,学号，得分,是否为月度优秀干事,1表示是月度优秀干事，0表示不是优秀干事
-							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":1,},
-							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":0,},
-							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":0,},
-						],
-					},
-					
-					{
-						"sum":3,//一个部门优秀干事人数
-						"bm":"KSC联盟",//部门
-						"GS"://一个部门多个干事
-						[//优秀干事名字,学号，得分,是否为月度优秀干事,1表示是月度优秀干事，0表示不是优秀干事
-							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":1,},
-							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":0,},
-							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":0,},
-						],
-					},
-					
-					{
-						"sum":3,//一个部门优秀干事人数
-						"bm":"KSC联盟",//部门
-						"GS"://一个部门多个干事
-						[//优秀干事名字,学号，得分,是否为月度优秀干事,1表示是月度优秀干事，0表示不是优秀干事
-							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":1,},
-							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":0,},
-							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":0,},
-						],
-					},
-					
-					{
-						"sum":3,//一个部门优秀干事人数
-						"bm":"KSC联盟",//部门
-						"GS"://一个部门多个干事
-						[//优秀干事名字,学号，得分,是否为月度优秀干事,1表示是月度优秀干事，0表示不是优秀干事
-							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":1,},
-							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":0,},
-							{"name":"邓作恒", "account":2013021120, "df":1024,"ydyxgs":0,},
 						],
 					},
 				],				
@@ -950,130 +831,17 @@ function Get_ZTKHJGFK()
 			
 			"WDJDRY"://外调较多人员
 			{
-				"bmsm":11,//部门数目
+				
 				"arrBM":
 				[
 					{
-						"sum":3,//一个部门优秀干事人数
+						
 						"bm":"KSC联盟",//部门
 						"GS"://一个部门多个干事
 						[
-							{"name":"邓作恒", "account":2013021120, "wdcs":2,},//外调干事名字,外调次数
-							{"name":"邓作恒", "account":2013021120, "wdcs":2,},//外调干事名字,外调次数
 							{"name":"邓作恒", "account":2013021120, "wdcs":2,},//外调干事名字,外调次数
 						],
 					},
-					
-					{
-						"sum":3,//一个部门优秀干事人数
-						"bm":"KSC联盟",//部门
-						"GS"://一个部门多个干事
-						[
-							{"name":"邓作恒", "account":2013021120, "wdcs":2,},//外调干事名字,外调次数
-							{"name":"邓作恒", "account":2013021120, "wdcs":2,},//外调干事名字,外调次数
-							{"name":"邓作恒", "account":2013021120, "wdcs":2,},//外调干事名字,外调次数
-						],
-					},
-									
-					{
-						"sum":3,//一个部门优秀干事人数
-						"bm":"KSC联盟",//部门
-						"GS"://一个部门多个干事
-						[
-							{"name":"邓作恒", "account":2013021120, "wdcs":2,},//外调干事名字,外调次数
-							{"name":"邓作恒", "account":2013021120, "wdcs":2,},//外调干事名字,外调次数
-							{"name":"邓作恒", "account":2013021120, "wdcs":2,},//外调干事名字,外调次数
-						],
-					},
-										
-					{
-						"sum":3,//一个部门优秀干事人数
-						"bm":"KSC联盟",//部门
-						"GS"://一个部门多个干事
-						[
-							{"name":"邓作恒", "account":2013021120, "wdcs":2,},//外调干事名字,外调次数
-							{"name":"邓作恒", "account":2013021120, "wdcs":2,},//外调干事名字,外调次数
-							{"name":"邓作恒", "account":2013021120, "wdcs":2,},//外调干事名字,外调次数
-						],
-					},
-										
-					{
-						"sum":3,//一个部门优秀干事人数
-						"bm":"KSC联盟",//部门
-						"GS"://一个部门多个干事
-						[
-							{"name":"邓作恒", "account":2013021120, "wdcs":2,},//外调干事名字,外调次数
-							{"name":"邓作恒", "account":2013021120, "wdcs":2,},//外调干事名字,外调次数
-							{"name":"邓作恒", "account":2013021120, "wdcs":2,},//外调干事名字,外调次数
-						],
-					},
-										
-					{
-						"sum":3,//一个部门优秀干事人数
-						"bm":"KSC联盟",//部门
-						"GS"://一个部门多个干事
-						[
-							{"name":"邓作恒", "account":2013021120, "wdcs":2,},//外调干事名字,外调次数
-							{"name":"邓作恒", "account":2013021120, "wdcs":2,},//外调干事名字,外调次数
-							{"name":"邓作恒", "account":2013021120, "wdcs":2,},//外调干事名字,外调次数
-						],
-					},
-										
-					{
-						"sum":3,//一个部门优秀干事人数
-						"bm":"KSC联盟",//部门
-						"GS"://一个部门多个干事
-						[
-							{"name":"邓作恒", "account":2013021120, "wdcs":2,},//外调干事名字,外调次数
-							{"name":"邓作恒", "account":2013021120, "wdcs":2,},//外调干事名字,外调次数
-							{"name":"邓作恒", "account":2013021120, "wdcs":2,},//外调干事名字,外调次数
-						],
-					},
-					
-					
-					{
-						"sum":3,//一个部门优秀干事人数
-						"bm":"KSC联盟",//部门
-						"GS"://一个部门多个干事
-						[
-							{"name":"邓作恒", "account":2013021120, "wdcs":2,},//外调干事名字,外调次数
-							{"name":"邓作恒", "account":2013021120, "wdcs":2,},//外调干事名字,外调次数
-							{"name":"邓作恒", "account":2013021120, "wdcs":2,},//外调干事名字,外调次数
-						],
-					},					
-					
-					{
-						"sum":3,//一个部门优秀干事人数
-						"bm":"KSC联盟",//部门
-						"GS"://一个部门多个干事
-						[
-							{"name":"邓作恒", "account":2013021120, "wdcs":2,},//外调干事名字,外调次数
-							{"name":"邓作恒", "account":2013021120, "wdcs":2,},//外调干事名字,外调次数
-							{"name":"邓作恒", "account":2013021120, "wdcs":2,},//外调干事名字,外调次数
-						],
-					},
-										
-					{
-						"sum":3,//一个部门优秀干事人数
-						"bm":"KSC联盟",//部门
-						"GS"://一个部门多个干事
-						[
-							{"name":"邓作恒", "account":2013021120, "wdcs":2,},//外调干事名字,外调次数
-							{"name":"邓作恒", "account":2013021120, "wdcs":2,},//外调干事名字,外调次数
-							{"name":"邓作恒", "account":2013021120, "wdcs":2,},//外调干事名字,外调次数
-						],
-					},
-										
-					{
-						"sum":3,//一个部门优秀干事人数
-						"bm":"KSC联盟",//部门
-						"GS"://一个部门多个干事
-						[
-							{"name":"邓作恒", "account":2013021120, "wdcs":2,},//外调干事名字,外调次数
-							{"name":"邓作恒", "account":2013021120, "wdcs":2,},//外调干事名字,外调次数
-							{"name":"邓作恒", "account":2013021120, "wdcs":2,},//外调干事名字,外调次数
-						],
-					},			
 				],				
 			},
 		};
@@ -1118,13 +886,13 @@ function Get_ZTKHJGFK()
 					this.ydyxgs = "";
 			}
 			this.arrObjGBMYXGS = new Array();//保存一个部门优秀干事的数组
-			for(var i = 0; i < BM.sum; ++i)
+			for(var i = 0; i < BM.GS.length; ++i)
 			{
 				this.arrObjGBMYXGS.push(new obj_GBMYXGS(BM.GS[i]));
 			}
 		}
 		this.arrObjYXGS = new Array();//保存多个部门优秀干事的数组
-		for(var i = 0; i < json_Get_ZTKHJGFK.YXGS.bmsm; ++i)
+		for(var i = 0; i < json_Get_ZTKHJGFK.YXGS.arrBM.length; ++i)
 		{
 			this.arrObjYXGS.push(new obj_YXGS(json_Get_ZTKHJGFK.YXGS.arrBM[i]));
 		}
@@ -1139,13 +907,13 @@ function Get_ZTKHJGFK()
 				this.wdcs = GS.wdcs;//外调次数
 			}
 			this.arrObjGBMWDJDRY = new Array();//保存一个部门w外调较多干事的数组
-			for(var i = 0; i < BM.sum; ++i)
+			for(var i = 0; i < BM.GS.length; ++i)
 			{
 				this.arrObjGBMWDJDRY.push(new obj_GBMWDJDRY(BM.GS[i]));
 			}
 		}
 		this.arrObjWDJDRY = new Array();//保存多个部门外调较多干事的数组
-		for(var i = 0; i < 11; ++i)
+		for(var i = 0; i < json_Get_ZTKHJGFK.WDJDRY.arrBM.length; ++i)
 		{
 			this.arrObjWDJDRY.push(new obj_WDJDRY(json_Get_ZTKHJGFK.WDJDRY.arrBM[i]));
 		}		
@@ -2056,6 +1824,12 @@ function Get_BZFK()
 				{"name":"干事1", "account":2014052211, "assess":"还好吧的干事自评",},//干事姓名, 学号，干事自我评价
 			]
 		},
+		"arrGSPM":
+		[
+			{"name":"干事1","score":"100"},
+			{"name":"干事2","score":"2"},
+			{"name":"干事3","score":"1300"},
+		],
 		
 		"GanShiPingJia":
 		{
@@ -2118,6 +1892,7 @@ function Get_BZFK()
 		
 		
 		this.arrGanShiZhiWoPinJia = arrGSZP;//干事自我评价数组
+		this.arrGanShiDeFengPaiMing = json_BZFK.arrGSPM//干事排名
 		
 		this.BuMenDeFeng = json_BZFK.BuMenDeFeng;//部门得分
 		this.BuMenPaiMing = json_BZFK.BuMenPaiMing;//部门排名
@@ -4481,7 +4256,7 @@ function Show_GSKHFK()
 	+"					<td>出勤得分</td><td><p>基本得分1分</p><p>A.例会 大会 拓展（请假-0.1/次，迟到-0.2/次，缺席-0.3/次）</p><p>B.外调（缺席-0.1/次）</p></td><td>" + objGSKHFK.arrDFXZ[2] + "</td><td></td>\n"
 	+"				</tr>\n"
 	+"				<tr>\n"
-	+"					<td>外调加分</td><td><p>基本分1分</p><p>A.例会 大会 拓展（请假-0.1/次，迟到-0.2/次，缺席-0.3/次）</p><p>B.外调（缺席-0.1/次）</p></td><td>" + objGSKHFK.arrDFXZ[3] + "</td><td><p>此外调统计包括人力平时外调各部门干事，司仪、礼仪队的外调，信编拍照外调和人力观察员外调</p></td>\n"
+	+"					<td>外调加分</td><td><p>基本分0分</p><p>A.例会 大会 拓展（请假-0.1/次，迟到-0.2/次，缺席-0.3/次）</p><p>B.外调（缺席-0.1/次）</p></td><td>" + objGSKHFK.arrDFXZ[3] + "</td><td><p>此外调统计包括人力平时外调各部门干事，司仪、礼仪队的外调，信编拍照外调和人力观察员外调</p></td>\n"
 	+"				</tr>\n"
 	+"				<tr>\n"
 	+"					<td>推优加分</td><td>0.1/票</td><td>" + objGSKHFK.arrDFXZ[4] + "</td><td></td>\n"
@@ -5381,7 +5156,7 @@ function Show_BZFK()
 				+"		<td>出勤得分</td><td><p>基本得分1分</p><p>A.例会 大会 拓展（请假-0.1/次，迟到-0.2/次，缺席-0.3/次）</p><p>B.外调（缺席-0.1/次）</p></td><td>"+obj_BZFK.arrDeFenXiZhe[4]+"</td><td></td>\n"
 				+"	</tr>\n"
 				+"	<tr>\n"
-				+"		<td>外调加分</td><td><p>基本分1分</p><p>A.例会 大会 拓展（请假-0.1/次，迟到-0.2/次，缺席-0.3/次）</p><p>B.外调（缺席-0.1/次）</p></td><td>"+obj_BZFK.arrDeFenXiZhe[5]+"</td><td><p>此外调统计包括人力平时外调各部门干事，司仪、礼仪队的外调，信编拍照外调和人力观察员外调</p></td>\n"
+				+"		<td>外调加分</td><td><p>基本分0分</p><p>A.例会 大会 拓展（请假-0.1/次，迟到-0.2/次，缺席-0.3/次）</p><p>B.外调（缺席-0.1/次）</p></td><td>"+obj_BZFK.arrDeFenXiZhe[5]+"</td><td><p>此外调统计包括人力平时外调各部门干事，司仪、礼仪队的外调，信编拍照外调和人力观察员外调</p></td>\n"
 				+"	</tr>\n"
 				+"	<tr>\n"
 				+"		<td>反馈加分</td><td><p>0.1/次</p><p>在外调反馈表或活动调研问卷中写的意见被活动部门采纳</p></td><td>"+obj_BZFK.arrDeFenXiZhe[6]+"</td><td></td>\n"
@@ -5424,7 +5199,15 @@ function Show_BZFK()
 	{
 		strInnerHtml += "<li><p class=\"self-assessment\">"+obj_BZFK.arrGanShiZhiWoPinJia[i].name+"<br />"+obj_BZFK.arrGanShiZhiWoPinJia[i].assess+"</p></li>";
 	}
-	strInnerHtml +="</ul>"
+	
+	strInnerHtml +="</ul>";
+	strInnerHtml+="<h3>干事得分排名</h3><ol>";
+	alert("00");
+	for(var i=0;i<obj_BZFK.arrGanShiDeFengPaiMing.length;i++)
+	{
+		strInnerHtml+="<li>"+obj_BZFK.arrGanShiDeFengPaiMing[i].name+"&emsp;<span>得分：</span>"+obj_BZFK.arrGanShiDeFengPaiMing[i].score+"</li>";
+	}
+	strInnerHtml+="</ol>"
 					+"<h3>部门情况反馈</h3>"
 					+"<p>部门得分："+obj_BZFK.BuMenDeFeng+"</p>"
 					+"<p>部门排名："+obj_BZFK.BuMenPaiMing+"</p>"
