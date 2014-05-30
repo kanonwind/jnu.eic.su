@@ -42,6 +42,10 @@ class InitAction extends Action
 	{
 	  unset($data);
 	  $data['account']=$v['account'];
+	  $data['is_sub']='y';
+	  $president_info=$president_model->add($data);
+	  if(!$president_info)
+	    "主席团".$data['account']."初始化失败</br>";
 	}
   }
   //某年某月考核系统初始化
@@ -51,15 +55,38 @@ class InitAction extends Action
 	//根据tbl_authority判断，若时间已经存在拒绝访问
 	//干事自评表，部长自评表，干事自评表，部长考核表，部门考核表
 	$this->funcyjjh();
+	$this->funcinitbmty();
+	$this->funcinitgsfk();
+	$this->funcinitbzfk();
+	$this->funcinitbmfk();
+	$this->funcinityxbz();
+	$this->funcinitwdcs();
+	$this->funcinitchuqin();
+	$this->funcinitdiaoyan();
+	$this->funcinitqtqk();
+	$this->funcinityxchxz();
   } 
-  //一键激活，包括：干事自评表，部长自评表，干事自评表，部长考核表，部门考核表
+  public function funcsettime()
+  {
+    $year=2014;//$_POST['year'];
+	$month=5;//$_POST['month'];
+	$arr=Array(
+	  'year'=>$year,
+	  'month'=>$month,
+	);
+	return $arr;
+  }
+  //一键激活，包括：干事自评表，部长自评表，干事考核表，部长考核表，部门考核表
   public function funcyjjh()
   {
     //设置年月
 	//$year="2014";
 	//$month="4";
-	$year=$_POST['year'];
-	$month=$_POST['month'];
+	//$year=$_POST['year'];
+	//$month=$_POST['month'];
+	$arr=$this->funcsettime();
+	$year=$arr['year'];
+	$month=$arr['month'];
     //一键激活数据库表，包括：
 	
 	$person_model=new Model("Person");
@@ -506,13 +533,16 @@ class InitAction extends Action
     }
     echo "主席团初始化完成</br>";  
   } 
-  //一键考核补充：主席团的部门推优
+  //一键考核补充1：主席团的部门推优
   public function funcinitbmty()
   {
     //$year="2014";
 	//$month="4";
-    $year=$_POST['year'];
-	$month=$_POST['month'];
+    //$year=$_POST['year'];
+	//$month=$_POST['month'];
+	$arr=$this->funcsettime();
+	$year=$arr['year'];
+	$month=$arr['month'];
 	echo "主席团的部门推优初始化开始</br>";
 	//找出所有主席团成员
 	$person_model=new Model("Person");
@@ -539,13 +569,16 @@ class InitAction extends Action
 	}
 	echo "主席团的部门推优初始化完成</br>";
   }
-  //一键考核补充：成该月份的干事反馈表
+  //一键考核补充2：成该月份的干事反馈表
   public function funcinitgsfk()
   {
     //$year="2014";
     //$month="4";
-    $year=$_POST['year'];
-    $month=$_POST['month'];
+    //$year=$_POST['year'];
+    //$month=$_POST['month'];
+	$arr=$this->funcsettime();
+	$year=$arr['year'];
+	$month=$arr['month'];
     $person_model=new Model("Person");
     $gsfk_model=new Model("Gsfk");
     //找到所有的干事
@@ -574,15 +607,18 @@ class InitAction extends Action
     }
     echo "干事反馈表初始化开始</br>";
   }
- //一键考核补充：该月份的部长反馈表
+ //一键考核补充3：该月份的部长反馈表
   public function funcinitbzfk()
   {
     echo "部长反馈表初始化开始</br>";
     //找出所有的部长
 	//$year="2014";
 	//$month="4";
-	$year=$_POST['year'];
-	$month=$_POST['month'];
+	//$year=$_POST['year'];
+	//$month=$_POST['month'];
+	$arr=$this->funcsettime();
+	$year=$arr['year'];
+	$month=$arr['month'];
 	$person_model=new Model("Person");
 	$bzfk_model=new Model("Bzfk");
 	$person_info=$person_model->where("type=3")->select();
@@ -610,13 +646,16 @@ class InitAction extends Action
 	}
 	echo "部长反馈表初始化完成</br>";
   }
-  //一键考核补充，该月份的部门反馈表
+  //一键考核补充4，该月份的部门反馈表
   public function funcinitbmfk()
   {
    //$year="2014";
    //$month="4";
-   $year=$_POST['year'];
-   $month=$_POST['month'];
+   //$year=$_POST['year'];
+   //$month=$_POST['month'];
+   $arr=$this->funcsettime();
+	$year=$arr['year'];
+	$month=$arr['month'];
    echo "部门反馈表初始化开始</br>";
    $bmfk_model=new Model("Bmfk");
    //找出11个部门
@@ -643,13 +682,16 @@ class InitAction extends Action
    }
    echo "部门反馈表初始化结束</br>";
   }
-  //一键考核补充：该月的优秀部长评定表
+  //一键考核补充5：该月的优秀部长评定表
   public function funcinityxbz()
   {
     //$year="2014";
 	//$month="4";
-	$year=$_POST['year'];
-	$month=$_POST['month'];
+	//$year=$_POST['year'];
+	//$month=$_POST['month'];
+	$arr=$this->funcsettime();
+	$year=$arr['year'];
+	$month=$arr['month'];
     //找到所有主席
 	echo "优秀部长评定表初始化开始</br>";
 	$person_model=new Model("Person");
@@ -678,13 +720,16 @@ class InitAction extends Action
    }
    echo "优秀部长评定表初始化完成</br>";
   }
-  //一键考核补充，该月的外调次数表
+  //一键考核补充6，该月的外调次数表
   public function funcinitwdcs()
   {
    //$year="2014";
    //$month="4";
-   $year=$_POST['year'];
-   $month=$_POST['month'];
+   //$year=$_POST['year'];
+   //$month=$_POST['month'];
+   $arr=$this->funcsettime();
+	$year=$arr['year'];
+	$month=$arr['month'];
    $wdcs_model=new Model("Wdcs");
    $person_model=new Model("Person");
    echo "外调次数初始化开始</br>";
@@ -707,24 +752,241 @@ class InitAction extends Action
    }
    echo "外调次数初始化结束</br>";
   }
-  //一键考核补充，该月的出勤统计
+  //一键考核补充7，该月的出勤统计
   public function funcinitchuqin()
   {
-    $year=$_POST['year'];
-    $month=$_POST['month'];
+    //$year=$_POST['year'];
+    //$month=$_POST['month'];
+	$arr=$this->funcsettime();
+	$year=$arr['year'];
+	$month=$arr['month'];
 	$person_model=new Model("Person");
 	$chuqin_model=new Model("Chuqin");
 	$rlgj_model=new Model("Rlgj");
+	echo "出勤统计初始化开始</br>";
 	//共11个部门，根据跟进干事记录各部门的出勤情况
+    for($i=1;$i<=11;$i++)
+	{
+	  $rlgj_info=$rlgj_model->where("apartment=$i")->find();
+	  $rlgs_account=$rlgj_info['account'];
+	  //$person_info=$person_model->where('account=$rlgs_account')->find();
+	  //$type=$person_info['type'];
+	  $person_info=$person_model->where("apartment=$i")->select();
+	  foreach($person_info as $v)
+	  {
+	    unset($data);
+		$data['year']=$year;
+		$data['month']=$month;
+		$data['waccount']=$rlgs_account;
+		$data['raccount']=$v['account'];
+		$data['rapartment']=$i;
+		$data['qj']=0;
+		$data['ct']=0;
+		$data['qx']=0;
+		$chuqin_info=$chuqin_model->add($data);
+		if(!$chuqin_info)
+		  echo "出勤表初始化失败</br>";
+	  }
+	}
+	echo "出勤统计初始化结束</br>";
   }
-  //一键考核补充，该月的调研采纳统计
+  //一键考核补充8，该月的调研采纳统计
   public function funcinitdiaoyan()
-  {}
-  //一键考核补充，该月的优秀部长候选
-  public function funcinityxbzhx()
-  {}
-  //一键考核补充，该月的优秀称号限制
+  {
+    //$year=$_POST['year'];
+    //$month=$_POST['month'];
+	$arr=$this->funcsettime();
+	$year=$arr['year'];
+	$month=$arr['month'];
+    $person_model=new Model("Person");
+	$diaoyan_model=new Model("Diaoyan");
+	$rlgj_model=new Model("Rlgj");
+	echo "调研采纳初始化开始</br>";
+	//找出11个部门的干事和部长
+	for($i=1;$i<=11;$i++)
+	{
+	  //找到跟进的干事
+	  $rlgj_info=$rlgj_model->where("apartment=$i")->find();
+	  $rlgs_account=$rlgj_info['account'];
+	  $person_info=$person_model->where("apartment=$i")->select();
+	  foreach($person_info as $v)
+	  {
+	    unset($data);
+		$data['year']=$year;
+		$data['month']=$month;
+		$data['waccount']=$rlgs_account;
+		$data['raccount']=$v['account'];
+		$data['rapartment']=$i;
+		$data['caina']=0;
+		$diaoyan_info=$diaoyan_model->add($data);
+		if(!$diaoyan_info)
+		  echo "调研采纳初始化失败</br>";
+	  }
+	}
+	echo "调研采纳初始化结束</br>";
+  }
+  //一键考核补充9，其他情况加分表
+  public function funcinitqtqk()
+  {
+    //$year=$_POST['year'];
+    //$month=$_POST['month'];
+	$arr=$this->funcsettime();
+	$year=$arr['year'];
+	$month=$arr['month'];
+    $person_model=new Model("Person");
+	$qt_model=new Model("Qt");
+	echo "其他情况加减分初始化开始</br>";
+	//找到所有的干事、部长
+	$person_info=$person_model->where("(type=1 or type=2) or type=3")->select();
+	foreach($person_info as $v)
+	{
+	  //$year=$_POST['year'];
+      //$month=$_POST['month'];
+	  $gs_account=$v['account'];
+	  unset($data);
+	  $data['year']=$year;
+	  $data['month']=$month;
+	  $data['account']=$gs_account;
+	  $data['qt']=0;
+	  $data['text']="空";
+	  $qt_info=$qt_model->add($data);
+	  if(!$qt_info)
+	    echo "其他情况加分表初始化失败</br>";
+	}
+	//找到所有部门
+	for($i=1;$i<=11;$i++)
+	{
+	  unset($data);
+	  $data['year']=$year;
+	  $data['month']=$month;
+	  $data['account']=$i;
+	  $data['qt']=0;
+	  $data['text']="空";
+	  $qt_info=$qt_model->add($data);
+	  if(!$qt_info)
+	    echo "其他情况加分表初始化失败</br>";
+	}
+	echo "其他情况加减分初始化结束</br>";
+  }
+  //一键考核补充10，上月的优秀某某限定表
   public function funcinityxchxz()
-  {}
+  {
+    //获取上次考核的时间
+	$arr=$this->funcgettime();
+	$lastyear=$arr['year'];
+	$lastmonth=$arr['month'];
+	$person_model=new Model("Person");
+	$gsfk_model=new Model("Gsfk");
+	$bzfk_model=new Model("Bzfk");
+	$bmfk_model=new Model("Bmfk");
+	$yxchxz_model=new Model("Yxchxz");
+	echo "限定表初始化开始</br>";
+	//先删除
+	$yxchxz_model->where("id!=0")->delete();
+    //获取上次考核的优秀干事
+	$gsfk_info=$gsfk_model->where("(year=$lastyear and month=$lastmonth) and yxgs=1")->select();
+    //var_dump($gsfk_info);
+	foreach($gsfk_info as $v)
+	{
+	  $gs_account=$v['account'];
+	  unset($data);
+	  $data['account']=$gs_account;
+	  $yxchxz_info=$yxchxz_model->add($data);
+	  if(!$yxchxz_info)
+	    echo "优秀干事限定初始化失败</br>";
+	}
+	//获取上次考核的优秀部长
+	$bzfk_info=$bzfk_model->where("(year=$lastyear and month=$lastmonth) and yxbz=1")->select();
+    foreach($bzfk_info as $v)
+	{
+	  $bz_account=$v['account'];
+	  unset($data);
+	  $data['account']=$bz_account;
+	  $yxchxz_info=$yxchxz_model->add($data);
+	  if(!yxchxz_info)
+	     echo "优秀部长限定初始化失败</br>";
+	}
+	//获取上次考核的优秀部门
+	$bmfk_info=$bmfk_model->where("(year=$lastyear and month=$lastmonth) and yxbm=1")->select();
+    foreach($bmfk_info as $v)
+	{
+	  unset($data);
+	  $data['account']=$v['apartment'];
+	  $yxchxz_info=$yxchxz_model->add($data);
+	  if(!$yxchxz_info)
+        echo "优秀部门限定初始化失败</br>";
+	}
+	echo "调研采纳初始化结束</br>";
+  }
+  //函数，获取上月考核月份
+  public function funcgettime()
+  {
+    //获取当前时间
+	//$year=2020;
+	//$month=8;
+	$arr=$this->funcsettime();
+	$year=$arr['year'];
+	$month=$arr['month'];
+	//如果传过来的时间比数据库里面的任何时间都小，程序将
+	//进入死循环。
+	//$year=$_POST['year'];
+	//$month=$_POST['month'];
+	$lastyear=$year;
+	$lastmonth=$month;
+	$authority_model=new Model("Authority");
+	//上次考核时间肯定比当前的早
+	$flag=1;
+	$authority_info=$authority_model->select();
+	
+	$count=count($authority_info);
+	while($flag)
+	{
+	  if($lastmonth==1)
+	  {
+	    $lastyear=$lastyear-1;
+		$lastmonth=12;
+	  }
+	  else
+	  {
+	    $lastmonth=$lastmonth-1;
+	  }
+	  $authority_info=$authority_model->where("year=$lastyear and month=$lastmonth")->find();
+	  if(!empty($authority_info))
+      {
+	    $flag=0;
+	    $arr=Array(
+		  'year'=>$lastyear,
+		  'month'=>$lastmonth,
+		);
+	  }      
+      else 
+ 	  {
+	    //echo $lastyear."年".$lastmonth."月的考核记录不存在</br>";
+	  }
+	}
+	//echo  $this->_encode($arr);
+	return $arr;
+  }
+ //调用—_encode()函数，将数组进行编码转哈
+   public  function _encode($arr)
+  {
+    $na = array();
+    foreach ( $arr as $k => $value ) {  
+      $na[$this->_urlencode($k)] = $this->_urlencode ($value);  
+    }
+    //return addcslashes(urldecode(json_encode($na)),"\\r");
+	return urldecode(json_encode($na));
+  }
+   public function _urlencode($elem)
+  {
+    if(is_array($elem)){
+    foreach($elem as $k=>$v){
+      $na[$this->_urlencode($k)] = $this->_urlencode($v);
+    }
+    return $na;
+  }
+  return urlencode($elem);
+  }
 }
+
 ?>

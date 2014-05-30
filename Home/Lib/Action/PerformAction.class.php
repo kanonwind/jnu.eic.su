@@ -41,10 +41,15 @@ class PerformAction extends Action
 	$person_info=$person_model->where("account=$account")->find();
 	//var_dump($person_info);
 	$type=$person_info['type'];
-	$arr=Array("YBGS","RLGS","BZJ","ZXT");
-	
-	
-	$typejson=$arr[$type-1];
+	if($type==3 && $person_info['apartment']==2)
+	{
+	  $typejson="RLBZ";
+	}
+	else
+	{
+	  $arr=Array("YBGS","RLGS","BZJ","ZXT");
+	  $typejson=$arr[$type-1];
+	}
 	$data=Array(
 	  'type'=>$typejson,
 	);
@@ -218,7 +223,7 @@ class PerformAction extends Action
 	//按照当前账号找出干事自评表的信息
       $gszp_model=new Model("Gszp");
 	$gszp_info=$gszp_model->where("(year=$year and month=$month) and account=$account")->find();
-	    $status=$this->judgetext($gszp_info['zptext']);
+	    //$status=$this->judgetext($gszp_info['zptext']);
 	    //生成得分
 	    $arrDF[]=Array('df'=>$this->judgedf($gszp_info['DF1']),);
 	    $arrDF[]=Array('df'=>$this->judgedf($gszp_info['DF2']),);
@@ -679,99 +684,275 @@ class PerformAction extends Action
 	//echo json_encode($arr,JSON_UNESCAPED_UNICODE);
 	
   }
-
+  //调研意见采纳表
+  public function jsdyyjcn()
+  {
+    //拒绝未登录访问
+	session_name('LOGIN');
+    session_start();
+    if(empty($_SESSION['account']))
+      $this->redirect('Login/index'); 
+	$account=$_SESSION['account'];
+	//获取请求的时间
+	$year=$_POST['year'];
+	$month=$_POST['month'];
+	//$year=2014;
+	//$month=5;
+	//获取状态
+	$status=$this->getStatus();
+	$rlgj_model=new Model("Rlgj");
+	$person_model=new Model("Person");
+	$diaoyan_model=new Model("Diaoyan");
+	//获取操作的所有部门
+    for($i=1;$i<=11;$i++)
+	{
+	/*
+	  $diaoyan_info=$diaoyan_model->where("rapartment=$i and (year=$year and month=$month)")->select();
+	  //var_dump($diaoyan_info);
+	  foreach($diaoyan_info as $v)
+	  {
+	    
+	    $x_account=$v['raccount'];
+		//echo $x_account;
+		$person_info2=$person_model->where("account=$x_account")->find();
+        $x_name=$person_info2['name'];
+		$caina=$v['caina'];
+		$arrCNJF[]=Array(
+	    "name"=>$x_name,
+		"account"=>$x_account,
+		"jiafen"=>$caina,
+	     ); 
+         echo $x_account.$x_name.$caina."</br>";
+		 //var_dump($arrCNJF);
+		 //$str.=$x_name.$caina;
+	  }
+	  */
+	  $person_info=$person_model->where("apartment=$i")->select();
+	  foreach($person_info as $v)
+	  {
+	    $x_account=$v['account'];
+		$x_name=$v['name'];
+		$diaoyan_info=$diaoyan_model->where("(year=$year and month=$month) and raccount=$x_account")->find();
+		$caina=$diaoyan_info['caina'];
+		$arrCNJF[]=Array(
+	    "name"=>$x_name,
+		"account"=>$x_account,
+		"jiafen"=>$caina,
+	     ); 
+	  }
+	  $arrBM[]=Array(
+	  "bmmz"=>$i,
+	  "arrCNJF"=>$arrCNJF,
+	   );
+	   unset($arrCNJF);
+	   //echo $this->_encode($arrBM);
+	}
+	/*
+	$rlgj_info=$rlgj_model->where("account=$account")->find();
+	$apartment=$rlgj_info['apartment'];
+	$person_info=$person_model->where("apartment=$apartment")->select();
+	foreach($person_info as $v)
+	{
+	  $x_account=$v['account'];
+	  $person_info2=$person_model->where("account=$x_account")->find();
+	  $x_name=$person_info2['name'];
+	  $diaoyan_info=$diaoyan_model->where("(year=$year and month=$month) and raccount=$x_account")->find();
+      $caina=$diaoyan_info['caina'];
+      $arrCNJF[]=Array(
+	    "name"=>$x_name,
+		"account"=>$x_account,
+		"jiafen"=>$caina,
+	  );  
+	}
+	$arrBM=Array(
+	  "bmmz"=>$apartment,
+	  "bmrs"=>count($person_info),
+	  "arrCNJF"=>$arrCNJF,
+	);
+	*/
+	//向前端发送json数据
+	$arr=Array(
+	  "status"=>$status,
+	  "arrBM"=>$arrBM,
+	  "str"=>$str,
+	);
+	echo $this->_encode($arr);
+  }
   //跟进部门出勤统计表
-  public function funcgjbmcqtj()
+  public function  jsgjbmcqtj()
   {
 	//拒绝未登录访问
 	session_name('LOGIN');
     session_start();
     if(empty($_SESSION['account']))
       $this->redirect('Login/index'); 
-    //获取授权状态 status	  
-	$status=$this->getStatus();
-	//账号，时间
 	$account=$_SESSION['account'];
-	//$year=date("Y");
-	//$month = date("n");
+	
+	//获取请求的时间
 	$year=$_POST['year'];
 	$month=$_POST['month'];
-	//获取部门，类型
-	$person_model=new Model("Person");	//echo $account;
-	$person_info=$person_model->where("account=$account")->find();
-	$type=$person_info['type'];
-	$apartment=$person_info['apartment'];  
-    $chuqin_model=new Model("Chuqin");
-    $chuqin_info=$chuqin_model->where("waccount=$account and (year=$year and month=$month)")->select();	
-    $renshu=count($chuqin_info);
-	foreach($chuqin_info as $v)
+	//判断时间是否合理
+	$chuqin_model=new Model("Chuqin");
+
+    //获取授权状态 status 	  
+	$status=$this->getStatus();
+	$person_model=new Model("Person");  
+	$rlgj_model=new Model("Rlgj");
+	
+	$rlgj_info=$rlgj_model->where("account=$account")->find();
+	//跟进部门
+	$apartment=$rlgj_info['apartment'];
+	//echo "不么：".$apartment;
+	$gjbm=$apartment;
+	//if($apartment==1)
+	//  echo "秘书处";
+	$person_info=$person_model->where("apartment=$apartment")->select();
+	//人数
+	$renshu=count($person_info);
+	//出勤情况
+	foreach($person_info as $v)
 	{
-	  $gjbm=$v['rapartment'];
-	  $raccount=$v['raccount'];
-	  $person_info=$person_model->where("account=$raccount")->find();
-	  $rname=$person_info['name'];
-	  $arrchuqin[]=Array(
+	  $raccount=$v['account'];
+	  $chuqin_info=$chuqin_model->where("waccount=$account and raccount=$raccount and (year=$year and month=$month)")->find();
+      $person_info=$person_model->where("account=$raccount")->find();
+      $rname=$person_info['name'];
+      $chuqin[]=Array(
+	    'account'=>$raccount,
 	    'name'=>$rname,
-		'account'=>$raccount,
-		'qj'=>$v['qj'],
-		'ct'=>$v['ct'],
-		'qx'=>$v['qx'],
-	  );
+		'qj'=>$chuqin_info['qj'],
+		'ct'=>$chuqin_info['ct'],
+		'qx'=>$chuqin_info['qx'],
+	  );	  
+	  //$str.=$raccount.$chuqin_info['qj'].$chuqin_info['ct'].$chuqin_info['qx'];
 	}
+	
 	//生成将要返回的json数组
 	$arr=Array(
-	  'gjbm'=>$gjbm,
+	  'gjbm'=>$apartment,
 	  'renshu'=>$renshu,
 	  'status'=>$status,
-	  'chuqin'=>$arrchuqin,
+	  'chuqin'=>$chuqin,
+	  'str'=>$status,
 	);
 	echo $this->_encode($arr);
 	//echo json_encode($arr,JSON_UNESCAPED_UNICODE);
-	
+
+
   }
-  //调研意见采纳表
-  public function funcdyyjcn()
+  //优秀称号限定表
+  public function funcyxchxz()
   {
-	//拒绝未登录访问
+    $person_model=new Model("Person");
+	$yxchxz_model=new Model("Yxchxz");
+	$status=$this->getStatus();
+	//找到所有部门,限定干事和部长
+	for($i=1;$i<=11;$i++)
+	{
+	  $person_info=$person_model->where("apartment=$i")->select();
+	  foreach($person_info as $v)
+	  {
+	    $x_account=$v['account'];
+		$person_info2=$person_model->where("account=$x_account")->find();
+		$x_name=$person_info2['name'];
+		$yxchxz_info=$yxchxz_model->where("account=$x_account")->find();
+		if(!empty($yxchxz_info))
+		  $check=1;
+		else
+		  $check=0;
+		$arrPersons[]=Array(
+		  'name'=>$x_name,
+		  'account'=>$x_account,
+		  'check'=>$check,
+		);	
+	  }
+	  $arrDepart[]=Array(
+	    'depart'=>$i,
+		'arrPersons'=>$arrPersons,
+	  );
+	  unset($arrPersons);
+	}
+	//找到所有部门，限制部门
+	for($i=1;$i<=11;$i++)
+	{
+	  $yxchxz_info=$yxchxz_model->where("account=$i")->find();
+	  if(!empty($yxchxz_info))
+	    $check=1;
+	  else
+	    $check=0;
+	  $arrBMPD[]=Array(
+	    'depart'=>$i,
+		'check'=>$check,
+	  );
+	}
+	//向前端发送json数据
+	$arr=Array(
+	  'year'=>0,
+	  'month'=>0,
+	  'status'=>$status,
+	  'arrDepart'=>$arrDepart,
+	  'arrBMPD'=>$arrBMPD,
+	  'str'=>$status,
+	);
+	echo $this->_encode($arr);
+  }
+  //其他情况加减分表
+  public function funcqt()
+  {
+  //拒绝未登录访问
+    $year=$_POST['year'];
+	$month=$_POST['month'];
+	//$year=2014;
+	//$month=5;
 	session_name('LOGIN');
     session_start();
     if(empty($_SESSION['account']))
       $this->redirect('Login/index'); 
-    //获取授权状态 status	  
-	$status=$this->getStatus();
-	//账号，时间
 	$account=$_SESSION['account'];
-	//$year=date("Y");
-	//$month = date("n");
-	$year=$_POST['year'];
-	$month=$_POST['month'];
-	//获取部门，类型
-	$person_model=new Model("Person");	//echo $account;
-	$person_info=$person_model->where("account=$account")->find();
-	$type=$person_info['type'];
-	$apartment=$person_info['apartment'];  
-    $diaoyan_model=new Model("Diaoyan");
-    $diaoyan_info=$diaoyan_model->where("year=$year and month=$month")->select();
-    $bmsm=11;
-    for($i=1;$i<=2;$i++)
-    {
-	  $person_info=$person_model->where("apartment=$i")->select();
-	  $bmrs=count($person_info);
-      $arrBM[]=Array(
-	    'bmmz'=>$i,
-		'bmrs'=>$bmrs,
-		'arrCNJF'=>$this->getcnjf($i,$year,$month),
-	  );	
-	
+	$status=$this->getStatus();
+    $person_model=new Model("Person");
+	$rlgj_model=new Model("Rlgj");
+	$qt_model=new Model("Qt");
+	//根据当前登录的人力干事账号获取其跟进部门的信息
+	$rlgj_info=$rlgj_model->where("account=$account")->find();
+	$apartment=$rlgj_info['apartment'];
+	//获取人员信息
+	$person_info=$person_model->where("apartment=$apartment")->select();
+	foreach($person_info as $v)
+	{
+	  $x_account=$v['account'];
+	  $person_info2=$person_model->where("account=$x_account")->find();
+	  $x_name=$person_info2['name'];
+	  $x_type=$person_info2['type'];
+	  $qt_info=$qt_model->where("(year=$year and month=$month) and account=$x_account")->find();
+      $qt=$qt_info['qt'];
+	  $liyou=$qt_info['text'];
+	  $persons[]=Array(
+	    'name'=>$x_name,
+		'account'=>$x_account,
+		'depart'=>$x_type,
+		'jiajianfen'=>$qt,
+		'liyou'=>$liyou,
+		);
 	}
-	//生成将要返回的json数组
+	//获取跟进部门信息
+	
+	  $qt_info=$qt_model->where("account=$apartment")->find();
+	  $bmjjf=Array(
+	    'name'=>$apartment,
+		'jiajianfen'=>$qt_info['qt'],
+		'liyou'=>$qt_info['text'],
+	  );
+	
+	//向前端发送json数据
 	$arr=Array(
+	  'year'=>0,
+	  'month'=>0,
 	  'status'=>$status,
-	  'bmsm'=>11,
-	  'arrBM'=>$arrBM,
+	  'gjbm'=>$apartment,
+	  'persons'=>$persons,
+	  'bmjjf'=>$bmjjf,
 	);
 	echo $this->_encode($arr);
-    //echo json_encode($arr,JSON_UNESCAPED_UNICODE);    
   }
   //优秀部长评定表
   public function funcyxbz()
@@ -1038,27 +1219,7 @@ class PerformAction extends Action
 	//echo json_encode($BM,JSON_UNESCAPED_UNICODE);
 	return $BM;
   }
-  //在调研意见采纳表中，需要根据传过来的apartment,来生成对应信息
-  public function getcnjf($apartment,$year,$month)
-  {
-    $diaoyan_model=new Model("Diaoyan");
-	$person_model=new Model("Person");
-	$diaoyan_info=$diaoyan_model->where("(year=$year and month=$month) and rapartment=$apartment")->select();
-    foreach($diaoyan_info as $v)
-	{
-	  $raccount=$v['raccount'];
-	  $person_info=$person_model->where("account=$raccount")->find();
-	  $rname=$person_info['name'];
-	  $jiafen=$v['caina'];
-	  $arrCNJF[]=Array(
-	    'account'=>$raccount,
-		'name'=>$rname,
-		'jiafen'=>$jiafen,
-	  );
-	}
-	//echo json_encode($arrCNJF,JSON_UNESCAPED_UNICODE);
-	return $arrCNJF;
-  }
+
   //在优秀部长评定表，需要根据传过来的部长account,生成对应信息
   public function getyxbz($raccount,$year,$month)
   {
@@ -2593,130 +2754,8 @@ class PerformAction extends Action
 	echo $this->_encode($arr);
 	//echo json_encode($arr,JSON_UNESCAPED_UNICODE);
   }  
-  //向前端发送跟进部门出勤统计表json数据
-  public function  jsgjbmcqtj()
-  {
-	//拒绝未登录访问
-	session_name('LOGIN');
-    session_start();
-    if(empty($_SESSION['account']))
-      $this->redirect('Login/index'); 
-	$account=$_SESSION['account'];
-	
-	//获取请求的时间
-	$year=$_POST['year'];
-	$month=$_POST['month'];
-	//判断时间是否合理
-	$chuqin_model=new Model("Chuqin");
-	if($chuqin_info=$chuqin_model->where("year=$year and month=$month")->find())
-	{	
-	
-    //获取授权状态 status 	  
-	$status=$this->getStatus();
-	$person_model=new Model("Person");  
-	$rlgj_model=new Model("Rlgj");
-	
-	$rlgj_info=$rlgj_model->where("account=$account")->find();
-	//跟进部门
-	$apartment=$rlgj_info['apartment'];
-	//echo "不么：".$apartment;
-	$gjbm=$apartment;
-	//if($apartment==1)
-	//  echo "秘书处";
-	$person_info=$person_model->where("apartment=$apartment")->select();
-	//人数
-	$renshu=count($person_info);
-	//出勤情况
-	foreach($person_info as $v)
-	{
-	  $raccount=$v['account'];
-	  $chuqin_info=$chuqin_model->where("waccount=$account and raccount=$raccount")->find();
-      $person_info=$person_model->where("account=$raccount")->find();
-      $rname=$person_info['name'];
-      $chuqin[]=Array(
-	    'account'=>$raccount,
-	    'name'=>$rname,
-		'qj'=>$chuqin_info['qj'],
-		'ct'=>$chuqin_info['ct'],
-		'qx'=>$chuqin_info['qx'],
-	  );	  
-	}
-	//生成将要返回的json数组
-	$arr=Array(
-	  'gjbm'=>$apartment,
-	  'renshu'=>$renshu,
-	  'status'=>$status,
-	  'chuqin'=>$chuqin,
-	);
-	echo $this->_encode($arr);
-	//echo json_encode($arr,JSON_UNESCAPED_UNICODE);
-	}//合理空间结束
-	//没有找到该年月对应的话，返回错误信息
-	else{
-	
-	}
-  }
- //向前端发送调研意见采纳表json数据
- public function jsdyyjcn()
- {
-	//拒绝未登录访问
-	session_name('LOGIN');
-    session_start();
-    if(empty($_SESSION['account']))
-      $this->redirect('Login/index'); 
-	$account=$_SESSION['account'];
-	
-	//获取请求的时间
-	$year=$_POST['year'];
-	$month=$_POST['month'];
-	//判断时间是否合理
-	$diaoyan_model=new Model("Diaoyan");
-	if($diaoyan_info=$diaoyan_model->where("year=$year and month=$month")->find())
-	{	
-	
-    //获取授权状态 status 	  
-	$status=$this->getStatus();
-	$person_model=new Model("Person");  
-	
-    $bmsm=11;
-	//获取调研采纳情况
-	for($i=1;$i<=11;$i++)
-	{
-	  //echo "第".$i."个部门：</br>";
-	  $person_info=$person_model->where("apartment=$i")->select();
-	  $bmrs=count($person_info);
-	  foreach($person_info as $v)
-	  {
-	    $raccount=$v['account'];
-		$rname=$v['name'];
-		$diaoyan_info=$diaoyan_model->where("(year=$year and month=$month) and raccount=$raccount")->find();
-		$arrCNJF[]=Array(
-		  'name'=>$rname,
-		  'account'=>$raccount,
-		  'jiafen'=>$diaoyan_info['caina'],
-		);
-	  }
-	  $arrBM[]=Array(
-	    'bmmz'=>$i,
-		'bmrs'=>$bmrs,
-		'arrCNJF'=>$arrCNJF,
-	  );
-	  unset($arrCNJF);
-	}
-	//向前端发送json数据
-	$arr=Array(
-	  'status'=>$status,
-	  'bmsm'=>$bmsm,
-	  'arrBM'=>$arrBM,
-	);
-	echo $this->_encode($arr);
-	//echo json_encode($arr,JSON_UNESCAPED_UNICODE);
-	}//合理空间结束
-	//没有找到该年月对应的话，返回错误信息
-	else{
-	
-	}
- }
+
+
  //向前端发送整体考核结果反馈表json数据
  public function jsztkhjgfk()
  {
@@ -3201,7 +3240,7 @@ class PerformAction extends Action
 	echo $this->_encode($arr);
 	//echo json_encode($arr,JSON_UNESCAPED_UNICODE);
   }
-  //接收跟进部门统计表
+  //接收跟进部门出勤统计表
   public function post_gjbmcqtj()
   {
 	//拒绝未登录访问
@@ -3209,18 +3248,41 @@ class PerformAction extends Action
     session_start();
     if(empty($_SESSION['account']))
       $this->redirect('Login/index'); 
-
+    $year=$_POST['year'];
+	$month=$_POST['month'];
+	$status=$this->getStatus();
 	$account=$_SESSION['account'];
+	$apartment=$_POST['gjbm'];
+	$chuqin_model=new Model("Chuqin");
+	for($i=0;$i<count($_POST['chuqin']);$i++)
+	{
+	  $raccount=$_POST['chuqin'][$i]['account'];
+	  unset($data);
+	  //$data['year']=$year;
+	  //$data['month']=$month;
+	  $data['qj']=$_POST['chuqin'][$i]['qj'];
+	  $data['ct']=$_POST['chuqin'][$i]['ct'];
+	  $data['qx']=$_POST['chuqin'][$i]['qx'];
+	  $chuqin_info=$chuqin_model->where("(year=$year and month=$month) and raccount=$raccount")->data($data)->save();
+	  //if(!$chuqin_info)
+	    //$status.="fail";
+	}
+    $status.=$_POST['chuqin'][1]['qj']
+	       .$_POST['chuqin'][1]['ct']
+		   .$_POST['chuqin'][1]['qx']
+		   .$_POST['chuqin'][1]['account'];
 	//返回信息
     $arr=Array(
-	  'status'=>$_POST['chuqin'][0]['name'],
+	  'status'=>$status,
 	  'gjbm'=>$_POST['gjbm'],
 	  'renshu'=>$_POST['renshu'],
+	  'str'=>$status,
 	);
 	echo $this->_encode($arr);
 	//echo json_encode($arr,JSON_UNESCAPED_UNICODE);	
   }
-   //接收调研意见采纳
+   //接收调研意见采纳(前端有问题，暂且不管)
+
   public function post_dyyjcn()
   {
 	//拒绝未登录访问
@@ -3228,8 +3290,24 @@ class PerformAction extends Action
     session_start();
     if(empty($_SESSION['account']))
       $this->redirect('Login/index'); 
-
+    $diaoyan_model=new Model("Diaoyan");
+	$person_model=new Model("Person");
 	$account=$_SESSION['account'];
+	$year=$_POST['year'];
+	$month=$_POST['month'];
+	$status=$this->getStatus();
+	for($i=0;$i<count($_POST['arrBM']);$i++)
+	{
+	  for($j=0;$j<count($_POST['arrBM'][$i]['arrCNJF']);$j++)
+	  {
+	    $x_account=$_POST['arrBM'][$i]['arrCNJF'][$j]['account'];
+		$caina=$_POST['arrBM'][$i]['arrCNJF'][$j]['jiafen'];
+		unset($data);
+		$data['raccount']=$x_account;
+		$data['caina']=$caina;
+		$diaoyan_model->where("(year=$year and month=$month) and raccount=$x_account")->data($data)->save();
+	  }
+	}
 	//返回信息
     $arr=Array(
 	  'status'=>$_POST['arrBM'][0]['arrCNJF'][0]['name'],
@@ -3239,6 +3317,7 @@ class PerformAction extends Action
 	echo $this->_encode($arr);
 	//echo json_encode($arr,JSON_UNESCAPED_UNICODE);	
   }
+
    //接收干事考核
   public function post_gskh()
   {
@@ -3524,7 +3603,93 @@ class PerformAction extends Action
 	);
 	echo $this->_encode($arr);
   }
-  
+
+ //接收其他情况加减分数据
+  public function post_qt()
+  {
+    //拒绝未登录访问
+	session_name('LOGIN');
+    session_start();
+    if(empty($_SESSION['account']))
+      $this->redirect('Login/index');  
+	$account=$_SESSION['account'];   
+	$year=$_POST['year'];
+	$month=$_POST['month'];
+	$qt_model=new Model("Qt");
+	$person_model=new Model("Person");
+	//接收干事部长的其他加减分
+	for($i=0;$i<count($_POST['persons']);$i++)
+	{
+	  $x_account=$_POST['persons'][$i]['account'];
+	  unset($data);
+	  $data['account']=$x_account;
+	  $data['year']=$year;
+	  $data['month']=$month;
+	  $data['qt']=$_POST['persons'][$i]['jiajianfen'];
+	  $data['text']=$_POST['persons'][$i]['liyou'];
+	  $qt_info=$qt_model->where("(year=$year and month=$month) and account=$x_account")->data($data)->save();
+	}
+	//接收部门的其他加减分
+	$apartment=$_POST['bmjjf']['name'];
+	unset($data);
+	$data['account']=$apartment;
+	$data['year']=$year;
+	$data['month']=$month;
+	$data['qt']=$_POST['bmjjf']['jiajianfen'];
+	$data['text']=$_POST['bmjjf']['liyou'];
+	$qt_info=$qt_model->where("(year=$year and month=$month) and account=$apartment")->data($data)->save();
+  }
+  //接收优秀称号限定表的数据
+  public function post_yxchxz()
+  {
+    $yxchxz_model=new Model("Yxchxz");
+	$person_model=new Model("Person");
+	//处理干事和部长的限制
+    for($i=0;$i<count($_POST['arrDepart']);$i++)
+	{
+	  for($j=0;$j<count($_POST['arrDepart'][$i]['arrPersons']);$j++)
+	  {
+	    $x_account=$_POST['arrDepart'][$i]['arrPersons'][$j]['account'];
+	    $check=$_POST['arrDepart'][$i]['arrPersons'][$j]['check'];
+        $yxchxz_info=$yxchxz_model->where("account=$x_account")->find();
+		if(empty($yxchxz_info) && $check==true)
+		{
+		  //勾选了但原来没有则添加到限制里面
+		  unset($data);
+		  $data['account']=$x_account;
+		  $yxchxz_info=$yxchxz_model->add($data);
+		}
+		if(!empty($yxchxz_info) && $check==false)
+		{
+		  //原来有的但取消了勾选则从限制表里面删除
+		  $yxchxz_info=$yxchxz_model->where("account=$x_account")->delete();
+		}
+	   }
+	}
+	//处理部门的限制
+	for($i=0;$i<count($_POST['arrBMPD']);$i++)
+	{
+	  $apartment=$_POST['arrBMPD'][$i]['depart'];
+	  $check=$_POST['arrBMPD'][$i]['check'];
+	  $yxchxz_info=$yxchxz_model->where("account=$apartment")->find();
+	  if(empty($yxchxz_info) && $check==1)
+	  {
+	    //勾选了但原来没有则添加到限制里面
+		unset($data);
+		$data['account']=$apartment;
+		$yxchxz_info=$yxchxz_model->add($data);
+	  }
+	  if(!empty($yxchxz_info) && $check==0)
+	  {
+	    //原来有的但取消了勾选则从限制表里面删除
+		$yxchxz_info=$yxchxz_model->where("account=$apartment")->delete();
+	  }
+	}
+	$arr=Array(
+	  'status'=>$_POST['arrBMPD'][0]['check'],
+	);
+	echo $this->_encode($arr);
+  }
   //将下面的激活函数浓缩在一起
   public function funcinitall()
   {

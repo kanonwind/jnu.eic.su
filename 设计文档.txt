@@ -1246,9 +1246,29 @@ tbl_bmwg//部门违规
       包括个人基本信息，跟进和主管信息，所有考核表格信息，
 第二：每次的绩效考核，各种表格都需要根据年月初始化一次
 
+新增一个表格，其他情况
 
 
-
+delete from tbl_gszp where month=5;
+delete from tbl_bzzp where month=5;
+delete from tbl_gskh where month=5;
+delete from tbl_bzkh where month=5;
+delete from tbl_bmkh where month=5;
+delete from tbl_bmfk where month=5;
+delete from tbl_bmty where month=5;
+delete from tbl_bmwg where month=5;
+delete from tbl_bzfk where month=5;
+delete from tbl_chuqin where month=5;
+delete from tbl_diaoyan where month=5;
+delete from tbl_gsfk where month=5;
+delete from tbl_interact where month=5;
+delete from tbl_oneway where month=5;
+delete from tbl_qt where month=5;
+delete from tbl_resource where month=5;
+delete from tbl_wdcs where month=5;
+delete from tbl_yxbz where month=5;
+delete from tbl_yxbzhx where month=5;
+delete from tbl_yxchxz;
 
 
 

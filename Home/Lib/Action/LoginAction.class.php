@@ -4,6 +4,14 @@
 */
 class LoginAction extends Action
 {
+    //关闭登录的界面
+	/*
+	public function index()
+	{
+	  echo ""暂停服务;
+	  //$this->display();
+	}
+	*/
 	//index为登录界面
 
 	public function index()
@@ -13,11 +21,10 @@ class LoginAction extends Action
 		   session_name('LOGIN');
            session_start();
         if(empty($_SESSION['account']))	
-		  $this->display();
+		  $this->display();  
 		else
 		  $this->redirect("Perform/index");
-
-	  // echo "暂时无法登录";
+	      
 	}
 	//check为登录验证界面
 	public function check()
@@ -25,8 +32,18 @@ class LoginAction extends Action
 	    //先判断session
 		   session_name('LOGIN');
            session_start();
+		$person_model=new Model("Person");
         if(!empty($_SESSION['account']))		
+		{
+		    $account=$_SESSION['account'];
+			$person_info=$person_model->where("account=$account")->find();
+			//if($person_info['type']==3 && $person_info['apartment']==2)
             $this->redirect("Perform/index");		
+			  //$this->redirect("Admin/index");
+			//else
+			  //echo "sorry";
+			  //echo "暂停服务";
+		}
 	    $account=$_POST['user_login_name'];
 	    $password=$_POST['user_login_pw'];
 		$person_model=new Model("Person");
@@ -40,15 +57,6 @@ class LoginAction extends Action
 		else
 		  $this->redirect("Login/index");
 	}
-	/*
-	public function test()
-	{
-	  $admin_model=new Model("Admin");
-	  var_dump($admin_model);
-	  echo "adf;lkj";
-	  $this->display();
-	  
-	}
-	*/
+
 }
 ?>
