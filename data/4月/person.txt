@@ -1,0 +1,14 @@
+public function funcinsert($account,$name,$password,$type,$apartment)
+{
+$data['account']=account;//"2012052308";//账号
+$data['name']=$name;//"朱林杰";//名字
+$data['password']=$password;//"2012052308";//初始密码
+$data['type']=$type;//1;//类型
+$data['apartment']=$apartment;//1;//部门
+$person_model=new Model("Person");
+$person_model->add($data);
+}
+
+$this->funcinsert("2012052308","朱林杰","2012052308",1,1);
+
+

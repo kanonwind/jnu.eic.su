@@ -141,11 +141,11 @@ function GetTable()
 							  "整体考核结果反馈表","部长自评表","干事考核表","部长反馈表",
 							  "部长考核表","部门考核表","优秀部长评定表","主席团反馈表", "考核进程控制表");
 	
-	var arrYBGS = new Array("干事自评表");
-	var arrRLGS = new Array("干事自评表","跟进部门出勤统计表","其他情况加减分","调研意见采纳表");
-	var arrRLBZ = new Array("优秀评定限制表","部长自评表","干事考核表");
-	var arrBZJ = new Array("部长自评表","干事考核表");
-	var arrZXT = new Array("部长考核表","部门考核表");
+	var arrYBGS = new Array("干事自评表","干事考核反馈表");
+	var arrRLGS = new Array("干事自评表","跟进部门出勤统计表","其他情况加减分","调研意见采纳表","干事考核反馈表","整体考核结果反馈表");
+	var arrRLBZ = new Array("优秀评定限制表","部长自评表","干事考核表","整体考核结果反馈表","部长反馈表");
+	var arrBZJ = new Array("部长自评表","干事考核表","部长反馈表","整体考核结果反馈表");
+	var arrZXT = new Array("部长考核表","部门考核表","优秀部长评定表","整体考核结果反馈表","主席团反馈表");
 	//alert(arr.type);
 	switch(arr.type)
 	{
@@ -405,32 +405,12 @@ function Get_GSZP()
 		  "DF":
 		  [
 		    {"df":9},
-			{"df":10},
-			{"df":9},
-			{"df":9},
-			{"df":8},
-			{"df":9},
-			{"df":7},
-			{"df":9},
-			{"df":9},
-			{"df":6},
-			{"df":9},
-			{"df":4},
 		  ],
 		  "zongfen":0,
 		  "zwpj":"感觉良好",
 		  "TongShi":
 		  [
-		    {"name":"同事A", "account":2012052210},
-		    {"name":"同事B", "account":2012052210},
-		    {"name":"同事C", "account":201205221},
-		    {"name":"同事D", "account":2012052210},
-			{"name":"同事E", "account":2012052210},
-		    {"name":"同事F", "account":2012052210},
-		    {"name":"同事G", "account":2012052210},
-		    {"name":"同事H", "account":2012052210},
-			{"name":"同事I", "account":2012052210},
-		    {"name":"同事J", "account":2012052210},			
+		    {"name":"同事A", "account":2012052210},		
 		  ],
 		  
 		  "TYGS":
@@ -443,8 +423,6 @@ function Get_GSZP()
 		  "DBZPJ":
 		  [
 			{"name":"部长", "account":201205221, "fs":9, "pj":"评价",},
-			{"name":"部长", "account":201205221, "fs":8, "pj":"评价",},
-			{"name":"部长", "account":20120522, "fs":10, "pj":"评价",},
 		  ],
 		};
 		*/
@@ -685,14 +663,6 @@ function Get_GJBMCQTJ()
 			"chuqin":
 			[	
 				{"name":"邓作恒", "qj":0, "ct":0, "qx":0, "account":201205222},//名字,请假次数,迟到或早退次数,缺席,学号
-				{"name":"邓作恒", "qj":0, "ct":0, "qx":0, "account":201205222},//名字,请假次数,迟到或早退次数,缺席,学号
-				{"name":"邓作恒", "qj":0, "ct":0, "qx":0, "account":201205222},//名字,请假次数,迟到或早退次数,缺席,学号
-				{"name":"邓作恒", "qj":0, "ct":0, "qx":0, "account":201205222},//名字,请假次数,迟到或早退次数,缺席,学号
-				{"name":"邓作恒", "qj":0, "ct":0, "qx":0, "account":201205222},//名字,请假次数,迟到或早退次数,缺席,学号
-				{"name":"邓作恒", "qj":0, "ct":0, "qx":0, "account":201205222},//名字,请假次数,迟到或早退次数,缺席,学号
-				{"name":"邓作恒", "qj":0, "ct":0, "qx":0, "account":201205222},//名字,请假次数,迟到或早退次数,缺席,学号
-				{"name":"邓作恒", "qj":0, "ct":0, "qx":0, "account":201205222},//名字,请假次数,迟到或早退次数,缺席,学号
-				{"name":"邓作恒", "qj":0, "ct":0, "qx":0, "account":201205222},//名字,请假次数,迟到或早退次数,缺席	,学号
 			],
 		};
 	*/
@@ -795,13 +765,6 @@ function Get_DYYJCN()
 					//"bmrs":8, 
 					"arrCNJF":
 					[
-						{"name":"邓作恒", "account":2012032210, "jiafen":2,},
-						{"name":"邓作恒", "account":2012032210, "jiafen":2,},
-						{"name":"邓作恒", "account":2012032210, "jiafen":2,},
-						{"name":"邓作恒", "account":2012032210, "jiafen":2,},
-						{"name":"邓作恒", "account":2012032210, "jiafen":2,},
-						{"name":"邓作恒", "account":2012032210, "jiafen":2,},
-						{"name":"邓作恒", "account":2012032210, "jiafen":2,},
 						{"name":"邓作恒", "account":2012032210, "jiafen":2,},
 					],
 				},
@@ -2031,7 +1994,7 @@ function Get_BZFK()
 		var obj;
 	    $.ajax({
 		url:URL+"/jsbzfk",
-		data:{'year':'2014','month':'6','nima':'a'},
+		data:{"year":year,"month":month,},
 		async:false,
 		dataType:"json",
 		type:"POST",
@@ -2054,8 +2017,6 @@ function Get_BZFK()
 			"arrQiTaBuZhanPinJia":
 			[
 				{"pj":"还好",},//其他部长评价
-				{"pj":"还好",},//其他部长评价
-				{"pj":"还好",},//其他部长评价
 			],
 		},
 		
@@ -2067,27 +2028,11 @@ function Get_BZFK()
 			"arrGSZP":
 			[
 				{"name":"干事1", "account":2014052211, "assess":"还好吧的干事自评",},//干事姓名, 学号，干事自我评价
-				{"name":"干事1", "account":2014052211, "assess":"还好吧的干事自评",},//干事姓名, 学号，干事自我评价
-				{"name":"干事1", "account":2014052211, "assess":"还好吧的干事自评",},//干事姓名, 学号，干事自我评价
-				{"name":"干事1", "account":2014052211, "assess":"还好吧的干事自评",},//干事姓名, 学号，干事自我评价
-				{"name":"干事1", "account":2014052211, "assess":"还好吧的干事自评",},//干事姓名, 学号，干事自我评价
-				{"name":"干事1", "account":2014052211, "assess":"还好吧的干事自评",},//干事姓名, 学号，干事自我评价
-				{"name":"干事1", "account":2014052211, "assess":"还好吧的干事自评",},//干事姓名, 学号，干事自我评价
-				{"name":"干事1", "account":2014052211, "assess":"还好吧的干事自评",},//干事姓名, 学号，干事自我评价
-				{"name":"干事1", "account":2014052211, "assess":"还好吧的干事自评",},//干事姓名, 学号，干事自我评价
-				{"name":"干事1", "account":2014052211, "assess":"还好吧的干事自评",},//干事姓名, 学号，干事自我评价
-				{"name":"干事1", "account":2014052211, "assess":"还好吧的干事自评",},//干事姓名, 学号，干事自我评价
-				{"name":"干事1", "account":2014052211, "assess":"还好吧的干事自评",},//干事姓名, 学号，干事自我评价
-				{"name":"干事1", "account":2014052211, "assess":"还好吧的干事自评",},//干事姓名, 学号，干事自我评价
-				{"name":"干事1", "account":2014052211, "assess":"还好吧的干事自评",},//干事姓名, 学号，干事自我评价
-				{"name":"干事1", "account":2014052211, "assess":"还好吧的干事自评",},//干事姓名, 学号，干事自我评价
 			]
 		},
 		"arrGSPM":
 		[
 			{"name":"干事1","score":"100"},
-			{"name":"干事2","score":"2"},
-			{"name":"干事3","score":"1300"},
 		],
 		
 		"GanShiPingJia":
@@ -2096,9 +2041,6 @@ function Get_BZFK()
 			"arrGanShiPingJia"://干事评价数组
 			[
 				{"gspj":"还好吧"},
-				{"gspj":"很好吧"},
-				{"gspj":"非常好"},
-				{"gspj":"无与伦比"},
 			],
 		},
 		
@@ -3091,6 +3033,7 @@ function BMKH_BZ()
 	var objReturn = new objBMKH();
 	return objReturn;
 }
+
 //获取部门考核表数据
 function Get_BMKH()
 {
@@ -3218,6 +3161,7 @@ function Get_BMKH()
 	var objReturn = new obj_BMKH();
 	return objReturn;
 }
+
 //把部门考核表的填写的内容传给服务器
 function Post_BMKH(obj_BMKH)//obj_BMKH为Get_BMKH()定义的对象
 {
@@ -3287,14 +3231,14 @@ function Get_YXBZPD()
 		var obj;
 	    $.ajax({
 		url:URL+"/funcyxbz",
-		data:{'year':'2014','month':'6','nima':'a'},
+		data:{'year':year,'month':month,},
 		async:false,
 		dataType:"json",
 		type:"POST",
 		success:function(result){obj=result;}
 		});	
 		var json_YXBZPD = obj;
-		
+		//alert(obj.status);
 /*
 	var json_YXBZPD = 
 	{
@@ -3348,7 +3292,7 @@ function Get_ZXTFK()
 		var obj;
 	    $.ajax({
 		url:URL+"/jszxtfk",
-		data:{"type":1},
+		data:{"year":year,"month":month},
 		async:false,
 		dataType:"json",
 		type:"POST",
@@ -3369,65 +3313,7 @@ function Get_ZXTFK()
 					"isExc":true,//true表示是优秀部门，优秀部门应该只有两个，但是前端并不检测数量
 				},
 				
-				{
-					"name":"人力资源部",
-					"score":1024,
-					"isExc":true,//true表示是优秀部门，优秀部门应该只有两个，但是前端并不检测数量
-				},
 				
-				{
-					"name":"人力资源部",
-					"score":1024,
-					"isExc":true,//true表示是优秀部门，优秀部门应该只有两个，但是前端并不检测数量
-				},
-				
-				{
-					"name":"人力资源部",
-					"score":1024,
-					"isExc":true,//true表示是优秀部门，优秀部门应该只有两个，但是前端并不检测数量
-				},
-				
-				{
-					"name":"人力资源部",
-					"score":1024,
-					"isExc":true,//true表示是优秀部门，优秀部门应该只有两个，但是前端并不检测数量
-				},
-				
-				{
-					"name":"人力资源部",
-					"score":1024,
-					"isExc":true,//true表示是优秀部门，优秀部门应该只有两个，但是前端并不检测数量
-				},
-				
-				{
-					"name":"人力资源部",
-					"score":1024,
-					"isExc":true,//true表示是优秀部门，优秀部门应该只有两个，但是前端并不检测数量
-				},
-				
-				{
-					"name":"人力资源部",
-					"score":1024,
-					"isExc":true,//true表示是优秀部门，优秀部门应该只有两个，但是前端并不检测数量
-				},
-				
-				{
-					"name":"人力资源部",
-					"score":1024,
-					"isExc":true,//true表示是优秀部门，优秀部门应该只有两个，但是前端并不检测数量
-				},
-				
-				{
-					"name":"人力资源部",
-					"score":1024,
-					"isExc":true,//true表示是优秀部门，优秀部门应该只有两个，但是前端并不检测数量
-				},
-				
-				{
-					"name":"人力资源部",
-					"score":1024,
-					"isExc":true,//true表示是优秀部门，优秀部门应该只有两个，但是前端并不检测数量
-				},
 			],
 		},
 		
@@ -3436,8 +3322,6 @@ function Get_ZXTFK()
 			"sum":3,//部长人数
 			"arrExcMin":
 			[
-				{"name":"某部长", "depart":"某部门", "score":1024},
-				{"name":"某部长", "depart":"某部门", "score":1024},
 				{"name":"某部长", "depart":"某部门", "score":1024},
 			],
 		},
@@ -3453,44 +3337,10 @@ function Get_ZXTFK()
 					"selfAssess":"还好吧,应该还好，其实挺好，一切正常，自我感觉良好",
 					"feedBack":"很好，非常好，很称职，很有深度，很有魄力，很有能力，很有霸气",
 				},
-				
-				{
-					"depart":"某部门",
-					"minister":"某部长",
-					"selfAssess":"还好吧,应该还好，其实挺好，一切正常，自我感觉良好",
-					"feedBack":"很好，非常好，很称职，很有深度，很有魄力，很有能力，很有霸气",
-				},
-				
-				{
-					"depart":"某部门",
-					"minister":"某部长",
-					"selfAssess":"还好吧,应该还好，其实挺好，一切正常，自我感觉良好",
-					"feedBack":"很好，非常好，很称职，很有深度，很有魄力，很有能力，很有霸气",
-				},
-				
-				{
-					"depart":"某部门",
-					"minister":"某部长",
-					"selfAssess":"还好吧,应该还好，其实挺好，一切正常，自我感觉良好",
-					"feedBack":"很好，非常好，很称职，很有深度，很有魄力，很有能力，很有霸气",
-				},
-				
-				{
-					"depart":"某部门",
-					"minister":"某部长",
-					"selfAssess":"还好吧,应该还好，其实挺好，一切正常，自我感觉良好",
-					"feedBack":"很好，非常好，很称职，很有深度，很有魄力，很有能力，很有霸气",
-				},
 			],
 		},
 		"_arrAnonymity"://匿名评价数组
 		[
-			{"anonymityFeedBack":"这人身高太逆天"},
-			{"anonymityFeedBack":"这人身高太逆天"},
-			{"anonymityFeedBack":"这人身高太逆天"},
-			{"anonymityFeedBack":"这人身高太逆天"},
-			{"anonymityFeedBack":"这人身高太逆天"},
-			{"anonymityFeedBack":"这人身高太逆天"},
 			{"anonymityFeedBack":"这人身高太逆天"},
 		],
 	};
@@ -5021,7 +4871,10 @@ function Show_ZTKHJGFK()
 				+"		<ol>\n";
 		for(var j = 0; j < obj_ZTKHJGFK.arrObjWDJDRY[i].arrObjGBMWDJDRY.length; ++j)
 		{
-			strHTML += "<li>" + obj_ZTKHJGFK.arrObjWDJDRY[i].arrObjGBMWDJDRY[j].name + "&emsp;<span>外调次数：</span>" + obj_ZTKHJGFK.arrObjWDJDRY[i].arrObjGBMWDJDRY[j].wdcs + "</li>\n";
+			if(obj_ZTKHJGFK.arrObjWDJDRY[i].arrObjGBMWDJDRY[j].wdcs>=3)
+			{
+				strHTML += "<li>" + obj_ZTKHJGFK.arrObjWDJDRY[i].arrObjGBMWDJDRY[j].name + "&emsp;<span>外调次数：</span>" + obj_ZTKHJGFK.arrObjWDJDRY[i].arrObjGBMWDJDRY[j].wdcs + "</li>\n";
+			}
 		}
 		strHTML += "</ol>\n"
 				+"</li>\n";
@@ -5667,7 +5520,6 @@ function Show_BZFK()
 	
 	strInnerHtml +="</ul>";
 	strInnerHtml+="<h3>干事得分排名</h3><ol>";
-	alert("00");
 	for(var i=0;i<obj_BZFK.arrGanShiDeFengPaiMing.length;i++)
 	{
 		strInnerHtml+="<li>"+obj_BZFK.arrGanShiDeFengPaiMing[i].name+"&emsp;<span>得分：</span>"+obj_BZFK.arrGanShiDeFengPaiMing[i].score+"</li>";

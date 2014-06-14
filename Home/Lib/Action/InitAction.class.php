@@ -59,7 +59,7 @@ class InitAction extends Action
 	$this->funcinitgsfk();
 	$this->funcinitbzfk();
 	$this->funcinitbmfk();
-	$this->funcinityxbz();
+	//$this->funcinityxbz();
 	$this->funcinitwdcs();
 	$this->funcinitchuqin();
 	$this->funcinitdiaoyan();
@@ -683,6 +683,7 @@ class InitAction extends Action
    echo "部门反馈表初始化结束</br>";
   }
   //一键考核补充5：该月的优秀部长评定表
+ /*
   public function funcinityxbz()
   {
     //$year="2014";
@@ -698,7 +699,7 @@ class InitAction extends Action
 	$yxbz_model=new Model("Yxbz");
 	$president_model=new Model("President");
 	$yxbzhx_model=new Model("Yxbzhx");
-	$yxbzhx_info=$yxbzhx_model->select();
+	$yxbzhx_info=$yxbzhx_model->("year=$year and month=$month")->select();
     //从优秀部长候选中选
 	$person_model=$person_model->where("type=4")->select();
 	foreach($person_model as $v)
@@ -720,6 +721,7 @@ class InitAction extends Action
    }
    echo "优秀部长评定表初始化完成</br>";
   }
+*/
   //一键考核补充6，该月的外调次数表
   public function funcinitwdcs()
   {
