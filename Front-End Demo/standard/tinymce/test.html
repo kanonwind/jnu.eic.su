@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="EN" xml:lang="EN">
+	<head>
+	<meta http-equiv="content-type" content="text/html;charset=utf-8"/><!--说明字符集-->
+	<meta http-equiv="content-language" content="zh-CN" /><!--说明语言-->
+	<meta name="author" content="ZuohengDeng" /><!--作者-->
+	<meta name="copyright" content="jnu.ksc" /><!--声明版权-->
+	<meta name="description" content="电气信息学院团委学生会门户网站" /><!--网站概述-->
+	<meta name="keywords" content="新闻中心 暨大 暨南大学 电气院 电气信息学院 团委学生会 暨南大学电气信息学院团委学生会 团委学生会新闻中心" /><!--关键词-->
+	<meta name="keywords" content="Electrcal and Information College of Jinan University Youth League Committee Student Union" />
+	<link rel="shortcut icon" href="logo.jpg" />
+	<script type="text/javascript" src="tinymce.min.js"></script>
+	<link href="editor.css"				type="text/css"		rel="stylesheet" />
+	<link href="stdindex_footer.css" 	type="text/css" 	rel="stylesheet" />
+	<link href="stdindex_title.css" 	type="text/css" 	rel="stylesheet" />
+	<link href="homev2.css"				type="text/css"		rel="stylesheet" />
+ </head>
+<!-- Place this in the body of the page content -->
+	<body>
+
+		<script type="text/javascript">
+		tinymce.init({
+			selector: "textarea",
+			theme: "modern",
+			language:"zh_CN",
+			height:"920px",
+			width:"920px",
+			plugins: [
+				"advlist autolink lists link image charmap hr anchor pagebreak",
+				"searchreplace wordcount visualblocks visualchars code",
+				"insertdatetime media nonbreaking save table contextmenu directionality",
+				"emoticons template paste textcolor colorpicker textpattern"
+			],
+			toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent ",
+			toolbar2: "media link image| forecolor backcolor emoticons",
+			image_advtab: true,
+			templates: [
+				{title: 'Test template 1', content: 'Test 1'},
+				{title: 'Test template 2', content: 'Test 2'}
+			]
+		});
+		</script>
+		<div id="hdr">
+			<div id="hdr_main">
+				<div id="hdr_top">
+					<!--表头徽标-->
+					<div id="logo">
+						<img src="std_title_logo.png" width="54px" height="54px" alt="团委学生会的徽标"/>
+					</div>
+					<!--标题-->
+					<div id="title">
+						<p id="chs_title">
+							暨南大学电气信息学院团委学生会
+						</p>
+						<p id="eng_title">
+							Electrcal and Information College of Jinan University Youth League Committee &#38; Student Union
+						</p>
+						<div id="help_nav">
+							<!--这里几个链接的url还没决定的-->
+							<a class="head_help_nav" href="liaojie.html">了解团委学生会</a>
+							<a class="head_help_nav" href="caozuofangfa.html">操作方法</a>
+							<a class="head_help_nav" href="zhichi.html">支持</a>
+						</div>
+						
+						
+					</div>
+					
+					<div id="search_and_info">
+					
+						<!--站内搜索框，样式和代码均未完成-->
+						<div id="search_bar">
+							<input type="text" name="q" id="query" title="站内搜索" />
+							<button type="submit" name="qsub" id="searchsubmit" title="搜索" value="" ><img src="site_search.png" alt="搜索按钮徽标" /></button>
+						</div>
+					
+						<!--用户信息，未登陆是为“登陆”锚标签，登陆后为“用户名”，“个人中心”，“注销”3个锚标签-->
+						<div id="login_info">
+							<a class="user_info" id="login_info_user_name" href="#">邓作恒</a>
+							<a class="user_info" id="login_info_user_id" href="#">2012052207</a>
+							<a class="user_info" id="login_info_user_center" href="#">个人中心</a>
+							<a class="user_info" id="login_info_log_out" href="#">注销</a>
+						</div>
+						
+					</div>
+					
+				</div>
+			</div>
+			<div id="hdr_guide">
+				<div id="guide">		
+					<div id="guide_table">
+						<table id="main_guide">
+							<tr>
+								<td class="about_us_td">
+									<a class="main_nav" id="a_home" href="#">首页</a>
+								</td>
+								<td class="about_us_td">
+									<a class="main_nav" id="a_news" href="news.html">新闻中心</a>
+								</td>
+								<td class="about_us_td">
+									<a class="main_nav" id="a_work" href="work.html">学生工作</a>
+								</td>
+								<td class="about_us_td">
+									<a class="main_nav" id="a_act" href="activities.html">活动</a>
+								</td>
+								<td class="about_us_td">
+									<a class="main_nav" id="a_files" href="files.html">现行制度浏览与下载</a>
+								</td>
+							</tr>
+						</table>					
+					</div>
+				</div>
+			</div>
+			
+		</div>	
+		<div id="main">
+			<form method="post" action="#">
+				<label for="article_title">标题:</label>
+				<input type="text" name="article_title" id="article_title" />
+				
+				<textarea id="text"></textarea>
+				<button type="submit" id="submitbutton">发表</button>
+				<button type="button" id="cancel">取消</button>
+			</form>
+		</div>
+	</body>
+</html>
