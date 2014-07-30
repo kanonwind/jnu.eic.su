@@ -2,12 +2,37 @@
 //绩效考核控制器
 class PerformAction extends Action
 {
+ 	//每个需要用到判断用户是否登录的地方，都要调用这个方法，每个控制器都有相同的一个
+	public function judgelog()
+	{
+		$judgelog=1;
+		session_name('LOGIN');
+		session_start();
+		if(empty($_SESSION['account'])||empty($_SESSION['random']))
+		{
+			$judgelog=0;
+		}
+		else
+		{
+			$account=$_SESSION['account'];
+			$random=$_SESSION['random'];
+			$login_model=new Model("Login");
+			$login_info=$login_model->where("account=$account and random=$random")->find();
+			if(!$login_info)
+			{
+				//随机数不一样，覆盖掉			
+				$judgelog=0;		
+			}
+
+		}
+		return $judgelog;
+	}
   //绩效考核首页
   public function index()
   {
 	session_name('LOGIN');
     session_start();
-    if(empty($_SESSION['account']))
+    if(!$this->judgelog())
       $this->redirect('Login/index'); 
 	
   $arr1=Array("秘书处","人力资源部","宣传部","信息编辑部","学术部","体育部","KSC联盟","组织部","文娱部","公关部","心理服务部","主席团");
@@ -33,7 +58,7 @@ class PerformAction extends Action
  	//拒绝未登录访问
 	session_name('LOGIN');
     session_start();
-    if(empty($_SESSION['account']))
+    if(!$this->judgelog())
       $this->redirect('Login/index'); 
 	$account=$_SESSION['account'];
 	//var_dump($account);
@@ -99,7 +124,7 @@ class PerformAction extends Action
 /* 	//拒绝未登录访问
 	session_name('LOGIN');
     session_start();
-    if(empty($_SESSION['account']))
+    if(!$this->judgelog())
       $this->redirect('Login/index');  
 	//判断状态status,默认为0，表示不能编辑，当为1时则可以编辑
 	$status=0;
@@ -131,7 +156,7 @@ class PerformAction extends Action
 	//拒绝未登录访问
 	session_name('LOGIN');
     session_start();
-    if(empty($_SESSION['account']))
+    if(!$this->judgelog())
       $this->redirect('Login/index'); 
     //获取授权状态 status 	  
 	$status=$this->getStatus();
@@ -278,7 +303,7 @@ class PerformAction extends Action
 	//拒绝未登录访问
 	session_name('LOGIN');
     session_start();
-    if(empty($_SESSION['account']))
+    if(!$this->judgelog())
       $this->redirect('Login/index'); 
     //获取授权状态 status	  
 	$status=$this->getStatus();
@@ -369,7 +394,7 @@ class PerformAction extends Action
 	//拒绝未登录访问
 	session_name('LOGIN');
     session_start();
-    if(empty($_SESSION['account']))
+    if(!$this->judgelog())
       $this->redirect('Login/index'); 
     //获取授权状态 status	  
 	$status=$this->getStatus();
@@ -489,7 +514,7 @@ class PerformAction extends Action
 	//拒绝未登录访问
 	session_name('LOGIN');
     session_start();
-    if(empty($_SESSION['account']))
+    if(!$this->judgelog())
       $this->redirect('Login/index'); 
     //获取授权状态 status	  
 	$status=$this->getStatus();
@@ -589,7 +614,7 @@ class PerformAction extends Action
 	//拒绝未登录访问
 	session_name('LOGIN');
     session_start();
-    if(empty($_SESSION['account']))
+    if(!$this->judgelog())
       $this->redirect('Login/index'); 
     //获取授权状态 status	  
 	$status=$this->getStatus();
@@ -690,7 +715,7 @@ class PerformAction extends Action
     //拒绝未登录访问
 	session_name('LOGIN');
     session_start();
-    if(empty($_SESSION['account']))
+    if(!$this->judgelog())
       $this->redirect('Login/index'); 
 	$account=$_SESSION['account'];
 	//获取请求的时间
@@ -784,7 +809,7 @@ class PerformAction extends Action
 	//拒绝未登录访问
 	session_name('LOGIN');
     session_start();
-    if(empty($_SESSION['account']))
+    if(!$this->judgelog())
       $this->redirect('Login/index'); 
 	$account=$_SESSION['account'];
 	
@@ -905,7 +930,7 @@ class PerformAction extends Action
 	//$month=5;
 	session_name('LOGIN');
     session_start();
-    if(empty($_SESSION['account']))
+    if(!$this->judgelog())
       $this->redirect('Login/index'); 
 	$account=$_SESSION['account'];
 	$status=$this->getStatus();
@@ -961,7 +986,7 @@ class PerformAction extends Action
  	//拒绝未登录访问
 	session_name('LOGIN');
     session_start();
-    if(empty($_SESSION['account']))
+    if(!$this->judgelog())
       $this->redirect('Login/index'); 
     //获取授权状态 status	  
 	$status=$this->getStatus();
@@ -1104,7 +1129,7 @@ class PerformAction extends Action
 	//拒绝未登录访问
 	session_name('LOGIN');
     session_start();
-    if(empty($_SESSION['account']))
+    if(!$this->judgelog())
       $this->redirect('Login/index'); 
     //获取授权状态 status	  
 	$status=$this->getStatus();
@@ -1161,7 +1186,7 @@ class PerformAction extends Action
 	//拒绝未登录访问
 	session_name('LOGIN');
     session_start();
-    if(empty($_SESSION['account']))
+    if(!$this->judgelog())
       $this->redirect('Login/index'); 
     //获取授权状态 status	  
 	$status=$this->getStatus();
@@ -1196,7 +1221,7 @@ class PerformAction extends Action
  	//拒绝未登录访问
 	session_name('LOGIN');
     session_start();
-    if(empty($_SESSION['account']))
+    if(!$this->judgelog())
       $this->redirect('Login/index'); 
     //获取授权状态 status	  
 	$status=$this->getStatus();
@@ -2372,7 +2397,7 @@ class PerformAction extends Action
 	//拒绝未登录访问
 	session_name('LOGIN');
     session_start();
-    if(empty($_SESSION['account']))
+    if(!$this->judgelog())
       $this->redirect('Login/index'); 
 	  
 	//获取请求的时间
@@ -2490,7 +2515,7 @@ class PerformAction extends Action
 	//拒绝未登录访问
 	session_name('LOGIN');
     session_start();
-    if(empty($_SESSION['account']))
+    if(!$this->judgelog())
       $this->redirect('Login/index'); 
 	$account=$_SESSION['account'];
     $bzfk_model=new Model("Bzfk");
@@ -2659,7 +2684,7 @@ class PerformAction extends Action
 	//拒绝未登录访问
 	session_name('LOGIN');
     session_start();
-    if(empty($_SESSION['account']))
+    if(!$this->judgelog())
       $this->redirect('Login/index'); 
 	$account=$_SESSION['account'];
 	
@@ -2802,7 +2827,7 @@ class PerformAction extends Action
 	//拒绝未登录访问
 	session_name('LOGIN');
     session_start();
-    if(empty($_SESSION['account']))
+    if(!$this->judgelog())
       $this->redirect('Login/index'); 
 
 	$account=$_SESSION['account'];
@@ -2945,7 +2970,7 @@ class PerformAction extends Action
 	//拒绝未登录访问
 	session_name('LOGIN');
     session_start();
-    if(empty($_SESSION['account']))
+    if(!$this->judgelog())
       $this->redirect('Login/index'); 
 	$account=$_SESSION['account'];
 	//基本信息
@@ -3040,7 +3065,7 @@ class PerformAction extends Action
 	//拒绝未登录访问
 	session_name('LOGIN');
     session_start();
-    if(empty($_SESSION['account']))
+    if(!$this->judgelog())
       $this->redirect('Login/index'); 
     
 	$account=$_SESSION['account'];
@@ -3149,7 +3174,7 @@ class PerformAction extends Action
 	//拒绝未登录访问
 	session_name('LOGIN');
     session_start();
-    if(empty($_SESSION['account']))
+    if(!$this->judgelog())
       $this->redirect('Login/index'); 
     $year=$_POST['year'];
 	$month=$_POST['month'];
@@ -3191,7 +3216,7 @@ class PerformAction extends Action
 	//拒绝未登录访问
 	session_name('LOGIN');
     session_start();
-    if(empty($_SESSION['account']))
+    if(!$this->judgelog())
       $this->redirect('Login/index'); 
     $diaoyan_model=new Model("Diaoyan");
 	$person_model=new Model("Person");
@@ -3227,7 +3252,7 @@ class PerformAction extends Action
 	//拒绝未登录访问
 	session_name('LOGIN');
     session_start();
-    if(empty($_SESSION['account']))
+    if(!$this->judgelog())
       $this->redirect('Login/index');
 	 
     //$account=$_SESSION['account'];	  
@@ -3299,7 +3324,7 @@ class PerformAction extends Action
 	//拒绝未登录访问
 	session_name('LOGIN');
     session_start();
-    if(empty($_SESSION['account']))
+    if(!$this->judgelog())
       $this->redirect('Login/index');
 	//$account=$_SESSION['account'];
 	//主席账号
@@ -3368,7 +3393,7 @@ class PerformAction extends Action
 	//拒绝未登录访问
 	session_name('LOGIN');
     session_start();
-    if(empty($_SESSION['account']))
+    if(!$this->judgelog())
       $this->redirect('Login/index');
 	//主席团账号
 	$waccount=$_SESSION['account'];
@@ -3465,7 +3490,7 @@ class PerformAction extends Action
 	//拒绝未登录访问
 	session_name('LOGIN');
     session_start();
-    if(empty($_SESSION['account']))
+    if(!$this->judgelog())
       $this->redirect('Login/index');
 	//$account=$_SESSION['account'];
 	//主席账号
@@ -3513,7 +3538,7 @@ class PerformAction extends Action
     //拒绝未登录访问
 	session_name('LOGIN');
     session_start();
-    if(empty($_SESSION['account']))
+    if(!$this->judgelog())
       $this->redirect('Login/index');  
 	$account=$_SESSION['account'];   
 	$year=$_POST['year'];
@@ -3599,7 +3624,7 @@ class PerformAction extends Action
 	//拒绝未登录访问
 	session_name('LOGIN');
     session_start();
-    if(empty($_SESSION['account']))
+    if(!$this->judgelog())
       $this->redirect('Login/index'); 
     //对传过来的时间进行判断,看看数据库里是否已经激活过该时间了
     $year=$_POST['year'];

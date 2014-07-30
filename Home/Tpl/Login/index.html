@@ -7,6 +7,7 @@
 	<link rel="shortcut icon" href="__PUBLIC__/image/logo.jpg" />
 	<link href="__PUBLIC__/css/login.css" type="text/css" rel="stylesheet" />
 	<script  type="text/javascript" src="__PUBLIC__/js/login.js"> </script>
+	<script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
 	<script type="text/javascript">
         var URL = "__URL__";
         var APP = "__APP__";
@@ -47,6 +48,15 @@
 						</div>
 						<div>
 							<input type="password" name="user_login_pw" id="user_login_pw" class="login_input"/>
+						</div>
+						<div class="name_label">
+							<span>
+								验证码
+							</span>
+						</div>
+						<div>
+							<input type="text" id="vertication_code"/>
+							<img src="" alt="GD图像" title="" id="vertication_img"/>
 						</div>
 						<div id="keep_login_checkbox">
 							

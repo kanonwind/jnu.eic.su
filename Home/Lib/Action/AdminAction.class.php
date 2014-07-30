@@ -29,7 +29,7 @@ class AdminAction extends Action
   {
     session_name('LOGIN');
     session_start();
-    if(empty($_SESSION['account']))
+    if(!$this->judgelog())
       $this->redirect('Login/index'); 
 	
 	//只有人力的部长才能访问到
@@ -225,5 +225,30 @@ class AdminAction extends Action
 	);
 	echo $this->_encode($arr);
   }
+  	//每个需要用到判断用户是否登录的地方，都要调用这个方法，每个控制器都有相同的一个
+	public function judgelog()
+	{
+		$judgelog=1;
+		session_name('LOGIN');
+		session_start();
+		if(empty($_SESSION['account'])||empty($_SESSION['random']))
+		{
+			$judgelog=0;
+		}
+		else
+		{
+			$account=$_SESSION['account'];
+			$random=$_SESSION['random'];
+			$login_model=new Model("Login");
+			$login_info=$login_model->where("account=$account and random=$random")->find();
+			if(!$login_info)
+			{
+				//随机数不一样，覆盖掉			
+				$judgelog=0;		
+			}
+
+		}
+		return $judgelog;
+	}
 }
 ?>

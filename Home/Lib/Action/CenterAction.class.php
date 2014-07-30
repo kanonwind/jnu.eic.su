@@ -10,8 +10,14 @@ class CenterAction extends Action
 		//拒绝未登录访问
 		session_name('LOGIN');
         session_start();
-        if(empty($_SESSION['account']))
+        if(!$this->judgelog())
             $this->redirect('Login/index');
+		$account=$_SESSION['account'];	
+		$person_model=new Model("Person");
+		$person_info=$person_model->where("account=$account")->find();
+		$name=$person_info['name'];
+		$this->assign('account',$account);
+		$this->assign('name',$name);
 		$this->display();
 	}
 	//index的js脚本请求个人信息，message找到数据整理后返回json数据
@@ -21,7 +27,7 @@ class CenterAction extends Action
 		//拒绝未登录访问
 		session_name('LOGIN');
         session_start();
-        if(empty($_SESSION['account']))
+        if(!$this->judgelog())
             $this->redirect('Login/index');
 			/*
 		//拒绝非js请求数据
@@ -90,7 +96,7 @@ class CenterAction extends Action
 		//拒绝未登录访问
 		session_name('LOGIN');
         session_start();
-        if(empty($_SESSION['account']))
+        if(!$this->judgelog())
             $this->redirect('Login/index');
 		//不是js请求拒绝访问
 		if(empty($_GET['account']))
@@ -100,6 +106,11 @@ class CenterAction extends Action
 	//index的js脚本请求空课表信息，table找到数据整理后返回json数据
 	public function table()
 	{
+		//拒绝未登录访问
+		session_name('LOGIN');
+        session_start();
+        if(!$this->judgelog())
+            $this->redirect('Login/index');
 	}
 	//modify为修改个人信息的数据库操作
 	public function modify()
@@ -108,7 +119,7 @@ class CenterAction extends Action
 		//拒绝未登录访问
 		session_name('LOGIN');
         session_start();
-        if(empty($_SESSION['account']))
+        if(!$this->judgelog())
             $this->redirect('Login/index');
 		/*
 		//不是js请求拒绝访问
@@ -164,7 +175,7 @@ class CenterAction extends Action
 		//拒绝未登录访问
 		session_name('LOGIN');
         session_start();
-        if(empty($_SESSION['account']))
+        if(!$this->judgelog())
             $this->redirect('Login/index');
 		/*
 		//不是js请求拒绝访问
@@ -200,7 +211,7 @@ class CenterAction extends Action
 		//拒绝未登录访问
 		session_name('LOGIN');
         session_start();
-        if(empty($_SESSION['account']))
+        if(!$this->judgelog())
             $this->redirect('Login/index');
 		/*
 		//不是js请求拒绝访问
@@ -225,6 +236,11 @@ class CenterAction extends Action
 	//revise为修改空课表的数据库操作
 	public function revise()
 	{
+		//拒绝未登录访问
+		session_name('LOGIN');
+        session_start();
+        if(!$this->judgelog())
+            $this->redirect('Login/index');
 	}
   //调用—_encode()函数，将数组进行编码转哈
    public  function _encode($arr)
@@ -246,7 +262,31 @@ class CenterAction extends Action
   }
   return urlencode($elem);
   }
+ 	//每个需要用到判断用户是否登录的地方，都要调用这个方法，每个控制器都有相同的一个
+	public function judgelog()
+	{
+		$judgelog=1;
+		session_name('LOGIN');
+		session_start();
+		if(empty($_SESSION['account'])||empty($_SESSION['random']))
+		{
+			$judgelog=0;
+		}
+		else
+		{
+			$account=$_SESSION['account'];
+			$random=$_SESSION['random'];
+			$login_model=new Model("Login");
+			$login_info=$login_model->where("account=$account and random=$random")->find();
+			if(!$login_info)
+			{
+				//随机数不一样，覆盖掉			
+				$judgelog=0;		
+			}
 
+		}
+		return $judgelog;
+	}
 
 }
 ?>

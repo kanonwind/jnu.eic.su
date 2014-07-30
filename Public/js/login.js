@@ -7,6 +7,7 @@ function initLogin()
 	
 	document.getElementById("login_button").onclick=function()
 	{
+
 		var objForm = document.forms["login_info"];
 		var strUserName = objForm.elements["user_login_name"].value;
 		var strUserPW = objForm.elements["user_login_pw"].value;
@@ -38,7 +39,34 @@ function initLogin()
 		{
 			return IsValid(str);
 		}
-		
+		//验证码事件处理
+		if(""==$('#vertication_code').val())
+		{
+			alert("验证码不能为空");
+			return false;
+		}
+		else
+		{
+			checknumber=$('#vertication_code').val();
+			var obj;
+			$.ajax({
+				type:"POST",
+				url:URL+"/vertication",
+				data:{'checknumber':checknumber},
+				dataType:"json",
+				async:false,
+				success:function(result){
+					obj=result;			
+				},
+			});
+			if(obj.checked==0)
+			{
+				alert("验证码错误");
+				$('#vertication_code').val("")
+				$('#vertication_img').attr('src',URL+'/vertication');
+				return false;
+			}
+		}
 		if(!validUsername(strUserName))
 		{
 			document.getElementById("login_error").innerHTML="*非法用户名!";
@@ -103,6 +131,13 @@ function initLogin()
 	{
 		document.getElementById("user_login_pw").style.borderColor="black";
 	}
+	//验证码切换图片
+	$('#vertication_img').attr('src',URL+'/vertication');
+	$('#vertication_img').click(function(){
+		$('#vertication_img').attr('src',URL+'/vertication');
+		
+	});
+
 }
 
 //发送用户名和密码
