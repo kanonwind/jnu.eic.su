@@ -1,6 +1,10 @@
 window.onload=allocateSystemInit;
 
-var exChangedButton="cha_xun_ke_biao"
+var exChangedButton="cha_xun_ke_biao";
+var arrDepartName=new Array("秘书处","人力资源部","宣传部","信息编辑部","学术部",
+"体育部","KSC联盟","组织部","文娱部","公关部","心理服务部","主席团");
+var arrTypeName=new Array("干事","人力干事","部长级","主席团");
+var arrGenderName=new Array("不确定","女","男");
 
 function changeButtonStyle(buttonName)
 {
@@ -113,8 +117,9 @@ function postAllocQueInfo(objQI)
 		obj.qDay是时间·日
 		obj.qBeginHour和obj.BeginMin是开始工作的时和分
 		obj.qEndHour和obj.EndMin是结束工作的时和分
-		obj.qGender是性别要求
+		obj.qGender是性别要求,0表示不限，1表示女，2表示男
 	*/
+	alert(objQI.qGender);
 	var jsonPost=
 	{
 		"qDepart":objQI.qDepart,
@@ -134,53 +139,133 @@ function postAllocQueInfo(objQI)
 	{
 		"arrAnsPerInfo":[
 			{
-				"userID":"2012052207",
-				"userName":"邓作恒",
-				"freeTime":"09:50-14:30",
-				"depart":"KSC联盟",
-				"userType":"部长级",
-				"gender":"男",
+				"conformity":"0.3",//符合度用来排序
+				"userID":"2012052201",//用户账号
+				"userName":"邓作恒",//用户姓名
+				"freeTime":"0.3",//查询时间附近的空课时间
+				"depart":"2",//部门
+				"userType":"3",//用户类型
+				"gender":"1",//性别
 				"longPhoneNumber":"13726247196",
 				"shortPhoneNumber":"617196",
-				"QQNumber":"2470423627",
+				"total_alloc_time":"5",//总的外调次数
+				"recently_alloc_time":"2",//最近一个月
 			},
 			{
-				"userID":"2012052207",
-				"userName":"邓作恒",
-				"freeTime":"09:50-14:30",
-				"depart":"KSC联盟",
-				"userType":"部长级",
-				"gender":"男",
+				"conformity":"0.2",//符合度用来排序
+				"userID":"2012052202",//用户账号
+				"userName":"邓作恒",//用户姓名
+				"freeTime":"0.2",//查询时间附近的空课时间
+				"depart":"2",//部门
+				"userType":"3",//用户类型
+				"gender":"1",//性别
 				"longPhoneNumber":"13726247196",
 				"shortPhoneNumber":"617196",
-				"QQNumber":"2470423627",
+				"total_alloc_time":"5",//总的外调次数
+				"recently_alloc_time":"2",//最近一个月
 			},
 			{
-				"userID":"2012052207",
-				"userName":"邓作恒",
-				"freeTime":"09:50-14:30",
-				"depart":"KSC联盟",
-				"userType":"部长级",
-				"gender":"男",
+				"conformity":"0.2",//符合度用来排序
+				"userID":"2012052203",//用户账号
+				"userName":"邓作恒",//用户姓名
+				"freeTime":"0.2",//查询时间附近的空课时间
+				"depart":"2",//部门
+				"userType":"1",//用户类型
+				"gender":"1",//性别
 				"longPhoneNumber":"13726247196",
 				"shortPhoneNumber":"617196",
-				"QQNumber":"2470423627",
+				"total_alloc_time":"5",//总的外调次数
+				"recently_alloc_time":"2",//最近一个月
 			},
 			{
-				"userID":"2012052207",
-				"userName":"邓作恒",
-				"freeTime":"09:50-14:30",
-				"depart":"KSC联盟",
-				"userType":"部长级",
-				"gender":"男",
+				"conformity":"0.2",//符合度用来排序
+				"userID":"2012052204",//用户账号
+				"userName":"邓作恒",//用户姓名
+				"freeTime":"0.2",//查询时间附近的空课时间
+				"depart":"2",//部门
+				"userType":"1",//用户类型
+				"gender":"1",//性别
 				"longPhoneNumber":"13726247196",
 				"shortPhoneNumber":"617196",
-				"QQNumber":"2470423627",
+				"total_alloc_time":"4",//总的外调次数
+				"recently_alloc_time":"2",//最近一个月
 			},
+			{
+				"conformity":"0.2",//符合度用来排序
+				"userID":"2012052205",//用户账号
+				"userName":"邓作恒",//用户姓名
+				"freeTime":"0.2",//查询时间附近的空课时间
+				"depart":"2",//部门
+				"userType":"1",//用户类型
+				"gender":"1",//性别
+				"longPhoneNumber":"13726247196",
+				"shortPhoneNumber":"617196",
+				"total_alloc_time":"4",//总的外调次数
+				"recently_alloc_time":"1",//最近一个月
+			},
+			{
+				"conformity":"0.1",//符合度用来排序
+				"userID":"2012052206",//用户账号
+				"userName":"邓作恒",//用户姓名
+				"freeTime":"0.1",//查询时间附近的空课时间
+				"depart":"2",//部门
+				"userType":"1",//用户类型
+				"gender":"0",//性别
+				"longPhoneNumber":"13726247196",
+				"shortPhoneNumber":"617196",
+				"total_alloc_time":"4",//总的外调次数
+				"recently_alloc_time":"1",//最近一个月
+			},
+			{
+				"conformity":"0.1",//符合度用来排序
+				"userID":"2012052207",//用户账号
+				"userName":"邓作恒",//用户姓名
+				"freeTime":"0.1",//查询时间附近的空课时间
+				"depart":"2",//部门
+				"userType":"1",//用户类型
+				"gender":"1",//性别
+				"longPhoneNumber":"13726247196",
+				"shortPhoneNumber":"617196",
+				"total_alloc_time":"4",//总的外调次数
+				"recently_alloc_time":"1",//最近一个月
+			},
+			
+			
 		],
 	};
 			
-	
+	jsonGet.arrAnsPerInfo.sort(function(lhs,rhs)
+	{
+		if(lhs.conformity==rhs.conformity)//符合度最优先
+		{
+			if(lhs.userType==rhs.userType)
+			{
+				if(lhs.total_alloc_time==rhs.total_alloc_time)
+				{
+					if(lhs.recently_alloc_time==rhs.recently_alloc_time)
+					{
+						return lhs.gender<rhs.gender;//男生排前面
+					}
+					else
+					{
+						lhs.recently_alloc_time>rhs.recently_alloc_time;//最近外调数少的排前面
+					}
+				}
+				else
+				{
+					return lhs.total_alloc_time>rhs.total_alloc_time;//累计外调数少的排前面
+				}
+			}
+			else
+			{
+				return (lhs.userType-rhs.userType)>0;//干事排前面
+			}
+		}
+		else
+		{
+			return (lhs.conformity-rhs.conformity)<0;//符合度高的排前面
+		}
+	});
 	return jsonGet.arrAnsPerInfo;
 }
 
@@ -497,7 +582,7 @@ function showChaXunKeBiao()
 					+"					<th>性别</th>\n"
 					+"					<th>长号</th>\n"
 					+"					<th>短号</th>\n"
-					+"					<th>QQ</th>\n"
+					+"					<th>累计/最近外调数</th>\n"
 					+"				</tr>\n"
 					+"			</thead>\n"
 					+"			<tbody>\n";
@@ -506,12 +591,12 @@ function showChaXunKeBiao()
 					strQueryReTable += "<tr><td><input type=\"checkbox\" name=\""+arrResponse[i].userID+"\" value=\""+arrResponse[i].userID+"\"/></td>"
 									+"<td>"+arrResponse[i].userName+"</td>" 
 									+"<td>"+arrResponse[i].freeTime + "</td>"
-									+"<td>"+arrResponse[i].depart + "</td>"
-									+"<td>"+arrResponse[i].userType + "</td>"
-									+"<td>"+arrResponse[i].gender + "</td>"
+									+"<td>"+arrDepartName[arrResponse[i].depart-1] + "</td>"
+									+"<td>"+arrTypeName[arrResponse[i].userType-1] + "</td>"
+									+"<td>"+arrGenderName[arrResponse[i].gender] + "</td>"
 									+"<td>"+arrResponse[i].longPhoneNumber + "</td>"
 									+"<td>"+arrResponse[i].shortPhoneNumber + "</td>"
-									+"<td>"+arrResponse[i].QQNumber + "</td>"
+									+"<td>"+(arrResponse[i].total_alloc_time +"/"+arrResponse[i].recently_alloc_time)+ "</td>"
 									+"</tr>";
 				}
 				strQueryReTable += "</tbody></table><div id=\"verification\"><div>";

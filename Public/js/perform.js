@@ -12,12 +12,14 @@ function GetObjById(strId)//根据ID获取对象
 	return document.getElementById(strId);
 }
 
+
 function GetId(e)//根据鼠标处理事件获取鼠标活动当前的ID
 {
 	e=e||event;
 	var tag=e.srcElement||e.target;
 	return tag.id;
 }
+
 
 function CheckLegalStr(strCheck)//检查输入的字符串是否含有非法字段
 {
@@ -29,6 +31,7 @@ function CheckLegalStr(strCheck)//检查输入的字符串是否含有非法字�
 		return true;
 }
 
+
 //把字符串的一些特殊字符转化再存入数据库
 function TranStr_Post(str)
 {
@@ -38,6 +41,7 @@ function TranStr_Post(str)
 	return str
 }
 
+
 //把从数据库获取的字符串转化后再显示
 function TranStr_Get(str)
 {
@@ -45,51 +49,14 @@ function TranStr_Get(str)
 	str = str.toString().replace(new RegExp("&kg&", 'g'), " ");//转换为空格符，显示空格
 	return str;
 }
+
+
 //部门转为对应的数字
 function TranTextToDig(text)
 {
-	var iBumen;
-	switch(text)
-	{
-		case "秘书处":
-			iBuMen = 1;
-			break;
-		case "人力资源部":
-			iBuMen = 2;
-			break;
-		case "宣传部":
-			iBuMen = 3;
-			break;
-		case "信息编辑部":
-			iBuMen = 4;
-			break;
-		case "学术部":
-			iBuMen = 5;
-			break;
-		case "体育部":
-			iBuMen = 6;
-			break;
-		case "KSC联盟":
-			iBuMen = 7;
-			break;
-		case "组织部":
-			iBuMen = 8;
-			break;
-		case "文娱部":
-			iBuMen = 9;
-			break;
-		case "公关部":
-			iBuMen = 10;
-			break;
-		case "心理服务部":
-			iBuMen = 11;
-			break;
-		case "主席团":
-			iBuMen = 12;
-			break;
-	}
-	return iBuMen;
+	arrDepartName.indexOf(text);
 }
+
 
 //对应的数字转成相应的部门
 function TranDigToText(iBuMen)
@@ -100,6 +67,7 @@ function TranDigToText(iBuMen)
 	var text = arrBuMen[iBuMen-1];
 	return text;
 }
+
 
 //获取当前用户需要的各种考核表
 function GetTable()
@@ -220,8 +188,6 @@ function PostTable(buttonText)
 	}
 	return iCurButton;
 }*/
-
-
 
 
 //干事自评表的考核项目和评分标准
@@ -364,8 +330,6 @@ function GSZP_BZ()
 }
 
 
-
-
 //获取干事自评表数据
 function Get_GSZP()
 {
@@ -486,9 +450,6 @@ function Get_GSZP()
 }
 
 
-
-
-
 //把干事自评表的填写的内容传给服务器
 function Post_GSZP(obj_GSZP)//obj_GSZP为Get_GSZP()定义的对象
 {
@@ -548,8 +509,6 @@ function Post_GSZP(obj_GSZP)//obj_GSZP为Get_GSZP()定义的对象
 	else
 		return false;
 }
-
-
 
 
 //获取干事考核反馈表数据
@@ -631,9 +590,6 @@ function Get_GSKHFK()
 }
 
 
-
-
-
 //获取跟进部门出勤统计表数据
 function Get_GJBMCQTJ()
 {
@@ -686,8 +642,6 @@ function Get_GJBMCQTJ()
 }
 
 
-
-
 //把跟进部门统计表填写的内容传给服务器
 function Post_GJBMCQTJ(obj_GJBMCQTJ)//obj_GJBMCQTJ为Get_GJBMCQTJ()定义的对象
 {
@@ -729,8 +683,6 @@ function Post_GJBMCQTJ(obj_GJBMCQTJ)//obj_GJBMCQTJ为Get_GJBMCQTJ()定义的对�
 	else
 		return false;
 }
-
-
 
 
 //获取调研意见采纳表数据
@@ -807,7 +759,6 @@ function Get_DYYJCN()
 }
 
 
-
 //把调研意见采纳表的填写的内容传给服务器
 function Post_DYYJCN(obj_DYYJCN)//obj_DYYJCN为Get_DYYJCN()定义的对象
 {
@@ -851,6 +802,7 @@ function Post_DYYJCN(obj_DYYJCN)//obj_DYYJCN为Get_DYYJCN()定义的对象
 	else
 		return false;
 }
+
 
 //获取整体考核结果反馈表数据
 function Get_ZTKHJGFK()
@@ -991,6 +943,7 @@ function Get_ZTKHJGFK()
 	var objReturn = new obj_ZTKHJGFK();
 	return objReturn;
 }
+
 
 //部长自评表的考核项目和评分标准
 function BZZP_BZ()
@@ -1174,6 +1127,8 @@ function BZZP_BZ()
 	var objReturn = new obj_BZZP();
 	return objReturn;
 }
+
+
 //获取部长自评表数据
 function Get_BZZP()
 {
@@ -1300,6 +1255,8 @@ function Get_BZZP()
 	var objReturn = new obj_BZZP();
 	return objReturn;
 }
+
+
 //把部长自评表的填写的内容传给服务器
 function Post_BZZP(obj_BZZP)//obj_BZZP为Get_BZZP()定义的对象
 {
@@ -1366,6 +1323,7 @@ function Post_BZZP(obj_BZZP)//obj_BZZP为Get_BZZP()定义的对象
 	else
 		return false;
 }
+
 
 //干事考核表的考核项目和评分标准
 function GSKH_BZ()
@@ -1506,6 +1464,7 @@ function GSKH_BZ()
 	var objReturn = new objGSKH();
 	return objReturn;
 }
+
 
 //获取干事考核表数据
 function Get_GSKH()
@@ -1910,6 +1869,8 @@ function Get_GSKH()
 	var objReturn = new obj_GSKH();
 	return objReturn;
 }
+
+
 //把干事考核表的填写的内容传给服务器
 function Post_GSKH(obj_GSKH)//obj_GSKH为Get_GSKH()定义的对象
 {
@@ -1982,6 +1943,7 @@ function Post_GSKH(obj_GSKH)//obj_GSKH为Get_GSKH()定义的对象
 	else
 		return false;
 }
+
 
 //获取部长反馈表数据
 function Get_BZFK()
@@ -2106,6 +2068,7 @@ function Get_BZFK()
 	var objBZFK = new classBZFK();
 	return objBZFK;
 }
+
 
 //部长考核表的考核项目和评分标准
 function BZKH_BZ()
@@ -2264,6 +2227,7 @@ function BZKH_BZ()
 	var objReturn = new objBZKH();
 	return objReturn;
 }
+
 
 //获取部长考核表数据
 function Get_BZKH()
@@ -2886,6 +2850,8 @@ function Get_BZKH()
 	var objReturn = new obj_BZKH();
 	return objReturn;
 }
+
+
 //把部长考核表的填写的内容传给服务器
 function Post_BZKH(obj_BZKH)//obj_BZKH为Get_BZKH()定义的对象
 {
@@ -2953,6 +2919,7 @@ function Post_BZKH(obj_BZKH)//obj_BZKH为Get_BZKH()定义的对象
 	else
 		return false;
 }
+
 
 //部门考核表的考核项目和评分标准
 function BMKH_BZ()
@@ -3033,6 +3000,7 @@ function BMKH_BZ()
 	var objReturn = new objBMKH();
 	return objReturn;
 }
+
 
 //获取部门考核表数据
 function Get_BMKH()
@@ -3162,6 +3130,7 @@ function Get_BMKH()
 	return objReturn;
 }
 
+
 //把部门考核表的填写的内容传给服务器
 function Post_BMKH(obj_BMKH)//obj_BMKH为Get_BMKH()定义的对象
 {
@@ -3223,6 +3192,7 @@ function Post_BMKH(obj_BMKH)//obj_BMKH为Get_BMKH()定义的对象
 		return false;
 }
 
+
 //获取优秀部长评定表数据
 function Get_YXBZPD()
 {
@@ -3283,6 +3253,7 @@ function Get_YXBZPD()
 	}
 	return json_YXBZPD;
 }
+
 
 //获取主席团反馈表数据
 function Get_ZXTFK()
@@ -3419,6 +3390,7 @@ function Get_ZXTFK()
 	
 }
 
+
 //发送优秀部长评定表的结果
 function Post_YXBZPD(arrIDlist)
 {	
@@ -3465,6 +3437,7 @@ function Post_YXBZPD(arrIDlist)
 		return false;
 }
 
+
 //获取考核进程控制表的数据
 function Get_KHJCKZ()
 {
@@ -3478,6 +3451,7 @@ function Get_KHJCKZ()
 	return json_Get_KHJCKZ;
 }
 
+
 //发送考核进程控制表的数据回数据库
 function Post_KHJCKZ(obj_KHJCKZ)
 {
@@ -3489,6 +3463,7 @@ function Post_KHJCKZ(obj_KHJCKZ)
 	else
 		return false;
 }
+
 
 //获取其他情况加减分数据
 function Get_QTQKJJF()
@@ -3539,6 +3514,7 @@ function Get_QTQKJJF()
 	return json_Get_QYQKJJF;
 }
 
+
 //发送其他情况加减分数据
 function POST_QTQKJJF(obj_QTQKJJF)
 {
@@ -3577,6 +3553,7 @@ function POST_QTQKJJF(obj_QTQKJJF)
 	else
 		return false;
 }
+
 
 //获取优秀评定限制表数据
 function Get_YXPDXZ()
@@ -3631,180 +3608,23 @@ function Get_YXPDXZ()
 				[
 					{"name":"部长", "account":2013042212, "check":true},
 					{"name":"部长", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":false},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
+					
 				],
 			},
-			{
-				"depart":"部门",//部门名字
-				"arrPersons"://一个部门中的人的数组
-				[
-					{"name":"部长", "account":2013042212, "check":true},
-					{"name":"部长", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-				],
-			},
-			{
-				"depart":"部门",//部门名字
-				"arrPersons"://一个部门中的人的数组
-				[
-					{"name":"部长", "account":2013042212, "check":true},
-					{"name":"部长", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-				],
-			},
-			{
-				"depart":"部门",//部门名字
-				"arrPersons"://一个部门中的人的数组
-				[
-					{"name":"部长", "account":2013042212, "check":true},
-					{"name":"部长", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-				],
-			},
-			{
-				"depart":"部门",//部门名字
-				"arrPersons"://一个部门中的人的数组
-				[
-					{"name":"部长", "account":2013042212, "check":true},
-					{"name":"部长", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-				],
-			},
-			{
-				"depart":"部门",//部门名字
-				"arrPersons"://一个部门中的人的数组
-				[
-					{"name":"部长", "account":2013042212, "check":true},
-					{"name":"部长", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-				],
-			},
-			{
-				"depart":"部门",//部门名字
-				"arrPersons"://一个部门中的人的数组
-				[
-					{"name":"部长", "account":2013042212, "check":true},
-					{"name":"部长", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-				],
-			},
-			{
-				"depart":"部门",//部门名字
-				"arrPersons"://一个部门中的人的数组
-				[
-					{"name":"部长", "account":2013042212, "check":true},
-					{"name":"部长", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-				],
-			},
-			{
-				"depart":"部门",//部门名字
-				"arrPersons"://一个部门中的人的数组
-				[
-					{"name":"部长", "account":2013042212, "check":true},
-					{"name":"部长", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-				],
-			},
-			{
-				"depart":"部门",//部门名字
-				"arrPersons"://一个部门中的人的数组
-				[
-					{"name":"部长", "account":2013042212, "check":true},
-					{"name":"部长", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-					{"name":"干事", "account":2013042212, "check":true},
-				],
-			},
+			
 		],
 		
 		"arrBMPD"://部门评定限制
 		[
 			{"depart":"部门", "check":true},//部门名字，是否选中
 			{"depart":"部门", "check":true},//部门名字，是否选中
-			{"depart":"部门", "check":true},//部门名字，是否选中
-			{"depart":"部门", "check":true},//部门名字，是否选中
-			{"depart":"部门", "check":true},//部门名字，是否选中
-			{"depart":"部门", "check":true},//部门名字，是否选中
-			{"depart":"部门", "check":true},//部门名字，是否选中
-			{"depart":"部门", "check":true},//部门名字，是否选中
-			{"depart":"部门", "check":true},//部门名字，是否选中
-			{"depart":"部门", "check":true},//部门名字，是否选中
-			{"depart":"部门", "check":true},//部门名字，是否选中
+			
 		],
 	};
 	*/
 	return json_Get_YXPDXZ;
 }
+
 
 //发送优秀评定限制表
 function Post_YXPDXZ(obj_YXPDXZ)
@@ -3883,6 +3703,7 @@ function Post_YXPDXZ(obj_YXPDXZ)
 		return false;
 }
 
+
 function PerformInit()
 {
 	AutoHideHead();
@@ -3893,6 +3714,7 @@ function PerformInit()
 	ActiveTableButton();
 	SelectTime(0);
 }
+
 
 //自动隐藏头部
 function AutoHideHead() 
@@ -4014,6 +3836,7 @@ function AutoHideHead()
 	}
 }
 
+
 function ActiveTableButton()
 {
 	var arrTable = GetTable();
@@ -4051,6 +3874,7 @@ function ActiveTableButton()
 	}
 }
 
+
 //改变选中的部分的样式
 function ChangStyle(iPreTable, iCurTable)
 {
@@ -4061,6 +3885,7 @@ function ChangStyle(iPreTable, iCurTable)
 	var arrTable = GetTable();
 	GetObjById("table_name").innerHTML = arrTable[iCurTable];//打印当前被激活的按钮的内容的名字
 }
+
 
 //设置三角形指标滑动
 function ZhiBiaoHuaDong(iPreTable, iCurTable)
@@ -4087,6 +3912,7 @@ function ZhiBiaoHuaDong(iPreTable, iCurTable)
 		}
 	}
 }
+
 
 //根据选择时间显示内容
 function SelectTime(iCurShowFunction, btnText)
@@ -4163,6 +3989,7 @@ function SelectTime(iCurShowFunction, btnText)
 	}
 }
 
+
 function ArrShowTable()
 {
 	var arrTable = GetTable();
@@ -4221,6 +4048,7 @@ function ArrShowTable()
 	}
 	return arrShowFunction;
 }
+
 
 //干事自评表
 function Show_GSZP()

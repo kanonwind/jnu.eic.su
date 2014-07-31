@@ -1,5 +1,17 @@
 window.onload = UserCenterInit;
 
+var lunarMonths = new Array("一月","二月","三月","四月","五月","六月",
+								"七月","八月","九月","十月","十一月","十二月");
+var lunarMonthDays = new Array( "初一","初二","初三","初四","初五","初六","初七","初八","初九","初十",
+									"十一","十二","十三","十四","十五","十六","十七","十八","十九","二十",
+									"廿一","廿二","廿三","廿四","廿五","廿六","廿七","廿八","廿九","三十");
+var gregorianMonths=new Array("1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月");
+
+var gregorianDays=new Array("1日","2日","3日","4日","5日","6日","7日","8日","9日","10日","11日","12日","13日","14日","15日","16日","17日","18日","19日","20日","21日","22日","23日","24日","25日","26日","27日","28日","29日","30日","31日");
+
+var arrDepartName=new Array("秘书处","人力资源部","宣传部","信息编辑部","学术部",
+"体育部","KSC联盟","组织部","文娱部","公关部","心理服务部","主席团");
+
 function UserCenterInit()
 {
 	ShowPersonalData();
@@ -35,11 +47,7 @@ function UserCenterInit()
 //获取个人信息
 function GetPersonalData()
 {
-	var lunarMonths = new Array("一月","二月","三月","四月","五月","六月",
-								"七月","八月","九月","十月","十一月","十二月");
-	var lunarMonthDays = new Array( "初一","初二","初三","初四","初五","初六","初七","初八","初九","初十",
-									"十一","十二","十三","十四","十五","十六","十七","十八","十九","二十",
-									"廿一","廿二","廿三","廿四","廿五","廿六","廿七","廿八","廿九","三十");
+	
 
 	//用户类型
 	var arrUserType = new Array("干事","人力干事","部长级","主席团");
@@ -196,139 +204,35 @@ function PostPersonalDataToServer(objPersonalData)
 		case "公历":objPersonalData.birType=0;break;
 		case "农历":objPersonalData.birType=1;break;
 	}
-	switch(objPersonalData.month)
+	//转换月份格式
+	for(var i=0;i<gregorianMonths.length;i++)
 	{
-		case "一月":
-		case "1月":objPersonalData.month=1;break;
-		case "二月":
-		case "2月":objPersonalData.month=2;break;
-		case "三月":
-		case "3月":objPersonalData.month=3;break;
-		case "四月":
-		case "4月":objPersonalData.month=4;break;
-		case "五月":
-		case "5月":objPersonalData.month=5;break;
-		case "六月":
-		case "6月":objPersonalData.month=6;break;
-		case "七月":
-		case "7月":objPersonalData.month=7;break;
-		case "八月":
-		case "8月":objPersonalData.month=8;break;
-		case "九月":
-		case "9月":objPersonalData.month=9;break;
-		case "十月":
-		case "10月":objPersonalData.month=10;break;
-		case "十一月":
-		case "11月":objPersonalData.month=11;break;
-		case "十二月":
-		case "12月":objPersonalData.month=12;break;
+		if(objPersonalData.month==lunarMonthMonths[i]||objPersonalData.month==gregorianMonths[i])
+		{
+			objPersonalData.month=i+1;
+			break;
+		}
 	}
-	switch(objPersonalData.day)
+	alert("日："+objPersonalData.month);
+	//转换日期格式
+	for(var i=0;i<gregorianDays.length;i++)
 	{
-		case "初一":
-		case "1日":objPersonalData.day=1;break;
-		case "初二":
-		case "2日":objPersonalData.day=2;break;
-		case "初三":
-		case "3日":objPersonalData.day=3;break;
-		case "初四":
-		case "4日":objPersonalData.day=4;break;
-		case "初五":
-		case "5日":objPersonalData.day=5;break;
-		case "初六":
-		case "6日":objPersonalData.day=6;break;
-		case "初七":
-		case "7日":objPersonalData.day=7;break;
-		case "初八":
-		case "8日":objPersonalData.day=8;break;
-		case "初九":
-		case "9日":objPersonalData.day=9;break;
-		case "初十":
-		case "10日":objPersonalData.day=10;break;
-		case "十一":
-		case "11日":objPersonalData.day=11;break;
-		case "十二":
-		case "12日":objPersonalData.day=12;break;
-		case "十三":
-		case "13日":objPersonalData.day=13;break;
-		case "十四":
-		case "14日":objPersonalData.day=14;break;
-		case "十五":
-		case "15日":objPersonalData.day=15;break;
-		case "十六":
-		case "16日":objPersonalData.day=16;break;
-		case "十七":
-		case "17日":objPersonalData.day=17;break;
-		case "十八":
-		case "18日":objPersonalData.day=18;break;
-		case "十九":
-		case "19日":objPersonalData.day=19;break;
-		case "二十":
-		case "20日":objPersonalData.day=20;break;
-		case "廿一":
-		case "21日":objPersonalData.day=21;break;
-		case "廿二":
-		case "22日":objPersonalData.day=22;break;
-		case "廿三":
-		case "23日":objPersonalData.day=23;break;
-		case "廿四":
-		case "24日":objPersonalData.day=24;break;
-		case "廿五":
-		case "25日":objPersonalData.day=25;break;
-		case "廿六":
-		case "26日":objPersonalData.day=26;break;
-		case "廿七":
-		case "27日":objPersonalData.day=27;break;
-		case "廿八":
-		case "28日":objPersonalData.day=28;break;
-		case "廿九":
-		case "29日":objPersonalData.day=29;break;
-		case "三十":
-		case "30日":objPersonalData.day=30;break;
+		if(objPersonalData.day==gregorianDays[i]||objPersonalData.day==lunarMonthDays[i])
+		{
+			objPersonalData.day=i+1;
+			break;
+		}
 	}
+	
+	
 	//alert(objPersonalData.birType+objPersonalData.month+objPersonalData.day);
 	alert("日："+objPersonalData.day);
 	//部门信息转化
-	switch(objPersonalData.depart)
-	{
-		case "秘书处":
-			objPersonalData.depart = 1;
-			break;
-		case "主席团":
-			objPersonalData.depart = 12;
-			break;
-		case "人力资源部":
-			objPersonalData.depart = 2;
-			break;
-		case "宣传部":
-			objPersonalData.depart = 3;
-			break;
-		case "信息编辑部":
-			objPersonalData.depart = 4;
-			break;
-		case "学术部":
-			objPersonalData.depart = 5;
-			break;
-		case "体育部":
-			objPersonalData.depart = 6;
-			break;
-		case "KSC联盟":
-			objPersonalData.depart = 7;
-			break;
-		case "组织部":
-			objPersonalData.depart = 8;
-			break;
-		case "文娱部":
-			objPersonalData.depart = 9;
-			break;
-		case "公关部":
-			objPersonalData.depart = 10;
-			break;
-		case "心理服务部":
-			objPersonalData.depart = 11;
-			break;
-	}
-	//alert("部门"+objPersonalData.depart);
+	
+	objPersonalData.depart=arrDepartName.indexOf(objPersonalData.depart)+1;
+	
+	
+	alert("部门"+objPersonalData.depart);
 	
 	//转化用户类型
 	switch(objPersonalData.userType)
