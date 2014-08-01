@@ -2,14 +2,24 @@
 
 window.onload=initLogin;
 
+function getObjbyID(id)
+{
+	return document.getElementById(id);
+}
+
 function initLogin()
 {
 	
 	document.getElementById("login_button").onclick=function()
 	{
+		
 		var objForm = document.forms["login_info"];
+		
 		var strUserName = objForm.elements["user_login_name"].value;
+		
 		var strUserPW = objForm.elements["user_login_pw"].value;
+	
+		//objForm.elements["user_login_pw"].value=hex_md5(strPW);
 		function IsValid( oField ) 
 		{ 
 			re= /select|update|delete|exec|count|'|"|=|;|>|<|%/i; 
@@ -24,7 +34,7 @@ function initLogin()
 		function validUsername(str)
 		{
 			re = /^\d{10}$/;
-			if(re.test(str) && IsValid(str) &&str.size()==10)
+			if(re.test(str) && IsValid(str)&&10==str.length)
 			{
 				return true;
 			}
@@ -36,31 +46,32 @@ function initLogin()
 		
 		function validUserPW(str)
 		{
-			return IsValid(str);
+			return IsValid(str)&&(str!="");
 		}
-		
 		if(!validUsername(strUserName))
 		{
-			document.getElementById("login_error").innerHTML="*非法用户名!";
-			document.getElementById("user_login_name").style.borderColor="red";
+			
+			getObjbyID("login_error").innerHTML="*非法用户名!";
+			getObjbyID("user_login_name").style.borderColor="red";
 			objForm.elements["user_login_name"].value="";
 			return false;
 		}
 		else if(!validUserPW(strUserPW))
 		{
-			document.getElementById("login_error").innerHTML="*密码或用户名错误！";
-			document.getElementById("user_login_pw").style.borderColor="red";
+			getObjbyID("login_error").innerHTML="*密码或用户名错误！";
+			getObjbyID("user_login_pw").style.borderColor="red";
 			objForm.elements["user_login_pw"].value="";
 			return false;
 		}
 		else if(""==strUserName)
 		{
-			document.getElementById("login_error").innerHTML="*用户名不能为空！";
-			document.getElementById("user_login_name").style.borderColor="red";
+			getObjbyID("login_error").innerHTML="*用户名不能为空！";
+			getObjbyID("user_login_name").style.borderColor="red";
 			return false;
 		}
 		else 
 		{
+		
 			/*
 			strError=postNameandPW(strUserName,strUserPW);
 			if(strError=="")
@@ -80,36 +91,39 @@ function initLogin()
 				document.getElementById("user_login_pw").style.borderColor="red";
 			}
 			*/
+			var strPW=objForm.elements["user_login_pw"].value;
+			objForm.elements["user_login_pw"].value=hex_md5(strPW);
 			return true;
 		}
 	}
-	document.getElementById("cancel_button").onclick=function()
+	getObjbyID("cancel_button").onclick=function()
 	{
 		history.go(-1);
 	}
-	document.getElementById("user_login_name").onfocus=function()
+	//文本框的边框效果
+	getObjbyID("user_login_name").onfocus=function()
 	{
-		document.getElementById("user_login_name").style.borderColor="black";
+		getObjbyID("user_login_name").style.borderColor="black";
 	}
-	document.getElementById("user_login_name").onblur=function()
+	getObjbyID("user_login_name").onblur=function()
 	{
-		document.getElementById("user_login_name").style.borderColor="#999999";
+		getObjbyID("user_login_name").style.borderColor="#999999";
 	}
-	document.getElementById("user_login_pw").onblur=function()
+	getObjbyID("user_login_pw").onblur=function()
 	{
-		document.getElementById("user_login_pw").style.borderColor="#999999";
+		getObjbyID("user_login_pw").style.borderColor="#999999";
 	}
-	document.getElementById("user_login_pw").onfocus=function()
+	getObjbyID("user_login_pw").onfocus=function()
 	{
-		document.getElementById("user_login_pw").style.borderColor="black";
+		getObjbyID("user_login_pw").style.borderColor="black";
 	}
-	document.getElementById("vertication_code").onfocus=function()
+	getObjbyID("vertication_code").onfocus=function()
 	{
-		document.getElementById("vertication_code").style.borderColor="black";
+		getObjbyID("vertication_code").style.borderColor="black";
 	}
-	document.getElementById("vertication_code").onblur=function()
+	getObjbyID("vertication_code").onblur=function()
 	{
-		document.getElementById("vertication_code").style.borderColor="#999999";
+		getObjbyID("vertication_code").style.borderColor="#999999";
 	}
 }
 

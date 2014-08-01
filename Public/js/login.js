@@ -25,7 +25,7 @@ function initLogin()
 		function validUsername(str)
 		{
 			re = /^\d{10}$/;
-			if(re.test(str) && IsValid(str) &&str.size()==10)
+			if(re.test(str) && IsValid(str) &&str.length==10)
 			{
 				return true;
 			}
@@ -112,6 +112,8 @@ function initLogin()
 				document.getElementById("user_login_pw").style.borderColor="red";
 			}
 			*/
+			var strPW=objForm.elements["user_login_pw"].value;
+			objForm.elements["user_login_pw"].value=hex_md5(strPW);
 			return true;
 		}
 	}
