@@ -13,6 +13,8 @@ a.login_help{font-size:14px;text-decoration:none;}
 
 input.login_input{width:250px;height:24px;border-style:solid;border-color:#999999;border-width:1px;font-size:16px;font-weight:bold;}
 
+input.vertication_code{width:100px;}
+
 div#keep_login_checkbox{padding-top:10px;padding-bottom:30px;}
 
 div#keep_login_checkbox{font-size:14px;}
@@ -32,4 +34,8 @@ hr{border:none;height:2px;background:#cccccc;}
 div#copyright{font-size:14px;color:#999999;padding-top:50px;}
 
 p#login_error{font-size:14px;color:red;}
+
+img#vertication_img,#vertication_code{vertical-align:middle;}
+
+img#vertication_img:hover{cursor:pointer;}
 

@@ -42,7 +42,8 @@ function initLogin()
 		//验证码事件处理
 		if(""==$('#vertication_code').val())
 		{
-			alert("验证码不能为空");
+			document.getElementById("login_error").innerHTML="*验证码不能为空!";
+			document.getElementById("vertication_code").style.borderColor="red";
 			return false;
 		}
 		else
@@ -61,7 +62,10 @@ function initLogin()
 			});
 			if(obj.checked==0)
 			{
-				alert("验证码错误");
+				document.getElementById("login_error").innerHTML="*验证码错误!";
+				document.getElementById("vertication_code").style.borderColor="red";
+				objForm.elements["vertication_code"].value="";
+				//alert("验证码错误");
 				$('#vertication_code').val("")
 				$('#vertication_img').attr('src',URL+'/vertication');
 				return false;
@@ -130,6 +134,18 @@ function initLogin()
 	document.getElementById("user_login_pw").onfocus=function()
 	{
 		document.getElementById("user_login_pw").style.borderColor="black";
+	}
+	document.getElementById("user_login_pw").onfocus=function()
+	{
+		document.getElementById("user_login_pw").style.borderColor="black";
+	}
+	document.getElementById("vertication_code").onfocus=function()
+	{
+		document.getElementById("vertication_code").style.borderColor="black";
+	}
+	document.getElementById("vertication_code").onblur=function()
+	{
+		document.getElementById("vertication_code").style.borderColor="#999999";
 	}
 	//验证码切换图片
 	$('#vertication_img').attr('src',URL+'/vertication');

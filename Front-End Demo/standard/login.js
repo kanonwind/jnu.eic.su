@@ -103,6 +103,14 @@ function initLogin()
 	{
 		document.getElementById("user_login_pw").style.borderColor="black";
 	}
+	document.getElementById("vertication_code").onfocus=function()
+	{
+		document.getElementById("vertication_code").style.borderColor="black";
+	}
+	document.getElementById("vertication_code").onblur=function()
+	{
+		document.getElementById("vertication_code").style.borderColor="#999999";
+	}
 }
 
 //发送用户名和密码
