@@ -8,10 +8,18 @@ class CenterAction extends Action
 	public function index()
 	{   
 		//拒绝未登录访问
-		session_name('LOGIN');
-        session_start();
-        if(!$this->judgelog())
-            $this->redirect('Login/index');
+	if(!$this->judgelog())
+	{
+		$this->redirect("Login/index");
+	}
+    session_name('LOGIN');
+    session_start();
+	
+	if(!$this->judgelog())
+	{
+		$this->redirect("Login/index");
+	}
+	else{
 		$account=$_SESSION['account'];	
 		$person_model=new Model("Person");
 		$person_info=$person_model->where("account=$account")->find();
@@ -19,6 +27,8 @@ class CenterAction extends Action
 		$this->assign('account',$account);
 		$this->assign('name',$name);
 		$this->display();
+		}
+
 	}
 	//index的js脚本请求个人信息，message找到数据整理后返回json数据
 	public function message()

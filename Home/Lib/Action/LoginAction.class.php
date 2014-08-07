@@ -8,8 +8,50 @@ class LoginAction extends Action
 	//index为登录界面
 	public function index()
 	{
-		if(!$this->judgelog())
+
+
+		//未登录拒绝访问，除非有设置cookie保存
+		if(0==$this->judgelog())
 		{
+			//先检查是否存在cookie，如果存在则直接进入home
+			if(isset($_COOKIE['account'])&&isset($_COOKIE['password']))
+			{
+				$account=$_COOKIE['account'];
+				$password=$_COOKIE['password'];
+				$person_model=new Model("Person");
+				if($person_info=$person_model->where("account=$account")->find())
+				{
+					$password_base=$person_info['password'];
+					if(md5($password_base)==$password)
+					{
+						//进入之前先保存到session和数据库
+						$random=rand(0,100);
+						$random.=rand(0,100);
+						$random.=rand(0,100);
+						//用户账号、随机数同时存入数据库和SESSION中
+						$_SESSION['account']=$account;
+						$_SESSION['random']=$random;
+						unset($data);
+						$data['account']=$account;
+						$data['random']=$random;
+						$login_model=new Model("Login");
+						if($login_info=$login_model->where("account=$account")->find())
+						{
+							//直接覆盖
+							$login_model->where("account=$account")->save($data);
+						}
+						else{
+							//不存在则增加
+							$login_model->data($data)->add();
+						}
+						$this->redirect("Home/index");
+					}
+	
+				}
+
+			
+				
+			}
 			$this->display();
 		}
 		else
@@ -32,7 +74,16 @@ class LoginAction extends Action
 	    $account=$_POST['user_login_name'];
 	    $password=$_POST['user_login_pw'];
 		$person_model=new Model("Person");
-		if($person_info=$person_model->where("account=$account and password=$password")->find()) 
+		$flag=0;//验证不通过即为0
+		if($person_info=$person_model->where("account=$account")->find())
+		{
+			$password_base=$person_info['password'];
+			if(md5($password_base)==$password)
+			{
+				$flag=1;
+			}
+		}
+		if($flag==1) 
          { 
 			$random=rand(0,100);
 			$random.=rand(0,100);
@@ -53,7 +104,17 @@ class LoginAction extends Action
 				//不存在则增加
 				$login_model->data($data)->add();
 		   }
-		   $this->redirect("Home/index");
+
+			//判断是否保持登录状态
+			if($_POST['keep_login']=="keep")
+			{
+		   		setcookie("account",$account,time()+7*24*3600);//cookie时间设置为7天，一周时间
+				setcookie("password",$password,time()+7*24*3600);			
+				$this->redirect("Center/index");
+			}
+			else{	
+				$this->redirect("Home/index");
+			}
 	    }
 		else
 		  $this->redirect("Login/index");
@@ -70,6 +131,9 @@ class LoginAction extends Action
 			$login_model=new Model("Login");
 			$login_info=$login_model->where("account=$account")->delete();
 			session_unset();
+			//同时删除cookie
+			setcookie("account","",0);
+			setcookie("password","",0);
 		}
 		$this->redirect("Home/index");
 	}
@@ -89,7 +153,7 @@ class LoginAction extends Action
 		{
 			//Ob_end_flush();
 			header("Content-type:image/png");
-			$image=imagecreate(100,50);
+			$image=imagecreate(50,28);
 			$bg=imagecolorallocate($image,200,200,200);
 			$checknumber='';
 			for($i=0;$i<4;$i++)
@@ -97,7 +161,7 @@ class LoginAction extends Action
 				$index=rand(0,61);
 				$str=$arr_check[$index];
 				$checknumber.=$str;
-				imagestring($image,5,10+$i*20,20,$str,imagecolorallocate($image,rand(100,125),rand(100,125),0));
+				imagestring($image,5,3+$i*12,5,$str,imagecolorallocate($image,rand(100,125),rand(100,125),0));
 
 			}
 			$_SESSION['checknumber']=$checknumber;
@@ -124,23 +188,28 @@ class LoginAction extends Action
 		$judgelog=1;//已登录
 		session_name('LOGIN');
 		session_start();
+		//SESSION为空肯定未登录
 		if(empty($_SESSION['account'])||empty($_SESSION['random']))
 		{
 			$judgelog=0;
 		}
 		else
 		{
+			//SESSION不为空，但随机数验证不一致，表示在其他地方登录上次非正常退出，视为未登录
 			$account=$_SESSION['account'];
 			$random=$_SESSION['random'];
 			$login_model=new Model("Login");
-			$login_info=$login_model->where("account=$account and random=$random")->find();
-			if(!$login_info)
+			$login_info=$login_model->where("account=$account")->find();
+				var_dump($login_info);
+			if($login_info['random']!=$random)
 			{
 				//随机数不一样，覆盖掉			
 				$judgelog=0;		
 			}
 
 		}
+
+
 		return $judgelog;
 	}
 }
