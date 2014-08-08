@@ -52,7 +52,7 @@ table.yijibiao td.total_score{font-size:24px;color:white;text-align:center;}
 
 .perf_hr{height:1px;border:solid;clear:both;background:#79c0be;color:#79c0be;padding-right:5px;margin-right:5px;margin-top:10px;}
 
-div#detail_table h3,ol span,ul span{color:#018f89;}
+div#detail_table h3,ol span,ul span,table span{color:#018f89;}
 
 p.self-assessment{width:600px;word-wrap:break-word;}
 
@@ -76,3 +76,7 @@ div#pjbz p{margin-left:10px;margin-right:10px;}
 div#pjbz h3{font-weight:bold;}
 
 div#hdr{position: fixed; top:0px;tabindex: 0;}
+
+span.onclick{color:#018f89;cursor:pointer;}
+
+tr.ckwwcqk td{background:white;}
