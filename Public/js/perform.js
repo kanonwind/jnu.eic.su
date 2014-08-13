@@ -3221,7 +3221,7 @@ function ActiveTableButton()
 				+ strId + "\" value=\"" + arrTable[i] + "\">" + arrTable[i] + "</button>\n";
 	}
 	
-	strHTML += "<img id=\"zhibiao\" src=\"zhibiao2.png\" />"
+	strHTML += "<img id=\"zhibiao\" src=\""+imgURL+"zhibiao2.png\" />"
 	
 	GetObjById("control_group").innerHTML = strHTML;	
 	

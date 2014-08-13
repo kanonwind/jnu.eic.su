@@ -60,7 +60,7 @@ function get_news()
         var author="文章作者"+i;
         var abst="文章内容"+i+"文章内容"+"文章内容"+"文章内容"+"文章内容"+"文章内容"+"文章内容"+"文章内容"+"文章内容"+"文章内容";
         abst+=  "文章内容"+i+"文章内容"+"文章内容"+"文章内容"+"文章内容"+"文章内容"+"文章内容"+"文章内容"+"文章内容"+"文章内容";
-        var picpath="news_picture"+i+".jpg";
+        var picpath=imgURL+"news_picture"+i+".jpg";
         var obj=new news_info(title,author,abst,"#",picpath);
         news_texts[i]=obj;
     }
@@ -69,6 +69,7 @@ function get_news()
 
 function NewsInit()
 {
+	newsPicName ="news_picture";
 	search();
 	window.onfocus = function(){boolIsFocus=true; clearTimeout(Time); RotateNews();}
 	window.onblur= function(){boolIsFocus=false;}
@@ -89,7 +90,7 @@ function NewsInit()
 
     for(i = 0; i < (objs_schedule_news.childNodes.length-1)/2; ++i)
     {
-       MouseOverActive(i, "news_mouseover.png", "news_mouseout.png"); //处理鼠标放在圆圈上时的事件
+       MouseOverActive(i, imgURL+"news_mouseover.png", imgURL+"news_mouseout.png"); //处理鼠标放在圆圈上时的事件
     }
 
     ActiveNews(iIndexPic);//定位当前新闻对应的圆圈
@@ -117,7 +118,7 @@ function MouseOverActive(iActivePic, path_over, path_out)
 		
 		if(iPrePic < iActivePic)
 		{
-			var strPicPath = newsPicName + iActivePic + newsPicType;
+			var strPicPath = imgURL+newsPicName + iActivePic + newsPicType;
 			objPic1.src = strPicPath; 
 			
 			SlidesToRight();
@@ -125,7 +126,7 @@ function MouseOverActive(iActivePic, path_over, path_out)
 		
 		if(iPrePic > iActivePic)
 		{
-			var strPicPath = newsPicName + iActivePic + newsPicType;
+			var strPicPath = imgURL+newsPicName + iActivePic + newsPicType;
 			objPic3.src = strPicPath;
 			SlidesToLeft();
 		}
@@ -139,8 +140,8 @@ function MouseOverActive(iActivePic, path_over, path_out)
 
 function MouseOverSlide(object, path_over, path_out)
 {
-    object.onmouseover = function(){this.src = path_over; return false;}
-    object.onmouseout = function(){this.src = path_out; return false;}
+    object.onmouseover = function(){this.src = imgURL+path_over; return false;}
+    object.onmouseout = function(){this.src = imgURL+path_out; return false;}
 
 
 }
@@ -148,7 +149,7 @@ function MouseOverSlide(object, path_over, path_out)
 //显示当前那个点
 function ActiveNews(iActivePic)
 {
-    objs_schedule_news.childNodes[iActivePic*2+1].src  = "news_mouseover.png";
+    objs_schedule_news.childNodes[iActivePic*2+1].src  = imgURL+"news_mouseover.png";
     objs_schedule_news.childNodes[iActivePic*2+1].id = "Active";
 	
 	iIndexPic = iActivePic;
@@ -164,7 +165,7 @@ function ActiveNews(iActivePic)
         {
 			iPrePic = i;
             objs_schedule_news.childNodes[i*2+1].id = "i";
-            objs_schedule_news.childNodes[i*2+1].src = "news_mouseout.png";
+            objs_schedule_news.childNodes[i*2+1].src = imgURL+"news_mouseout.png";
             break;
         }
     }
@@ -180,7 +181,7 @@ function PreNewsPicture()
     }
     iIndexPic--;
 	
-	var strPicPath = newsPicName + iIndexPic + newsPicType;
+	var strPicPath = imgURL+newsPicName + iIndexPic + newsPicType;
 	objPic3.src = strPicPath; 
 
     CurrentNewsPicture(iPrePic, iIndexPic);
@@ -197,7 +198,7 @@ function NextNewsPicture()
         iIndexPic = 0;
     }
 
-	var strPicPath = newsPicName + iIndexPic + newsPicType;
+	var strPicPath = imgURL+newsPicName + iIndexPic + newsPicType;
 	objPic1.src = strPicPath; 
 	
 	CurrentNewsPicture(iPrePic, iIndexPic);

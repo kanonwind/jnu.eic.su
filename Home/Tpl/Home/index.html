@@ -1,35 +1,12 @@
-<?php
-/*
-函数ChangeUrl($filename)
-功能：获取所需图片文件的URL，若图片不存在，返回#
-参数：图片文件名，如logo_big.jpg，注意不是路径
-返回值：<img/>所需的路径src
-示例：
-<!-- <img id="big_logo" src="__PUBLIC__/image/logo_big.jpg" width="440px" height="440px" alt="暨南大学电气信息学院团委学生会的标准徽标" /> -->
-<img id="big_logo" src="<?php ChangeUrl("logo_big.jpg");?>" width="440px" height="440px" alt="暨南大学电气信息学院团委学生会的标准徽标" />
-*/
-function ChangeUrl($filename)
-{
-	$sto=new SaeStorage();
-	$domain="upload";
-	if($sto->fileExists($domain,"image/".$filename))
-	{
-
-		$url=$sto->getUrl($domain,"image/".$filename);
-		if(IS_SAE)
+	<?php 
+		$sto=new SaeStorage();
+		$domain="upload";
+		$imgURL=$sto->getUrl($domain,"image/");
+		if(!IS_SAE)
 		{
-			echo $url;
+			$imgURL="/".$imgURL;
 		}
-		else{
-			echo "/".$url;
-		}
-		
-	}
-	else{
-		echo "#";
-	}
-}
-?>
+	?>
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
@@ -43,14 +20,17 @@ function ChangeUrl($filename)
 	<meta name="keywords" content="暨大 暨南大学 电气院 电气信息学院 团委学生会 暨南大学电气信息学院团委学生会 团委学生会首页" /><!--关键词-->
 	<meta name="keywords" content="Electrcal and Information College of Jinan University Youth League Committee Student Union" />
 	
-	<!-- <link rel="shortcut icon" href="__PUBLIC__/image/logo.jpg" /> -->
-	<link rel="shortcut icon" href="<?php ChangeUrl("logo.jpg");?>" />
+	
+	<link rel="shortcut icon" href="<?php echo $imgURL;?>logo.jpg" />
 	<link href="__PUBLIC__/css/stdindex_footer.css" 	type="text/css" 	rel="stylesheet" />
 	<link href="__PUBLIC__/css/stdindex_title.css" 	type="text/css" 	rel="stylesheet" />
 	<link href="__PUBLIC__/css/home.css"				type="text/css"		rel="stylesheet" />
 	<script type="text/javascript" src="__PUBLIC__/js/news_javascript.js"></script>
 	<script type="text/javascript" src="__PUBLIC__/js/searchbutton.js"></script>
-	
+
+	<script type="text/javascript">
+		var imgURL="<?php echo $imgURL;?>";
+	</script>
 	<title>暨南大学电气信息学院团委学生会</title>
 	</head>
 	<body>
@@ -59,8 +39,8 @@ function ChangeUrl($filename)
 				<div id="hdr_top">
 					<!--表头徽标-->
 					<div id="logo">
-						<!-- <img src="__PUBLIC__/image/std_title_logo.png" width="54px" height="54px" alt="团委学生会的徽标"/> -->
-						<img src="<?php ChangeUrl("std_title_logo.png");?>" width="54px" height="54px" alt="团委学生会的徽标"/>
+						
+						<img src="<?php echo $imgURL;?>std_title_logo.png" width="54px" height="54px" alt="团委学生会的徽标"/>
 						
 					</div>
 					<!--标题-->
@@ -87,8 +67,8 @@ function ChangeUrl($filename)
 						<div id="search_bar">
 							<input type="text" name="q" id="query" title="站内搜索" />
 							<button type="submit" name="qsub" id="searchsubmit" title="搜索" value="" >
-							<!-- <img src="__PUBLIC__/image/site_search.png" alt="搜索按钮徽标" /> -->
-							<img src="<?php ChangeUrl("site_search.png");?>" alt="搜索按钮徽标" />
+							<img src="<?php echo $imgURL;?>site_search.png" alt="搜索按钮徽标" />
+							
 							</button>
 						</div>
 					
@@ -139,31 +119,31 @@ function ChangeUrl($filename)
 		<div id="real_body">
 			<div id="slide_news">
 				<div id="main_news_div">
-					<a href="#"><img src="<?php ChangeUrl("news_picture7.jpg");?>" id="pic1" alt="newsPic"/></a>
-					<a href="#"><img src="<?php ChangeUrl("news_picture0.jpg");?>" id="pic2" alt="newsPic"/></a>
-					<a href="#"><img src="<?php ChangeUrl("news_picture1.jpg");?>" id="pic3" alt="newsPic"/></a>
+					<a href="#"><img src="<?php echo $imgURL;?>news_picture7.jpg" id="pic1" alt="newsPic"/></a>
+					<a href="#"><img src="<?php echo $imgURL;?>news_picture0.jpg" id="pic2" alt="newsPic"/></a>
+					<a href="#"><img src="<?php echo $imgURL;?>news_picture1.jpg" id="pic3" alt="newsPic"/></a>
 					
 					<div id="news">
 						<p id="news_text"></p>
 					</div>
 					
 					<div class="news_slide_button" id="button">
-						<img id="pre_news" src="<?php ChangeUrl("pre_mouseout.png");?>" alt="pre_mouseout" />
-						<img id="next_news" src="<?php ChangeUrl("next_mouseout.png");?>" alt="next_mouseout" />
+						<img id="pre_news" src="<?php echo $imgURL;?>pre_mouseout.png" alt="pre_mouseout" />
+						<img id="next_news" src="<?php echo $imgURL;?>next_mouseout.png" alt="next_mouseout" />
 					</div>
 					
 				</div>
 				
 				<div class="s-mod-hotnews-newstitle-mask" id="mask"></div>
 				<div id="news_active">
-					<img id="Active" src="<?php ChangeUrl("news_mouseout.png");?>" alt="point_buttom" />
-					<img id="pic1" src="<?php ChangeUrl("news_mouseout.png");?>" alt="point_buttom" />
-					<img id="pic2" src="<?php ChangeUrl("news_mouseout.png");?>" alt="point_buttom" />
-					<img id="pic3" src="<?php ChangeUrl("news_mouseout.png");?>" alt="point_buttom" />
-					<img id="pic4" src="<?php ChangeUrl("news_mouseout.png");?>" alt="point_buttom" />
-					<img id="pic5" src="<?php ChangeUrl("news_mouseout.png");?>" alt="point_buttom" />
-					<img id="pic6" src="<?php ChangeUrl("news_mouseout.png");?>" alt="point_buttom" />
-					<img id="pic7" src="<?php ChangeUrl("news_mouseout.png");?>" alt="point_buttom" />
+					<img id="Active" src="<?php echo $imgURL;?>news_mouseout.png" alt="point_buttom" />
+					<img id="pic1" src="<?php echo $imgURL;?>news_mouseout.png" alt="point_buttom" />
+					<img id="pic2" src="<?php echo $imgURL;?>news_mouseout.png" alt="point_buttom" />
+					<img id="pic3" src="<?php echo $imgURL;?>news_mouseout.png" alt="point_buttom" />
+					<img id="pic4" src="<?php echo $imgURL;?>news_mouseout.png" alt="point_buttom" />
+					<img id="pic5" src="<?php echo $imgURL;?>news_mouseout.png" alt="point_buttom" />
+					<img id="pic6" src="<?php echo $imgURL;?>news_mouseout.png" alt="point_buttom" />
+					<img id="pic7" src="<?php echo $imgURL;?>news_mouseout.png" alt="point_buttom" />
 				</div>
 			</div>
 			<div id="main_stu_sys" class="main_right_top">
@@ -172,7 +152,7 @@ function ChangeUrl($filename)
 					<div id="performance_system">
 						<div class="center_the_logo">
 							<a href="#" class="sys_logo_img" id="logo_of_per_sys">
-								<img src="<?php ChangeUrl("performance_system_logo.png");?>" width="50px" height="50px" alt="绩效考核系统的徽标" />
+								<img src="<?php echo $imgURL;?>performance_system_logo.png" width="50px" height="50px" alt="绩效考核系统的徽标" />
 							</a>
 						</div>
 						<p class="sys_alt">
@@ -182,7 +162,7 @@ function ChangeUrl($filename)
 					<div id="allocate_system">
 						<div class="center_the_logo">
 							<a href="#" class="sys_logo_img" id="logo_of_alloc_sys">
-								<img src="<?php ChangeUrl("allocate_system_logo.png");?>" width="50px" height="50px" alt="人员调配系统的徽标" />
+								<img src="<?php echo $imgURL;?>allocate_system_logo.png" width="50px" height="50px" alt="人员调配系统的徽标" />
 							</a>
 						</div>
 						<p class="sys_alt">
@@ -193,7 +173,7 @@ function ChangeUrl($filename)
 					<div id="secretariat">
 						<div class="center_the_logo">
 							<a href="#" class="sys_logo_img" id="logo_of_secr_sys">
-								<img src="<?php ChangeUrl("secretariat_logo.png");?>" width="50px" height="50px" alt="秘书处的徽标" />
+								<img src="<?php echo $imgURL;?>secretariat_logo.png" width="50px" height="50px" alt="秘书处的徽标" />
 							</a>
 						</div>
 						<p class="sys_alt">
@@ -228,7 +208,7 @@ function ChangeUrl($filename)
 						<a href="#" class="hot_a">
 							KSC程序设计大赛完满落幕
 						</a>
-						<img src="<?php ChangeUrl("hot_activity.png");?>" width="36px" height="20px" alt="热点活动" />
+						<img src="<?php echo $imgURL;?>hot_activity.png" width="36px" height="20px" alt="热点活动" />
 					</div>
 					<!--这里是取学生工作的数据库中最新的文章-->
 						
@@ -236,7 +216,7 @@ function ChangeUrl($filename)
 						<a href="#" class="hot_a">
 							学长交流会，师生趣味活动
 						</a>
-						<img src="<?php ChangeUrl("hot_stuwork.png");?>" width="59px" height="20px" alt="热点学生工作" />
+						<img src="<?php echo $imgURL;?>hot_stuwork.png" width="59px" height="20px" alt="热点学生工作" />
 					</div>
 				</div>
 				
@@ -280,11 +260,11 @@ function ChangeUrl($filename)
 						</p>
 					</div>
 					<div id="coming_activity_main_post">
-						<img src="<?php ChangeUrl("coming_activity_main_post.png");?>" width="520px" height="380px" alt="活动主海报"/>		
+						<img src="<?php echo $imgURL;?>coming_activity_main_post.png" width="520px" height="380px" alt="活动主海报"/>		
 					</div>
 					<div id="coming_activity_small_post">
 						<div id="small_post_img">
-							<img src="<?php ChangeUrl("coming_activity_small_psot.png");?>" width="160px" height="180px" alt="活动副海报"/>
+							<img src="<?php echo $imgURL;?>coming_activity_small_psot.png" width="160px" height="180px" alt="活动副海报"/>
 						</div>
 						<p id="activity_slogan">
 							挡我者挂高数

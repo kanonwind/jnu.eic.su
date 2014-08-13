@@ -1,42 +1,19 @@
-<?php
-/*
-函数ChangeUrl($filename)
-功能：获取所需图片文件的URL，若图片不存在，返回#
-参数：图片文件名，如logo_big.jpg，注意不是路径
-返回值：<img/>所需的路径src
-示例：
-<!-- <img id="big_logo" src="__PUBLIC__/image/logo_big.jpg" width="440px" height="440px" alt="暨南大学电气信息学院团委学生会的标准徽标" /> -->
-<img id="big_logo" src="<?php ChangeUrl("logo_big.jpg");?>" width="440px" height="440px" alt="暨南大学电气信息学院团委学生会的标准徽标" />
-*/
-function ChangeUrl($filename)
-{
-	$sto=new SaeStorage();
-	$domain="upload";
-	if($sto->fileExists($domain,"image/".$filename))
-	{
-
-		$url=$sto->getUrl($domain,"image/".$filename);
-		if(IS_SAE)
+	<?php 
+		$sto=new SaeStorage();
+		$domain="upload";
+		$imgURL=$sto->getUrl($domain,"image/");
+		if(!IS_SAE)
 		{
-			echo $url;
+			$imgURL="/".$imgURL;
 		}
-		else{
-			echo "/".$url;
-		}
-		
-	}
-	else{
-		echo "#";
-	}
-}
-?>
+	?>
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="EN" xml:lang="EN">
 	<head>
 	<meta http-equiv="content-type" content="text/html" charset="UTF-8"/>
-	<link rel="shortcut icon" href="<?php ChangeUrl("logo.jpg");?>" />
+	<link rel="shortcut icon" href="<?php echo $imgURL;?>logo.jpg" />
 	
 	<link href="__PUBLIC__/css/stdindex_footer.css" 	type="text/css" 	rel="stylesheet" />
 	<link href="__PUBLIC__/css/stdindex_title.css" 	type="text/css" 	rel="stylesheet" />
@@ -48,7 +25,7 @@ function ChangeUrl($filename)
         var APP = "__APP__";
         var ROOT = "__ROOT__";
 		var PUBLIC="__PUBLIC__";
-
+		var imgURL="<?php echo $imgURL;?>";
 
     </script>
 	<title>暨南大学电气信息学院团委学生会</title>
@@ -59,7 +36,7 @@ function ChangeUrl($filename)
 				<div id="hdr_top">
 					<!--表头徽标-->
 					<div id="logo">
-						<img src="<?php ChangeUrl("std_title_logo.png");?>" width="54px" height="54px" alt="团委学生会的徽标"/>
+						<img src="<?php echo $imgURL;?>std_title_logo.png" width="54px" height="54px" alt="团委学生会的徽标"/>
 					</div>
 					<!--标题-->
 					<div id="title">
@@ -83,7 +60,7 @@ function ChangeUrl($filename)
 						<!--站内搜索框，样式和代码均未完成-->
 						<div tabindex="0" id="search_bar">
 							<input type="text" name="q" id="query" title="站内搜索" />
-							<button type="submit" name="qsub" id="searchsubmit" title="搜索" value="" ><img src="<?php ChangeUrl("site_search.png");?>" alt="搜索按钮徽标" /></button>
+							<button type="submit" name="qsub" id="searchsubmit" title="搜索" value="" ><img src="<?php echo $imgURL;?>site_search.png" alt="搜索按钮徽标" /></button>
 						</div>
 
 						
@@ -140,7 +117,7 @@ function ChangeUrl($filename)
 					<p>系统阶段：5月考核进行中</p>
 				</div>
 				<div>
-					<img src="<?php ChangeUrl("performance_system_logo_big.png");?>" />
+					<img src="<?php echo $imgURL;?>performance_system_logo_big.png" />
 				</div>
 			</div>
 			
@@ -188,7 +165,7 @@ function ChangeUrl($filename)
 					主席团反馈表
 				</button>
 				-->
-				<img id="zhibiao" src="<?php ChangeUrl("zhibiao2.png");?>" />
+				<img id="zhibiao" src="<?php echo $imgURL;?>zhibiao2.png" />
 			</div>
 
             <div id="detail_table">
