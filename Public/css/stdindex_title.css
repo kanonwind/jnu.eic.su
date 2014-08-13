@@ -1,97 +1,51 @@
+/*author:dengzuoheng*/
 
-body
-{
+/*body样式*/
+body{margin-left:auto;margin-right:auto;margin-bottom:auto;width:100%;padding: 0;font-family:"Microsoft YaHei UI","Microsoft YaHei","微软雅黑","宋体";}
 
-	margin-left:auto;
-	margin-right:auto;
-	margin-bottom:auto;
-	width:100%;
-	padding: 0;
+/*div样式*/
+div#hdr_top,div#real_body,div#hdr_top,div#guide{width:920px;}
 
-	
-}
+div#real_body{margin-top:160px;margin-left:auto;margin-right:auto;}
 
+div#hdr{width:100%;height:140px;position:fixed;margin: 0px;padding:0px;top:0px;left:0px;z-index:32767;}
 
-div#real_body
-{
-	width:920px;
-	margin-top:160px;
-	margin-left:auto;
-	margin-right:auto;
-}
+div#hdr_main{width:100%;height:110px;background:url(http://jnueicsu-upload.stor.sinaapp.com/image/bgimg_title1.png) repeat;top:0px;left:0px;margin: 0px;position:absolute;}
 
-	
+div#hdr_guide{width:100%;height:30px;background:url(http://jnueicsu-upload.stor.sinaapp.com/image/bgimg_title2.png) repeat;top:110px;left:0px;margin:0px;position:absolute;padding:0px;}
 
-div#hdr
-{
-	width:100%;
-	height:140px;
-	position:fixed;
-	margin: 0px;
-	padding:0px;
-	top:0px;
-	left:0px;
-	z-index:32767;
+div#hdr_top{margin:auto;}
 
-}
-
-div#hdr_main
-{
-	width:100%;
-	height:110px;
-	background:url(./image/bgimg_title1.png) repeat;
-	top:0px;
-	left:0px;
-	margin: 0px;
-	position:absolute;
-	
-}
-
-div#hdr_guide
-{
-	width:100%;
-	height:30px;
-	background:url(./image/bgimg_title2.png) repeat;
-	top:110px;
-	left:0px;
-	margin:0px;
-	position:absolute;
-	padding:0px;
-	
-
-}
-
-div#hdr_top{width:920px;margin:auto;}
-
-div#guide{width:920px;margin:0 auto;}
+div#guide{margin:0 auto;}
 
 div#logo{float:left;padding-top:20px;padding-right:10px;}
 
 div#title{float:left;padding-top:10px;}
 
-
-
-p#chs_title{font-family:幼圆,"Microsoft YaHei UI","Microsoft YaHei","微软雅黑","宋体";font-size:28px;color:#B0C43A;line-height:0;}
-
-p#eng_title
-{
-	font-family:幼圆,"Microsoft YaHei UI","Microsoft YaHei","Arial","微软雅黑","宋体";
-	font-size:12px;
-	color:#B0C43A;
-	line-height:0;
-}
-
 div#help_nav{float:left;}
 
+div#search_and_info{width:230px;float:right;height:50px;padding-top:30px;margin-top:10px;}
 
-a.head_help_nav{font-family:"Microsoft YaHei UI","Microsoft YaHei","微软雅黑","宋体";font-size:14px;text-decoration:none;padding-right:2em;}
+div#search_bar{width:220px;height:25px;background-color:white;float:right;margin:0px;padding:0px;border:none;background:white;}
+
+div#login_info{float:right;font-size:14px;margin-top:20px;}
+
+/*p样式*/
+p#chs_title,p#eng_title{font-family:宋体,"Microsoft YaHei UI Light","Microsoft YaHei UI","Microsoft YaHei","微软雅黑","宋体";color:#B0C43A;font-weight:normal;}
+
+p#chs_title{font-size:28px;line-height:0;}
+
+p#eng_title{font-size:12px;line-height:0;}
+
+/*连接样式*/
+a.head_help_nav{font-size:14px;text-decoration:none;padding-right:2em;}
 a.head_help_nav:active{color:#FFFFFF;}
 a.head_help_nav:focus{color:#FFFFFF;text-decoration:underline;}
 a.head_help_nav:link{color:#CCCCCC;}
 a.head_help_nav:visited{color:#CCCCCC;}
 a.head_help_nav:hover{color:#FFFFFF;text-decoration:underline;}
 
-a.main_nav{font-family:"Microsoft YaHei UI","Microsoft YaHei","微软雅黑","宋体";font-size:16px;text-decoration:none;width:30px;}
+a.main_nav{font-size:16px;text-decoration:none;width:30px;}
 
 a.main_nav:active{color:#FFFFFF;}
 a.main_nav:focus{color:#FFFFFF;}
@@ -103,18 +57,6 @@ a#a_home:link{color:#B0C43A;}
 a#a_home:hover{color:#FFFF00;}
 a#a_home:visited{color:#B0C43A;}
 
-table#main_guide{padding-left:64px;}
-
-table#main_guide td{margin:0px;width:9em;}
-
-div#search_and_info{width:230px;float:right;height:50px;padding-top:30px;margin-top:10px;}
-
-div#search_bar{width:220px;height:24px;background-color:white;float:right;}
-
-input#query{width:185px;height:23px;border:none;margin:0px;padding:0px;font-family:"Microsoft YaHei UI","Microsoft YaHei","微软雅黑","宋体";font-size:12px;}
-button#searchsubmit{width:23px;height:23px;float:right;border:none;margin:0px;padding:0px;}
-button#searchsubmit img{width:23px;height:23px;}
-div#login_info{float:right;font-size:14px;font-family:"Microsoft YaHei UI","Microsoft YaHei","微软雅黑","宋体";margin-top:20px;}
 a.user_info{text-decoration:none;}
 
 a.user_info:active{color:#BBBBBB;}
@@ -123,7 +65,17 @@ a.user_info:visited{color:#BBBBBB;}
 a.user_info:link{color:#BBBBBB;}
 a.user_info:hover{color:#FFFFFF;}
 
+/*table样式*/
+table#main_guide{padding-left:64px;}
 
+table#main_guide td{margin:0px;width:9em;}
 
+/*搜索按钮样式*/
+button#searchsubmit{float:right;border:none;margin:0px;padding:0px;}
+
+button#searchsubmit img,button#searchsubmit{width:25px;height:25px;}
+
+/*输入表单样式*/
+input#query{width:186px;height:22px;border:none;margin:0px;font-size:12px;background:white;}
 
 

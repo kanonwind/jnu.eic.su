@@ -16,7 +16,7 @@ div#footer_bg
 	top:0px;
 	left:0px;
 	position:relative;
-	background:url(footer_main.png) repeat;
+	background:url(http://jnueicsu-upload.stor.sinaapp.com/image/footer_main.png) repeat;
 	
 }
 
@@ -25,7 +25,7 @@ div#footer_hr1
 
 	width:100%;
 	height:24px;
-	background:url(footer_hr1.png) repeat;
+	background:url(http://jnueicsu-upload.stor.sinaapp.com/image/footer_hr1.png) repeat;
 	left:0px;
 	top:0px;
 }
@@ -35,7 +35,7 @@ div#footer_hr2
 
 	width:100%;
 	height:10px;
-	background:url(footer_hr2.png) repeat;
+	background:url(http://jnueicsu-upload.stor.sinaapp.com/image/footer_hr2.png) repeat;
 	left:0px;
 	top:24px;
 }
