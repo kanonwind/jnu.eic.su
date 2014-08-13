@@ -1,3 +1,28 @@
+<?php
+/*
+函数ChangeUrl($filename)
+功能：获取所需图片文件的URL，若图片不存在，返回#
+参数：图片文件名，如logo_big.jpg，注意不是路径
+返回值：<img/>所需的路径src
+示例：
+<!-- <img id="big_logo" src="__PUBLIC__/image/logo_big.jpg" width="440px" height="440px" alt="暨南大学电气信息学院团委学生会的标准徽标" /> -->
+<img id="big_logo" src="<?php ChangeUrl("logo_big.jpg");?>" width="440px" height="440px" alt="暨南大学电气信息学院团委学生会的标准徽标" />
+*/
+function ChangeUrl($filename)
+{
+	$sto=new SaeStorage();
+	$domain="Public";
+	if($sto->fileExists($domain,"upload/image/".$filename))
+	{
+		$url="/";
+		$url.=$sto->getUrl($domain,"upload/image/".$filename);
+		echo $url;
+	}
+	else{
+		echo "#";
+	}
+}
+?>
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
@@ -8,7 +33,7 @@
 	<meta name="author" content="ZuohengDeng" /><!--作者-->
 	<meta name="copyright" content="jnu.ksc" /><!--声明版权-->	
 	
-	<link rel="shortcut icon" href="__PUBLIC__/image/logo.jpg" />
+	<link rel="shortcut icon" href="<?php ChangeUrl("logo.jpg");?>" />
 	
 	<link href="__PUBLIC__/css/stdindex_footer.css" 	type="text/css" 	rel="stylesheet" />
 	<link href="__PUBLIC__/css/stdindex_title.css" 	type="text/css" 	rel="stylesheet" />
@@ -52,7 +77,7 @@ function getjson()
 				<div id="hdr_top">
 					<!--表头徽标-->
 					<div id="logo">
-						<img src="__PUBLIC__/image/std_title_logo.png" width="54px" height="54px" alt="团委学生会的徽标"/>
+						<img src="<?php ChangeUrl("std_title_logo.png");?>" width="54px" height="54px" alt="团委学生会的徽标"/>
 					</div>
 					<!--标题-->
 					<div id="title">

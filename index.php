@@ -6,6 +6,8 @@
   //3、开启调试模式
   define('APP_DEBUG',true);
   //4、引入核心文件，区分大小写
-  //require './ThinkPHP/ThinkPHP.php';
-  require './ThinkPHP/Extend/Engine/Sae.php';
+  define('ENGINE_NAME','SAE');
+  require './ThinkPHP/ThinkPHP.php';
+/*   define("HOME_PATH","./ThinkPHP");
+  require HOME_PATH.'Extend/Engine/Sae.php'; */
 ?>
