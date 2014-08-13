@@ -11,12 +11,19 @@
 function ChangeUrl($filename)
 {
 	$sto=new SaeStorage();
-	$domain="Public";
-	if($sto->fileExists($domain,"upload/image/".$filename))
+	$domain="upload";
+	if($sto->fileExists($domain,"image/".$filename))
 	{
-		$url="/";
-		$url.=$sto->getUrl($domain,"upload/image/".$filename);
-		echo $url;
+
+		$url=$sto->getUrl($domain,"image/".$filename);
+		if(IS_SAE)
+		{
+			echo $url;
+		}
+		else{
+			echo "/".$url;
+		}
+		
 	}
 	else{
 		echo "#";
