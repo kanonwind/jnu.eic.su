@@ -55,19 +55,21 @@ button
 	width:80px;
 	height:30px;
 	font-size:14px;
+    outline:none;
 }
 
 form#article_form tr{width:800px;}
 
 form#article_form td{min-width:100px;padding:0px;}
 
-form#article_form input{width:810px;}
+form#article_form input{width:810px;outline:none;}
 
 button.publish_center_button{cursor:pointer;height:30px;width:200px;border:none;margin:0px;padding:0px;font-size:20px;color:white;}
 
 button#articles,button#announcement,button#coming_soon{background:#888888;}
 
-button#artcle_type_online,button#artcle_type_upload{border:none;width:100px;background:#444444;color:white;}
+button#artcle_type_online,button#artcle_type_upload,button#submitbutton,button#cancel{border:none;width:100px;background:#444444;color:white;}
 
-form#article_form input#uploaded_file{border:solid 1px #888888;height:120%;width:300px;}
+form#article_form input#uploaded_file{border:solid 1px #888888;height:120%;width:300px;margin-left:62px;}
 
+button#submitbutton,button#cancel{margin-top:30px;}
