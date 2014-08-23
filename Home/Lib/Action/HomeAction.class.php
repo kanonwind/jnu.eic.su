@@ -34,6 +34,30 @@ class HomeAction extends Action
 	}
 	$this->display();
   }
+  //AJAX请求新闻数据
+  public function newsData()
+  {
+	//带有图片URL的新闻方可
+	$news_model=new Model("News");
+	$news_info=$news_model->where("url!='#'")->select();
+	//有8条新闻
+	if(count($news_info)>7)
+	{
+		for($i=0;$i<8;$i++)
+		{
+			$arr[]=Array(
+				'title'=>$news_info[$i]['title'],
+				'author'=>$news_info[$i]['author'],
+				'abst'=>$news_info[$i]['keyword'],
+				'picpath'=>$news_info[$i]['url'],
+			);
+		}
+	}
+	else{
+		//没有8条新闻
+	}
+	echo $this->_encode($arr);
+  }
   
  	//每个需要用到判断用户是否登录的地方，都要调用这个方法，每个控制器都有相同的一个
 	public function judgelog()
@@ -60,5 +84,25 @@ class HomeAction extends Action
 		}
 		return $judgelog;
 	}
+  //调用—_encode()函数，将数组进行编码转哈
+   public  function _encode($arr)
+  {
+    $na = array();
+    foreach ( $arr as $k => $value ) {  
+      $na[$this->_urlencode($k)] = $this->_urlencode ($value);  
+    }
+    //return addcslashes(urldecode(json_encode($na)),"\\r");
+	return urldecode(json_encode($na));
+  }
+   public function _urlencode($elem)
+  {
+    if(is_array($elem)){
+    foreach($elem as $k=>$v){
+      $na[$this->_urlencode($k)] = $this->_urlencode($v);
+    }
+    return $na;
+  }
+  return urlencode($elem);
+  }
 }
 ?>

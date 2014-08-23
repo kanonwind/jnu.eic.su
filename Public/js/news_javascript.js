@@ -54,16 +54,33 @@ function news_info(title,author,abst,newslink,newsPic)
 //获取新闻内容，news_texts数组的初始化
 function get_news()
 {
+	//请求数据
+		var newsData;
+	    $.ajax({
+		url:APP+"/Home/newsData",//请求用户类型
+		data:{},
+		async:false,
+		dataType:"json",
+		type:"POST",
+		success:function(result){newsData=result;}
+		});			
+		//alert(newsImgURL+newsData[0]['picpath']);
     for(var i=0;i<8;i++)
     {
-        var title="新闻标题"+i;
+/*         var title="新闻标题aaaaa"+i;
         var author="文章作者"+i;
         var abst="文章内容"+i+"文章内容"+"文章内容"+"文章内容"+"文章内容"+"文章内容"+"文章内容"+"文章内容"+"文章内容"+"文章内容";
         abst+=  "文章内容"+i+"文章内容"+"文章内容"+"文章内容"+"文章内容"+"文章内容"+"文章内容"+"文章内容"+"文章内容"+"文章内容";
-        var picpath=imgURL+"news_picture"+i+".jpg";
+        var picpath=imgURL+"news_picture"+i+".jpg"; */
+		var title=newsData[i]['title'];
+		var author=newsData[i]['author'];
+		var abst=newsData[i]['abst'];
+		var picpath=newsData[i]['picpath'];
         var obj=new news_info(title,author,abst,"#",picpath);
         news_texts[i]=obj;
     }
+	
+	alert(news_texts[0].newsPic);
 }
 
 
@@ -118,7 +135,7 @@ function MouseOverActive(iActivePic, path_over, path_out)
 		
 		if(iPrePic < iActivePic)
 		{
-			var strPicPath = imgURL+newsPicName + iActivePic + newsPicType;
+			var strPicPath = newsImgURL+newsPicName + iActivePic + newsPicType;
 			objPic1.src = strPicPath; 
 			
 			SlidesToRight();
@@ -126,7 +143,7 @@ function MouseOverActive(iActivePic, path_over, path_out)
 		
 		if(iPrePic > iActivePic)
 		{
-			var strPicPath = imgURL+newsPicName + iActivePic + newsPicType;
+			var strPicPath = newsImgURL+newsPicName + iActivePic + newsPicType;
 			objPic3.src = strPicPath;
 			SlidesToLeft();
 		}
@@ -181,7 +198,7 @@ function PreNewsPicture()
     }
     iIndexPic--;
 	
-	var strPicPath = imgURL+newsPicName + iIndexPic + newsPicType;
+	var strPicPath = newsImgURL+newsPicName + iIndexPic + newsPicType;
 	objPic3.src = strPicPath; 
 
     CurrentNewsPicture(iPrePic, iIndexPic);
@@ -197,8 +214,9 @@ function NextNewsPicture()
     {
         iIndexPic = 0;
     }
-
-	var strPicPath = imgURL+newsPicName + iIndexPic + newsPicType;
+	//alert(iIndexPic);
+	//var strPicPath = newsImgURL+newsPicName + iIndexPic + newsPicType;
+	var strPicPath=newsImgURL+news_texts[iIndexPic].newsPic;
 	objPic1.src = strPicPath; 
 	
 	CurrentNewsPicture(iPrePic, iIndexPic);

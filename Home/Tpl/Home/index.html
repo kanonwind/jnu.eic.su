@@ -2,9 +2,11 @@
 		$sto=new SaeStorage();
 		$domain="upload";
 		$imgURL=$sto->getUrl($domain,"image/");
+		$newsImgURL=$sto->getUrl($domain,"newsImage/");
 		if(!IS_SAE)
 		{
 			$imgURL="/".$imgURL;
+			$newsImgURL="/".$newsImgURL;
 		}
 	?>
 <?xml version="1.0" encoding="UTF-8"?>
@@ -26,10 +28,13 @@
 	<link href="__PUBLIC__/css/stdindex_title.css" 	type="text/css" 	rel="stylesheet" />
 	<link href="__PUBLIC__/css/home.css"				type="text/css"		rel="stylesheet" />
 	<script type="text/javascript" src="__PUBLIC__/js/news_javascript.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
 	<script type="text/javascript" src="__PUBLIC__/js/searchbutton.js"></script>
 
 	<script type="text/javascript">
 		var imgURL="<?php echo $imgURL;?>";
+		var newsImgURL="<?php echo $newsImgURL;?>";
+		var APP="__APP__";
 	</script>
 	<title>暨南大学电气信息学院团委学生会</title>
 	</head>

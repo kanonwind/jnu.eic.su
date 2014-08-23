@@ -6,8 +6,8 @@ return array(
     'URL_HTML_SUFFIX'=>'.html',
 	'DB_TYPE'=>'mysql',   //设置数据库类型
 	'DB_PREFIX'=>'tbl_',  //设置表前缀
-	//SAE上测试用下面配置
-/* 	'DB_HOST'=>'SAE_MYSQL_HOST_M',//设置主机
+/* 	//SAE上测试用下面配置
+	'DB_HOST'=>'SAE_MYSQL_HOST_M',//设置主机
 	'DB_NAME'=>'SAE_MYSQL_DB',//设置数据库名
 	'DB_USER'=>'SAE_MYSQL_USER',    //设置用户名
 	'DB_PWD'=>'SAE_MYSQL_PASS',        //设置密码
