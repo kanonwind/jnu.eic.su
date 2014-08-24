@@ -1274,6 +1274,7 @@ delete from tbl_yxchxz;
 
 
 新闻模块
+新闻，学生工作，活动，现行制度，公告，即将举办的活动
 在页面distribution.html的基础上，建立数据库表tbl_news
 tbl_news
 {

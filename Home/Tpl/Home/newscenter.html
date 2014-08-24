@@ -1,3 +1,12 @@
+	<?php 
+		$sto=new SaeStorage();
+		$domain="upload";
+		$imgURL=$sto->getUrl($domain,"image/");
+		if(!IS_SAE)
+		{
+			$imgURL="/".$imgURL;
+		}
+	?>
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
@@ -11,11 +20,11 @@
 	<meta name="keywords" content="新闻中心 暨大 暨南大学 电气院 电气信息学院 团委学生会 暨南大学电气信息学院团委学生会 团委学生会新闻中心" /><!--关键词-->
 	<meta name="keywords" content="Electrcal and Information College of Jinan University Youth League Committee Student Union" />
 	
-	<link rel="shortcut icon" href="logo.jpg" />
+	<link rel="shortcut icon" href="<?php echo $imgURL; ?>logo.jpg" />
 	
-	<link href="stdindex_footer.css" 	type="text/css" 	rel="stylesheet" />
-	<link href="stdindex_title.css" 	type="text/css" 	rel="stylesheet" />
-	<link href="newscenter.css"				type="text/css"		rel="stylesheet" />
+	<link href="__PUBLIC__/css/stdindex_footer.css" 	type="text/css" 	rel="stylesheet" />
+	<link href="__PUBLIC__/css/stdindex_title.css" 	type="text/css" 	rel="stylesheet" />
+	<link href="__PUBLIC__/css/newscenter.css"				type="text/css"		rel="stylesheet" />
 	
 	<title>暨南大学电气信息学院团委学生会</title>
 	</head>
@@ -25,7 +34,7 @@
 				<div id="hdr_top">
 					<!--表头徽标-->
 					<div id="logo">
-						<img src="std_title_logo.png" width="54px" height="54px" alt="团委学生会的徽标"/>
+						<img src="<?php echo $imgURL; ?>std_title_logo.png" width="54px" height="54px" alt="团委学生会的徽标"/>
 					</div>
 					<!--标题-->
 					<div id="title">
@@ -49,7 +58,7 @@
 						<!--站内搜索框，样式和代码均未完成-->
 						<div id="search_bar">
 							<input type="text" name="q" id="query" title="站内搜索" />
-							<button type="submit" name="qsub" id="searchsubmit" title="搜索" value="" ><img src="site_search.png" alt="搜索按钮徽标" /></button>
+							<button type="submit" name="qsub" id="searchsubmit" title="搜索" value="" ><img src="<?php echo $imgURL; ?>site_search.png" alt="搜索按钮徽标" /></button>
 						</div>
 					
 						<!--用户信息，未登陆是为“登陆”锚标签，登陆后为“用户名”，“个人中心”，“注销”3个锚标签-->
@@ -70,19 +79,19 @@
 						<table id="main_guide">
 							<tr>
 								<td class="about_us_td">
-									<a class="main_nav" id="a_home" href="#">首页</a>
+									<a class="main_nav" id="a_home" href="__APP__/Home/index">首页</a>
 								</td>
 								<td class="about_us_td">
-									<a class="main_nav" id="a_news" href="news.html">新闻中心</a>
+									<a class="main_nav" id="a_news" href="__APP__/Home/newscenter">新闻中心</a>
 								</td>
 								<td class="about_us_td">
-									<a class="main_nav" id="a_work" href="work.html">学生工作</a>
+									<a class="main_nav" id="a_work" href="__APP__/Home/work">学生工作</a>
 								</td>
 								<td class="about_us_td">
-									<a class="main_nav" id="a_act" href="activities.html">活动</a>
+									<a class="main_nav" id="a_act" href="__APP__/Home/activity">活动</a>
 								</td>
 								<td class="about_us_td">
-									<a class="main_nav" id="a_files" href="files.html">现行制度浏览与下载</a>
+									<a class="main_nav" id="a_files" href="__APP__/Home/files">现行制度浏览与下载</a>
 								</td>
 							</tr>
 						</table>					
@@ -107,27 +116,33 @@
 			</div>
 			<div>
 				<table class="xxxc_table"><!--这是新闻列表-->
+				<!--此链接为新闻标题和链接到该新闻的url，学生工作，活动，现行制度也如此-->
+				<?php 
+				//定界符特殊要求，不能有注释，结束标记前面不能有任何字符
+				for($i=0;$i<count($lastArr);$i++)
+				{
+					$link=__URL__."/show"."?id=".$lastArr[$i]['id'];
+					$title=$lastArr[$i]['title'];
+					$create_time=$lastArr[$i]['create_time'];
+					$create_time=date("Y/m/d",$create_time);
+					$str.=<<<str
 					<tr>
 						<td>	
 							<div>
 								<p class="xxxc_t_l">
-									<!--此链接为新闻标题和链接到该新闻的url，学生工作，活动，现行制度也如此-->
-									<a href="#" class="xxxcenter_a">某新闻标题某新闻标题某新闻标题某新闻标题某新闻标题</a>
+									
+									<a href="$link" class="xxxcenter_a">$title</a>
 								</p>
 								<p class="xxxc_t_r">
-									[2015/02/30]
-								</p>
-								<p class="xxxc_t_l">
-									<!--此链接为新闻标题和链接到该新闻的url，学生工作，活动，现行制度也如此-->
-									<a href="#" class="xxxcenter_a">某新闻标题某新闻标题某新闻标题某新闻标题某新闻标题</a>
-								</p>
-								<p class="xxxc_t_r">
-									[2015/02/30]
+									[$create_time]
 								</p>								
 							</div>
 						</td>
 					</tr>
-					
+str;
+				}
+					echo $str;
+				?>
 				</table>
 				
 			</div>
@@ -141,33 +156,56 @@
 			</div>
 			<div>
 				<table class="xxxc_table">
-					
+				<!--现行制度的这里要加一个下载链接，点击就保存就行了，不用跳到什么页面的-->
+				<?php
+				unset($str);
+				for($i=0;$i<count($moreArr);$i++)
+				{
+				$title=$moreArr[$i]['title'];
+				$link=__URL__."/show"."?id=".$moreArr[$i]['id'];
+				$create_time=$moreArr[$i]['create_time'];
+				$create_time=date("Y/m/d",$create_time);
+				$str.=<<<str
 					<tr>
 						<td>	
 							<div>
 								<p class="xxxc_t_l">
-									<a href="#" class="xxxcenter_a">某新闻标题某新闻标题某新闻标题某新闻标题某新闻标题</a>
+									<a href="$link" class="xxxcenter_a">$title</a>
 								</p>
-								<p class="xxxc_t_r"><!--现行制度的这里要加一个下载链接，点击就保存就行了，不用跳到什么页面的-->
+								<p class="xxxc_t_r">
 									<a href="#" class="xxxcenter_a">[下载]&nbsp;</a>
-									[2015/02/30]
+									[$create_time]
 								</p>
 							</div>
 						</td>
 					</tr>
+str;
+				}
+				echo $str;
+				?>
 				</table>
 			</div>
 			<!--这是换页部分，我也不知道怎么写好，大神交给你了-->
 			<div id="the_next_page">
 				<p class="xxxc_t_l">
-					<a href="#" class="xxxcenter_a" >第一页</a>&nbsp;|&nbsp;<a href="#" class="xxxcenter_a">下一页</a>&nbsp;
-					<a href="#" class="xxxcenter_a" >上一页</a>&nbsp;|&nbsp;<a href="#" class="xxxcenter_a">最后一页</a>&nbsp;
+					<a href="<?php echo __URL__."/".$view;?>?page=1" class="xxxcenter_a" >第一页</a>&nbsp;|&nbsp;<a href="<?php echo __URL__."/".$view;?>?page=<?php echo $prePage;?>" class="xxxcenter_a" >上一页</a>&nbsp;
+					<a href="<?php echo __URL__."/".$view;?>?page=<?php echo $nexPage;?>" class="xxxcenter_a">下一页</a>&nbsp;|&nbsp;<a href="<?php echo __URL__."/".$view;?>?page=<?php echo $pageNum;?>" class="xxxcenter_a">最后一页</a>&nbsp;
 				</p>
 				<p class="xxxc_t_r">
-					当前页：1/n
-					<a href="#" class="xxxcenter_a">&nbsp; [1] </a>
+					当前页：<?php echo $page;?>/<?php echo $pageNum;?>
+					<?php 
+					unset($str);
+					for($i=1;$i<$pageNum+1;$i++)
+					{
+					$str.=<<<str
+						<a href="__URL__/$view?page=$i" class="xxxcenter_a">&nbsp; [$i] </a>
+str;
+					}
+					echo $str;
+					?>
+<!-- 					<a href="#" class="xxxcenter_a">&nbsp; [1] </a>
 					<a href="#" class="xxxcenter_a">&nbsp; [2] </a>
-					<a href="#" class="xxxcenter_a">&nbsp; [3] </a>
+					<a href="#" class="xxxcenter_a">&nbsp; [3] </a> -->
 				</p>
 			</div>
 					

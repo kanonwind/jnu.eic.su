@@ -134,14 +134,14 @@ class NewsAction extends Action{
 		$data['type']=$type;
 		$data['url']=$url;
 		$data['text']=$text;
-/* 		if(false==$news_model->data($data)->add())
+		if(false==$news_model->data($data)->add())
 		{
-			$this->error("新闻添加出错，正在返回......");
+			$this->error("添加出错，正在返回......");
 		}
 		else
 		{
-			$this->Success("新闻添加成功，正在返回......",__APP__."/News/create");
-		} */
+			$this->Success("添加成功，正在返回......",__APP__."/News/create");
+		} 
 		
 	}
 	//公告	执行添加
@@ -160,11 +160,11 @@ class NewsAction extends Action{
 		$data['text']=$text;
 		if(false==$announcement_model->data($data)->add())
 		{
-			$this->error("新闻添加出错，正在返回......");
+			$this->error("添加出错，正在返回......");
 		}
 		else
 		{
-			$this->Success("公告添加成功，正在返回......",__APP__."/News/create");
+			$this->Success("添加成功，正在返回......",__APP__."/News/create");
 		}
 	}
 	//即将举办的活动	执行添加
@@ -188,12 +188,13 @@ class NewsAction extends Action{
 		$activity_model=new Model("Activity");
 		if(false==$activity_model->data($data)->add())
 		{
-			$this->error("活动添加出错，正在返回......");
+			$this->error("添加出错，正在返回......");
 		}
 		else
 		{
-			$this->Success("新闻添加成功，正在返回......",__APP__."/News/create");
+			$this->Success("添加成功，正在返回......",__APP__."/News/create");
 		}
 	}
+
 }
 ?>
