@@ -80,7 +80,7 @@ function get_news()
         news_texts[i]=obj;
     }
 	
-	alert(news_texts[0].newsPic);
+	//alert(news_texts[0].newsPic);
 }
 
 

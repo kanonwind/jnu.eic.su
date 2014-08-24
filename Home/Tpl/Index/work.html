@@ -1,0 +1,334 @@
+	<?php 
+		$sto=new SaeStorage();
+		$domain="upload";
+		$imgURL=$sto->getUrl($domain,"image/");
+		if(!IS_SAE)
+		{
+			$imgURL="/".$imgURL;
+		}
+	?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="EN" xml:lang="EN">
+	<head>
+	<meta http-equiv="content-type" content="text/html;charset=utf-8"/><!--说明字符集-->
+	<meta http-equiv="content-language" content="zh-CN" /><!--说明语言-->
+	<meta name="author" content="ZuohengDeng" /><!--作者-->
+	<meta name="copyright" content="jnu.ksc" /><!--声明版权-->
+	<meta name="description" content="电气信息学院团委学生会门户网站" /><!--网站概述-->
+	<meta name="keywords" content="新闻中心 暨大 暨南大学 电气院 电气信息学院 团委学生会 暨南大学电气信息学院团委学生会 团委学生会新闻中心" /><!--关键词-->
+	<meta name="keywords" content="Electrcal and Information College of Jinan University Youth League Committee Student Union" />
+	
+	<link rel="shortcut icon" href="<?php echo $imgURL; ?>logo.jpg" />
+	
+	<link href="__PUBLIC__/css/stdindex_footer.css" 	type="text/css" 	rel="stylesheet" />
+	<link href="__PUBLIC__/css/stdindex_title.css" 	type="text/css" 	rel="stylesheet" />
+	<link href="__PUBLIC__/css/newscenter.css"				type="text/css"		rel="stylesheet" />
+	
+	<title>暨南大学电气信息学院团委学生会</title>
+	</head>
+	<body>
+		<div id="hdr">
+			<div id="hdr_main">
+				<div id="hdr_top">
+					<!--表头徽标-->
+					<div id="logo">
+						<img src="<?php echo $imgURL; ?>std_title_logo.png" width="54px" height="54px" alt="团委学生会的徽标"/>
+					</div>
+					<!--标题-->
+					<div id="title">
+						<p id="chs_title">
+							暨南大学电气信息学院团委学生会
+						</p>
+						<p id="eng_title">
+							Electrcal and Information College of Jinan University Youth League Committee &#38; Student Union
+						</p>
+						<div id="help_nav">
+							<a class="head_help_nav" href="liaojie.html">了解团委学生会</a>
+							<a class="head_help_nav" href="caozuofangfa.html">操作方法</a>
+							<a class="head_help_nav" href="zhichi.html">支持</a>
+						</div>
+						
+						
+					</div>
+					
+					<div id="search_and_info">
+					
+						<!--站内搜索框，样式和代码均未完成-->
+						<div id="search_bar">
+							<input type="text" name="q" id="query" title="站内搜索" />
+							<button type="submit" name="qsub" id="searchsubmit" title="搜索" value="" ><img src="<?php echo $imgURL; ?>site_search.png" alt="搜索按钮徽标" /></button>
+						</div>
+					
+						<!--用户信息，未登陆是为“登陆”锚标签，登陆后为“用户名”，“个人中心”，“注销”3个锚标签-->
+						<div id="login_info">
+						<?php echo $link;?>
+<!-- 							<a class="user_info" id="login_info_user_name" href="#">邓作恒</a>
+							<a class="user_info" id="login_info_user_id" href="#">2012052207</a>
+							<a class="user_info" id="login_info_user_center" href="#">个人中心</a>
+							<a class="user_info" id="login_info_log_out" href="#">注销</a> -->
+						</div>
+						
+					</div>
+					
+				</div>
+			</div>
+			<div id="hdr_guide">
+				<div id="guide">		
+					<div id="guide_table">
+						<table id="main_guide">
+							<tr>
+								<td class="about_us_td">
+									<a class="main_nav" id="a_home" href="__ROOT__">首页</a>
+								</td>
+								<td class="about_us_td">
+									<a class="main_nav" id="a_news" href="__URL__/newscenter">新闻中心</a>
+								</td>
+								<td class="about_us_td">
+									<a class="main_nav" id="a_work" href="__URL__/work">学生工作</a>
+								</td>
+								<td class="about_us_td">
+									<a class="main_nav" id="a_act" href="__URL__/activity">活动</a>
+								</td>
+								<td class="about_us_td">
+									<a class="main_nav" id="a_files" href="__URL__/files">现行制度浏览与下载</a>
+								</td>
+							</tr>
+						</table>					
+					</div>
+				</div>
+			</div>
+			
+		</div>		
+		
+		<!--标题,新闻，学生工作，活动，现行制度-->
+		<div class="xxxcenter_title">
+			<div>
+				<h1>学生工作</h1>
+				<h4>News Center</h4><!--英语要注意，写错了就丢大了-->
+			</div>
+		</div>
+		<hr class="xxxcenter_hr"/>
+		<div class="center_part" id="the_latest_news">
+			<div class="xxxc_latest_title">
+				<h2>最新</h2>
+				<h4>The Latest news</h4><!--英语注意，新闻，学生工作，活动，现行制度可能不同-->
+			</div>
+			<div>
+				<table class="xxxc_table"><!--这是新闻列表-->
+				<!--此链接为新闻标题和链接到该新闻的url，学生工作，活动，现行制度也如此-->
+				<?php 
+				//定界符特殊要求，不能有注释，结束标记前面不能有任何字符
+				for($i=0;$i<count($lastArr);$i++)
+				{
+					$link=__URL__."/show"."?id=".$lastArr[$i]['id'];
+					$title=$lastArr[$i]['title'];
+					$create_time=$lastArr[$i]['create_time'];
+					$create_time=date("Y/m/d",$create_time);
+					$str.=<<<str
+					<tr>
+						<td>	
+							<div>
+								<p class="xxxc_t_l">
+									
+									<a href="$link" class="xxxcenter_a">$title</a>
+								</p>
+								<p class="xxxc_t_r">
+									[$create_time]
+								</p>								
+							</div>
+						</td>
+					</tr>
+str;
+				}
+					echo $str;
+				?>
+				</table>
+				
+			</div>
+		</div>
+		<hr class="xxxcenter_hr" />
+		
+		<div class="center_part" id="more_news">
+			<div class="xxxc_more_title">
+				<h2>更多</h2>
+				<h4>More News</h4>
+			</div>
+			<div>
+				<table class="xxxc_table">
+				<!--现行制度的这里要加一个下载链接，点击就保存就行了，不用跳到什么页面的-->
+				<?php
+				unset($str);
+				for($i=0;$i<count($moreArr);$i++)
+				{
+				$title=$moreArr[$i]['title'];
+				$link=__URL__."/show"."?id=".$moreArr[$i]['id'];
+				$create_time=$moreArr[$i]['create_time'];
+				$create_time=date("Y/m/d",$create_time);
+				$str.=<<<str
+					<tr>
+						<td>	
+							<div>
+								<p class="xxxc_t_l">
+									<a href="$link" class="xxxcenter_a">$title</a>
+								</p>
+								<p class="xxxc_t_r">
+									<a href="#" class="xxxcenter_a">[下载]&nbsp;</a>
+									[$create_time]
+								</p>
+							</div>
+						</td>
+					</tr>
+str;
+				}
+				echo $str;
+				?>
+				</table>
+			</div>
+			<!--这是换页部分，我也不知道怎么写好，大神交给你了-->
+			<div id="the_next_page">
+				<p class="xxxc_t_l">
+					<a href="<?php echo __URL__."/".$view;?>?page=1" class="xxxcenter_a" >第一页</a>&nbsp;|&nbsp;<a href="<?php echo __URL__."/".$view;?>?page=<?php echo $prePage;?>" class="xxxcenter_a" >上一页</a>&nbsp;
+					<a href="<?php echo __URL__."/".$view;?>?page=<?php echo $nexPage;?>" class="xxxcenter_a">下一页</a>&nbsp;|&nbsp;<a href="<?php echo __URL__."/".$view;?>?page=<?php echo $pageNum;?>" class="xxxcenter_a">最后一页</a>&nbsp;
+				</p>
+				<p class="xxxc_t_r">
+					当前页：<?php echo $page;?>/<?php echo $pageNum;?>
+					<?php 
+					unset($str);
+					for($i=1;$i<$pageNum+1;$i++)
+					{
+					$str.=<<<str
+						<a href="__URL__/$view?page=$i" class="xxxcenter_a">&nbsp; [$i] </a>
+str;
+					}
+					echo $str;
+					?>
+<!-- 					<a href="#" class="xxxcenter_a">&nbsp; [1] </a>
+					<a href="#" class="xxxcenter_a">&nbsp; [2] </a>
+					<a href="#" class="xxxcenter_a">&nbsp; [3] </a> -->
+				</p>
+			</div>
+					
+		</div>
+		
+		<div id="footer">
+			<div id="footer_bg">
+			
+				<div id="footer_hr1">
+				</div>
+				
+				<div id="footer_hr2">
+				</div>
+				<div id="footer_details">
+					<div id="footer_main">
+						<table id="about_us">
+							<thead>
+								<tr>
+									<th class="footer_about_us_th"></th>								
+									<th class="footer_about_us_th">关于我们</th>
+									<th class="footer_about_us_th"></th>	
+									<th class="footer_about_us_th">关注我们</th>
+									<th class="footer_about_us_th"></th>	
+									<th class="footer_about_us_th">友情链接</th>
+									<th class="footer_about_us_th"></th>	
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th class="footer_about_us_th"></th>	
+									<td class="footer_about_us_td">
+										<a href="a.html" class="footer_about_a">
+											关于团委学生会
+										</a>
+									</td>
+									<th class="footer_about_us_th"></th>	
+									<td class="footer_about_us_td">
+										<a href="a.html" class="footer_about_a">
+											新浪微博
+										</a>
+									</td>
+									<th class="footer_about_us_th"></th>	
+									<td class="footer_about_us_td">
+										<a href="a.html" class="footer_about_a">
+											电气信息学院
+										</a>
+									</td>
+									<th class="footer_about_us_th"></th>	
+								</tr>
+								<tr>
+									<th class="footer_about_us_th"></th>	
+									<td class="footer_about_us_td">
+										<a href="a.html" class="footer_about_a">
+											免责声明
+										</a>
+									</td>
+									<th class="footer_about_us_th"></th>	
+									<td class="footer_about_us_td">
+										<a href="a.html" class="footer_about_a">
+											微信
+										</a>
+									</td>
+									<th class="footer_about_us_th"></th>	
+									<td class="footer_about_us_td">
+										<a href="a.html" class="footer_about_a">
+											信息科学院
+										</a>
+									</td>
+									<th class="footer_about_us_th"></th>	
+								</tr>
+								<tr>
+									<th class="footer_about_us_th"></th>	
+									<td class="footer_about_us_td">
+										<a href="a.html" class="footer_about_a">
+											联系开发人员
+										</a>
+									</td>
+									<th class="footer_about_us_th"></th>	
+									<td class="footer_about_us_td">
+										<a href="a.html" class="footer_about_a">
+											人人网
+										</a>
+									</td>
+									<th class="footer_about_us_th"></th>	
+									<td class="footer_about_us_td">
+										<a href="a.html" class="footer_about_a">
+											暨南风
+										</a>
+									</td>
+									<th class="footer_about_us_th"></th>	
+								</tr>
+								<tr>
+									<th class="footer_about_us_th"></th>	
+									<td class="footer_about_us_td">
+										<a href="a.html" class="footer_about_a">
+											报告错误
+										</a>
+									</td>
+									<th class="footer_about_us_th"></th>	
+									<td class="footer_about_us_td">
+										<a href="a.html" class="footer_about_a">
+											QQ空间
+										</a>
+									</td>
+									<th class="footer_about_us_th"></th>	
+									<td class="footer_about_us_td"></td>
+									<th class="footer_about_us_th"></th>	
+								</tr>
+							</tbody>
+						</table>
+										
+						<div id="Copyright">
+							<p class="copy_main">Copyright&copy;2014电气信息学院团委学生会</p>
+							<p class="copy_main">技术支持:暨南大学KSC联盟</p>
+							<p class="copy_main">jnu.ksc@gmail.com</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
+			
+			
+			
