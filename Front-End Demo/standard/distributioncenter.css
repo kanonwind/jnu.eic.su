@@ -58,6 +58,7 @@ button
     outline:none;
 }
 
+//这段代码在newscenter中也有- -
 form#article_form tr{width:800px;}
 
 form#article_form td{min-width:100px;padding:0px;}
