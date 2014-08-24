@@ -80,7 +80,7 @@ function get_news()
         news_texts[i]=obj;
     }
 	
-	alert(news_texts[0].newsPic);
+	//alert(news_texts[0].newsPic);
 }
 
 
@@ -135,7 +135,8 @@ function MouseOverActive(iActivePic, path_over, path_out)
 		
 		if(iPrePic < iActivePic)
 		{
-			var strPicPath = newsImgURL+newsPicName + iActivePic + newsPicType;
+			//var strPicPath = newsImgURL+newsPicName + iActivePic + newsPicType;
+			var strPicPath=newsImgURL+news_texts[iActivePic].newsPic;
 			objPic1.src = strPicPath; 
 			
 			SlidesToRight();
@@ -143,7 +144,8 @@ function MouseOverActive(iActivePic, path_over, path_out)
 		
 		if(iPrePic > iActivePic)
 		{
-			var strPicPath = newsImgURL+newsPicName + iActivePic + newsPicType;
+			//var strPicPath = newsImgURL+newsPicName + iActivePic + newsPicType;
+			var strPicPath=newsImgURL+news_texts[iActivePic].newsPic;
 			objPic3.src = strPicPath;
 			SlidesToLeft();
 		}
@@ -198,7 +200,8 @@ function PreNewsPicture()
     }
     iIndexPic--;
 	
-	var strPicPath = newsImgURL+newsPicName + iIndexPic + newsPicType;
+	//var strPicPath = newsImgURL+newsPicName + iIndexPic + newsPicType;
+	var strPicPath=newsImgURL+news_texts[iIndexPic].newsPic;
 	objPic3.src = strPicPath; 
 
     CurrentNewsPicture(iPrePic, iIndexPic);

@@ -1,3 +1,12 @@
+	<?php 
+		$sto=new SaeStorage();
+		$domain="upload";
+		$imgURL=$sto->getUrl($domain,"image/");
+		if(!IS_SAE)
+		{
+			$imgURL="/".$imgURL;
+		}
+	?>
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
@@ -8,15 +17,14 @@
 	<meta name="author" content="ZuohengDeng" /><!--作者-->
 	<meta name="copyright" content="jnu.ksc" /><!--声明版权-->
 	<meta name="description" content="电气信息学院团委学生会门户网站" /><!--网站概述-->
-	<meta name="keywords" content="新闻中心 暨大 暨南大学 电气院 电气信息学院 团委学生会 暨南大学电气信息学院团委学生会 团委学生会新闻中心" /><!--关键词-->
+	<meta name="keywords" content="暨大 暨南大学 电气院 电气信息学院 团委学生会 暨南大学电气信息学院团委学生会 团委学生会首页" /><!--关键词-->
 	<meta name="keywords" content="Electrcal and Information College of Jinan University Youth League Committee Student Union" />
 	
-	<link rel="shortcut icon" href="logo.jpg" />
-	
-	<link href="stdindex_footer.css" 	type="text/css" 	rel="stylesheet" />
-	<link href="stdindex_title.css" 	type="text/css" 	rel="stylesheet" />
-	<link href="newscenter.css"				type="text/css"		rel="stylesheet" />
-	
+	<link rel="shortcut icon" href="<?php echo $imgURL;?>logo.jpg" />
+	<link href="__PUBLIC__/css/stdindex_footer.css" 	type="text/css" 	rel="stylesheet" />
+	<link href="__PUBLIC__/css/stdindex_title.css" 	type="text/css" 	rel="stylesheet" />
+	<link href="__PUBLIC__/css/newscenter.css"			type="text/css"		rel="stylesheet" />
+
 	<title>暨南大学电气信息学院团委学生会</title>
 	</head>
 	<body>
@@ -25,7 +33,7 @@
 				<div id="hdr_top">
 					<!--表头徽标-->
 					<div id="logo">
-						<img src="std_title_logo.png" width="54px" height="54px" alt="团委学生会的徽标"/>
+						<img src="<?php echo $imgURL;?>std_title_logo.png" width="54px" height="54px" alt="团委学生会的徽标"/>
 					</div>
 					<!--标题-->
 					<div id="title">
@@ -49,15 +57,16 @@
 						<!--站内搜索框，样式和代码均未完成-->
 						<div id="search_bar">
 							<input type="text" name="q" id="query" title="站内搜索" />
-							<button type="submit" name="qsub" id="searchsubmit" title="搜索" value="" ><img src="site_search.png" alt="搜索按钮徽标" /></button>
+							<button type="submit" name="qsub" id="searchsubmit" title="搜索" value="" ><img src="<?php echo $imgURL;?>site_search.png" alt="搜索按钮徽标" /></button>
 						</div>
 					
 						<!--用户信息，未登陆是为“登陆”锚标签，登陆后为“用户名”，“个人中心”，“注销”3个锚标签-->
 						<div id="login_info">
-							<a class="user_info" id="login_info_user_name" href="#">邓作恒</a>
+						<?php echo $link;?>
+<!-- 							<a class="user_info" id="login_info_user_name" href="#">邓作恒</a>
 							<a class="user_info" id="login_info_user_id" href="#">2012052207</a>
 							<a class="user_info" id="login_info_user_center" href="#">个人中心</a>
-							<a class="user_info" id="login_info_log_out" href="#">注销</a>
+							<a class="user_info" id="login_info_log_out" href="#">注销</a> -->
 						</div>
 						
 					</div>
@@ -70,19 +79,19 @@
 						<table id="main_guide">
 							<tr>
 								<td class="about_us_td">
-									<a class="main_nav" id="a_home" href="#">首页</a>
+									<a class="main_nav" id="a_home" href="__APP__">首页</a>
 								</td>
 								<td class="about_us_td">
-									<a class="main_nav" id="a_news" href="news.html">新闻中心</a>
+									<a class="main_nav" id="a_news" href="__URL__/newscenter">新闻中心</a>
 								</td>
 								<td class="about_us_td">
-									<a class="main_nav" id="a_work" href="work.html">学生工作</a>
+									<a class="main_nav" id="a_work" href="__URL__/work">学生工作</a>
 								</td>
 								<td class="about_us_td">
-									<a class="main_nav" id="a_act" href="activities.html">活动</a>
+									<a class="main_nav" id="a_act" href="__URL__/activity">活动</a>
 								</td>
 								<td class="about_us_td">
-									<a class="main_nav" id="a_files" href="files.html">现行制度浏览与下载</a>
+									<a class="main_nav" id="a_files" href="__URL__/files">现行制度浏览与下载</a>
 								</td>
 							</tr>
 						</table>					
@@ -90,89 +99,46 @@
 				</div>
 			</div>
 			
-		</div>		
+		</div>	
 		
-		<!--标题,新闻，学生工作，活动，现行制度-->
 		<div class="xxxcenter_title">
 			<div>
-				<h1>新闻中心</h1>
-				<h4>News Center</h4><!--英语要注意，写错了就丢大了-->
-			</div>
-		</div>
-		<hr class="xxxcenter_hr"/>
-		<div class="center_part" id="the_latest_news">
-			<div class="xxxc_latest_title">
-				<h2>最新</h2>
-				<h4>The Latest news</h4><!--英语注意，新闻，学生工作，活动，现行制度可能不同-->
-			</div>
-			<div>
-				<table class="xxxc_table"><!--这是新闻列表-->
-					<tr>
-						<td>	
-							<div>
-								<p class="xxxc_t_l">
-									<!--此链接为新闻标题和链接到该新闻的url，学生工作，活动，现行制度也如此-->
-									<a href="#" class="xxxcenter_a">某新闻标题某新闻标题某新闻标题某新闻标题某新闻标题</a>
-								</p>
-								<p class="xxxc_t_r">
-									[2015/02/30]
-								</p>
-								<p class="xxxc_t_l">
-									<!--此链接为新闻标题和链接到该新闻的url，学生工作，活动，现行制度也如此-->
-									<a href="#" class="xxxcenter_a">某新闻标题某新闻标题某新闻标题某新闻标题某新闻标题</a>
-								</p>
-								<p class="xxxc_t_r">
-									[2015/02/30]
-								</p>								
-							</div>
-						</td>
-					</tr>
-					
-				</table>
-				
+				<h1>新闻中心</h1><!--标题依旧小心英语-->
+				<h4>News Center</h4>
 			</div>
 		</div>
 		<hr class="xxxcenter_hr" />
-		
-		<div class="center_part" id="more_news">
-			<div class="xxxc_more_title">
-				<h2>更多</h2>
-				<h4>More News</h4>
-			</div>
-			<div>
-				<table class="xxxc_table">
-					
-					<tr>
-						<td>	
-							<div>
-								<p class="xxxc_t_l">
-									<a href="#" class="xxxcenter_a">某新闻标题某新闻标题某新闻标题某新闻标题某新闻标题</a>
-								</p>
-								<p class="xxxc_t_r"><!--现行制度的这里要加一个下载链接，点击就保存就行了，不用跳到什么页面的-->
-									<a href="#" class="xxxcenter_a">[下载]&nbsp;</a>
-									[2015/02/30]
-								</p>
-							</div>
-						</td>
-					</tr>
-				</table>
-			</div>
-			<!--这是换页部分，我也不知道怎么写好，大神交给你了-->
-			<div id="the_next_page">
-				<p class="xxxc_t_l">
-					<a href="#" class="xxxcenter_a" >第一页</a>&nbsp;|&nbsp;<a href="#" class="xxxcenter_a">下一页</a>&nbsp;
-					<a href="#" class="xxxcenter_a" >上一页</a>&nbsp;|&nbsp;<a href="#" class="xxxcenter_a">最后一页</a>&nbsp;
+		<div class="center_part" id="the_latest_news">
+			<div class="art_tit_div">
+				
+				<h1 class="article_title"><?php echo $newsArr['title'];?></h1>	<!--新闻标题，学生工作，活动，现行制度也是如此-->
+				
+				<p class="author_etc"><!--作者和文章和时间-->
+					作者：<?php echo $newsArr['author'];?>
+					时间：<?php echo $newsArr['create_time'];?>
 				</p>
-				<p class="xxxc_t_r">
-					当前页：1/n
-					<a href="#" class="xxxcenter_a">&nbsp; [1] </a>
-					<a href="#" class="xxxcenter_a">&nbsp; [2] </a>
-					<a href="#" class="xxxcenter_a">&nbsp; [3] </a>
+				<p class="article_key_word"><!--关键词，由文章作者决定-->
+					关键词：
+					<?php echo $newsArr['keyword'];?>
+<!-- 					关键词1
+					关键词2
+					关键词3 -->
 				</p>
+				<hr class="article_hr" />
 			</div>
-					
+			<div class="art_body_div"><!--文章内容-->
+				<?php echo $newsArr['text'];?>
+<!-- 				<p>
+					新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容
+				</p>
+				<p>
+					新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容
+				</p>
+				 -->
+				<hr class="article_hr" />
+			</div>
+	
 		</div>
-		
 		<div id="footer">
 			<div id="footer_bg">
 			
