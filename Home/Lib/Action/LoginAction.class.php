@@ -44,7 +44,7 @@ class LoginAction extends Action
 							//不存在则增加
 							$login_model->data($data)->add();
 						}
-						$this->redirect("Home/index");
+						$this->redirect("Index/index");
 					}
 	
 				}
@@ -57,7 +57,7 @@ class LoginAction extends Action
 		}
 		else
 		{
-			$this->redirect("Home/index");
+			$this->redirect("Index/index");
 		}      
 	}
 	//check为登录验证界面
@@ -70,7 +70,7 @@ class LoginAction extends Action
         if($this->judgelog())		
 		{
 			//如果当前有已经登录，直接跳转到新闻首页，只能通过注销或者关闭浏览器来退出	  
-            $this->redirect("Home/index");		
+            $this->redirect();		
 		}
 	    $account=$_POST['user_login_name'];
 	    $password=$_POST['user_login_pw'];
@@ -111,10 +111,12 @@ class LoginAction extends Action
 			{
 		   		setcookie("account",$account,time()+7*24*3600);//cookie时间设置为7天，一周时间
 				setcookie("password",$password,time()+7*24*3600);			
-				$this->redirect("Center/index");
+				$this->redirect("Index/index");
 			}
 			else{	
-				$this->redirect("Home/index");
+				setcookie("account","",0);
+				setcookie("password","",0);
+				$this->redirect("Index/index");
 			}
 	    }
 		else
@@ -136,7 +138,7 @@ class LoginAction extends Action
 			setcookie("account","",0);
 			setcookie("password","",0);
 		}
-		$this->redirect("Home/index");
+		$this->redirect("Login/index");
 	}
 
 	//vertication为验证码处理
@@ -201,7 +203,7 @@ class LoginAction extends Action
 			$random=$_SESSION['random'];
 			$login_model=new Model("Login");
 			$login_info=$login_model->where("account=$account")->find();
-				var_dump($login_info);
+				//var_dump($login_info);
 			if($login_info['random']!=$random)
 			{
 				//随机数不一样，覆盖掉			

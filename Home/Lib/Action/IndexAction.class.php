@@ -7,16 +7,13 @@ class IndexAction extends Action
   //首页
   public function index()
   {
-	if(!$this->judgelog())
-	{
-		$this->redirect("Login/index");
-	}
+
     session_name('LOGIN');
     session_start();
     if(!$this->judgelog())
     {
 		//尚未登录
-		$link="<a class=\"user_info\" id=\"login_info_user_log_in\" href=\"".__APP__."/Login/index.php\">登录</a>";
+		$link="<a class=\"user_info\" id=\"login_info_user_log_in\" href=\"".__APP__."/Login/index\">登录</a>";
 		$this->assign('link',$link);
 	}
 	else{
@@ -31,6 +28,88 @@ class IndexAction extends Action
 		$link.="<a class=\"user_info\" id=\"login_info_log_out\" href=\"".__APP__."/Login/logout\">注销</a>";
 		$this->assign('link',$link);
 	}
+	//获取3篇热点新闻
+	$news_model=new Model("News");
+	$news_info=$news_model->where("type=1")->select();
+	unset($arr);
+	foreach($news_info as $v)
+	{
+		$arr[]=Array(
+			'create_time'=>$v['create_time'],
+		);
+	}		
+	sort($arr);	
+	for($i=0;$i<3;$i++)
+	{
+		$create_time=$arr[count($arr)-$i-1]['create_time'];
+		$news_info=$news_model->where("create_time=$create_time")->find();
+		$hot[]=Array(
+			'keyword'=>$news_info['keyword'],
+			'id'=>$news_info['id'],
+		);//最新新闻存储完毕
+	}
+	//获取最新活动
+	$news_info=$news_model->where("type=3")->select();
+	unset($arr);
+	foreach($news_info as $v)
+	{
+		$arr[]=Array(
+			'create_time'=>$v['create_time'],
+		);
+	}		
+	sort($arr);	
+	$create_time=$arr[count($arr)-1]['create_time'];
+	$news_info=$news_model->where("create_time=$create_time")->find();
+	$activity=Array(
+		'keyword'=>$news_info['keyword'],
+		'id'=>$news_info['id'],
+	);
+	//获取最新学生工作
+	$news_info=$news_model->where("type=2")->select();
+	unset($arr);
+	foreach($news_info as $v)
+	{
+		$arr[]=Array(
+			'create_time'=>$v['create_time'],
+		);
+	}		
+	sort($arr);	
+	$create_time=$arr[count($arr)-1]['create_time'];
+	$news_info=$news_model->where("create_time=$create_time")->find();
+	$work=Array(
+		'keyword'=>$news_info['keyword'],
+		'id'=>$news_info['id'],
+	);
+	//获取公告
+	//获取即将举办
+	unset($arr);
+	$activity_model=new Model("Activity");
+	$activity_info=$activity_model->select();
+	
+	foreach($activity_info as $v)
+	{
+		$arr[]=Array(
+			'create_time'=>$v['create_time'],
+		);
+	}		
+	sort($arr);
+	
+	$create_time=$arr[count($arr)-1]['create_time'];
+	$activity_info=$activity_model->where("create_time=$create_time")->find();
+	$activityExpected=Array(
+		'act_name'=>$activity_info['act_name'],
+		'act_time'=>$activity_info['act_time'],
+		'act_address'=>$activity_info['act_address'],
+		'act_apartment'=>$activity_info['act_apartment'],
+		'act_slogan'=>$activity_info['act_slogan'],
+		'act_bigposter'=>$activity_info['act_bigposter'],
+		'act_smallposter'=>$activity_info['act_smallposter'],
+	);
+	
+	$this->assign('hot',$hot);
+	$this->assign('activity',$activity);
+	$this->assign('work',$work);
+	$this->assign('activityExpected',$activityExpected);
 	$this->display();
   }
   //AJAX请求新闻数据
@@ -62,16 +141,13 @@ class IndexAction extends Action
   //新闻中心页面
   public function newscenter()
   {
-	if(!$this->judgelog())
-	{
-		$this->redirect("Login/index");
-	}
+
     session_name('LOGIN');
     session_start();
     if(!$this->judgelog())
     {
 		//尚未登录
-		$link="<a class=\"user_info\" id=\"login_info_user_log_in\" href=\"".__APP__."/Login/index.php\">登录</a>";
+		$link="<a class=\"user_info\" id=\"login_info_user_log_in\" href=\"".__APP__."/Login/index\">登录</a>";
 		$this->assign('link',$link);
 	}
 	else{
@@ -100,16 +176,13 @@ class IndexAction extends Action
   //学生工作页面
   public function work()
   {
- 	if(!$this->judgelog())
-	{
-		$this->redirect("Login/index");
-	}
+
     session_name('LOGIN');
     session_start();
     if(!$this->judgelog())
     {
 		//尚未登录
-		$link="<a class=\"user_info\" id=\"login_info_user_log_in\" href=\"".__APP__."/Login/index.php\">登录</a>";
+		$link="<a class=\"user_info\" id=\"login_info_user_log_in\" href=\"".__APP__."/Login/index\">登录</a>";
 		$this->assign('link',$link);
 	}
 	else{
@@ -138,16 +211,13 @@ class IndexAction extends Action
   //活动页面
   public function activity()
   {
- 	if(!$this->judgelog())
-	{
-		$this->redirect("Login/index");
-	}
+
     session_name('LOGIN');
     session_start();
     if(!$this->judgelog())
     {
 		//尚未登录
-		$link="<a class=\"user_info\" id=\"login_info_user_log_in\" href=\"".__APP__."/Login/index.php\">登录</a>";
+		$link="<a class=\"user_info\" id=\"login_info_user_log_in\" href=\"".__APP__."/Login/index\">登录</a>";
 		$this->assign('link',$link);
 	}
 	else{
@@ -176,16 +246,13 @@ class IndexAction extends Action
   //现行制度页面
   public function files()
   {
- 	if(!$this->judgelog())
-	{
-		$this->redirect("Login/index");
-	}
+
     session_name('LOGIN');
     session_start();
     if(!$this->judgelog())
     {
 		//尚未登录
-		$link="<a class=\"user_info\" id=\"login_info_user_log_in\" href=\"".__APP__."/Login/index.php\">登录</a>";
+		$link="<a class=\"user_info\" id=\"login_info_user_log_in\" href=\"".__APP__."/Login/index\">登录</a>";
 		$this->assign('link',$link);
 	}
 	else{
@@ -309,16 +376,13 @@ class IndexAction extends Action
   //新闻中心单条新闻
   public function show()
   {
- 	if(!$this->judgelog())
-	{
-		$this->redirect("Login/index");
-	}
+
     session_name('LOGIN');
     session_start();
     if(!$this->judgelog())
     {
 		//尚未登录
-		$link="<a class=\"user_info\" id=\"login_info_user_log_in\" href=\"".__APP__."/Login/index.php\">登录</a>";
+		$link="<a class=\"user_info\" id=\"login_info_user_log_in\" href=\"".__APP__."/Login/index\">登录</a>";
 		$this->assign('link',$link);
 	}
 	else{

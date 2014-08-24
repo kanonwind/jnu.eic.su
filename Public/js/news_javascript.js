@@ -57,7 +57,7 @@ function get_news()
 	//请求数据
 		var newsData;
 	    $.ajax({
-		url:APP+"/Home/newsData",//请求用户类型
+		url:APP+"/Index/newsData",//请求用户类型
 		data:{},
 		async:false,
 		dataType:"json",
