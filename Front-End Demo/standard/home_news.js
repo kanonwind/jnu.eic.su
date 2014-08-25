@@ -40,7 +40,7 @@ var arrColor = new Array("#940707", "#00a0e9", "#486a00", "#04caac", "#005982", 
 var iPicSum = 8; //新闻图片的总数
 var iIndexPic = 0; //当前显示新闻图片的编号
 var iPrePic = 0;//上一张显示新闻的图片的编号
-var arrNewsTitle = new Array("新闻标题0", "新闻标题1", "新闻标题2", "新闻标题3", "新闻标题4", "新闻标题5", "新闻标题6", "新闻标题7");
+var arrNewsTitle = new Array();
 var arrNewsText = new Array();
 
 
@@ -48,6 +48,7 @@ var arrNewsText = new Array();
 //获取新闻内容，news_texts数组的初始化
 function get_news()
 {
+    /*
     for(var i=0;i<8;i++)
     {
         var title="新闻标题"+i;
@@ -59,7 +60,65 @@ function get_news()
         arrNewsText[i]=obj;
 		arrNewsTitle[i] = title;
     }
-	
+    */
+
+
+	json_Get={
+        "arrNewsInfo":
+        [
+            {
+                "title":"标题0","author":"作者0","abst":"内容0",
+                "picpath":"33EC15DCC2478C38978983DBD27DE95C.jpg",
+                "newslink":"#",//正文连接
+            },
+            {
+                "title":"标题1","author":"作者1","abst":"内容1",
+                "picpath":"9B36EF8AFBCC736EB6C880F136966007.jpg",
+                "newslink":"#",//正文连接
+            },
+            {
+                "title":"标题2","author":"作者2","abst":"内容2",
+                "picpath":"D52369F3255366E5E43E0443CD7ADC2F.jpg",
+                "newslink":"#",//正文连接
+            },
+            {
+                "title":"标题3","author":"作者3","abst":"内容3",
+                "picpath":"CDD02A5C5208EBE8BEACBB3AF5AC3BF1.jpg",
+                "newslink":"#",//正文连接
+            },
+            {
+                "title":"标题4","author":"作者4","abst":"内容4",
+                "picpath":"A5EE731ED6DAB6DFF5E214DDC9428C12.jpg",
+                "newslink":"#",//正文连接
+            },
+            {
+                "title":"标题5","author":"作者5","abst":"内容5",
+                "picpath":"4873EB0C0AB45965B65C403EC2EDA8D8.jpg",
+                "newslink":"#",//正文连接
+            },
+            {
+                "title":"标题6","author":"作者6","abst":"内容6",
+                "picpath":"1C5BC9C8DB02C129ED811429CFFE8AA3.jpg",
+                "newslink":"#",//正文连接
+            },
+            /*{
+                "title":"标题7","author":"作者7","abst":"内容7",
+                "picpath":"89E809B6C5AEFCE52997624B2FB56F15.jpg",
+                "newslink":"#",//正文连接
+            },*/
+        ],
+    };
+    for(var i=0;i<json_Get.arrNewsInfo.length;i++)
+    {
+        arrNewsText[i]=new news_info(
+            json_Get.arrNewsInfo[i].title,
+            json_Get.arrNewsInfo[i].author,
+            json_Get.arrNewsInfo[i].abst,
+            json_Get.arrNewsInfo[i].newslink,
+            json_Get.arrNewsInfo[i].picpath);
+        arrNewsTitle[i]=json_Get.arrNewsInfo[i].title;
+    }
+    iPicSum=json_Get.arrNewsInfo.length;
 		//新闻内容对象
 	function news_info(title,author,abst,newslink,newsPic)
 	{
@@ -81,6 +140,27 @@ function get_news()
 
 function NewsInit()
 {
+    get_news();//获取新闻
+    
+    strInnerHTML=new String();
+    strInnerHTML+="<div id=\"main_news_div\">"    
+			+"		<img src=\""+arrNewsText[0].newsPic+"\" id=\"midPic\" alt=\"newsPic\"/>"
+			+"		<img src=\""+arrNewsText[1].newsPic+"\"\" id=\"leftPic\" alt=\"newsPic\"/>"
+			+"		<img src=\""+arrNewsText[arrNewsText.length-1].newsPic+"\"\" id=\"rightPic\" alt=\"newsPic\"/>"							
+			+"		<div id=\"news_slide_button\">"
+			+"			<a id=\"pre_news\" href=\"javascript:\" style><img id=\"btn_pre\" src=\"http://jnueicsu-upload.stor.sinaapp.com/image/btn-carousel-prev.png\" /></a>"
+			+"			<a id=\"next_news\" href=\"javascript:\"><img id=\"btn_next\" src=\"http://jnueicsu-upload.stor.sinaapp.com/image/btn-carousel-next.png\" /></a>"
+			+"		</div>"
+			+"		<div id=\"mid_news_title\"><p id=\"mid_news_text\"></p></div>"
+			+"		<div id=\"left_news_title\"><p id=\"left_news_text\"></p></div>"
+			+"		<div id=\"right_news_title\"><p id=\"right_news_text\"></p></div>"	
+			+"		<div id=\"news\">"
+			+"			<p id=\"news_text\"></p>"
+			+"		</div>"
+			+"</div>";
+    
+    //return;
+    document.getElementById("slide_news").innerHTML=strInnerHTML;      
 	search();
 	objLeftPic = document.getElementById("leftPic");
 	objMidPic = document.getElementById("midPic");
@@ -88,14 +168,14 @@ function NewsInit()
 	objLeftPic.style.left = "-550px";
 	objRightPic.style.left = "550px";
 	
-	get_news();//获取新闻
+	
 	
 	objLeftNewsTitle = document.getElementById("left_news_title");
 	objMidNewsTitle = document.getElementById("mid_news_title");
 	objRightNewsTitle = document.getElementById("right_news_title");
 	objLeftNewsTitle.style.left = "-550px";	
 	objRightNewsTitle.style.left = "550px";
-	document.getElementById("left_news_text").innerHTML = arrNewsTitle[7];
+	document.getElementById("left_news_text").innerHTML = arrNewsTitle[iPicSum-1];
 	document.getElementById("mid_news_text").innerHTML = arrNewsTitle[0];
 	document.getElementById("right_news_text").innerHTML = arrNewsTitle[1];
 	
@@ -175,7 +255,7 @@ function PreNewsPicture()
     }
     iIndexPic--;
 	
-	var strPicPath = newsPicName + iIndexPic + newsPicType;
+	var strPicPath = arrNewsText[iIndexPic].newsPic;
 	objRightPic.src = strPicPath; 
 	
 	objRightNewsTitle.style.background = arrColor[iIndexPic];//改变标题块颜色
@@ -209,7 +289,8 @@ function NextNewsPicture()
         iIndexPic = 0;
     }
 
-	var strPicPath = newsPicName + iIndexPic + newsPicType;
+	//var strPicPath = newsPicName + iIndexPic + newsPicType;
+    var strPicPath=arrNewsText[iIndexPic].newsPic;
 	objLeftPic.src = strPicPath; 
 	
 	objLeftNewsTitle.style.background = arrColor[iIndexPic];//改变标题块颜色
