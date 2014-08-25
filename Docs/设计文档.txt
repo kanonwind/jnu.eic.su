@@ -1,22 +1,22 @@
-ÏÈÓÃyiicÉú³É»ù±¾¹Ç¼Ü¡£
-°´ÕÕÖ®Ç°µÄÉè¼ÆË¼Â·£¬½¨Á¢Êý¾Ý¿â
+å…ˆç”¨yiicç”ŸæˆåŸºæœ¬éª¨æž¶ã€‚
+æŒ‰ç…§ä¹‹å‰çš„è®¾è®¡æ€è·¯ï¼Œå»ºç«‹æ•°æ®åº“
 union
-//¹ÜÀíÔ±µÇÂ½ÐÅÏ¢
+//ç®¡ç†å‘˜ç™»é™†ä¿¡æ¯
 tbl_admin
   account varchar primary key
   password varchar
-//ÐÂÎÅÀ¸Ä¿Ò»
+//æ–°é—»æ ç›®ä¸€
 tbl_news1
   id int  primary key auto
   title varchar
   content text
   authod varchar
   time varchar
-//ÐÂÎÅÀ¸Ä¿¶þ
+//æ–°é—»æ ç›®äºŒ
 tbl_news2
-//ÐÂÎÅÀ¸Ä¿Èý
+//æ–°é—»æ ç›®ä¸‰
 tbl_news3
-//¸öÈËÖÐÐÄ
+//ä¸ªäººä¸­å¿ƒ
 tbl_person
   account varchar primary key
   name varchar
@@ -41,7 +41,7 @@ tbl_person
   is_buzhang default n
   is_zhuxi default n
   is_xiaoyou default n
-//ÆÀ·Ö¹ÜÀí
+//è¯„åˆ†ç®¡ç†
 tbl_eva
   account varchar
   month_id int primary key
@@ -52,7 +52,7 @@ tbl_eva
   self_e text
   mate_e text
   up_e text
-//ÎÊ¾í
+//é—®å·
 tbl_quest
   id int primary key
   title varchar
@@ -64,19 +64,19 @@ tbl_quest
   B_g int
   C_g int
   D_g int
-//¸öÈË¿Î±í
+//ä¸ªäººè¯¾è¡¨
 tbl_timetable
-Ò»ÄêÓÐ53ÖÜ£¬×îºóÒ»ÖÜ¿ÉÄÜÊÇ1ÌìÒ²¿ÉÄÜÊÇ2Ìì,¿ÉÒÔÓÃdateµÄW²ÎÊýÀ´
-ÅÐ¶ÏÊÇÕâÒ»ÄêÖÐµÄµÚ¼¸ÖÜ
-Ã¿½Ú¿ÎÓÐËÄÖÖ×´Ì¬£ºÓÐ¿Î£¬µ¥ÖÜÓÐ¿Î£¬Ë«ÖÜÓÐ¿Î£¬Ã»¿Î
-Ç°¶Ë´«¹ýÀ´·Ö±ð¸³Öµ3 2 1 0
-Ã¿Ìì´Ó08:00-21:50Îª¿Î±íÊ±Çø£¬Ò»¹²ÓÐ13½Ú¿Î£¬
-¿Î±íµÄÉè¼ÆÒÑ¾­ÓÐËù²»Í¬ÁË£¬ÓÐ¸öpk account£¬ÆäËû¶¼ÊÇA1¡¢A2...A7µÄÐÎÊ½
-ÖÜÒ»µ½ÖÜÈÕ·Ö±ðÊÇABCDEFG
-ÐèÒªÓÃµ½µÄº¯Êý£ºarray_fill()	str_split
+ä¸€å¹´æœ‰53å‘¨ï¼Œæœ€åŽä¸€å‘¨å¯èƒ½æ˜¯1å¤©ä¹Ÿå¯èƒ½æ˜¯2å¤©,å¯ä»¥ç”¨dateçš„Wå‚æ•°æ¥
+åˆ¤æ–­æ˜¯è¿™ä¸€å¹´ä¸­çš„ç¬¬å‡ å‘¨
+æ¯èŠ‚è¯¾æœ‰å››ç§çŠ¶æ€ï¼šæœ‰è¯¾ï¼Œå•å‘¨æœ‰è¯¾ï¼ŒåŒå‘¨æœ‰è¯¾ï¼Œæ²¡è¯¾
+å‰ç«¯ä¼ è¿‡æ¥åˆ†åˆ«èµ‹å€¼3 2 1 0
+æ¯å¤©ä»Ž08:00-21:50ä¸ºè¯¾è¡¨æ—¶åŒºï¼Œä¸€å…±æœ‰13èŠ‚è¯¾ï¼Œ
+è¯¾è¡¨çš„è®¾è®¡å·²ç»æœ‰æ‰€ä¸åŒäº†ï¼Œæœ‰ä¸ªpk accountï¼Œå…¶ä»–éƒ½æ˜¯A1ã€A2...A7çš„å½¢å¼
+å‘¨ä¸€åˆ°å‘¨æ—¥åˆ†åˆ«æ˜¯ABCDEFG
+éœ€è¦ç”¨åˆ°çš„å‡½æ•°ï¼šarray_fill()	str_split
 tbl_timetable(
 account
-mon //Ä¬ÈÏ0000000000000¹²13¸ö×Ö·û
+mon //é»˜è®¤0000000000000å…±13ä¸ªå­—ç¬¦
 tue
 wed
 thu
@@ -84,7 +84,7 @@ fri
 sat
 sun
 );
-ÔÝÊ±ÏÈÕâÑù×Ó½«ÕâËÄ¸öÖ±½ÓÐ´½ø¿âÀï
+æš‚æ—¶å…ˆè¿™æ ·å­å°†è¿™å››ä¸ªç›´æŽ¥å†™è¿›åº“é‡Œ
 use union;
 create table tbl_timetable(
 `account` VARCHAR( 20 ) NOT NULL ,
@@ -189,13 +189,13 @@ create table tbl_timetable(
 PRIMARY KEY ( `account` )
 );
 
-//ÈËÁ¦¹ÜÀí±í£¨×¨ÓÃÓÚÍâµ÷£©
+//äººåŠ›ç®¡ç†è¡¨ï¼ˆä¸“ç”¨äºŽå¤–è°ƒï¼‰
 tbl_resource
 {
-account//¶ÔÓ¦µÄ
-id //Éú³ÉÊ±¼ä ×ÔÔö
-code//ÐòÁÐºÅ
-assess//ÆÀ¹À
+account//å¯¹åº”çš„
+id //ç”Ÿæˆæ—¶é—´ è‡ªå¢ž
+code//åºåˆ—å·
+assess//è¯„ä¼°
 }
 
 
@@ -208,120 +208,120 @@ assess//ÆÀ¹À
 
 
 
-µÇÂ½phpmyadmin£¬½øÐÐ±àÐ´
+ç™»é™†phpmyadminï¼Œè¿›è¡Œç¼–å†™
 
-½øÐÐºóÌ¨¿ª·¢£¬ÏÈÓÃgiiÉú³ÉhomeÄ£¿é
-ÔÚmain.phpÌí¼Ó'home'
+è¿›è¡ŒåŽå°å¼€å‘ï¼Œå…ˆç”¨giiç”Ÿæˆhomeæ¨¡å—
+åœ¨main.phpæ·»åŠ 'home'
 
-Éú³É¿ØÖÆÆ÷
+ç”ŸæˆæŽ§åˆ¶å™¨
 admin
 news123
 person
 
-´¦Àíadmin¿ØÖÆÆ÷
- ÓÐÈý¸ö¶¯×÷£¬index,login,check
- Éú³Éadmin ¶ÔÓ¦µÄmodel
-ÏÈ¿ªÆôÊý¾Ý¿âÖ§³Ö
+å¤„ç†adminæŽ§åˆ¶å™¨
+ æœ‰ä¸‰ä¸ªåŠ¨ä½œï¼Œindex,login,check
+ ç”Ÿæˆadmin å¯¹åº”çš„model
+å…ˆå¼€å¯æ•°æ®åº“æ”¯æŒ
 
-¿ØÖÆÆ÷admin»ù±¾¸ã¶¨£¬Ö»Ç·indexÉÏ±àÐ´Á¬½Ó
+æŽ§åˆ¶å™¨adminåŸºæœ¬æžå®šï¼Œåªæ¬ indexä¸Šç¼–å†™è¿žæŽ¥
 
-½ÓÏÂÀ´±àÐ´news1¿ØÖÆÆ÷
-ÓÐ¶¯×÷£º
-Ìí¼Óadd
-É¾³ýdel
-±à¼­edit
-Õ¹Ê¾show
+æŽ¥ä¸‹æ¥ç¼–å†™news1æŽ§åˆ¶å™¨
+æœ‰åŠ¨ä½œï¼š
+æ·»åŠ add
+åˆ é™¤del
+ç¼–è¾‘edit
+å±•ç¤ºshow
 
-²»»áÓÃautoÈÃÎÒ×ß²»ÉÙÍäÂ·
-
-
-
-ÓÃ»§µÇÂ¼ºÍÐÂÎÅ±à¼­Ä£¿é»ù±¾Íê³ÉÁË£¬ÏÈÔÚÐèÒª×ÅÊÖ½â¾öµÄÊÇ¼¨Ð§¿¼ºËÏµÍ³
-ÓÃ»§ÖÐÐÄ£º
-ÓÃgiiÐÂ½¨Ò»¸öÄ£¿éuser£¬
+ä¸ä¼šç”¨autoè®©æˆ‘èµ°ä¸å°‘å¼¯è·¯
 
 
-È¡ÏûÓÊÏäÑéÖ¤£¬¸Ä³Éis_active
-ÊÇÊ±ºò½â¾öÈ¨ÏÞÎÊÌâÁË¡£
 
-Õû¸öÈËÁ¦¹ÜÀíÏµÍ³µÄÉè¼Æ²»µ¥µ¥ÊÇÊý¾ÝµÄ´æ´¢ÕâÃ´¼òµ¥
-³ýÁËÖ÷ÒªµÄ¹¦ÄÜ£¬»¹ÐèÒª×¢ÒâÏ¸½Ú·½ÃæµÄ¶«Î÷
-µÚÒ»£¬¿ÉÒÔÍ¨¹ýÌõ¼þ²éÕÒ·ûºÏÒªÇóµÄÈËÔ±¡£
-    ´ÓÐÇÆÚ¼¸£¬µÚ¼¸½Ú¿Î£¬ÐÔ±ðÕâÈý¸ö·½ÃæÀ´ÏÞÖÆ
-µÚ¶þ£¬¿ÉÒÔ²é¿´Õû¸ö²¿ÃÅµÄ¿Õ¿ÎÇé¿ö
-µÚÈý£¬Ç©µ½Ç©Àë¼ÇÂ¼
-µÚËÄ£¬¿Õ¿Î±íÑéÖ¤Âë
-²éÕÒ³ö¸ÃÊ±¼ä¶ÎÃ»¿ÎµÄ¸ÉÊÂÖ®ºó£¬¾ÍµÃ×¼±¸Íâµ÷ÁË£¬¿ÉÄÜÍâµ÷²¿·ÖÈË£¬
-Ò²¿ÉÄÜÈ«²¿¶¼Íâµ÷£¬Ò²ÓÐ¿ÉÄÜºóÈ±Ï¯À´²¹ÉÏ»òÕß£¬ËùÒÔÕë¶Ô¸Ã´ÎÍâµ÷£¬Ó¦¸Ã¿ÉÒÔ¶ÔÈËÔ±½øÐÐ
-ÔöÉ¾£¬²¢ÇÒ¿ÉÒÔ½øÐÐÆÀ¼Û
-ÎÒµÄµ£ÓÇÊÇ£¬¿ÉÄÜÈ·¶¨Íâµ÷Ö®ºóÏëÐÞ¸ÄÁË£¬ÕâÖÖÇé¿öÔõÃ´°ì£¿¾ö¶¨ÁË£¬Ìá¹©Ò»¸ö¿É±à¼­µÄ¹¦ÄÜ£¬ÔÝÊ±²»¿¼ÂÇ°²È«ÐÔÎÊÌâ
-ÕÕ¾É£¬ÔÚÇ©µ½Ç©ÀëÄÇÀïÔö¼ÓÒ»¸öÀúÊ·¼ÇÂ¼£¬È»ºóÒªÊÇÏëÐÞ¸ÄµÄ»°¾ÍµÃÊäÈëÍâµ÷ÐòÁÐºÅ
-ÐÞ¸Ä°üÀ¨É¾³ýÍâµ÷£¬ÖØÐÂÍâµ÷£¬É¾³ýÈËÔ±
-¶øÇÒ»¹¿ÉÒÔ½øÐÐÆÀ¼Û
+ç”¨æˆ·ç™»å½•å’Œæ–°é—»ç¼–è¾‘æ¨¡å—åŸºæœ¬å®Œæˆäº†ï¼Œå…ˆåœ¨éœ€è¦ç€æ‰‹è§£å†³çš„æ˜¯ç»©æ•ˆè€ƒæ ¸ç³»ç»Ÿ
+ç”¨æˆ·ä¸­å¿ƒï¼š
+ç”¨giiæ–°å»ºä¸€ä¸ªæ¨¡å—userï¼Œ
 
-Ò»ÏÂ×ÅÖØÉè¼Æ¼¨Ð§¿¼ºËÏµÍ³
-²âÊÔÐèÒª£º
-//¸ÉÊÂ×ÔÆÀ±í´óÏîÄ¿,a±íÊ¾¸ÉÊÂ
+
+å–æ¶ˆé‚®ç®±éªŒè¯ï¼Œæ”¹æˆis_active
+æ˜¯æ—¶å€™è§£å†³æƒé™é—®é¢˜äº†ã€‚
+
+æ•´ä¸ªäººåŠ›ç®¡ç†ç³»ç»Ÿçš„è®¾è®¡ä¸å•å•æ˜¯æ•°æ®çš„å­˜å‚¨è¿™ä¹ˆç®€å•
+é™¤äº†ä¸»è¦çš„åŠŸèƒ½ï¼Œè¿˜éœ€è¦æ³¨æ„ç»†èŠ‚æ–¹é¢çš„ä¸œè¥¿
+ç¬¬ä¸€ï¼Œå¯ä»¥é€šè¿‡æ¡ä»¶æŸ¥æ‰¾ç¬¦åˆè¦æ±‚çš„äººå‘˜ã€‚
+    ä»Žæ˜ŸæœŸå‡ ï¼Œç¬¬å‡ èŠ‚è¯¾ï¼Œæ€§åˆ«è¿™ä¸‰ä¸ªæ–¹é¢æ¥é™åˆ¶
+ç¬¬äºŒï¼Œå¯ä»¥æŸ¥çœ‹æ•´ä¸ªéƒ¨é—¨çš„ç©ºè¯¾æƒ…å†µ
+ç¬¬ä¸‰ï¼Œç­¾åˆ°ç­¾ç¦»è®°å½•
+ç¬¬å››ï¼Œç©ºè¯¾è¡¨éªŒè¯ç 
+æŸ¥æ‰¾å‡ºè¯¥æ—¶é—´æ®µæ²¡è¯¾çš„å¹²äº‹ä¹‹åŽï¼Œå°±å¾—å‡†å¤‡å¤–è°ƒäº†ï¼Œå¯èƒ½å¤–è°ƒéƒ¨åˆ†äººï¼Œ
+ä¹Ÿå¯èƒ½å…¨éƒ¨éƒ½å¤–è°ƒï¼Œä¹Ÿæœ‰å¯èƒ½åŽç¼ºå¸­æ¥è¡¥ä¸Šæˆ–è€…ï¼Œæ‰€ä»¥é’ˆå¯¹è¯¥æ¬¡å¤–è°ƒï¼Œåº”è¯¥å¯ä»¥å¯¹äººå‘˜è¿›è¡Œ
+å¢žåˆ ï¼Œå¹¶ä¸”å¯ä»¥è¿›è¡Œè¯„ä»·
+æˆ‘çš„æ‹…å¿§æ˜¯ï¼Œå¯èƒ½ç¡®å®šå¤–è°ƒä¹‹åŽæƒ³ä¿®æ”¹äº†ï¼Œè¿™ç§æƒ…å†µæ€Žä¹ˆåŠžï¼Ÿå†³å®šäº†ï¼Œæä¾›ä¸€ä¸ªå¯ç¼–è¾‘çš„åŠŸèƒ½ï¼Œæš‚æ—¶ä¸è€ƒè™‘å®‰å…¨æ€§é—®é¢˜
+ç…§æ—§ï¼Œåœ¨ç­¾åˆ°ç­¾ç¦»é‚£é‡Œå¢žåŠ ä¸€ä¸ªåŽ†å²è®°å½•ï¼Œç„¶åŽè¦æ˜¯æƒ³ä¿®æ”¹çš„è¯å°±å¾—è¾“å…¥å¤–è°ƒåºåˆ—å·
+ä¿®æ”¹åŒ…æ‹¬åˆ é™¤å¤–è°ƒï¼Œé‡æ–°å¤–è°ƒï¼Œåˆ é™¤äººå‘˜
+è€Œä¸”è¿˜å¯ä»¥è¿›è¡Œè¯„ä»·
+
+ä¸€ä¸‹ç€é‡è®¾è®¡ç»©æ•ˆè€ƒæ ¸ç³»ç»Ÿ
+æµ‹è¯•éœ€è¦ï¼š
+//å¹²äº‹è‡ªè¯„è¡¨å¤§é¡¹ç›®,aè¡¨ç¤ºå¹²äº‹
 tbl_atitle
 {
-title ´óÏîÄ¿ private key
+title å¤§é¡¹ç›® private key
 text1
 text2
-text3 Ð¡ÏîÄ¿
+text3 å°é¡¹ç›®
 }
-//¸ÉÊÂ×ÔÆÀ±íÐ¡ÏîÄ¿¼°·ÖÊý,a±íÊ¾¸ÉÊÂ
+//å¹²äº‹è‡ªè¯„è¡¨å°é¡¹ç›®åŠåˆ†æ•°,aè¡¨ç¤ºå¹²äº‹
 tbl_atext
 {
-title Ç°ÃæµÄÐ¡ÏîÄ¿private key
+title å‰é¢çš„å°é¡¹ç›®private key
 text1
 text2
 text3
-text4  ¾ßÌåÑ¡ÏîÄÚÈÝ
+text4  å…·ä½“é€‰é¡¹å†…å®¹
 grade1
 grade2
 grade3
-grade4  ¾ßÌåÑ¡ÏîµÃ·Ö
+grade4  å…·ä½“é€‰é¡¹å¾—åˆ†
 }
-½øÐÐÔöÉ¾²é¸ÄÊ±£¬¼ÇµÃÒªÍ¬²½²Ù×÷
+è¿›è¡Œå¢žåˆ æŸ¥æ”¹æ—¶ï¼Œè®°å¾—è¦åŒæ­¥æ“ä½œ
 
-ÓÉÓÚ¿¼ºË±íÓÐÁùÕÅ»ù±¾ÏàÍ¬£¬¶ø²ÉÓÃÉÏÃæµÄ·½Ê½ÊµÏÖÊÇÌ«¶àÁË£¬µ«Ë¼Â·²»´í£¬ËùÒÔ½øÐÐÕûºÏ£º
-//´óÏîÄ¿±í
+ç”±äºŽè€ƒæ ¸è¡¨æœ‰å…­å¼ åŸºæœ¬ç›¸åŒï¼Œè€Œé‡‡ç”¨ä¸Šé¢çš„æ–¹å¼å®žçŽ°æ˜¯å¤ªå¤šäº†ï¼Œä½†æ€è·¯ä¸é”™ï¼Œæ‰€ä»¥è¿›è¡Œæ•´åˆï¼š
+//å¤§é¡¹ç›®è¡¨
 tbl_titlemax
 {
-id //±íµÄÖÖÀà
-title1//´óÏîÄ¿µÄ±êÌâ£¬ÕâÖÖ¿¼ºË±í×î¶àÖ»ÄÜ¿ªÉè5¸ö´óÏîÄ¿
-title2//Ã¿¸ö´óÏîÄ¿ÓÖÊÇÖÐÏîÄ¿µÄÖØÒªË÷Òý
-title3//¿ÉÒÔÎª¿Õ
+id //è¡¨çš„ç§ç±»
+title1//å¤§é¡¹ç›®çš„æ ‡é¢˜ï¼Œè¿™ç§è€ƒæ ¸è¡¨æœ€å¤šåªèƒ½å¼€è®¾5ä¸ªå¤§é¡¹ç›®
+title2//æ¯ä¸ªå¤§é¡¹ç›®åˆæ˜¯ä¸­é¡¹ç›®çš„é‡è¦ç´¢å¼•
+title3//å¯ä»¥ä¸ºç©º
 title4
 title5
 }
-//ÖÐÏîÄ¿±í
+//ä¸­é¡¹ç›®è¡¨
 tbl_titlemid
 {
-id//±íµÄÖÖÀà
-title//´óÏîÄ¿
-title1//ÖÐÏîÄ¿£¬Çé¿ö¸ú´óÏîÄ¿²î²»¶à£¬×î¶à5¸ö
+id//è¡¨çš„ç§ç±»
+title//å¤§é¡¹ç›®
+title1//ä¸­é¡¹ç›®ï¼Œæƒ…å†µè·Ÿå¤§é¡¹ç›®å·®ä¸å¤šï¼Œæœ€å¤š5ä¸ª
 title2
 title3
 title4
 title5
 }
-//Ð¡ÏîÄ¿±í
+//å°é¡¹ç›®è¡¨
 tbl_titlemin
 {
-id//±íµÄÖÖÀà
-title//ÖÐÏîÄ¿
-title1//Ñ¡ÏîABCD£¬¹æ¶¨Ö»ÄÜÓÐËÄ¸öÑ¡Ïî
+id//è¡¨çš„ç§ç±»
+title//ä¸­é¡¹ç›®
+title1//é€‰é¡¹ABCDï¼Œè§„å®šåªèƒ½æœ‰å››ä¸ªé€‰é¡¹
 title2
 title3
 title4
 }
-»¹ÓÐÒ»ÖÖ¿¼ºË±íÊÇÃ»ÓÐ´óÏîÄ¿µÄ£¬¶øÇÒÖÐÏîÄ¿¶à´ï7¸ö£¬Èç¹ûÇ¿ÖÆ¸úÉÏÃæµÄ±í²¢ÆðÀ´»áºÜ³ÔÁ¦£¬ËùÒÔµ¥¶À¿ª
+è¿˜æœ‰ä¸€ç§è€ƒæ ¸è¡¨æ˜¯æ²¡æœ‰å¤§é¡¹ç›®çš„ï¼Œè€Œä¸”ä¸­é¡¹ç›®å¤šè¾¾7ä¸ªï¼Œå¦‚æžœå¼ºåˆ¶è·Ÿä¸Šé¢çš„è¡¨å¹¶èµ·æ¥ä¼šå¾ˆåƒåŠ›ï¼Œæ‰€ä»¥å•ç‹¬å¼€
 tbl_othermid
 {
-id//±íµÄÖÖÀà
-title1//¹æ¶¨×î¶àÖ»ÄÜÓÐ9¸öÖÐÏîÄ¿£¬
-title2//¼øÓÚÃ¿¸öÖÐÏîÄ¿¶ÔÓ¦µÄÐ¡ÏîÄ¿Ò²ÊÇABCD¹Ì¶¨µÄ£¬ËùÒÔ¿ÉÒÔÑØÓÃÉÏÃæµÄtbl_titlemin
+id//è¡¨çš„ç§ç±»
+title1//è§„å®šæœ€å¤šåªèƒ½æœ‰9ä¸ªä¸­é¡¹ç›®ï¼Œ
+title2//é‰´äºŽæ¯ä¸ªä¸­é¡¹ç›®å¯¹åº”çš„å°é¡¹ç›®ä¹Ÿæ˜¯ABCDå›ºå®šçš„ï¼Œæ‰€ä»¥å¯ä»¥æ²¿ç”¨ä¸Šé¢çš„tbl_titlemin
 title3
 title4
 title5
@@ -331,22 +331,22 @@ title8
 title9
 }
 
-ÎªÁË·½±ã£¬¹æ¶¨idÎªÏÂÁÐÖµÊ±·Ö±ð¶ÔÓ¦µÄ±í
-1£º¸ÉÊÂ×ÔÆÀ±í£¨¸ÉÊÂÌî£©
-2£º¸ÉÊÂ¿¼ºË±í£¨²¿³¤Ìî£©
-3£º²¿³¤×ÔÆÀ±í£¨²¿³¤Ìî£©
-4£º²¿³¤¿¼ºË±í£¨Ö÷Ï¯Ìî£©
-5£º²¿ÃÅ¿¼ºË±í£¨Ö÷Ï¯Ìî£©
-6£ºÖ÷Ï¯²¿ÃÅ¿¼ºË±í
-ÆäÖÐµÚÎåÕÅºÍµÚÁùÕÅ½á¹¹¸úÇ°ËÄÕÅ²»Ò»Ñù£¬ÐèÁíÍâÉè¼Æ
+ä¸ºäº†æ–¹ä¾¿ï¼Œè§„å®šidä¸ºä¸‹åˆ—å€¼æ—¶åˆ†åˆ«å¯¹åº”çš„è¡¨
+1ï¼šå¹²äº‹è‡ªè¯„è¡¨ï¼ˆå¹²äº‹å¡«ï¼‰
+2ï¼šå¹²äº‹è€ƒæ ¸è¡¨ï¼ˆéƒ¨é•¿å¡«ï¼‰
+3ï¼šéƒ¨é•¿è‡ªè¯„è¡¨ï¼ˆéƒ¨é•¿å¡«ï¼‰
+4ï¼šéƒ¨é•¿è€ƒæ ¸è¡¨ï¼ˆä¸»å¸­å¡«ï¼‰
+5ï¼šéƒ¨é—¨è€ƒæ ¸è¡¨ï¼ˆä¸»å¸­å¡«ï¼‰
+6ï¼šä¸»å¸­éƒ¨é—¨è€ƒæ ¸è¡¨
+å…¶ä¸­ç¬¬äº”å¼ å’Œç¬¬å…­å¼ ç»“æž„è·Ÿå‰å››å¼ ä¸ä¸€æ ·ï¼Œéœ€å¦å¤–è®¾è®¡
 
-²éÁËÒ»ÏÂ£¬Ä¬ÈÏ·ÃÎÊµÄ¶¼ÊÇindex.php£¬ÄÇÃ´¾Í¿ÉÒÔ½«×Ô¶¨ÒåµÄº¯Êý£¬ÀàµÈ
-·ÅÔÚprotected/functionÖÐ£¬È»ºóÔÚ¿ØÖÆÆ÷ÖÐÒýÈë
+æŸ¥äº†ä¸€ä¸‹ï¼Œé»˜è®¤è®¿é—®çš„éƒ½æ˜¯index.phpï¼Œé‚£ä¹ˆå°±å¯ä»¥å°†è‡ªå®šä¹‰çš„å‡½æ•°ï¼Œç±»ç­‰
+æ”¾åœ¨protected/functionä¸­ï¼Œç„¶åŽåœ¨æŽ§åˆ¶å™¨ä¸­å¼•å…¥
 require_once('protected/function.php');
 
-protected/function/Classtitlemax.phpÔÝÊ±²»ÏëÐ´Ä§·¨º¯ÊýµÄÏÞÖÆºÍÑéÖ¤£¬ÏÈ°Ñ´óÌå¹¦ÄÜÍê³ÉÔÙËµ
+protected/function/Classtitlemax.phpæš‚æ—¶ä¸æƒ³å†™é­”æ³•å‡½æ•°çš„é™åˆ¶å’ŒéªŒè¯ï¼Œå…ˆæŠŠå¤§ä½“åŠŸèƒ½å®Œæˆå†è¯´
 
-ÆäÊµ¿ÉÒÔ¿¼ÂÇ½«add.phpÀïÃæµÄÈ«²¿ÐÅÏ¢ÕûºÏµ½Ò»¸ö¼ÇÂ¼ÀïÃæÈ¥
+å…¶å®žå¯ä»¥è€ƒè™‘å°†add.phpé‡Œé¢çš„å…¨éƒ¨ä¿¡æ¯æ•´åˆåˆ°ä¸€ä¸ªè®°å½•é‡Œé¢åŽ»
 SET character_set_client=gbk_chinese_ci;
 SET character_set_connection=gbk_chinese_ci;
 SET character_set_database=gbk_chinese_ci;
@@ -356,11 +356,11 @@ SET collation_connection=gbk_chinese_ci;
 SET collation_server=gbk_chinese_ci;
 create table tbl_evaone
 {
-pkid primary int not NULL,//×÷ÎªÒ»¸öÖ÷¼ü£¬Ã»Ê²Ã´ÓÃ
-id int not NULL,//±íµÄÖÖÀà
-titleid int not NULL,//´óÏîÄ¿µÄ±àºÅ£¬×î¶àÊÇ5
-titlemax varchar(20),//´óÏîÄ¿
-titlemid1 varchar(20),//ÖÐÏîÄ¿1
+pkid primary int not NULL,//ä½œä¸ºä¸€ä¸ªä¸»é”®ï¼Œæ²¡ä»€ä¹ˆç”¨
+id int not NULL,//è¡¨çš„ç§ç±»
+titleid int not NULL,//å¤§é¡¹ç›®çš„ç¼–å·ï¼Œæœ€å¤šæ˜¯5
+titlemax varchar(20),//å¤§é¡¹ç›®
+titlemid1 varchar(20),//ä¸­é¡¹ç›®1
 titlemid2 varchar(20),
 titlemid3 varchar(20),
 titlemid4 varchar(20),
@@ -407,52 +407,52 @@ titlemin5CG int,
 titlemin5DG int
 };
 
-°´ÕÕµ±Ç°µÄÇé¿ö£¬¼¨Ð§¿¼ºË·ÖÈý²½×ß£º
-µÚÒ»£¬¿¼ºË±í¸ñµÄÉú³É¡£ÒòÎª¿¼ºË±í¸ñÊýÁ¿¾Þ¶à£¬¶øÇÒºóÆÚÓÖ»áÓÐËù±ä¶¯£¬ÐèÒª½øÐÐÊý¾Ý¿â´æ´¢¡£
-µÚ¶þ£¬±í¸ñÉè¼ÆÍê³ÉÖ®ºó£¬½ÓÏÂÀ´ÊÇÉè¼ÆÊý¾Ý¿â±í£¬ÒÔÊµÏÖ¸ÉÊÂ£¬ÈËÁ¦£¬²¿³¤£¬Ö÷Ï¯ÌîÐ´¿¼ºË±í
-     ÕâÀïÓÐÁ½·½ÃæµÄÄÚÈÝ£¬ÆäÒ»ÊÇµ÷ÓÃ¸÷¸öÊý¾Ý¿â±í£¬Éú³ÉÍêÕûµÄ¿¼ºËÒ³Ãæ¡£Æä¶þÊÇÉè¼ÆÊý¾Ý¿â±í£¬
-     ´æ´¢¿¼ºË½á¹û£¬·½±ã²éÑ¯ÒÔ¼°·´À¡¡£
-µÚÈý£¬¸ù¾ÝµÚ¶þÉè¼ÆµÄÊý¾Ý¿â±í£¬³éÈ¡²¢ÔËËãÆäÊý¾Ý£¬Éú³ÉÅÅÃû£¬Í³¼ÆµÈ·´À¡½á¹û¡£
+æŒ‰ç…§å½“å‰çš„æƒ…å†µï¼Œç»©æ•ˆè€ƒæ ¸åˆ†ä¸‰æ­¥èµ°ï¼š
+ç¬¬ä¸€ï¼Œè€ƒæ ¸è¡¨æ ¼çš„ç”Ÿæˆã€‚å› ä¸ºè€ƒæ ¸è¡¨æ ¼æ•°é‡å·¨å¤šï¼Œè€Œä¸”åŽæœŸåˆä¼šæœ‰æ‰€å˜åŠ¨ï¼Œéœ€è¦è¿›è¡Œæ•°æ®åº“å­˜å‚¨ã€‚
+ç¬¬äºŒï¼Œè¡¨æ ¼è®¾è®¡å®Œæˆä¹‹åŽï¼ŒæŽ¥ä¸‹æ¥æ˜¯è®¾è®¡æ•°æ®åº“è¡¨ï¼Œä»¥å®žçŽ°å¹²äº‹ï¼ŒäººåŠ›ï¼Œéƒ¨é•¿ï¼Œä¸»å¸­å¡«å†™è€ƒæ ¸è¡¨
+     è¿™é‡Œæœ‰ä¸¤æ–¹é¢çš„å†…å®¹ï¼Œå…¶ä¸€æ˜¯è°ƒç”¨å„ä¸ªæ•°æ®åº“è¡¨ï¼Œç”Ÿæˆå®Œæ•´çš„è€ƒæ ¸é¡µé¢ã€‚å…¶äºŒæ˜¯è®¾è®¡æ•°æ®åº“è¡¨ï¼Œ
+     å­˜å‚¨è€ƒæ ¸ç»“æžœï¼Œæ–¹ä¾¿æŸ¥è¯¢ä»¥åŠåé¦ˆã€‚
+ç¬¬ä¸‰ï¼Œæ ¹æ®ç¬¬äºŒè®¾è®¡çš„æ•°æ®åº“è¡¨ï¼ŒæŠ½å–å¹¶è¿ç®—å…¶æ•°æ®ï¼Œç”ŸæˆæŽ’åï¼Œç»Ÿè®¡ç­‰åé¦ˆç»“æžœã€‚
 
-Ê±¼ä·½ÃæµÄÏÞÖÆ¶îÍâÓÃÒ»ÕÅ±íÀ´³Ð½Ó¡£
-ÑÛÏÂÖØÖÐÖ®ÖØÊÇÉè¼ÆÄÜÈÝÄÉ¿¼ºË½á¹ûµÄ±í£¬¶øÇÒÒªÄÜÈÝÄÉËÄÖÖÀàÐÍµÄ¿¼ºË£¬²»Í¬ÔÂ·ÝµÄ¿¼ºË
+æ—¶é—´æ–¹é¢çš„é™åˆ¶é¢å¤–ç”¨ä¸€å¼ è¡¨æ¥æ‰¿æŽ¥ã€‚
+çœ¼ä¸‹é‡ä¸­ä¹‹é‡æ˜¯è®¾è®¡èƒ½å®¹çº³è€ƒæ ¸ç»“æžœçš„è¡¨ï¼Œè€Œä¸”è¦èƒ½å®¹çº³å››ç§ç±»åž‹çš„è€ƒæ ¸ï¼Œä¸åŒæœˆä»½çš„è€ƒæ ¸
 
-ÓÉÓÚstrcmp()º¯Êý¶ÔÖÐÎÄµÄÖ§³Ö²»ÊÇºÜºÃ£¬ËùÒÔperson ÖÐµÄtype
-±È½ÏÈ·¶¨ÏÂÃæ¹æÔò£º
-1 ¸ÉÊÂ
-2 ÈËÁ¦¸ÉÊÂ
-3 ²¿³¤¼¶
-4 Ö÷Ï¯ÍÅ
+ç”±äºŽstrcmp()å‡½æ•°å¯¹ä¸­æ–‡çš„æ”¯æŒä¸æ˜¯å¾ˆå¥½ï¼Œæ‰€ä»¥person ä¸­çš„type
+æ¯”è¾ƒç¡®å®šä¸‹é¢è§„åˆ™ï¼š
+1 å¹²äº‹
+2 äººåŠ›å¹²äº‹
+3 éƒ¨é•¿çº§
+4 ä¸»å¸­å›¢
 
-ÓÉÓÚstrcmp()º¯Êý¶ÔÖÐÎÄµÄÖ§³Ö²»ÊÇºÜÀíÏë£¬ËùÒÔ¶Ô²¿ÃÅµÄ´¦ÀíÖ»ÄÜ¸Ä³ÉÊý×ÖÀ´´úÌæ£¬µ½Ê±Íù
-Ç°Ì¨·¢ËÍÊý¾ÝµÄÊ±ºò£¬ÔÙ¼òµ¥×ª»¯Ò»ÏÂ¼´¿É
-ÃØÊé´¦£º1
-ÈËÁ¦×ÊÔ´²¿£º2
-Ðû´«²¿£º3
-ÐÅÏ¢±à¼­²¿£º4
-Ñ§Êõ²¿£º5
-ÌåÓý²¿£º6
-KSCÁªÃË£º7
-×éÖ¯²¿£º8
-ÎÄÓé²¿£º9
-¹«¹Ø²¿£º10
-ÐÄÀí·þÎñ²¿£º11
-Ö÷Ï¯ÍÅ£º12
+ç”±äºŽstrcmp()å‡½æ•°å¯¹ä¸­æ–‡çš„æ”¯æŒä¸æ˜¯å¾ˆç†æƒ³ï¼Œæ‰€ä»¥å¯¹éƒ¨é—¨çš„å¤„ç†åªèƒ½æ”¹æˆæ•°å­—æ¥ä»£æ›¿ï¼Œåˆ°æ—¶å¾€
+å‰å°å‘é€æ•°æ®çš„æ—¶å€™ï¼Œå†ç®€å•è½¬åŒ–ä¸€ä¸‹å³å¯
+ç§˜ä¹¦å¤„ï¼š1
+äººåŠ›èµ„æºéƒ¨ï¼š2
+å®£ä¼ éƒ¨ï¼š3
+ä¿¡æ¯ç¼–è¾‘éƒ¨ï¼š4
+å­¦æœ¯éƒ¨ï¼š5
+ä½“è‚²éƒ¨ï¼š6
+KSCè”ç›Ÿï¼š7
+ç»„ç»‡éƒ¨ï¼š8
+æ–‡å¨±éƒ¨ï¼š9
+å…¬å…³éƒ¨ï¼š10
+å¿ƒç†æœåŠ¡éƒ¨ï¼š11
+ä¸»å¸­å›¢ï¼š12
 
 
-Ã»°ì·¨£¬ÊÓÍ¼È·ÊµµÃ¶àµã
-3ÕÅshow±í£¬showa,showb,showc
-5ÕÅedit±í,edit1,eidt2,edit3,edit4,edit5´¦Àí²»Í¬µÄ
+æ²¡åŠžæ³•ï¼Œè§†å›¾ç¡®å®žå¾—å¤šç‚¹
+3å¼ showè¡¨ï¼Œshowa,showb,showc
+5å¼ editè¡¨,edit1,eidt2,edit3,edit4,edit5å¤„ç†ä¸åŒçš„
 
-ÎªÁË·½±ã´¦ÀíÖ÷Ï¯ÍÅÖ÷¹Ü²¿ÃÅµÄÐÅÏ¢£¬ÐÂÔöÒ»ÕÅ±í¸ñ
+ä¸ºäº†æ–¹ä¾¿å¤„ç†ä¸»å¸­å›¢ä¸»ç®¡éƒ¨é—¨çš„ä¿¡æ¯ï¼Œæ–°å¢žä¸€å¼ è¡¨æ ¼
 tbl_president
 {
-account pk//Ñ§ºÅ£¬
-apartment1//²¿ÃÅ1
-apartment2//²¿ÃÅ2
-is_sub//ÊÇ²»ÊÇÐ¡boss,y±íÊ¾Ö÷¹ÜÁ½¸ö²¿ÃÅ£¬n±íÊ¾Ö÷¹ÜËùÓÐ²¿ÃÅ
+account pk//å­¦å·ï¼Œ
+apartment1//éƒ¨é—¨1
+apartment2//éƒ¨é—¨2
+is_sub//æ˜¯ä¸æ˜¯å°boss,yè¡¨ç¤ºä¸»ç®¡ä¸¤ä¸ªéƒ¨é—¨ï¼Œnè¡¨ç¤ºä¸»ç®¡æ‰€æœ‰éƒ¨é—¨
 }
-²»Ö¹ÊÇÖ÷Ï¯ÍÅÒªºóÌ¨Ö¸¶¨£¬ÈËÁ¦¸ÉÊÂµÄ¸ú½øÒ²ÒªºóÌ¨Ö¸¶¨
+ä¸æ­¢æ˜¯ä¸»å¸­å›¢è¦åŽå°æŒ‡å®šï¼ŒäººåŠ›å¹²äº‹çš„è·Ÿè¿›ä¹Ÿè¦åŽå°æŒ‡å®š
 tbl_rlgj
 {
 account
@@ -466,10 +466,10 @@ apartment
 	<meta name="language" content="en" />
 </head>
 <div>
-<a href="./index.php?r=user/message/index">¸öÈËÖÐÐÄ</a>
-<a href="./index.php?r=home/admin/index">ºóÌ¨¹ÜÀí</a>
-<a href="./index.php?r=user/resource/index">ÈËÁ¦×ÊÔ´¹ÜÀíÏµÍ³</a>
-<a href="./index.php?r=user/evaluate/show">¼¨Ð§¿¼ºËÏµÍ³</a>
+<a href="./index.php?r=user/message/index">ä¸ªäººä¸­å¿ƒ</a>
+<a href="./index.php?r=home/admin/index">åŽå°ç®¡ç†</a>
+<a href="./index.php?r=user/resource/index">äººåŠ›èµ„æºç®¡ç†ç³»ç»Ÿ</a>
+<a href="./index.php?r=user/evaluate/show">ç»©æ•ˆè€ƒæ ¸ç³»ç»Ÿ</a>
 </div>
 </br>
 <?php echo $content;?>
@@ -487,30 +487,30 @@ foreach($person_info as $v)
 }
 ?>
 <table>
-    <tr><td>ÕË»§ÐÅÏ¢</td></tr>
-    <tr><td>ÕËºÅ£º</td><td><?php echo $v->account;?></td></tr>
-    <tr><td>ÐÕÃû£º</td><td><?php echo $v->name;?></td></tr>
-    <tr><td>ÓÃ»§ÀàÐÍ£º</td><td><?php echo $v->type;?></td></tr>
-    <tr><td>ËùÊô²¿ÃÅ£º</td><td><?php echo $v->apartment;?></td></tr>
-    <tr><td>Ö°Î»£º</td><td><?php echo $v->position;?></td></tr>
+    <tr><td>è´¦æˆ·ä¿¡æ¯</td></tr>
+    <tr><td>è´¦å·ï¼š</td><td><?php echo $v->account;?></td></tr>
+    <tr><td>å§“åï¼š</td><td><?php echo $v->name;?></td></tr>
+    <tr><td>ç”¨æˆ·ç±»åž‹ï¼š</td><td><?php echo $v->type;?></td></tr>
+    <tr><td>æ‰€å±žéƒ¨é—¨ï¼š</td><td><?php echo $v->apartment;?></td></tr>
+    <tr><td>èŒä½ï¼š</td><td><?php echo $v->position;?></td></tr>
 </table>
 <table>
-    <tr><td>¸öÈËÐÅÏ¢</td></tr>
-    <tr><td>ÐÔ±ð£º</td><td><?php echo $v->sex; ?></td></tr>
-    <tr><td>Äê¼¶£º</td><td><?php echo $v->grade; ?></td></tr>
-    <tr><td>×¨Òµ£º</td><td><?php echo $v->major; ?></td></tr>
-    <tr><td>ÉúÈÕ£º</td><td><?php echo $v->birthyear.$v->birthmonth.$v->birthday; ?></td></tr>
+    <tr><td>ä¸ªäººä¿¡æ¯</td></tr>
+    <tr><td>æ€§åˆ«ï¼š</td><td><?php echo $v->sex; ?></td></tr>
+    <tr><td>å¹´çº§ï¼š</td><td><?php echo $v->grade; ?></td></tr>
+    <tr><td>ä¸“ä¸šï¼š</td><td><?php echo $v->major; ?></td></tr>
+    <tr><td>ç”Ÿæ—¥ï¼š</td><td><?php echo $v->birthyear.$v->birthmonth.$v->birthday; ?></td></tr>
 </table>
 <table>
-    <tr><td>ÁªÏµ·½Ê½</td></tr>
-    <tr><td>³¤ºÅ£º</td><td><?php echo $v->phone;?></td></tr>
-    <tr><td>¶ÌºÅ£º</td><td><?php echo $v->short;?></td></tr>
-    <tr><td>qq£º</td><td><?php echo $v->qq;?></td></tr>
-    <tr><td>ËÞÉáºÅ£º</td><td><?php echo $v->dorm;?></td></tr>
-    <tr><td>ÓÊÏä£º</td><td><?php echo $v->mail;?></td></tr>
+    <tr><td>è”ç³»æ–¹å¼</td></tr>
+    <tr><td>é•¿å·ï¼š</td><td><?php echo $v->phone;?></td></tr>
+    <tr><td>çŸ­å·ï¼š</td><td><?php echo $v->short;?></td></tr>
+    <tr><td>qqï¼š</td><td><?php echo $v->qq;?></td></tr>
+    <tr><td>å®¿èˆå·ï¼š</td><td><?php echo $v->dorm;?></td></tr>
+    <tr><td>é‚®ç®±ï¼š</td><td><?php echo $v->mail;?></td></tr>
 </table>
-<a href="<?php echo './index.php?r=user/message/change'?>">ÐÞ¸Ä¸öÈËÐÅÏ¢</a>
-<a href="<?php echo './index.php?r=user/message/password'?>">ÐÞ¸ÄÃÜÂë</a>
+<a href="<?php echo './index.php?r=user/message/change'?>">ä¿®æ”¹ä¸ªäººä¿¡æ¯</a>
+<a href="<?php echo './index.php?r=user/message/password'?>">ä¿®æ”¹å¯†ç </a>
 
 
 
@@ -520,33 +520,33 @@ foreach($person_info as $v)
 -->
 
 
-ÏÂÃæÊÇ¼¨Ð§¿¼ºËµÄÉè¼ÆËµÃ÷
-ÎªÁË·½±ã£¬¹æ¶¨idÎªÏÂÁÐÖµÊ±·Ö±ð¶ÔÓ¦µÄ±í
-1£º¸ÉÊÂ×ÔÆÀ±í£¨¸ÉÊÂÌî£©
-2£º¸ÉÊÂ¿¼ºË±í£¨²¿³¤Ìî£©
-3£º²¿³¤×ÔÆÀ±í£¨²¿³¤Ìî£©
-4£º²¿³¤¿¼ºË±í£¨Ö÷Ï¯Ìî£©
-5£º²¿ÃÅ¿¼ºË±í£¨Ö÷Ï¯Ìî£©
-6£º¸ÉÊÂ¿¼ºË±í
-7£º¸ú½ø²¿ÃÅ³öÇÚÍ³¼Æ±í
-8£ºµ÷ÑÐÒâ¼û²ÉÄÉ±í
-9£ºÕûÌå¿¼ºË½á¹û·´À¡±í
-10£º²¿³¤·´À¡±í
-11£ºÓÅÐã²¿³¤ÆÀ¶¨±í
-12£ºÖ÷Ï¯ÍÅ·´À¡±í
+ä¸‹é¢æ˜¯ç»©æ•ˆè€ƒæ ¸çš„è®¾è®¡è¯´æ˜Ž
+ä¸ºäº†æ–¹ä¾¿ï¼Œè§„å®šidä¸ºä¸‹åˆ—å€¼æ—¶åˆ†åˆ«å¯¹åº”çš„è¡¨
+1ï¼šå¹²äº‹è‡ªè¯„è¡¨ï¼ˆå¹²äº‹å¡«ï¼‰
+2ï¼šå¹²äº‹è€ƒæ ¸è¡¨ï¼ˆéƒ¨é•¿å¡«ï¼‰
+3ï¼šéƒ¨é•¿è‡ªè¯„è¡¨ï¼ˆéƒ¨é•¿å¡«ï¼‰
+4ï¼šéƒ¨é•¿è€ƒæ ¸è¡¨ï¼ˆä¸»å¸­å¡«ï¼‰
+5ï¼šéƒ¨é—¨è€ƒæ ¸è¡¨ï¼ˆä¸»å¸­å¡«ï¼‰
+6ï¼šå¹²äº‹è€ƒæ ¸è¡¨
+7ï¼šè·Ÿè¿›éƒ¨é—¨å‡ºå‹¤ç»Ÿè®¡è¡¨
+8ï¼šè°ƒç ”æ„è§é‡‡çº³è¡¨
+9ï¼šæ•´ä½“è€ƒæ ¸ç»“æžœåé¦ˆè¡¨
+10ï¼šéƒ¨é•¿åé¦ˆè¡¨
+11ï¼šä¼˜ç§€éƒ¨é•¿è¯„å®šè¡¨
+12ï¼šä¸»å¸­å›¢åé¦ˆè¡¨
 
-¸ÉÊÂ×ÔÆÀ±í
-//½«ÍÆÓÅ¡¢²¿³¤ÆÀ¼ÛÍâµÄËùÓÐ¶«Î÷¼¯ÖÐÆðÀ´
+å¹²äº‹è‡ªè¯„è¡¨
+//å°†æŽ¨ä¼˜ã€éƒ¨é•¿è¯„ä»·å¤–çš„æ‰€æœ‰ä¸œè¥¿é›†ä¸­èµ·æ¥
 tbl_gszp
 {
  id //pk ai
- account//ÕËºÅ
- apartment//¸ÉÊÂËùÊô²¿ÃÅ
- year//¿¼ºËµÄÄê·Ý
- month//¿¼ºËµÄÔÂ·Ý
- zptext//×ÔÎÒÆÀ¼Û//ÏÞ¶¨×î¶à1000
- total//¿¼ºËµÄ×Ü·Ö
- DF1//×Ü¹²ÓÐ12¸ö×ÔÆÀ·Ö
+ account//è´¦å·
+ apartment//å¹²äº‹æ‰€å±žéƒ¨é—¨
+ year//è€ƒæ ¸çš„å¹´ä»½
+ month//è€ƒæ ¸çš„æœˆä»½
+ zptext//è‡ªæˆ‘è¯„ä»·//é™å®šæœ€å¤š1000
+ total//è€ƒæ ¸çš„æ€»åˆ†
+ DF1//æ€»å…±æœ‰12ä¸ªè‡ªè¯„åˆ†
  DF2
  DF3
  DF4
@@ -560,34 +560,34 @@ tbl_gszp
  DF12
 
 }
-//»¥¶¯±í£¬°üÀ¨¸ÉÊÂÆÀ¼Û²¿³¤¼¶£¬²¿³¤¼¶ÆÀ¼Û¸ÉÊÂ£¬¸ÉÊÂÍÆÓÅ¸ÉÊÂ
-//²¿³¤ÆÀ¼ÛÍ¬²¿ÃÅ²¿³¤£¬²¿³¤ÆÀ¼ÛÖ÷Ï¯£¬Ö÷Ï¯ÆÀ¼Û²¿³¤
+//äº’åŠ¨è¡¨ï¼ŒåŒ…æ‹¬å¹²äº‹è¯„ä»·éƒ¨é•¿çº§ï¼Œéƒ¨é•¿çº§è¯„ä»·å¹²äº‹ï¼Œå¹²äº‹æŽ¨ä¼˜å¹²äº‹
+//éƒ¨é•¿è¯„ä»·åŒéƒ¨é—¨éƒ¨é•¿ï¼Œéƒ¨é•¿è¯„ä»·ä¸»å¸­ï¼Œä¸»å¸­è¯„ä»·éƒ¨é•¿
 tbl_interact
 {
  id//pk
  year
  month
- waccount//Ð´ÆÀ¼ÛµÄÕËºÅ
- wapartment//Ð´ÆÀ¼ÛµÄ²¿ÃÅ
- wposition//Ð´ÆÀ¼ÛµÄÖ°Î»
- raccount//±»ÆÀ¼ÛµÄÕËºÅ
- rapartment//±»ÆÀ¼ÛµÄÈËµÄ²¿ÃÅ
- rposition//±»ÆÀ¼ÛµÄÈËµÄÖ°Î»
- text//ÆÀ¼ÛµÄÄÚÈÝ
- nm//0±íÊ¾Õý³££¬1±íÊ¾ÄäÃû
+ waccount//å†™è¯„ä»·çš„è´¦å·
+ wapartment//å†™è¯„ä»·çš„éƒ¨é—¨
+ wposition//å†™è¯„ä»·çš„èŒä½
+ raccount//è¢«è¯„ä»·çš„è´¦å·
+ rapartment//è¢«è¯„ä»·çš„äººçš„éƒ¨é—¨
+ rposition//è¢«è¯„ä»·çš„äººçš„èŒä½
+ text//è¯„ä»·çš„å†…å®¹
+ nm//0è¡¨ç¤ºæ­£å¸¸ï¼Œ1è¡¨ç¤ºåŒ¿å
 }
-//²¿³¤×ÔÆÀ±í£¬ÓÉ²¿³¤¼¶ÌîÐ´
+//éƒ¨é•¿è‡ªè¯„è¡¨ï¼Œç”±éƒ¨é•¿çº§å¡«å†™
 tbl_bzzp
 {
  id//pk
- waccount//ÌîÐ´¿¼ºË±íµÄ²¿³¤ÕËºÅ
- wapartment//ËùÊô²¿ÃÅ
- //raccount//±»ÆÀ¼ÛµÄÕËºÅ
- year//¿¼ºËÄê·Ý
- month//¿¼ºËÔÂ·Ý
- zptext//×ÔÎÒÆÀ¼Û
- total//×Ü·Ö
- DF1//×Ü¹²17¸öµÃ·Ö
+ waccount//å¡«å†™è€ƒæ ¸è¡¨çš„éƒ¨é•¿è´¦å·
+ wapartment//æ‰€å±žéƒ¨é—¨
+ //raccount//è¢«è¯„ä»·çš„è´¦å·
+ year//è€ƒæ ¸å¹´ä»½
+ month//è€ƒæ ¸æœˆä»½
+ zptext//è‡ªæˆ‘è¯„ä»·
+ total//æ€»åˆ†
+ DF1//æ€»å…±17ä¸ªå¾—åˆ†
  DF2
  DF3
  DF4
@@ -606,17 +606,17 @@ tbl_bzzp
  DF17
 }
 
-//¸ÉÊÂ¿¼ºË±í£¬ÓÉ²¿³¤¼¶ÌîÐ´
+//å¹²äº‹è€ƒæ ¸è¡¨ï¼Œç”±éƒ¨é•¿çº§å¡«å†™
 tbl_gskh
 {
  id//pk
  year
  month
- waccount//Ð´ÆÀ¼ÛµÄÕËºÅ
- wapartment//Ð´ÆÀ¼ÛµÄ²¿³¤µÄ²¿ÃÅ
- raccount//±»ÆÀ¼ÛµÄÕËºÅ
- total//×Ü·Ö
- DF1//×Ü¹²ÓÐ13¸öµÃ·Ö
+ waccount//å†™è¯„ä»·çš„è´¦å·
+ wapartment//å†™è¯„ä»·çš„éƒ¨é•¿çš„éƒ¨é—¨
+ raccount//è¢«è¯„ä»·çš„è´¦å·
+ total//æ€»åˆ†
+ DF1//æ€»å…±æœ‰13ä¸ªå¾—åˆ†
  DF2
  DF3
  DF4
@@ -630,18 +630,18 @@ tbl_gskh
  DF12
  DF13
 }
-//²¿³¤¿¼ºË±í£¬ÓÐÖ÷Ï¯ÍÅÌîÐ´
+//éƒ¨é•¿è€ƒæ ¸è¡¨ï¼Œæœ‰ä¸»å¸­å›¢å¡«å†™
 tbl_bzkh
 {
  id//pk
- waccount//ÌîÐ´¿¼ºË±íµÄÖ÷Ï¯ÕËºÅ
- wapartment//Ö÷Ï¯ÍÅµÄ²¿ÃÅ
- raccount//±»ÆÀ¼ÛµÄÕËºÅ
- rapartment//±»ÆÀ¼ÛµÄ²¿³¤ËùÊôµÄ²¿ÃÅ
- year//¿¼ºËÄê·Ý
- month//¿¼ºËÔÂ·Ý
- total//×Ü·Ö
- DF1//¹²ÓÐ15¸öµÃ·Ö
+ waccount//å¡«å†™è€ƒæ ¸è¡¨çš„ä¸»å¸­è´¦å·
+ wapartment//ä¸»å¸­å›¢çš„éƒ¨é—¨
+ raccount//è¢«è¯„ä»·çš„è´¦å·
+ rapartment//è¢«è¯„ä»·çš„éƒ¨é•¿æ‰€å±žçš„éƒ¨é—¨
+ year//è€ƒæ ¸å¹´ä»½
+ month//è€ƒæ ¸æœˆä»½
+ total//æ€»åˆ†
+ DF1//å…±æœ‰15ä¸ªå¾—åˆ†
  DF2
  DF3
  DF4
@@ -658,17 +658,17 @@ tbl_bzkh
  DF15
 }
 
-//²¿ÃÅ¿¼ºË±í£¬ÓÐÖ÷Ï¯ÌîÐ´
+//éƒ¨é—¨è€ƒæ ¸è¡¨ï¼Œæœ‰ä¸»å¸­å¡«å†™
 tbl_bmkh
 {
  id//pk
- waccount//ÌîÐ´¿¼ºË±íµÄÖ÷Ï¯ÕËºÅ
- wapartment//Ö÷Ï¯ÍÅ²¿ÃÅ
- rapartment//±»ÆÀ¼ÛµÄ²¿ÃÅ
- year//¿¼ºËÄê·Ý
- month//¿¼ºËÔÂ·Ý
- total//×Ü·Ö 
- DF1//¹²ÓÐ7¸öµÃ·Ö
+ waccount//å¡«å†™è€ƒæ ¸è¡¨çš„ä¸»å¸­è´¦å·
+ wapartment//ä¸»å¸­å›¢éƒ¨é—¨
+ rapartment//è¢«è¯„ä»·çš„éƒ¨é—¨
+ year//è€ƒæ ¸å¹´ä»½
+ month//è€ƒæ ¸æœˆä»½
+ total//æ€»åˆ† 
+ DF1//å…±æœ‰7ä¸ªå¾—åˆ†
  DF2
  DF3
  DF4
@@ -677,226 +677,226 @@ tbl_bmkh
  DF7 
 }
 
-//Ö÷Ï¯²¿ÃÅ»¥¶¯±í
+//ä¸»å¸­éƒ¨é—¨äº’åŠ¨è¡¨
 tbl_oneway
 {
  id//pk
  year
  month
- waccount//ÌîÐ´¿¼ºË±íµÄÖ÷Ï¯ÕËºÅ
- wapartment//ÌîÐ´¿¼ºË±íµÄÖ÷Ï¯²¿ÃÅ
- rapartment//±»ÆÀ¼ÛµÄ²¿ÃÅ
- text//ÆÀ¼ÛµÄÄÚÈÝ
+ waccount//å¡«å†™è€ƒæ ¸è¡¨çš„ä¸»å¸­è´¦å·
+ wapartment//å¡«å†™è€ƒæ ¸è¡¨çš„ä¸»å¸­éƒ¨é—¨
+ rapartment//è¢«è¯„ä»·çš„éƒ¨é—¨
+ text//è¯„ä»·çš„å†…å®¹
 }
 
-»ã×ÜÒ»ÏÂ
-//¸ÉÊÂ×ÔÆÀ±í
-//½«ÍÆÓÅ¡¢²¿³¤ÆÀ¼ÛÍâµÄËùÓÐ¶«Î÷¼¯ÖÐÆðÀ´
+æ±‡æ€»ä¸€ä¸‹
+//å¹²äº‹è‡ªè¯„è¡¨
+//å°†æŽ¨ä¼˜ã€éƒ¨é•¿è¯„ä»·å¤–çš„æ‰€æœ‰ä¸œè¥¿é›†ä¸­èµ·æ¥
 tbl_gszp
-//»¥¶¯±í£¬°üÀ¨¸ÉÊÂÆÀ¼Û²¿³¤¼¶£¬²¿³¤¼¶ÆÀ¼Û¸ÉÊÂ£¬¸ÉÊÂÍÆÓÅ¸ÉÊÂ
-//²¿³¤ÆÀ¼ÛÍ¬²¿ÃÅ²¿³¤£¬²¿³¤ÆÀ¼ÛÖ÷Ï¯£¬Ö÷Ï¯ÆÀ¼Û²¿³¤
+//äº’åŠ¨è¡¨ï¼ŒåŒ…æ‹¬å¹²äº‹è¯„ä»·éƒ¨é•¿çº§ï¼Œéƒ¨é•¿çº§è¯„ä»·å¹²äº‹ï¼Œå¹²äº‹æŽ¨ä¼˜å¹²äº‹
+//éƒ¨é•¿è¯„ä»·åŒéƒ¨é—¨éƒ¨é•¿ï¼Œéƒ¨é•¿è¯„ä»·ä¸»å¸­ï¼Œä¸»å¸­è¯„ä»·éƒ¨é•¿
 tbl_interact
-//²¿³¤×ÔÆÀ±í£¬ÓÉ²¿³¤¼¶ÌîÐ´
+//éƒ¨é•¿è‡ªè¯„è¡¨ï¼Œç”±éƒ¨é•¿çº§å¡«å†™
 tbl_bzzp
-//¸ÉÊÂ¿¼ºË±í£¬ÓÉ²¿³¤¼¶ÌîÐ´
+//å¹²äº‹è€ƒæ ¸è¡¨ï¼Œç”±éƒ¨é•¿çº§å¡«å†™
 tbl_gskh
-//²¿³¤¿¼ºË±í£¬ÓÐÖ÷Ï¯ÍÅÌîÐ´
+//éƒ¨é•¿è€ƒæ ¸è¡¨ï¼Œæœ‰ä¸»å¸­å›¢å¡«å†™
 tbl_bzkh
-//²¿ÃÅ¿¼ºË±í£¬ÓÐÖ÷Ï¯ÌîÐ´
+//éƒ¨é—¨è€ƒæ ¸è¡¨ï¼Œæœ‰ä¸»å¸­å¡«å†™
 tbl_bmkh
-//Ö÷Ï¯²¿ÃÅ»¥¶¯±í
+//ä¸»å¸­éƒ¨é—¨äº’åŠ¨è¡¨
 tbl_oneway
 
-½ÓÏÂÀ´ÊÇÄ£ÄâÐ´ÈëÐÅÏ¢£¬È»ºóÕûÀí³ö¿¼ºË½á¹û£¬Ò²¾ÍÊÇ·´À¡±í
-¸ÉÊÂ·´À¡±í
-²¿³¤·´À¡±í
+æŽ¥ä¸‹æ¥æ˜¯æ¨¡æ‹Ÿå†™å…¥ä¿¡æ¯ï¼Œç„¶åŽæ•´ç†å‡ºè€ƒæ ¸ç»“æžœï¼Œä¹Ÿå°±æ˜¯åé¦ˆè¡¨
+å¹²äº‹åé¦ˆè¡¨
+éƒ¨é•¿åé¦ˆè¡¨
 
 
-½ÓÏÂÀ´ÊÇÎ¥¹æÖÆ¶È
-Î¥¹æÖÆ¶ÈÊÇÕë¶Ô²¿ÃÅ¶øÑÔµÄ£¬ÓÐÁùÖÖÎ¥¹æ´¦·£
-·Ö±ðÊÇ
-1¡¢ÃØÊé´¦ÖÆ¶È
-2¡¢ÈËÁ¦×ÊÔ´²¿ÖÆ¶È
-3¡¢Ðû´«²¿ÖÆ¶È
-4¡¢ÐÅÏ¢±à¼­²¿ÖÆ¶È
-5¡¢¹«¹Ø²¿ÖÆ¶È
-6¡¢Ë¾ÒÇÀñÒÇ¶ÓÖÆ¶È
+æŽ¥ä¸‹æ¥æ˜¯è¿è§„åˆ¶åº¦
+è¿è§„åˆ¶åº¦æ˜¯é’ˆå¯¹éƒ¨é—¨è€Œè¨€çš„ï¼Œæœ‰å…­ç§è¿è§„å¤„ç½š
+åˆ†åˆ«æ˜¯
+1ã€ç§˜ä¹¦å¤„åˆ¶åº¦
+2ã€äººåŠ›èµ„æºéƒ¨åˆ¶åº¦
+3ã€å®£ä¼ éƒ¨åˆ¶åº¦
+4ã€ä¿¡æ¯ç¼–è¾‘éƒ¨åˆ¶åº¦
+5ã€å…¬å…³éƒ¨åˆ¶åº¦
+6ã€å¸ä»ªç¤¼ä»ªé˜Ÿåˆ¶åº¦
 tbl_fine
 {
  id//pk
- year//Äê·Ý
- month//ÔÂ·Ý
- type//ËùÊô¿Û·ÖÀàÐÍ£¬²ÎÕÕÉÏÃæÁùÖÖ
- apartment//²¿ÃÅ
- KF//¿Û·Ö
- text//ÀíÓÉ
+ year//å¹´ä»½
+ month//æœˆä»½
+ type//æ‰€å±žæ‰£åˆ†ç±»åž‹ï¼Œå‚ç…§ä¸Šé¢å…­ç§
+ apartment//éƒ¨é—¨
+ KF//æ‰£åˆ†
+ text//ç†ç”±
 }
 
 
-×îºó²¹³äÈËÁ¦Íâµ÷
-±»Íâµ÷µÄÈËÔ±»áÖ±½Ó¸ú¼¨Ð§¿¼ºË¹Ò¹³
+æœ€åŽè¡¥å……äººåŠ›å¤–è°ƒ
+è¢«å¤–è°ƒçš„äººå‘˜ä¼šç›´æŽ¥è·Ÿç»©æ•ˆè€ƒæ ¸æŒ‚é’©
 tbl_resource
 {
  id//pk
- account//±»Íâµ÷µÄÕËºÅ
+ account//è¢«å¤–è°ƒçš„è´¦å·
  year//
  month//
- code//Íâµ÷µÄÐòÁÐºÅ
- assess//Íâµ÷µÄÆÀ¼Û£¬1µ½4·Ö±ð±íÊ¾£ºÈ±Ï¯£¬³Ùµ½ÔçÍË£¬Ò»°ã£¬±íÏÖÍ»³ö
+ code//å¤–è°ƒçš„åºåˆ—å·
+ assess//å¤–è°ƒçš„è¯„ä»·ï¼Œ1åˆ°4åˆ†åˆ«è¡¨ç¤ºï¼šç¼ºå¸­ï¼Œè¿Ÿåˆ°æ—©é€€ï¼Œä¸€èˆ¬ï¼Œè¡¨çŽ°çªå‡º
 }
 
-×îºóÒ»ÕÅÊÇ¼¨Ð§È¨ÏÞ±í
+æœ€åŽä¸€å¼ æ˜¯ç»©æ•ˆæƒé™è¡¨
 tbl_authority
 {
  id //pk
  year//
  month
- active//Ä¬ÈÏÎªn,Ö»ÓÐµÈÓÚyÊ±²ÅÄÜËãÊÇ¼¤»î
- account//¼¤»îÈËµÄÕËºÅ
+ active//é»˜è®¤ä¸ºn,åªæœ‰ç­‰äºŽyæ—¶æ‰èƒ½ç®—æ˜¯æ¿€æ´»
+ account//æ¿€æ´»äººçš„è´¦å·
 }
 
-×¨Òµ£º
-ÐÅÏ¢°²È«
-Èí¼þ¹¤³Ì
-ÎïÁªÍø¹¤³Ì
-°ü×°¹¤³Ì
-µçÆø¹¤³Ì¼°Æä×Ô¶¯»¯
-µç×ÓÐÅÏ¢¿ÆÑ§Óë¼¼Êõ
+ä¸“ä¸šï¼š
+ä¿¡æ¯å®‰å…¨
+è½¯ä»¶å·¥ç¨‹
+ç‰©è”ç½‘å·¥ç¨‹
+åŒ…è£…å·¥ç¨‹
+ç”µæ°”å·¥ç¨‹åŠå…¶è‡ªåŠ¨åŒ–
+ç”µå­ä¿¡æ¯ç§‘å­¦ä¸ŽæŠ€æœ¯
 
-1 ¸ÉÊÂ
-2 ÈËÁ¦¸ÉÊÂ
-3 ²¿³¤¼¶
-4 Ö÷Ï¯ÍÅ
+1 å¹²äº‹
+2 äººåŠ›å¹²äº‹
+3 éƒ¨é•¿çº§
+4 ä¸»å¸­å›¢
 
-ÓÉÓÚstrcmp()º¯Êý¶ÔÖÐÎÄµÄÖ§³Ö²»ÊÇºÜÀíÏë£¬ËùÒÔ¶Ô²¿ÃÅµÄ´¦ÀíÖ»ÄÜ¸Ä³ÉÊý×ÖÀ´´úÌæ£¬µ½Ê±Íù
-Ç°Ì¨·¢ËÍÊý¾ÝµÄÊ±ºò£¬ÔÙ¼òµ¥×ª»¯Ò»ÏÂ¼´¿É
-ÃØÊé´¦£º1
-ÈËÁ¦×ÊÔ´²¿£º2
-Ðû´«²¿£º3
-ÐÅÏ¢±à¼­²¿£º4
-Ñ§Êõ²¿£º5
-ÌåÓý²¿£º6
-KSCÁªÃË£º7
-×éÖ¯²¿£º8
-ÎÄÓé²¿£º9
-¹«¹Ø²¿£º10
-ÐÄÀí·þÎñ²¿£º11
-Ö÷Ï¯ÍÅ£º12
-ºÃÁË£¬¾ÍÕâÑùÄ¬ÈÏÉÏÃæÕâÐ©±í¸ñ£¬À´ÅÜÒ»´Î£¬³¢ÊÔÕûÀí³ö·´À¡±í
-³õÊ¼»¯£º
-ÈËÔ±Â¼Èë£º
-¸ÉÊÂ£¬²¿³¤£¬Ö÷Ï¯
-Ö¸¶¨Ö÷Ï¯ÍÅÖ÷¹Ü²¿ÃÅ
+ç”±äºŽstrcmp()å‡½æ•°å¯¹ä¸­æ–‡çš„æ”¯æŒä¸æ˜¯å¾ˆç†æƒ³ï¼Œæ‰€ä»¥å¯¹éƒ¨é—¨çš„å¤„ç†åªèƒ½æ”¹æˆæ•°å­—æ¥ä»£æ›¿ï¼Œåˆ°æ—¶å¾€
+å‰å°å‘é€æ•°æ®çš„æ—¶å€™ï¼Œå†ç®€å•è½¬åŒ–ä¸€ä¸‹å³å¯
+ç§˜ä¹¦å¤„ï¼š1
+äººåŠ›èµ„æºéƒ¨ï¼š2
+å®£ä¼ éƒ¨ï¼š3
+ä¿¡æ¯ç¼–è¾‘éƒ¨ï¼š4
+å­¦æœ¯éƒ¨ï¼š5
+ä½“è‚²éƒ¨ï¼š6
+KSCè”ç›Ÿï¼š7
+ç»„ç»‡éƒ¨ï¼š8
+æ–‡å¨±éƒ¨ï¼š9
+å…¬å…³éƒ¨ï¼š10
+å¿ƒç†æœåŠ¡éƒ¨ï¼š11
+ä¸»å¸­å›¢ï¼š12
+å¥½äº†ï¼Œå°±è¿™æ ·é»˜è®¤ä¸Šé¢è¿™äº›è¡¨æ ¼ï¼Œæ¥è·‘ä¸€æ¬¡ï¼Œå°è¯•æ•´ç†å‡ºåé¦ˆè¡¨
+åˆå§‹åŒ–ï¼š
+äººå‘˜å½•å…¥ï¼š
+å¹²äº‹ï¼Œéƒ¨é•¿ï¼Œä¸»å¸­
+æŒ‡å®šä¸»å¸­å›¢ä¸»ç®¡éƒ¨é—¨
 
-ÈËÁ¦×ÊÔ´²¿£¨2£©¸ÉÊÂ£¨b£©
-2012052400 ¿Æ±È
-2012052401 °Â¶àÄ·
-2012052402 ¼ÓË÷¶û
-2012052403 ·ÑÉá¶û
-2012052404 ìøÊ¦ c
-2012052405 °Í¶÷Ë¹ c
-¼ÓÉÏÔ­À´¾ÍÓÐµÄÃØÊé´¦£¨1£©¸ÉÊÂ£¨a£©£º
-2012052300	»ÆÇïÑà	
-2012052301	ÐÜÃÎÑÅ
+äººåŠ›èµ„æºéƒ¨ï¼ˆ2ï¼‰å¹²äº‹ï¼ˆbï¼‰
+2012052400 ç§‘æ¯”
+2012052401 å¥¥å¤šå§†
+2012052402 åŠ ç´¢å°”
+2012052403 è´¹èˆå°”
+2012052404 ç¦…å¸ˆ c
+2012052405 å·´æ©æ–¯ c
+åŠ ä¸ŠåŽŸæ¥å°±æœ‰çš„ç§˜ä¹¦å¤„ï¼ˆ1ï¼‰å¹²äº‹ï¼ˆaï¼‰ï¼š
+2012052300	é»„ç§‹ç‡•	
+2012052301	ç†Šæ¢¦é›…
 
-2012052302	ÁõÐ¡½à
+2012052302	åˆ˜å°æ´
 
-2012052303	Îâ¿¡Ëþ
-2012052304	ÎâÓ¢ÎÄ
+2012052303	å´ä¿Šå¡”
+2012052304	å´è‹±æ–‡
 
-2012052305	¸ÊµØ(c)
-2012052306	ÎâÀî¾²(c)
+2012052305	ç”˜åœ°(c)
+2012052306	å´æŽé™(c)
 
-2012052307	µËÂûÝ¼(c)
+2012052307	é‚“è”“è(c)
 
-2012052308	ÖìÁÖ½Ü
+2012052308	æœ±æž—æ°
 
-2012052309	ÌïíµÀÙ
-2012052310	Ìï´Ï´Ï
-ÒÔ¼°Á½¸öÖ÷Ï¯
-2012052311	ÂÞÏé»ª(12)£¨d£©¸ºÔðÃØÊé´¦
-2012052312	ÁÖ¼Îö©(12)(d) Ö÷Ï¯
+2012052309	ç”°æ·¼è•¾
+2012052310	ç”°èªèª
+ä»¥åŠä¸¤ä¸ªä¸»å¸­
+2012052311	ç½—ç¥¥åŽ(12)ï¼ˆdï¼‰è´Ÿè´£ç§˜ä¹¦å¤„
+2012052312	æž—å˜‰é›¯(12)(d) ä¸»å¸­
 
-½Ó×ÅÊÇ½øÐÐÍâµ÷ÈÎÎñ£¬
-¼ÙÉè½øÐÐÁËÈý´ÎÍâµ÷
-ÐòÁÐ1£º
-2012052300	»ÆÇïÑà	4
-2012052301	ÐÜÃÎÑÅ  3
+æŽ¥ç€æ˜¯è¿›è¡Œå¤–è°ƒä»»åŠ¡ï¼Œ
+å‡è®¾è¿›è¡Œäº†ä¸‰æ¬¡å¤–è°ƒ
+åºåˆ—1ï¼š
+2012052300	é»„ç§‹ç‡•	4
+2012052301	ç†Šæ¢¦é›…  3
 
-2012052302	ÁõÐ¡½à  4
-2012052303	Îâ¿¡Ëþ  2
-2012052304	ÎâÓ¢ÎÄ  4
-ÐòÁÐ2£º
-2012052308	·ë¿¨Å©  4
+2012052302	åˆ˜å°æ´  4
+2012052303	å´ä¿Šå¡”  2
+2012052304	å´è‹±æ–‡  4
+åºåˆ—2ï¼š
+2012052308	å†¯å¡å†œ  4
 
-2012052309	ÌïíµÀÙ  3
-2012052310	Ìï´Ï´Ï  3
-ÐòÁÐ3£º
-2012052400 ¿Æ±È  4
-2012052401 °Â¶àÄ· 3
-2012052402 ¼ÓË÷¶û 2
-2012052403 ·ÑÉá¶û 1
+2012052309	ç”°æ·¼è•¾  3
+2012052310	ç”°èªèª  3
+åºåˆ—3ï¼š
+2012052400 ç§‘æ¯”  4
+2012052401 å¥¥å¤šå§† 3
+2012052402 åŠ ç´¢å°” 2
+2012052403 è´¹èˆå°” 1
   
 INSERT INTO `union`.`tbl_resource` (`account`, `year`, `month`, `id`, `code`, `assess`) 
 VALUES ('2012052308', '2014', '4', NULL, '2', '4');
 
 
-µÚÒ»²½£ººóÌ¨¼¤»î±¾ÔÂµÄ¼¨Ð§¿¼ºË
-Íùtbl_authority±í¸³Öµ£¬ÔÊÐí±¾ÔÂ¼¨Ð§¿¼ºË
-µÚ¶þ²½£º°´²¿¾Í°à£¬¸÷¸ö½ÇÉ«ÌîÐ´¸÷×ÔµÄ±í¸ñ£¬ÔÝÊ±Éè¶¨ÎªÁ½¸öÖ÷Ï¯£¬ËÄ¸ö²¿ÃÅ£¬Ã¿¸ö²¿ÃÅ4¸ÉÊÂ£¬2²¿³¤
-µÚÈý²½£º
-Éú³É·´À¡ÐÅÏ¢£º
-1¡¢¸ÉÊÂ·´À¡£ºµÃ·Ö£¬×ÔÆÀºÍ²¿³¤ÆÀ£¬ÍÆÓÅ£¬Íâµ÷¼Ó·Ö£¬µÃ·ÖÅÅÃû
-2¡¢²¿³¤·´À¡£ºµÃ·Ö£¬×ÔÆÀºÍÖ÷Ï¯ÆÀ£¬ÆäËû²¿³¤ÆÀ£¬Íâµ÷¼Ó·Ö£¬µÃ·ÖÅÅÃû
-3¡¢²¿ÃÅ·´À¡£ºµÃ·Ö£¬¿Û·Ö
-µÚËÄ²½£ºÍ£Ö¹±¾´Î¼¨Ð§¿¼ºË£¬tbl_authorityÖÐµÄactiveÖØÖÃÎªn.
+ç¬¬ä¸€æ­¥ï¼šåŽå°æ¿€æ´»æœ¬æœˆçš„ç»©æ•ˆè€ƒæ ¸
+å¾€tbl_authorityè¡¨èµ‹å€¼ï¼Œå…è®¸æœ¬æœˆç»©æ•ˆè€ƒæ ¸
+ç¬¬äºŒæ­¥ï¼šæŒ‰éƒ¨å°±ç­ï¼Œå„ä¸ªè§’è‰²å¡«å†™å„è‡ªçš„è¡¨æ ¼ï¼Œæš‚æ—¶è®¾å®šä¸ºä¸¤ä¸ªä¸»å¸­ï¼Œå››ä¸ªéƒ¨é—¨ï¼Œæ¯ä¸ªéƒ¨é—¨4å¹²äº‹ï¼Œ2éƒ¨é•¿
+ç¬¬ä¸‰æ­¥ï¼š
+ç”Ÿæˆåé¦ˆä¿¡æ¯ï¼š
+1ã€å¹²äº‹åé¦ˆï¼šå¾—åˆ†ï¼Œè‡ªè¯„å’Œéƒ¨é•¿è¯„ï¼ŒæŽ¨ä¼˜ï¼Œå¤–è°ƒåŠ åˆ†ï¼Œå¾—åˆ†æŽ’å
+2ã€éƒ¨é•¿åé¦ˆï¼šå¾—åˆ†ï¼Œè‡ªè¯„å’Œä¸»å¸­è¯„ï¼Œå…¶ä»–éƒ¨é•¿è¯„ï¼Œå¤–è°ƒåŠ åˆ†ï¼Œå¾—åˆ†æŽ’å
+3ã€éƒ¨é—¨åé¦ˆï¼šå¾—åˆ†ï¼Œæ‰£åˆ†
+ç¬¬å››æ­¥ï¼šåœæ­¢æœ¬æ¬¡ç»©æ•ˆè€ƒæ ¸ï¼Œtbl_authorityä¸­çš„activeé‡ç½®ä¸ºn.
 
 
-Ìì¿ÕÊÇÀ¶µÄ£¬ÊÇºÚµÄ£¬ÊÇ¿ªÀÊµÄ£¬ÊÇÒÖÓôµÄ¡£
-ÈËÒ²Ò»Ñù£¬ÎÒµÄÎ´À´ÔÚÄÄÀï£¬Ò»ÇÐËÆºõ²»¿ÉÔ¤Öª
+å¤©ç©ºæ˜¯è“çš„ï¼Œæ˜¯é»‘çš„ï¼Œæ˜¯å¼€æœ—çš„ï¼Œæ˜¯æŠ‘éƒçš„ã€‚
+äººä¹Ÿä¸€æ ·ï¼Œæˆ‘çš„æœªæ¥åœ¨å“ªé‡Œï¼Œä¸€åˆ‡ä¼¼ä¹Žä¸å¯é¢„çŸ¥
 
-»¥ÆÀ
-¸ÉÊÂÆÀ²¿³¤£ºÉÏµÛÊÇÅ®º¢
+äº’è¯„
+å¹²äº‹è¯„éƒ¨é•¿ï¼šä¸Šå¸æ˜¯å¥³å­©
 
 INSERT INTO `union`.`tbl_interact` (`id`, `year`, `month`, `waccount`, `wapartment`, `wtype`, `raccount`, `rapartment`, `rtype`, `text`) 
-VALUES (NULL, '2014', '4', '2012052300', '1', 'a', '2012052307', '1', 'c', 'ÉÏµÛÊÇÅ®º¢');
+VALUES (NULL, '2014', '4', '2012052300', '1', 'a', '2012052307', '1', 'c', 'ä¸Šå¸æ˜¯å¥³å­©');
 
-²¿³¤ÆÀ¸ÉÊÂ£ºÐÒ¸£À´ÇÃÃÅ
-¸ÉÊÂÍÆÓÅ¸ÉÊÂ£º×¨ÊôÌìÊ¹
+éƒ¨é•¿è¯„å¹²äº‹ï¼šå¹¸ç¦æ¥æ•²é—¨
+å¹²äº‹æŽ¨ä¼˜å¹²äº‹ï¼šä¸“å±žå¤©ä½¿
 
-²¿³¤ÆÀ¼ÛÍ¬²¿ÃÅ²¿³¤£ºÉúÃüÓÐÌ«¶àÐèÒªÊØ»¤£¬Ò»¸öÒ²²»ÄÜÉÙ
+éƒ¨é•¿è¯„ä»·åŒéƒ¨é—¨éƒ¨é•¿ï¼šç”Ÿå‘½æœ‰å¤ªå¤šéœ€è¦å®ˆæŠ¤ï¼Œä¸€ä¸ªä¹Ÿä¸èƒ½å°‘
 
-²¿³¤ÆÀ¼ÛÖ÷Ï¯£ºË­Ã÷ÀË×ÓÐÄ
+éƒ¨é•¿è¯„ä»·ä¸»å¸­ï¼šè°æ˜Žæµªå­å¿ƒ
 
-Ö÷Ï¯ÆÀ¼Û²¿³¤£ºÐÄñ«
+ä¸»å¸­è¯„ä»·éƒ¨é•¿ï¼šå¿ƒç˜¾
 
-²¿ÃÅ¿¼ºË±í
+éƒ¨é—¨è€ƒæ ¸è¡¨
 
-²¿³¤×ÔÆÀ±í£ºÕÒ¸öÍâ±íÎüÒý¶¯ÈË£¬ÌìÐÔ×ÔË½µÄÅ®ÈË
-
-
-ÎªÁË·½±ã£¬¹æ¶¨idÎªÏÂÁÐÖµÊ±·Ö±ð¶ÔÓ¦µÄ±í
-1£º¸ÉÊÂ×ÔÆÀ±í£¨¸ÉÊÂÌî£©
-2£º¸ÉÊÂ¿¼ºË±í£¨²¿³¤Ìî£©
-3£º²¿³¤×ÔÆÀ±í£¨²¿³¤Ìî£©
-4£º²¿³¤¿¼ºË±í£¨Ö÷Ï¯Ìî£©
-5£º²¿ÃÅ¿¼ºË±í£¨Ö÷Ï¯Ìî£©
-6£º¸ÉÊÂ¿¼ºË·´À¡±í£¨¸ø¸ÉÊÂ¿´£©
-7£º¸ú½ø²¿ÃÅ³öÇÚÍ³¼Æ±í£¨¸ú½øµÄÈËÁ¦¸ÉÊÂÌî£©
-8£ºµ÷ÑÐÒâ¼û²ÉÄÉ±í£¨ËùÓÐÈËÁ¦¸ÉÊÂ¶¼¿ÉÒÔÌî£©
-9£ºÕûÌå¿¼ºË½á¹û·´À¡±í£¨¸øÖ÷Ï¯ÍÅ¿´£¬ÈËÁ¦³ÉÔ±¿´£©
-10£º²¿³¤·´À¡±í£¨¸ø²¿³¤¿´£©
-11£ºÓÅÐã²¿³¤ÆÀ¶¨±í£¨Ö÷Ï¯ÍÅÌî£©
-12£ºÖ÷Ï¯ÍÅ·´À¡±í£¨¸øÖ÷Ï¯ÍÅ¿´£©
-
-ÓÃip+account¹²Í¬ÏÞÖÆ
-
-ÒòÎªÃ»ÓÐ²ÉÓÃforeign key£¬ËùÒÔÔÚ½øÐÐCRUDÊ±£¬Ò»¶¨µÃ×¢ÒâaccountµÄÍ¬²½ÐÔ£¬·ñÔò¼«Ò×³ö´í
+éƒ¨é•¿è‡ªè¯„è¡¨ï¼šæ‰¾ä¸ªå¤–è¡¨å¸å¼•åŠ¨äººï¼Œå¤©æ€§è‡ªç§çš„å¥³äºº
 
 
-·´À¡ÕâÒ»¿éÒ²ÊÇÒ»¸ö´ó¿ÓÀ´×Å
+ä¸ºäº†æ–¹ä¾¿ï¼Œè§„å®šidä¸ºä¸‹åˆ—å€¼æ—¶åˆ†åˆ«å¯¹åº”çš„è¡¨
+1ï¼šå¹²äº‹è‡ªè¯„è¡¨ï¼ˆå¹²äº‹å¡«ï¼‰
+2ï¼šå¹²äº‹è€ƒæ ¸è¡¨ï¼ˆéƒ¨é•¿å¡«ï¼‰
+3ï¼šéƒ¨é•¿è‡ªè¯„è¡¨ï¼ˆéƒ¨é•¿å¡«ï¼‰
+4ï¼šéƒ¨é•¿è€ƒæ ¸è¡¨ï¼ˆä¸»å¸­å¡«ï¼‰
+5ï¼šéƒ¨é—¨è€ƒæ ¸è¡¨ï¼ˆä¸»å¸­å¡«ï¼‰
+6ï¼šå¹²äº‹è€ƒæ ¸åé¦ˆè¡¨ï¼ˆç»™å¹²äº‹çœ‹ï¼‰
+7ï¼šè·Ÿè¿›éƒ¨é—¨å‡ºå‹¤ç»Ÿè®¡è¡¨ï¼ˆè·Ÿè¿›çš„äººåŠ›å¹²äº‹å¡«ï¼‰
+8ï¼šè°ƒç ”æ„è§é‡‡çº³è¡¨ï¼ˆæ‰€æœ‰äººåŠ›å¹²äº‹éƒ½å¯ä»¥å¡«ï¼‰
+9ï¼šæ•´ä½“è€ƒæ ¸ç»“æžœåé¦ˆè¡¨ï¼ˆç»™ä¸»å¸­å›¢çœ‹ï¼ŒäººåŠ›æˆå‘˜çœ‹ï¼‰
+10ï¼šéƒ¨é•¿åé¦ˆè¡¨ï¼ˆç»™éƒ¨é•¿çœ‹ï¼‰
+11ï¼šä¼˜ç§€éƒ¨é•¿è¯„å®šè¡¨ï¼ˆä¸»å¸­å›¢å¡«ï¼‰
+12ï¼šä¸»å¸­å›¢åé¦ˆè¡¨ï¼ˆç»™ä¸»å¸­å›¢çœ‹ï¼‰
 
-ÍüÁË»¹ÓÐÒ»ÕÅ³öÇÚ±í
+ç”¨ip+accountå…±åŒé™åˆ¶
+
+å› ä¸ºæ²¡æœ‰é‡‡ç”¨foreign keyï¼Œæ‰€ä»¥åœ¨è¿›è¡ŒCRUDæ—¶ï¼Œä¸€å®šå¾—æ³¨æ„accountçš„åŒæ­¥æ€§ï¼Œå¦åˆ™æžæ˜“å‡ºé”™
+
+
+åé¦ˆè¿™ä¸€å—ä¹Ÿæ˜¯ä¸€ä¸ªå¤§å‘æ¥ç€
+
+å¿˜äº†è¿˜æœ‰ä¸€å¼ å‡ºå‹¤è¡¨
 tbl_chuqin
 {
 id 
@@ -905,18 +905,18 @@ month
 waccount
 raccount
 rapartment
-qj//Çë¼Ù´ÎÊý£¬Ä¬ÈÏÎª0
-ct//³Ùµ½»òÔçÍË´ÎÊý£¬Ä¬ÈÏÎª0
-qx//È±Ï¯´ÎÊý£¬Ä¬ÈÏÎª0
+qj//è¯·å‡æ¬¡æ•°ï¼Œé»˜è®¤ä¸º0
+ct//è¿Ÿåˆ°æˆ–æ—©é€€æ¬¡æ•°ï¼Œé»˜è®¤ä¸º0
+qx//ç¼ºå¸­æ¬¡æ•°ï¼Œé»˜è®¤ä¸º0
 }
-³öÇÚÔÝÊ±Ö»ÄÜ²âÊÔ2012052300µÄ¸ú½ø²¿ÃÅ1
+å‡ºå‹¤æš‚æ—¶åªèƒ½æµ‹è¯•2012052300çš„è·Ÿè¿›éƒ¨é—¨1
 
-¸ú½ø²¿ÃÅ³öÇÚÍ³¼Æ±í£¬Ò²¾ÍÊÇtbl_chuqinÒª¸útbl_personÀïµÄÒ»ÖÂ
-Ò²¾ÍÊÇËµ£¬Ò»¼ü¼¤»îµÄÊ±ºò£¬½«È«²¿²¿ÃÅµÄÈ«²¿³ÉÔ±ÍùÀïÃæÈû
+è·Ÿè¿›éƒ¨é—¨å‡ºå‹¤ç»Ÿè®¡è¡¨ï¼Œä¹Ÿå°±æ˜¯tbl_chuqinè¦è·Ÿtbl_personé‡Œçš„ä¸€è‡´
+ä¹Ÿå°±æ˜¯è¯´ï¼Œä¸€é”®æ¿€æ´»çš„æ—¶å€™ï¼Œå°†å…¨éƒ¨éƒ¨é—¨çš„å…¨éƒ¨æˆå‘˜å¾€é‡Œé¢å¡ž
 
 
-»¹ÓÐÒ»¸öµ÷ÑÐÒâ¼û²ÉÄÉ±í£¬Ò²ÊÇÐèÒªÒ»¼ü¼¤»îµÄÊ±ºò£¬½«Ã¿¸ö²¿ÃÅµÄÈË
-µÄÐÅÏ¢·ÅÀïÃæÈ¥£¨ÆäÊµ¿ÉÒÔ²»ÓÃ£©
+è¿˜æœ‰ä¸€ä¸ªè°ƒç ”æ„è§é‡‡çº³è¡¨ï¼Œä¹Ÿæ˜¯éœ€è¦ä¸€é”®æ¿€æ´»çš„æ—¶å€™ï¼Œå°†æ¯ä¸ªéƒ¨é—¨çš„äºº
+çš„ä¿¡æ¯æ”¾é‡Œé¢åŽ»ï¼ˆå…¶å®žå¯ä»¥ä¸ç”¨ï¼‰
 tbl_diaoyan
 {
 id
@@ -925,9 +925,9 @@ month
 waccount
 raccount
 rapartment
-caina//Òâ¼û²ÉÄÉ´ÎÊý
+caina//æ„è§é‡‡çº³æ¬¡æ•°
 }
-//ÓÅÐã²¿³¤ÆÀ¶¨£¬Ä¬ÈÏÊÇÖ÷Ï¯ÌîµÄ
+//ä¼˜ç§€éƒ¨é•¿è¯„å®šï¼Œé»˜è®¤æ˜¯ä¸»å¸­å¡«çš„
 tbl_yxbz
 {
 id 
@@ -935,42 +935,42 @@ year
 month
 waccount
 raccount
-checked//1±íÊ¾±»Ñ¡ÖÐ£¬0±íÊ¾Ã»ÓÐ
+checked//1è¡¨ç¤ºè¢«é€‰ä¸­ï¼Œ0è¡¨ç¤ºæ²¡æœ‰
 }
 
-Ò»¼ü¼¤»îµÄÊ±ºò£¬ÐèÒª½«ËùÓÐ²¿ÃÅµÄËùÓÐ²¿³¤Åª½øÈ¥
+ä¸€é”®æ¿€æ´»çš„æ—¶å€™ï¼Œéœ€è¦å°†æ‰€æœ‰éƒ¨é—¨çš„æ‰€æœ‰éƒ¨é•¿å¼„è¿›åŽ»
 
-×îºó¹¥¼á£º¿¼ºË·´À¡
-¸ÉÊÂÆª£ºÕâÀï´æµÄÊ±ºò²»ÄÜÔÙÊÇintÐÍÁË
+æœ€åŽæ”»åšï¼šè€ƒæ ¸åé¦ˆ
+å¹²äº‹ç¯‡ï¼šè¿™é‡Œå­˜çš„æ—¶å€™ä¸èƒ½å†æ˜¯intåž‹äº†
 tbl_gsfk
 {
 id 
 year
 month
 account
-total//×Ü·Ö
-rank//¸ÃÔÂÅÅÃû
-yxgs//0±íÊ¾²»ÊÇ£¬1ÔòÎªÓÅÐã¸ÉÊÂ
-zpdf//×ÔÆÀµÃ·Ö
-bzpjdf//²¿³¤ÆÀ¼Û
-cqdf//³öÇÚµÃ·Ö
-wddf//Íâµ÷µÃ·Ö
-tydf//ÍÆÓÅµÃ·Ö
-fkdf//·´À¡µÃ·Ö
-qtdf//ÆäËûµÃ·Ö
+total//æ€»åˆ†
+rank//è¯¥æœˆæŽ’å
+yxgs//0è¡¨ç¤ºä¸æ˜¯ï¼Œ1åˆ™ä¸ºä¼˜ç§€å¹²äº‹
+zpdf//è‡ªè¯„å¾—åˆ†
+bzpjdf//éƒ¨é•¿è¯„ä»·
+cqdf//å‡ºå‹¤å¾—åˆ†
+wddf//å¤–è°ƒå¾—åˆ†
+tydf//æŽ¨ä¼˜å¾—åˆ†
+fkdf//åé¦ˆå¾—åˆ†
+qtdf//å…¶ä»–å¾—åˆ†
 }
-²¿³¤Æª
+éƒ¨é•¿ç¯‡
 tbl_bzfk
 {
 id 
 year
 month
 account
-total//×Ü·Ö
-rank//¸ÃÔÂÅÅÃû
-yxbz//0±íÊ¾²»ÊÇ£¬1ÔòÎªÓÅÐã²¿³¤
+total//æ€»åˆ†
+rank//è¯¥æœˆæŽ’å
+yxbz//0è¡¨ç¤ºä¸æ˜¯ï¼Œ1åˆ™ä¸ºä¼˜ç§€éƒ¨é•¿
 
-Ã»°ì·¨£¬»¹ÊÇµÃ¼ÓÒ»ÕÅ±í£¬¼ÇÂ¼Íâµ÷´ÎÊý
+æ²¡åŠžæ³•ï¼Œè¿˜æ˜¯å¾—åŠ ä¸€å¼ è¡¨ï¼Œè®°å½•å¤–è°ƒæ¬¡æ•°
 tbl_wdcs
 {
 id
@@ -978,76 +978,76 @@ year
 month
 account
 apartment
-wdcs//Ä¬ÈÏÎª0
-rank//²¿ÃÅÄÚÅÅÃû
+wdcs//é»˜è®¤ä¸º0
+rank//éƒ¨é—¨å†…æŽ’å
 }
-zpdf//×ÔÆÀµÃ·Ö
-zxpjdf//Ö÷¹Ü¸±Ö÷Ï¯ÆÀ¼ÛµÃ·Ö
-gspjdf//¸ÉÊÂÆÀ¼ÛµÃ·Ö
-bzpjdf//±¾²¿ÃÅÆäËû²¿³¤ÆÀ¼ÛµÃ·Ö
-cqdf//³öÇÚµÃ·Ö
-wddf//Íâµ÷µÃ·Ö
-fkdf//·´À¡µÃ·Ö
-qtdf//ÆäËûµÃ·Ö
+zpdf//è‡ªè¯„å¾—åˆ†
+zxpjdf//ä¸»ç®¡å‰¯ä¸»å¸­è¯„ä»·å¾—åˆ†
+gspjdf//å¹²äº‹è¯„ä»·å¾—åˆ†
+bzpjdf//æœ¬éƒ¨é—¨å…¶ä»–éƒ¨é•¿è¯„ä»·å¾—åˆ†
+cqdf//å‡ºå‹¤å¾—åˆ†
+wddf//å¤–è°ƒå¾—åˆ†
+fkdf//åé¦ˆå¾—åˆ†
+qtdf//å…¶ä»–å¾—åˆ†
 }
-²¿ÃÅÆª£º
+éƒ¨é—¨ç¯‡ï¼š
 tbl_bmfk
 {
 id 
 year
 month
-total//×Ü·Ö
-rank//¸ÃÔÂÅÅÃû
-yxbm//0±íÊ¾²»ÊÇ£¬1ÔòÎªÓÅÐã²¿ÃÅ
-zxpjdf//Ö÷Ï¯ÆÀ¼ÛµÃ·Ö
-zgpjdf//Ö÷¹Ü¸±Ö÷Ï¯ÆÀ¼ÛµÃ·Ö
-cqdf//³öÇÚµÃ·Ö
-wgkf//Î¥¹æ¿Û·Ö
-fkdf//¸ÉÊÂ²¿³¤·´À¡µÃ·ÖºÍ
-tydf//Ö÷Ï¯ÍÅÍÆÓÅµÃ·Ö
-qtdf//ÆäËûµÃ·Ö
-yxbz//ÓÅÐã²¿³¤£¬0ÎªÃ»ÓÐ£¬1ÎªÓÐ
+total//æ€»åˆ†
+rank//è¯¥æœˆæŽ’å
+yxbm//0è¡¨ç¤ºä¸æ˜¯ï¼Œ1åˆ™ä¸ºä¼˜ç§€éƒ¨é—¨
+zxpjdf//ä¸»å¸­è¯„ä»·å¾—åˆ†
+zgpjdf//ä¸»ç®¡å‰¯ä¸»å¸­è¯„ä»·å¾—åˆ†
+cqdf//å‡ºå‹¤å¾—åˆ†
+wgkf//è¿è§„æ‰£åˆ†
+fkdf//å¹²äº‹éƒ¨é•¿åé¦ˆå¾—åˆ†å’Œ
+tydf//ä¸»å¸­å›¢æŽ¨ä¼˜å¾—åˆ†
+qtdf//å…¶ä»–å¾—åˆ†
+yxbz//ä¼˜ç§€éƒ¨é•¿ï¼Œ0ä¸ºæ²¡æœ‰ï¼Œ1ä¸ºæœ‰
 }
 
 
-Èç¹û³öÏÖ¸ÉÊÂµÄ×îÖÕµÃ·ÖÒ»ÑùµÄ»°£¬¸ÃÈçºÎÊÇºÃ£¿
-´ð£º°´ÕÕÑ§ºÅ´óÐ¡ÅÅ
+å¦‚æžœå‡ºçŽ°å¹²äº‹çš„æœ€ç»ˆå¾—åˆ†ä¸€æ ·çš„è¯ï¼Œè¯¥å¦‚ä½•æ˜¯å¥½ï¼Ÿ
+ç­”ï¼šæŒ‰ç…§å­¦å·å¤§å°æŽ’
 
-·´À¡±íÍ³Ò»²»¼ÓÊ±¼äÏÞÖÆ£¬ÒòÎªµ±Ç°Ö»ÔÚ4ÔÂ²âÊÔ£¬¸üÖ÷ÒªÊÇÒòÎª»¹Ã»Ïëµ½ºÃµÄÏÞÖÆ´ëÊ©
+åé¦ˆè¡¨ç»Ÿä¸€ä¸åŠ æ—¶é—´é™åˆ¶ï¼Œå› ä¸ºå½“å‰åªåœ¨4æœˆæµ‹è¯•ï¼Œæ›´ä¸»è¦æ˜¯å› ä¸ºè¿˜æ²¡æƒ³åˆ°å¥½çš„é™åˆ¶æŽªæ–½
 
-ÈËÁ¦¸ÉÊÂ¸ú½ø²¿ÃÅÓÃtbl_rlgjÀ´±íÊ¾
-ÔÝÊ±Ö»ÓÐ2012052400¸ú½øÃØÊé´¦
+äººåŠ›å¹²äº‹è·Ÿè¿›éƒ¨é—¨ç”¨tbl_rlgjæ¥è¡¨ç¤º
+æš‚æ—¶åªæœ‰2012052400è·Ÿè¿›ç§˜ä¹¦å¤„
 
-Ò»Ð©¿ÉÄÜ»á³öÏÖnull »ò undefine µÄµÃÄ¬ÈÏÎª0»ò¿Õ
+ä¸€äº›å¯èƒ½ä¼šå‡ºçŽ°null æˆ– undefine çš„å¾—é»˜è®¤ä¸º0æˆ–ç©º
 
-ÔÂ¶ÈÓÅÐã¸ÉÊÂ£¬ÔÂ¶ÈÓÅÐã²¿³¤£¬ÔÂ¶ÈÓÅÐã²¿ÃÅ£¬ÓÐÐ©Ê±ºòÐèÒªÈËÎªÏÞÖÆ£¬
-¶îÍâÌí¼ÓÒ»ÕÅ±í
-tbl_xzyx//ÏÞÖÆÓÅÐã
+æœˆåº¦ä¼˜ç§€å¹²äº‹ï¼Œæœˆåº¦ä¼˜ç§€éƒ¨é•¿ï¼Œæœˆåº¦ä¼˜ç§€éƒ¨é—¨ï¼Œæœ‰äº›æ—¶å€™éœ€è¦äººä¸ºé™åˆ¶ï¼Œ
+é¢å¤–æ·»åŠ ä¸€å¼ è¡¨
+tbl_xzyx//é™åˆ¶ä¼˜ç§€
 {
 id
 year 
 month
-account //Ä¬ÈÏÎª0,
-apartment  //Ä¬ÈÏÎª0
+account //é»˜è®¤ä¸º0,
+apartment  //é»˜è®¤ä¸º0
 }
-Ö»ÒªÔÚµ±ÔÂÄÜÔÚtbl_xzyxÖÐÕÒµ½Êý¾Ý£¬¾Í²»ÄÜ³ÉÎªÓÅÐã
-Óë´Ë¶ÔÓ¦£¬ÔÂ¶ÈÓÅÐã³ÉÔ±ÐèÒª´æÆðÀ´
+åªè¦åœ¨å½“æœˆèƒ½åœ¨tbl_xzyxä¸­æ‰¾åˆ°æ•°æ®ï¼Œå°±ä¸èƒ½æˆä¸ºä¼˜ç§€
+ä¸Žæ­¤å¯¹åº”ï¼Œæœˆåº¦ä¼˜ç§€æˆå‘˜éœ€è¦å­˜èµ·æ¥
 
 
-¹ØÓÚÊ±¼äµÄÏÞÖÆ£¬·ÖÎªÏÂÃæ¼¸ÖÖ£º
-1¡¢¸ÉÊÂ¡¢²¿³¤¡¢Ö÷Ï¯ÍÅµÈÐèÒªÌîÐ´µÄ£¬´ÓauthorityÖÐ»ñÈ¡active,Ö»ÓÐ¼¤»î£¬²ÅÄÜÌîÐ´£¬Ò²¾ÍÊÇËµstatus=1;
-¶øauthorityµÄ¼¤»îÖ®Ç°ÊÇÒ»ÖÖ·½Ê½--¡·ÓÉºóÌ¨Ö¸¶¨£¬µ«ºóÌ¨ÄÑÃâ»áÊ§Îó£¬ËùÒÔÓ¦¸ÃÌí¼Ó·ÃÎÊÖ¸¶¨¹¦ÄÜ£¬
-Ö»ÒªÓÐÈËä¯ÀÀ¾Í»á´¥·¢Ê±¼äÅÐ¶Ï£¬¹ýÆÚÁË×Ô¶¯½«authorityÉèÖÃÎªn
-2¡¢·´À¡±íµÈÖ»ÄÜ¿´µÄ£¬Ôò¸ù¾ÝÇ°¶Ë´«¹ýÀ´µÄÊ±¼äÇëÇó£¬ÕÒµ½ÏàÓ¦µÄÔÂ·Ý·µ»ØÊä³ö
-Èç¹ûÒª²éÑ¯µÄÔÂ·Ý²»´æÔÚ£¬·µ»Ø´íÎó
+å…³äºŽæ—¶é—´çš„é™åˆ¶ï¼Œåˆ†ä¸ºä¸‹é¢å‡ ç§ï¼š
+1ã€å¹²äº‹ã€éƒ¨é•¿ã€ä¸»å¸­å›¢ç­‰éœ€è¦å¡«å†™çš„ï¼Œä»Žauthorityä¸­èŽ·å–active,åªæœ‰æ¿€æ´»ï¼Œæ‰èƒ½å¡«å†™ï¼Œä¹Ÿå°±æ˜¯è¯´status=1;
+è€Œauthorityçš„æ¿€æ´»ä¹‹å‰æ˜¯ä¸€ç§æ–¹å¼--ã€‹ç”±åŽå°æŒ‡å®šï¼Œä½†åŽå°éš¾å…ä¼šå¤±è¯¯ï¼Œæ‰€ä»¥åº”è¯¥æ·»åŠ è®¿é—®æŒ‡å®šåŠŸèƒ½ï¼Œ
+åªè¦æœ‰äººæµè§ˆå°±ä¼šè§¦å‘æ—¶é—´åˆ¤æ–­ï¼Œè¿‡æœŸäº†è‡ªåŠ¨å°†authorityè®¾ç½®ä¸ºn
+2ã€åé¦ˆè¡¨ç­‰åªèƒ½çœ‹çš„ï¼Œåˆ™æ ¹æ®å‰ç«¯ä¼ è¿‡æ¥çš„æ—¶é—´è¯·æ±‚ï¼Œæ‰¾åˆ°ç›¸åº”çš„æœˆä»½è¿”å›žè¾“å‡º
+å¦‚æžœè¦æŸ¥è¯¢çš„æœˆä»½ä¸å­˜åœ¨ï¼Œè¿”å›žé”™è¯¯
 
-¹ØÓÚÓÅÐã³ÉÔ±µÄÆÀ¶¨ºÍÏÞÖÆ
-1¡¢²»ÄÜÁ¬ÐøÁ½¸öÔÂÓÅÐã
-2¡¢ÏÞÖÆÄ³Ð©³ÉÔ±²»ÄÜÄÃÓÅÐã³ÆºÅ
+å…³äºŽä¼˜ç§€æˆå‘˜çš„è¯„å®šå’Œé™åˆ¶
+1ã€ä¸èƒ½è¿žç»­ä¸¤ä¸ªæœˆä¼˜ç§€
+2ã€é™åˆ¶æŸäº›æˆå‘˜ä¸èƒ½æ‹¿ä¼˜ç§€ç§°å·
 
 
 		/*
-		//ajaxÇëÇó£¬½ÓÊÕµ±Ç°ÕËºÅµÄ¸öÈËÐÅÏ¢
+		//ajaxè¯·æ±‚ï¼ŒæŽ¥æ”¶å½“å‰è´¦å·çš„ä¸ªäººä¿¡æ¯
 		var obj;
 	    $.ajax({
 		url:URL+"Perform/funcgszp",
@@ -1059,7 +1059,7 @@ apartment  //Ä¬ÈÏÎª0
 		var json_Get_GSZP=obj;
 		*/
 
-ÍÆÓÅ£¿
+æŽ¨ä¼˜ï¼Ÿ
 tbl_bzty
 {
 id 
@@ -1081,10 +1081,10 @@ tyly
 
 
 
-	//»ñÈ¡ÇëÇóµÄÊ±¼ä
+	//èŽ·å–è¯·æ±‚çš„æ—¶é—´
 	$year=$_GET['year'];
 	$month=$_GET['month'];
-	//ÅÐ¶ÏÊ±¼äÊÇ·ñºÏÀí
+	//åˆ¤æ–­æ—¶é—´æ˜¯å¦åˆç†
 	$gsfk_model=new Model("Gsfk");
 	if($gsfk_info=$gsfk_model->where("year=$year and month=$month")->find())
 	{
@@ -1095,8 +1095,8 @@ tyly
 
 
 
-	}//ºÏÀí¿Õ¼ä½áÊø
-	//Ã»ÓÐÕÒµ½¸ÃÄêÔÂ¶ÔÓ¦µÄ»°£¬·µ»Ø´íÎóÐÅÏ¢
+	}//åˆç†ç©ºé—´ç»“æŸ
+	//æ²¡æœ‰æ‰¾åˆ°è¯¥å¹´æœˆå¯¹åº”çš„è¯ï¼Œè¿”å›žé”™è¯¯ä¿¡æ¯
 	else{
 	
 	}
@@ -1104,7 +1104,7 @@ tyly
 
 
 
-		//ajaxÇëÇó
+		//ajaxè¯·æ±‚
 		var obj;
 	    $.ajax({
 		url:URL+"/post_gskh",
@@ -1128,19 +1128,19 @@ delete from tbl_oneway;
 
 
 
-·´À¡ÐÅÏ¢ÖØÖÆ°æ
-ÔÚÖî¶à·´À¡ÐÅÏ¢ÖÐ£¬ÆäÊµ×îÄÑµÄÊÇ¸ÉÊÂÅÅÃû¡¢ÓÅÐã¸ÉÊÂ¡¢²¿³¤ÅÅÃû¡¢
-ÓÅÐã²¿³¤¡¢²¿ÃÅÅÅÃû¡¢ÓÅÐã²¿ÃÅ
+åé¦ˆä¿¡æ¯é‡åˆ¶ç‰ˆ
+åœ¨è¯¸å¤šåé¦ˆä¿¡æ¯ä¸­ï¼Œå…¶å®žæœ€éš¾çš„æ˜¯å¹²äº‹æŽ’åã€ä¼˜ç§€å¹²äº‹ã€éƒ¨é•¿æŽ’åã€
+ä¼˜ç§€éƒ¨é•¿ã€éƒ¨é—¨æŽ’åã€ä¼˜ç§€éƒ¨é—¨
 
-ÅÅÃû»ù±¾ÉÏÊÇ°´×Ü·ÖÀ´È·¶¨µÄ£¬Ê±¼ä½ØÖ¹Ö®ºó£¬¾ÍÄÜÉú³É×Ü·Ö£¬È»ºó
-ÒÀ¾Ý×Ü·ÖÅÅÃû
+æŽ’ååŸºæœ¬ä¸Šæ˜¯æŒ‰æ€»åˆ†æ¥ç¡®å®šçš„ï¼Œæ—¶é—´æˆªæ­¢ä¹‹åŽï¼Œå°±èƒ½ç”Ÿæˆæ€»åˆ†ï¼Œç„¶åŽ
+ä¾æ®æ€»åˆ†æŽ’å
 
-ÓÅÐã¸ÉÊÂµÄ²úÉú£º
-Ã¿¸ö²¿ÃÅÒ»Ãû
-±¾²¿ÃÅµÃ·Ö×î¸ßÕß¡¢
-ÉÏ´Î¿¼ºË²»ÊÇÓÅÐã¸ÉÊÂ
-Ã»ÊÜÈËÁ¦µÄ¶îÍâÏÞÖÆ
-ÓÅÐã³ÆºÅÏÞÖÆ
+ä¼˜ç§€å¹²äº‹çš„äº§ç”Ÿï¼š
+æ¯ä¸ªéƒ¨é—¨ä¸€å
+æœ¬éƒ¨é—¨å¾—åˆ†æœ€é«˜è€…ã€
+ä¸Šæ¬¡è€ƒæ ¸ä¸æ˜¯ä¼˜ç§€å¹²äº‹
+æ²¡å—äººåŠ›çš„é¢å¤–é™åˆ¶
+ä¼˜ç§€ç§°å·é™åˆ¶
 tbl_yxchxz
 {
 id 
@@ -1148,66 +1148,66 @@ account
 }
 
 
-¸ÉÊÂ¿¼ºË·´À¡±í£¬¸ø¸ÉÊÂ¿´µÄ£¬°üÀ¨£º
-  ×Ü·Ö£º
-  ¸ÃÔÂÅÅÃû£º
-  ¸ÃÔÂÓÅÐã¸ÉÊÂ£º
-  µÃ·ÖÏ¸½Ú£º
-        ¸ÉÊÂ×ÔÆÀ±íµÃ·Ö
-        ¸ÉÊÂ¿¼ºË±íµÃ·Ö
-        ³öÇÚµÃ·Ö
-        Íâµ÷¼Ó·Ö
-        ÍÆÓÅ¼Ó·Ö
-        ·´À¡¼Ó·Ö
-        ÆäËûµÃ·Ö        
-  ×ÔÎÒÆÀ¼Û
-  ÆäËû¸ÉÊÂµÄÆÀ¼Û
-  ²¿³¤¼¶µÄÆÀ¼Û
+å¹²äº‹è€ƒæ ¸åé¦ˆè¡¨ï¼Œç»™å¹²äº‹çœ‹çš„ï¼ŒåŒ…æ‹¬ï¼š
+  æ€»åˆ†ï¼š
+  è¯¥æœˆæŽ’åï¼š
+  è¯¥æœˆä¼˜ç§€å¹²äº‹ï¼š
+  å¾—åˆ†ç»†èŠ‚ï¼š
+        å¹²äº‹è‡ªè¯„è¡¨å¾—åˆ†
+        å¹²äº‹è€ƒæ ¸è¡¨å¾—åˆ†
+        å‡ºå‹¤å¾—åˆ†
+        å¤–è°ƒåŠ åˆ†
+        æŽ¨ä¼˜åŠ åˆ†
+        åé¦ˆåŠ åˆ†
+        å…¶ä»–å¾—åˆ†        
+  è‡ªæˆ‘è¯„ä»·
+  å…¶ä»–å¹²äº‹çš„è¯„ä»·
+  éƒ¨é•¿çº§çš„è¯„ä»·
 
 
-²¿³¤¿¼ºË·´À¡±í£¬¸ø²¿³¤¿´£¬°üÀ¨
-  ×Ü·Ö£º
-  ÅÅÃû£º
-  µÃ·ÖÏ¸½Ú£º
-         ²¿³¤×ÔÆÀµÃ·Ö
-         ²¿³¤¿¼ºË±íµÃ·Ö
-         ¸ÉÊÂÆÀ·Ö
-         ÆäËû²¿³¤¼¶ÆÀ·Ö
-         ³öÇÚµÃ·Ö
-         Íâµ÷¼Ó·Ö
-         ·´À¡¼Ó·Ö
+éƒ¨é•¿è€ƒæ ¸åé¦ˆè¡¨ï¼Œç»™éƒ¨é•¿çœ‹ï¼ŒåŒ…æ‹¬
+  æ€»åˆ†ï¼š
+  æŽ’åï¼š
+  å¾—åˆ†ç»†èŠ‚ï¼š
+         éƒ¨é•¿è‡ªè¯„å¾—åˆ†
+         éƒ¨é•¿è€ƒæ ¸è¡¨å¾—åˆ†
+         å¹²äº‹è¯„åˆ†
+         å…¶ä»–éƒ¨é•¿çº§è¯„åˆ†
+         å‡ºå‹¤å¾—åˆ†
+         å¤–è°ƒåŠ åˆ†
+         åé¦ˆåŠ åˆ†
 
-ÐÄÀí¾ç´óÈüÈ¡µÃºÃ³É¼¨£¬ºÍÃ¿¸öÈËµÄÅ¬Á¦¶¼·Ö²»¿ª£¬ÍÅ¶ÓµÄÁ¦Á¿²ÅÊÇ×î´óµÄ~¾öÈüÎÒÃÇ¼ÌÐøÅ¬Á¦£¡
+å¿ƒç†å‰§å¤§èµ›å–å¾—å¥½æˆç»©ï¼Œå’Œæ¯ä¸ªäººçš„åŠªåŠ›éƒ½åˆ†ä¸å¼€ï¼Œå›¢é˜Ÿçš„åŠ›é‡æ‰æ˜¯æœ€å¤§çš„~å†³èµ›æˆ‘ä»¬ç»§ç»­åŠªåŠ›ï¼
 
-ÓÉÓÚÊ±¼ä½ôÆÈ£¬Ò»¼ü¿¼ºË²¢Ã»ÓÐÍêÕû£¬·´À¡±í»¹Ã»ÓÐ×Ô¶¯Éú³É
-Íê½áÖ®Ç°ÐèÒªÕûÀí³öÕýÊ½µÄÒ»¼ü¿¼ºË
+ç”±äºŽæ—¶é—´ç´§è¿«ï¼Œä¸€é”®è€ƒæ ¸å¹¶æ²¡æœ‰å®Œæ•´ï¼Œåé¦ˆè¡¨è¿˜æ²¡æœ‰è‡ªåŠ¨ç”Ÿæˆ
+å®Œç»“ä¹‹å‰éœ€è¦æ•´ç†å‡ºæ­£å¼çš„ä¸€é”®è€ƒæ ¸
 
-ÓÅÐã²¿³¤µÄÆÀ¶¨ÐèÒª×¢ÒâË³Ðò£¬
-1¡¢Ëã³ö×Ü·Ö
-2¡¢Ëã³öÅÅÃû£¨ËäÈ»²»ÓÃÏÔÊ¾£©
-3¡¢·ûºÏÌõ¼þÕß½øÈëºòÑ¡Ãûµ¥£¨ÅÅÃû¿¿Ç°£¬Ã»±»ÈËÁ¦ºÚ£¬²»ÊÇÉÏÂÖÓÅÐã£©
-4¡¢Ö÷Ï¯ÍÅ¹´Ñ¡ÆÀ¶¨
-5¡¢Í³¼ÆµÃÆ±£¬Éú³ÉÓÅÐã²¿³¤
-6¡¢½«ÓÅÐã²¿³¤¼ÓÈëÏÂÂÖÏÞÖÆÃûµ¥ÖÐ
-
-
-Ò»¼ü·´À¡£º
-µÚÒ»²½£º
-Éú³É¸ÉÊÂ·´À¡±í
-Éú³É²¿³¤µÃ·Ö£¬Éú³É²¿³¤ÅÅÃû
-Éú³É²¿ÃÅµÃ·Ö£¬Éú³É²¿ÃÅÅÅÃû
-µÚ¶þ²½£ºÓÅÐã³ÆºÅ´¦Àí
-Éú³ÉÓÅÐã²¿³¤ºòÑ¡Ãûµ¥
-Éú³ÉÓÅÐã²¿ÃÅºòÑ¡Ãûµ¥
-µÚÈý²½£º×îÖÕÇÃ¶¨
-Í³¼Æ²¢È·ÈÏÓÅÐã²¿³¤
-Í³¼Æ²¢È·ÈÏÓÅÐã²¿ÃÅ
-
-ÏòÇ°¶Ë·¢ËÍ·´À¡µÄjsonÊý¾Ý
+ä¼˜ç§€éƒ¨é•¿çš„è¯„å®šéœ€è¦æ³¨æ„é¡ºåºï¼Œ
+1ã€ç®—å‡ºæ€»åˆ†
+2ã€ç®—å‡ºæŽ’åï¼ˆè™½ç„¶ä¸ç”¨æ˜¾ç¤ºï¼‰
+3ã€ç¬¦åˆæ¡ä»¶è€…è¿›å…¥å€™é€‰åå•ï¼ˆæŽ’åé å‰ï¼Œæ²¡è¢«äººåŠ›é»‘ï¼Œä¸æ˜¯ä¸Šè½®ä¼˜ç§€ï¼‰
+4ã€ä¸»å¸­å›¢å‹¾é€‰è¯„å®š
+5ã€ç»Ÿè®¡å¾—ç¥¨ï¼Œç”Ÿæˆä¼˜ç§€éƒ¨é•¿
+6ã€å°†ä¼˜ç§€éƒ¨é•¿åŠ å…¥ä¸‹è½®é™åˆ¶åå•ä¸­
 
 
-¿ÉÄÜ£¬ÊÇ×îºóÒ»ÕÅ±íÁË
-tbl_yxbzhx//ÓÅÐã²¿³¤ºòÑ¡
+ä¸€é”®åé¦ˆï¼š
+ç¬¬ä¸€æ­¥ï¼š
+ç”Ÿæˆå¹²äº‹åé¦ˆè¡¨
+ç”Ÿæˆéƒ¨é•¿å¾—åˆ†ï¼Œç”Ÿæˆéƒ¨é•¿æŽ’å
+ç”Ÿæˆéƒ¨é—¨å¾—åˆ†ï¼Œç”Ÿæˆéƒ¨é—¨æŽ’å
+ç¬¬äºŒæ­¥ï¼šä¼˜ç§€ç§°å·å¤„ç†
+ç”Ÿæˆä¼˜ç§€éƒ¨é•¿å€™é€‰åå•
+ç”Ÿæˆä¼˜ç§€éƒ¨é—¨å€™é€‰åå•
+ç¬¬ä¸‰æ­¥ï¼šæœ€ç»ˆæ•²å®š
+ç»Ÿè®¡å¹¶ç¡®è®¤ä¼˜ç§€éƒ¨é•¿
+ç»Ÿè®¡å¹¶ç¡®è®¤ä¼˜ç§€éƒ¨é—¨
+
+å‘å‰ç«¯å‘é€åé¦ˆçš„jsonæ•°æ®
+
+
+å¯èƒ½ï¼Œæ˜¯æœ€åŽä¸€å¼ è¡¨äº†
+tbl_yxbzhx//ä¼˜ç§€éƒ¨é•¿å€™é€‰
 {
 id
 year
@@ -1216,12 +1216,12 @@ HX
 }
 
 
-¸ÉÊÂ¿¼ºË±íÓÐÎóµÄµØ·½£º
-Ó¢ÎÄ2012052345£º
+å¹²äº‹è€ƒæ ¸è¡¨æœ‰è¯¯çš„åœ°æ–¹ï¼š
+è‹±æ–‡2012052345ï¼š
 110 117   119   115   117   110 122   117 113   115
 122 120   126.5 119.5 118.5 116 125   123 118.5 119
 116 118.5 122.5 117   117.5 113 123.5 120 115.7 117
-¼ÎÁÕ2012052358£º
+å˜‰ç³2012052358ï¼š
 110 113 108 111 110 111 112 112 119 112 112 111
 123 120 115 111 105 105 112 113 109 91  114 103
 116.5
@@ -1238,30 +1238,30 @@ HX
 107 
 2012052201
 
-ÑîË§2012053239£º112¡¢113¡¢119¡¢116¡¢115¡¢119¡¢113
+æ¨å¸…2012053239ï¼š112ã€113ã€119ã€116ã€115ã€119ã€113
 
 
 
 
-tbl_bmwg//²¿ÃÅÎ¥¹æ
+tbl_bmwg//éƒ¨é—¨è¿è§„
 {
  id
  year
  month
  apartment
- wgkf//Î¥¹æ×Ü¹²µÄ¿Û·Ö£¬´æÕýÖµ
+ wgkf//è¿è§„æ€»å…±çš„æ‰£åˆ†ï¼Œå­˜æ­£å€¼
 }
 
 
 
-ÊµÏÖÈËÁ¦¸ú½øµÄ°ó¶¨admin.html
+å®žçŽ°äººåŠ›è·Ÿè¿›çš„ç»‘å®šadmin.html
 
-³õÊ¼»¯ÊÇ¸ö±È½Ï´ó¶øÇÒÓÖÓÐÐí¶àÏÝÚåµÄÄ£¿é£¬Ó¦¸Ãµ¥¶À³öÀ´
-µÚÒ»£ºÕû¸öÑ§Éú»áÈËÊÂ±ä¶¯³õÊ¼»¯£¬Õâ¾ÍÒâÎ¶×ÅÒªÏÈÉ¾³ýËùÓÐÈËµÄ¼ÇÂ¼ÐÅÏ¢,È»ºóÔÙÅÜ³öÐÂÒ»½ìµÄ
-      °üÀ¨¸öÈË»ù±¾ÐÅÏ¢£¬¸ú½øºÍÖ÷¹ÜÐÅÏ¢£¬ËùÓÐ¿¼ºË±í¸ñÐÅÏ¢£¬
-µÚ¶þ£ºÃ¿´ÎµÄ¼¨Ð§¿¼ºË£¬¸÷ÖÖ±í¸ñ¶¼ÐèÒª¸ù¾ÝÄêÔÂ³õÊ¼»¯Ò»´Î
+åˆå§‹åŒ–æ˜¯ä¸ªæ¯”è¾ƒå¤§è€Œä¸”åˆæœ‰è®¸å¤šé™·é˜±çš„æ¨¡å—ï¼Œåº”è¯¥å•ç‹¬å‡ºæ¥
+ç¬¬ä¸€ï¼šæ•´ä¸ªå­¦ç”Ÿä¼šäººäº‹å˜åŠ¨åˆå§‹åŒ–ï¼Œè¿™å°±æ„å‘³ç€è¦å…ˆåˆ é™¤æ‰€æœ‰äººçš„è®°å½•ä¿¡æ¯,ç„¶åŽå†è·‘å‡ºæ–°ä¸€å±Šçš„
+      åŒ…æ‹¬ä¸ªäººåŸºæœ¬ä¿¡æ¯ï¼Œè·Ÿè¿›å’Œä¸»ç®¡ä¿¡æ¯ï¼Œæ‰€æœ‰è€ƒæ ¸è¡¨æ ¼ä¿¡æ¯ï¼Œ
+ç¬¬äºŒï¼šæ¯æ¬¡çš„ç»©æ•ˆè€ƒæ ¸ï¼Œå„ç§è¡¨æ ¼éƒ½éœ€è¦æ ¹æ®å¹´æœˆåˆå§‹åŒ–ä¸€æ¬¡
 
-ÐÂÔöÒ»¸ö±í¸ñ£¬ÆäËûÇé¿ö
+æ–°å¢žä¸€ä¸ªè¡¨æ ¼ï¼Œå…¶ä»–æƒ…å†µ
 
 
 delete from tbl_gszp where month=5;
@@ -1288,9 +1288,9 @@ delete from tbl_yxchxz;
 
 
 
-ÐÂÎÅÄ£¿é
-ÐÂÎÅ£¬Ñ§Éú¹¤×÷£¬»î¶¯£¬ÏÖÐÐÖÆ¶È£¬¹«¸æ£¬¼´½«¾Ù°ìµÄ»î¶¯
-ÔÚÒ³Ãædistribution.htmlµÄ»ù´¡ÉÏ£¬½¨Á¢Êý¾Ý¿â±ítbl_news
+æ–°é—»æ¨¡å—
+æ–°é—»ï¼Œå­¦ç”Ÿå·¥ä½œï¼Œæ´»åŠ¨ï¼ŒçŽ°è¡Œåˆ¶åº¦ï¼Œå…¬å‘Šï¼Œå³å°†ä¸¾åŠžçš„æ´»åŠ¨
+åœ¨é¡µé¢distribution.htmlçš„åŸºç¡€ä¸Šï¼Œå»ºç«‹æ•°æ®åº“è¡¨tbl_news
 tbl_news
 {
 id 
@@ -1298,29 +1298,29 @@ create_time
 title
 author
 keyword
-type Àà±ð£¬°üÀ¨ÐÂÎÅ£¬Ñ§Éú¹¤×÷£¬»î¶¯£¬ÏÖÐÐÖÆ¶È£¬
-text ÕýÎÄ
-url  ÐÂÎÅµÄµÚÒ»ÕÅÍ¼Æ¬µÄURL
+type ç±»åˆ«ï¼ŒåŒ…æ‹¬æ–°é—»ï¼Œå­¦ç”Ÿå·¥ä½œï¼Œæ´»åŠ¨ï¼ŒçŽ°è¡Œåˆ¶åº¦ï¼Œ
+text æ­£æ–‡
+url  æ–°é—»çš„ç¬¬ä¸€å¼ å›¾ç‰‡çš„URL
 }
 tbl_announcement
 {
 id
 create_time
 update_time
-text	¹«¸æÄÚÈÝ
+text	å…¬å‘Šå†…å®¹
 }
 tbl_activity
 {
 id
 create_time
 update_time
-act_name	»î¶¯Ãû³Æ
-act_time	»î¶¯Ê±¼ä
-act_address	»î¶¯µØµã
-act_apartment	¾Ù°ì²¿ÃÅ
-act_slogan	»î¶¯¿ÚºÅ
-act_bigposter	»î¶¯´óº£±¨
-act_smallposter	»î¶¯Ð¡º£±¨
+act_name	æ´»åŠ¨åç§°
+act_time	æ´»åŠ¨æ—¶é—´
+act_address	æ´»åŠ¨åœ°ç‚¹
+act_apartment	ä¸¾åŠžéƒ¨é—¨
+act_slogan	æ´»åŠ¨å£å·
+act_bigposter	æ´»åŠ¨å¤§æµ·æŠ¥
+act_smallposter	æ´»åŠ¨å°æµ·æŠ¥
 }
 
 
