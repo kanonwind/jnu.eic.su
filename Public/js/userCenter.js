@@ -9,9 +9,20 @@ var gregorianMonths=new Array("1月","2月","3月","4月","5月","6月","7月","
 
 var gregorianDays=new Array("1日","2日","3日","4日","5日","6日","7日","8日","9日","10日","11日","12日","13日","14日","15日","16日","17日","18日","19日","20日","21日","22日","23日","24日","25日","26日","27日","28日","29日","30日","31日");
 
+var greMonthDays = new Array(31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
+
 var arrDepartName=new Array("秘书处","人力资源部","宣传部","信息编辑部","学术部",
 "体育部","KSC联盟","组织部","文娱部","公关部","心理服务部","主席团");
 
+var arrUserType = new Array("干事","人力干事","部长级","主席团");
+var arrGender = new Array("女","男","不确定");
+
+var arrMajorName = new Array("包装工程","软件工程","电气工程及其自动化","自动化","电子信息科学与技术","信息安全","物联网工程");
+
+var flagUserData=0;//用户信息，0为要从后台获取数据，1为不用
+var flagKKB=0;//空课表，0为要从后台获取数据，1为不用
+var objPersonalData;
+var arrES;
 function UserCenterInit()
 {
 	ShowPersonalData();
@@ -48,247 +59,66 @@ function UserCenterInit()
 function GetPersonalData()
 {
 	
-
-	//用户类型
-	var arrUserType = new Array("干事","人力干事","部长级","主席团");
-	//部门信息转化
-	var arrBuMen = new Array("秘书处", "人力资源部", "宣传部", "信息编辑部",
-							"学术部", "体育部", "KSC联盟", "组织部",
-							"文娱部", "公关部", "心理服务部", "主席团");
-	var arr = 
-	{
-		"birType":"1",
-		"month":"8",
-		"day":"21",
-	}
-
 	
-		//ajax请求Center/message，接收当前账号的个人信息
-		var obj;
-	    $.ajax({
-		url:URL+"/message",
-		data:{},
-		type:"post",
-		async:false,
-		dataType:"json",
-		success:function(result){obj=result;}
-		});
-    ////////账户信息
-    //账号
-    var _userId = obj.account;//"2012052207";
-    //密码
-    var _password = "";
-    //姓名
-    var _name = obj.name;//"邓作恒6666";
-    //用户类型
-    var _userType = arrUserType[obj.type-1];//"部长级";
-    //所属部门
-    var _depart = arrBuMen[obj.apartment-1];//"KSC联盟";
-    //职位
-    var _post =obj.position;// "KSC联盟技术负责人";
-    ////////账户信息结束
+    //ajax请求Center/message，接收当前账号的个人信息
+    var obj;
+    $.ajax({
+    url:URL+"/message",
+    data:{},
+    type:"post",
+    async:false,
+    dataType:"json",
+    success:function(result){obj=result;}
+    });
+    /*  
+    json_Get={
+        /////////////账户信息
+        "account":"2012052207",//账号
+        "name":"邓作恒6666",//姓名
+        "type":3,//用户类型
+        "apartment":7,//所属部门
+        "position":"KSC联盟技术负责人",//职位
+        ///////////////联系方式
+        "phone":"13726247196",//长号
+        "short":"617196",//短号
+        "qq":"2470423627",//
+        "dorm":"3313",//宿舍号
+        "mail":"dengzuoheng@gmail.com",//
+        
+        ////////////个人信息
+        "sex":"1",//性别(别想歪）
+        "grade":"2012",//年级
+        "major":"软件工程",//
+        "birthtype":1,//生日类型，0为公历1为农历
+        "birthmonth":8,//生日月，月份1-12，日子1-31
+        "birthday":21,//生日日
+        };
+    console.log(json_Get);
+    */
+    console.log(obj);
+    //if debug
+    //return json_Get;
+    //if release
+    return obj;
 
-    ////////联系方式
-    //长号
-    var _longPhoneNum = obj.phone;//"13726247196";
-    //短号
-    var _shortPhoneNum = obj.short;//"617196";
-    //QQ号码
-    var _QQNum = obj.qq;//"2470423627";
-    //宿舍号
-    var _dormNO = obj.dorm;//"3313";
-    //常用邮箱
-    var _Email = obj.mail;//"dengzuoheng@gmail.com";
-    ///////////联系方式结束
-
-    ///////////个人信息
-    //性别
-    var _sex = obj.sex;//"男";
-    //年级
-    var _grade = obj.grade;//2012;
-    //专业
-    var _major = obj.major;//"软件工程";
-    //生日
-	//0为公历1为农历
-	//月份1-12，日子1-31
-	if(obj.birthtype == 1)
-	{
-		var _birType = "农历";
-		//alert(obj.birthday-1);
-		var _month = lunarMonths[obj.birthmonth-1];
-		var _day = lunarMonthDays[obj.birthday-1];
-	}
-	
-	if(obj.birthtype == 0)
-	{
-		//alert(obj.birthday-1);
-		var _birType = "公历";
-		var _month = obj.birthmonth + "月";
-		var _day = obj.birthday;
-	}
-    /*var _birthday = "公历 8月21日";
-	var _birType = "农历";
-	var _month = "八月";
-	var _day = "廿一";*/
-    ////////////个人信息结束
-	
-	/////返回错误信息
-	var _returnError = "";
-
-    ///////////个人资料自定义对象
-    function objPersonalData()
-    {
-        this.userId = _userId;
-        this.password = _password;
-        this.name = _name;
-        this.userType = _userType;
-        this.depart = _depart;
-        this.post = _post;
-
-        this.longPhoneNum = _longPhoneNum;
-        this.shortPhoneNum = _shortPhoneNum;
-        this.QQNum = _QQNum;
-        this.dormNO = _dormNO;
-        this.Email = _Email;
-
-        this.sex = _sex;
-        this.grade = _grade;
-        this.major = _major;
-		this.birType = _birType;
-		this.month = _month;
-		this.day = _day;
-		this.birthday = this.birType + " " + this.month + this.day;
-		
-		this.returnError = _returnError;
-    }
-
-    var objPD = new objPersonalData();
-
-    return  objPD;
 }
 
 //向服务器传递数据
 function PostPersonalDataToServer(objPersonalData)
 {
-  
-	//
-	//alert(objPersonalData.name);
-	//alert(objPersonalData.birType + objPersonalData.month + objPersonalData.day);
-/*全部信息
-	objPersonalData.userId
-	objPersonalData.password
-	objPersonalData.name
-	objPersonalData.userType
-	objPersonalData.depart
-	objPersonalData.post
+    //我应该保证了传过来的数据与json格式约定一致的，如果有问题，请找邓作恒
+   
+    var response;
+    $.ajax({
+    url:URL+"/modify",
+    data:objPersonalData,
+    async:false,
+    type:"post",
+    dataType:"json",
+    success:function(result){response=result;}
+    });
+    //alert(response.status);
 
-	objPersonalData.longPhoneNum
-	objPersonalData.shortPhoneNum
-	objPersonalData.QQNum
-	objPersonalData.dormNO
-	objPersonalData.Email
-
-	objPersonalData.sex
-	objPersonalData.grade
-	objPersonalData.major
-	objPersonalData.birType
-	objPersonalData.month
-	objPersonalData.day
-	objPersonalData.birthday
-	//objPersonalData.returnError
-	*/
-    //生日
-	//0为公历1为农历
-	//月份1-12，日子1-31
-	switch(objPersonalData.birType)
-	{
-		case "公历":objPersonalData.birType=0;break;
-		case "农历":objPersonalData.birType=1;break;
-	}
-	//转换月份格式
-	for(var i=0;i<gregorianMonths.length;i++)
-	{
-		if(objPersonalData.month==lunarMonthMonths[i]||objPersonalData.month==gregorianMonths[i])
-		{
-			objPersonalData.month=i+1;
-			break;
-		}
-	}
-	alert("日："+objPersonalData.month);
-	//转换日期格式
-	for(var i=0;i<gregorianDays.length;i++)
-	{
-		if(objPersonalData.day==gregorianDays[i]||objPersonalData.day==lunarMonthDays[i])
-		{
-			objPersonalData.day=i+1;
-			break;
-		}
-	}
-	
-	
-	//alert(objPersonalData.birType+objPersonalData.month+objPersonalData.day);
-	alert("日："+objPersonalData.day);
-	//部门信息转化
-	
-	objPersonalData.depart=arrDepartName.indexOf(objPersonalData.depart)+1;
-	
-	
-	alert("部门"+objPersonalData.depart);
-	
-	//转化用户类型
-	switch(objPersonalData.userType)
-	{
-		case "部长级":
-			objPersonalData.userType = 3;
-			break;
-		case "主席团":
-			objPersonalData.userType = 4;
-			break;
-		case "干事":
-			objPersonalData.userType = 1;
-			break;
-		case "人力干事":
-			objPersonalData.userType = 2;
-			break;
-	}
-	//alert("用户类型"+objPersonalData.userType);
-	
-	
-		//ajax请求Center/modify，发送页面上经过修改的个人信息
-		var person_info=
-	   {
-		"account":objPersonalData.userId,
-		//objPersonalData.password
-		"name":objPersonalData.name,
-		"type":objPersonalData.userType,
-		"apartment":objPersonalData.depart,
-		"position":objPersonalData.post,
-
-		"phone":objPersonalData.longPhoneNum,
-		"short":objPersonalData.shortPhoneNum,
-		"qq":objPersonalData.QQNum,
-		"dorm":objPersonalData.dormNO,
-		"mail":objPersonalData.Email,
-
-		"sex":objPersonalData.sex,
-		"grade":objPersonalData.grade,
-		"major":objPersonalData.major,
-		"birthtype":objPersonalData.birType,
-		"birthmonth":objPersonalData.month,
-		"birthday":objPersonalData.day,
-		//objPersonalData.birthday
-		};
-		var response;
-	    $.ajax({
-		url:URL+"/modify",
-		data:person_info,
-		async:false,
-		type:"post",
-		dataType:"json",
-		success:function(result){response=result;}
-		});
-		//alert(response.status);
-	
 	//判断数据是否传递成功
 	if(1)
 		return true;
@@ -301,7 +131,7 @@ function PostPassWordToServer(strAffirmPW)
 	//alert(strAffirmPW);
 	var person_info=
 	{
-		"password":strAffirmPW,
+		"password":hex_md5(strAffirmPW),
 	};
 		var response;
 	    $.ajax({
@@ -324,6 +154,8 @@ function PostPassWordToServer(strAffirmPW)
 function CheckPassWord(passWord)
 {
 	//写了才能触发
+    passWord=hex_md5(passWord);
+    console.log(passWord);
 	var person_info=
 	{
 		"password":passWord,
@@ -450,7 +282,19 @@ function GetContactsBooks()
 	for(var iCount = 0; iCount < arr.num; ++iCount)
 	{
 		//var objPD = new objContactsBooks("主席团", "部长", "林杰", "QQ", "13631261719", "641719", "3313", "农历", "八月", "廿一", "12", "软件工程");
-		var objPD = new objContactsBooks(arr.person[iCount].depart, arr.person[iCount].post, arr.person[iCount].name, arr.person[iCount].QQNum, arr.person[iCount].longPhoneNum, arr.person[iCount].shortPhoneNum, arr.person[iCount].dormNO, arr.person[iCount].birType, arr.person[iCount].month, arr.person[iCount].day, arr.person[iCount].grade, arr.person[iCount].major);
+		var objPD = new objContactsBooks(
+            arr.person[iCount].depart, 
+            arr.person[iCount].post, 
+            arr.person[iCount].name, 
+            arr.person[iCount].QQNum, 
+            arr.person[iCount].longPhoneNum, 
+            arr.person[iCount].shortPhoneNum, 
+            arr.person[iCount].dormNO, 
+            arr.person[iCount].birType, 
+            arr.person[iCount].month, 
+            arr.person[iCount].day, 
+            arr.person[iCount].grade, 
+            arr.person[iCount].major);
 		
 		/*objPD.userId = 11111;
 		//objPD.password = _password;
@@ -522,8 +366,11 @@ function ShowPersonalData()
 {
 	//document.getElementById("change_personal_data").innerHTML = "";
 	//document.getElementById("change_password").innerHTML = "";
-	
-    var objPersonalData = GetPersonalData();
+	if(flagUserData==0)
+    {
+        objPersonalData = GetPersonalData();
+        flagUserData=1;
+    }
     var strPersonalDataHTML;
 
     strPersonalDataHTML =
@@ -541,11 +388,11 @@ function ShowPersonalData()
                         + "<p>职位：</p>\n"
                     + "</div>\n"
                     + "<div class=\"info_item\" id=\"account_info_detail\"><!--这是要从服务器拿数据的，这里只是例子-->\n"
-                        + "<p>" + objPersonalData.userId + "</p>\n"
+                        + "<p>" + objPersonalData.account + "</p>\n"
                         + "<p>" + objPersonalData.name + "</p>\n"
-                        + "<p>" + objPersonalData.userType + "</p>\n"
-                        + "<p>" + objPersonalData.depart + "</p>\n"
-                        + "<p>" + objPersonalData.post + "</p>\n"
+                        + "<p>" + arrUserType[objPersonalData.type-1] + "</p>\n"
+                        + "<p>" + arrDepartName[objPersonalData.apartment-1] + "</p>\n"
+                        + "<p>" + objPersonalData.position + "</p>\n"
                      + "</div>\n"
                 + "</div>\n"
                 + "<div class=\"account\" id=\"contact_info\">\n"
@@ -558,11 +405,11 @@ function ShowPersonalData()
                         + "<p>常用邮箱：</p>\n"
                     + "</div>\n"
                     + "<div class=\"info_item\" id=\"contact_info_detail\">\n"
-                        + "<p>" + objPersonalData.longPhoneNum + "</p>\n"
-                        + "<p>" +objPersonalData.shortPhoneNum + "</p>\n"
-                        + "<p>" + objPersonalData.QQNum + "</p>\n"
-                        + "<p>" + objPersonalData.dormNO + "</p>\n"
-                        + "<p>" + objPersonalData.Email + "</p>\n"
+                        + "<p>" + objPersonalData.phone + "</p>\n"
+                        + "<p>" + objPersonalData.short + "</p>\n"
+                        + "<p>" + objPersonalData.qq + "</p>\n"
+                        + "<p>" + objPersonalData.dorm + "</p>\n"
+                        + "<p>" + objPersonalData.mail + "</p>\n"
                     + "</div>\n"
                 + "</div>\n"
                 + "<div class=\"account\" id=\"personal_info\">\n"
@@ -574,10 +421,21 @@ function ShowPersonalData()
                         + "<p>生日：</p>\n"
                     + "</div>\n"
                     + "<div class=\"info_item\" id=\"personal_info_detail\">\n"
-                        + "<p>" + objPersonalData.sex + "</p>\n"
+                        + "<p>" + arrGender[objPersonalData.sex] + "</p>\n"
                         + "<p>" + objPersonalData.grade + "</p>\n"
                         + "<p>" + objPersonalData.major + "</p>\n"
-                        + "<p>" + objPersonalData.birthday + "</p>\n"
+                        + "<p>" ;
+                        
+            if(objPersonalData.birthtype==1)
+            {
+                strPersonalDataHTML+="农历 "+lunarMonths[objPersonalData.birthmonth-1]+lunarMonthDays[objPersonalData.birthday-1];
+            }
+            else
+            {
+                strPersonalDataHTML+="公历 "+objPersonalData.birthmonth+"月"+objPersonalData.birthday+"日";
+            }
+            
+            strPersonalDataHTML+= "</p>\n"
                     + "</div>\n"
                 + "</div>\n"
             + "</div>\n"
@@ -595,11 +453,17 @@ function ShowPersonalData()
     document.getElementById("personal_data").innerHTML = strPersonalDataHTML;
 	
 	document.getElementById("per_info_modf_apy").onclick = function()
-		{document.getElementById("personal_data").innerHTML=""; ChangePersonalData(); }
+    {
+        document.getElementById("personal_data").innerHTML=""; 
+        flagUserData=0;
+        ChangePersonalData(objPersonalData); 
+    }
 	document.getElementById("passworld_change").onclick = function()
-		{document.getElementById("personal_data").innerHTML=""; ChangePassWord(); }
-	
-	
+    {
+        document.getElementById("personal_data").innerHTML=""; 
+        ChangePassWord();
+    }
+		
 
 }
 
@@ -625,38 +489,32 @@ function PrintToHTML(objPersonalData, curYear)
 							+ "</div>\n"
 							+ "<div class=\"info_item\" id=\"account_info_detail\"><!--这是要从服务器拿数据的，这里只是例子-->\n"
 								+ "<p>\n"
-									+ objPersonalData.userId + "\n"
+									+ objPersonalData.account + "\n"
 									+ "<!--账号当然是不允许修改的-->\n"
 								+ "</p><!--这里的默认值是修改前的用户名，从数据库中抓，假设这一部分是用javascript实现的，与服务器通行的是javascipt-->\n"
 								+ "<p>\n"
 									+ "<input type=\"text\" id=\"modf_user_name\" name=\"modf_user_name\" value=" + objPersonalData.name + " />\n"
 								+ "</p>\n"
 								+ "<p>\n"
-									+ "<select id=\"modf_user_type\">\n"
-										+ "<option value=\"1\">主席团</option>\n"
-										+ "<option value=\"2\">部长级</option>\n"
-										+ "<option value=\"3\">人力干事</option>\n"
-										+ "<option value=\"4\">干事</option>\n"
-									+ "</select>\n"
+                                + "<select id=\"modf_user_type\">\n";
+                                for(var i=0;i<arrUserType.length;i++)
+                                {
+                                    strChangePersonalDataHTML+="<option value=\""+(i+1)+"\">"+arrUserType[i]+"</option>\n";
+                                }
+								
+								strChangePersonalDataHTML+="</select>\n"
 								+ "</p>\n"
 								+ "<p>\n"
-									+ "<select id=\"modf_user_department\">\n"
-										+ "<option value=\"1\">主席团</option>\n"
-										+ "<option value=\"2\">秘书处</option>\n"
-										+ "<option value=\"3\">人力资源部</option>\n"
-										+ "<option value=\"4\">KSC联盟</option>\n"
-										+ "<option value=\"5\">信息编辑部</option>\n"
-										+ "<option value=\"6\">组织部</option>\n"
-										+ "<option value=\"7\">宣传部</option>\n"
-										+ "<option value=\"8\">学术部</option>\n"
-										+ "<option value=\"9\">公关部</option>\n"
-										+ "<option value=\"10\">体育部</option>\n"
-										+ "<option value=\"11\">文娱部</option>\n"
-										+ "<option value=\"12\">心理服务部</option>\n"
-									+ "</select>\n"
+                            
+                                + "<select id=\"modf_user_department\">\n";
+                                for(var i=0;i<arrDepartName.length;i++)
+                                {
+                                    strChangePersonalDataHTML+="<option value=\""+(i+1)+"\">"+arrDepartName[i]+"</option>";
+                                }
+                                strChangePersonalDataHTML+="</select>\n"
 								+ "</p>\n"
 								+ "<p>\n"
-									+ "<input type=\"text\" id=\"modf_user_position\" name=\"modf_user_position\" value=\"" + objPersonalData.post + "\" />\n"
+									+ "<input type=\"text\" id=\"modf_user_position\" name=\"modf_user_position\" value=\"" + objPersonalData.position + "\" />\n"
 								+ "</p>\n"
 							+ "</div>\n"
 						+ "</div>\n"
@@ -672,19 +530,19 @@ function PrintToHTML(objPersonalData, curYear)
 							+ "</div>\n"
 							+ "<div class=\"info_item\" id=\"contact_info_detail\">\n"
 								+ "<p>\n"
-									+ "<input type=\"text\" id=\"modf_user_lphnum\" name=\"modf_user_lphnum\" value=\"" + objPersonalData.longPhoneNum + "\" />\n"
+									+ "<input type=\"text\" id=\"modf_user_lphnum\" name=\"modf_user_lphnum\" value=\"" + objPersonalData.phone + "\" />\n"
 								+ "</p>\n"
 								+ "<p>\n"
-									+ "<input type=\"text\" id=\"modf_user_sphnum\" name=\"modf_user_sphnum\" value=\"" + objPersonalData.shortPhoneNum + "\" />\n"
+									+ "<input type=\"text\" id=\"modf_user_sphnum\" name=\"modf_user_sphnum\" value=\"" + objPersonalData.short + "\" />\n"
 								+ "</p>\n"
 								+ "<p>\n"
-									+ "<input type=\"text\" id=\"modf_user_qq\" name=\"modf_user_qq\" value=\"" + objPersonalData.QQNum + "\" />\n"
+									+ "<input type=\"text\" id=\"modf_user_qq\" name=\"modf_user_qq\" value=\"" + objPersonalData.qq + "\" />\n"
 								+ "</p>\n"
 								+ "<p>\n"
-									+ "<input type=\"text\" id=\"modf_user_dorm\" name=\"modf_user_dorm\" value=\"" + objPersonalData.dormNO + "\" />\n"
+									+ "<input type=\"text\" id=\"modf_user_dorm\" name=\"modf_user_dorm\" value=\"" + objPersonalData.dorm + "\" />\n"
 								+ "</p>\n"
 								+ "<p>\n"
-									+ "<input type=\"text\" id=\"modf_user_email\" name=\"modf_user_email\" value=\"" + objPersonalData.Email + "\" />\n"
+									+ "<input type=\"text\" id=\"modf_user_email\" name=\"modf_user_email\" value=\"" + objPersonalData.mail + "\" />\n"
 								+ "</p>\n"
 							+ "</div>\n"
 						+ "</div>\n"
@@ -699,9 +557,9 @@ function PrintToHTML(objPersonalData, curYear)
 							+ "<div class=\"info_item\" id=\"personal_info_detail\">\n"
 								+ "<p>\n"
 									+ "<select id=\"modf_user_sex\">\n"
-										+ "<option value=\"0\">不确定</option>\n"
-										+ "<option value=\"1\">女</option>\n"
-										+ "<option value=\"2\">男</option>\n"
+										+ "<option value=\"0\">女</option>\n"
+										+ "<option value=\"1\">男</option>\n"
+										+ "<option value=\"2\">不确定</option>\n"
 									+ "</select>\n"
 								+ "</p>\n"
 								+ "<p>\n"
@@ -713,14 +571,12 @@ function PrintToHTML(objPersonalData, curYear)
 								+ "</p>\n"
 								+ "<p>\n"
 									+ "<select id=\"modf_user_major\">\n"
-										+ "<option value=\"pe\">包装工程</option>\n"
-										+ "<option value=\"se\">软件工程</option>\n"
-										+ "<option value=\"ee\">电气工程及其自动化</option>\n"
-										+ "<option value=\"au\">自动化</option>\n"
-										+ "<option value=\"ei\">电子信息科学与技术</option>\n"
-										+ "<option value=\"is\">信息安全</option>\n"
-										+ "<option value=\"iot\">物联网工程</option>\n"
-									+ "</select>\n"
+                                for(var i=0;i<arrMajorName.length;i++)
+                                {
+                                    strChangePersonalDataHTML+="<option value=\""+i+"\">"+arrMajorName[i]+"</option>";
+                                }
+								
+								strChangePersonalDataHTML+="</select>\n"
 								+ "</p>\n"
 								
 								+ "<p>\n"
@@ -742,7 +598,7 @@ function PrintToHTML(objPersonalData, curYear)
 						+ "</div>\n"
 					+ "</div>\n"
 					+ "<div id=\"modf_error\">\n"
-					+ objPersonalData.returnError + "\n"
+					//+ objPersonalData.returnError + "\n"
 					+ "</div>\n"
 					+ "<div class=\"modification\" id=\"per_info_modf_button\">\n"
 						+ "<button type=\"button\" class=\"user_center_modf_button\" name=\"per_info_modf_submit\" id=\"per_info_modf_submit\" title=\"保存修改的个人资料\">\n"
@@ -757,9 +613,9 @@ function PrintToHTML(objPersonalData, curYear)
 }
 
 //修改个人信息
-function ChangePersonalData()
+function ChangePersonalData(objPersonalData)
 {
-	var objPersonalData = GetPersonalData();   
+	//var objPersonalData = GetPersonalData();   
 	
 	////确定当前大一入学的年份
 	var curYear;
@@ -774,39 +630,15 @@ function ChangePersonalData()
 	
 	////写入HTML文件
 	PrintToHTML(objPersonalData, curYear);
-alert(objPersonalData.dormNO);
+   
 
 	//////////显示修改前个人信息
-	var userTp = new Array("主席团","部长级","人力干事","干事");
-	for(var i = 0; i < userTp.length; ++i)
-	{
-		if(objPersonalData.userType == userTp[i])
-		{
-			document.getElementById("modf_user_type").selectedIndex = i;
-			break;
-		}
-	}
 	
-	var userDp = new Array("主席团","秘书处","人力资源部","KSC联盟","信息编辑部",
-			"组织部","宣传部","学术部","公关部","体育部","文娱部","心理服务部");
-	for(var i = 0; i < userDp.length; ++i)
-	{
-		if(objPersonalData.depart == userDp[i])
-		{
-			document.getElementById("modf_user_department").selectedIndex = i;
-			break;
-		}
-	}
+    document.getElementById("modf_user_type").selectedIndex = objPersonalData.type-1;
 	
-	var userSex = new Array("不确定","女","男");
-	for(var i = 0; i < userSex.length; ++i)
-	{
-		if(objPersonalData.sex == userSex[i])
-		{
-			document.getElementById("modf_user_sex").selectedIndex = i;
-			break;
-		}
-	}
+	document.getElementById("modf_user_department").selectedIndex =objPersonalData.apartment-1;
+			
+	document.getElementById("modf_user_sex").selectedIndex = objPersonalData.sex;
 	
 	var usrGrade = new Array((curYear-2), (curYear-1), curYear);
 	for(var i = 0; i < usrGrade.length; ++i)
@@ -818,99 +650,53 @@ alert(objPersonalData.dormNO);
 		}
 	}
 	
-	var userMajor = new Array("包装工程","软件工程","电气工程及其自动化","自动化","电子信息科学与技术","信息安全","物联网工程");
-	for(var i = 0; i < userMajor.length; ++i)
-	{
-		if(objPersonalData.major == userMajor[i])
-		{
-			document.getElementById("modf_user_major").selectedIndex = i;
-			break;
-		}
-	}
+	document.getElementById("modf_user_major").selectedIndex = arrMajorName.indexOf(objPersonalData.major);
 
 	/////设置生日日期	
 	var objBirType = document.getElementById("birthday_type");
 	var objMonthType = document.getElementById("month_type");
 	var objDaysType = document.getElementById("days_type");
 	
-	var lunarMonths = new Array("一月","二月","三月","四月","五月","六月",
-								"七月","八月","九月","十月","十一月","十二月");
-	var lunarMonthDays = new Array( "初一","初二","初三","初四","初五","初六","初七","初八","初九","初十",
-									"十一","十二","十三","十四","十五","十六","十七","十八","十九","二十",
-									"廿一","廿二","廿三","廿四","廿五","廿六","廿七","廿八","廿九","三十");
-	var greMonthDays = new Array(31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
 		
-	if(objPersonalData.birType == "公历")
+	if(objPersonalData.birthtype == 0)//公历为0
 	{
 		GreMonths();
 		GreDays();
-		
-		document.getElementById("birthday_type").selectedIndex = 0;
-		for(var i = 0; i < 12; ++i)
-		{
-			if(objPersonalData.month == ((i+1)+"月"))
-			{
-				objMonthType.selectedIndex = i;
-				//alert("lll" + i);
-				for(var j = 0; j < greMonthDays[i]; ++j)
-				{
-					if(objPersonalData.day == ((j+1)))
-					{
-						objDaysType.selectedIndex = j;//alert("lll" + j);
-						break;
-					}
-				}
-				
-				break;
-			}
-		}
+        
+		objBirType.selectedIndex = 0;
+		objMonthType.selectedIndex = objPersonalData.birthmonth-1;
+		bjDaysType.selectedIndex = objPersonalData.birthday-1;
 	}
 	else
 	{
+        //console.log(objPersonalData.birthtype);
 		LunarMonths();
 		LunarDays();
-		
-		document.getElementById("birthday_type").selectedIndex = 1;
-		for(var i = 0; i < 12; ++i)
-		{
-			if(objPersonalData.month == lunarMonths[i])
-			{
-				objMonthType.selectedIndex = i;
-				for(var j = 0; j < 30; ++j)
-				{
-					if(objPersonalData.day == lunarMonthDays[j])
-					{
-						objDaysType.selectedIndex = j;//alert("lffl" + j);
-						break;
-					}
-				}
-				
-				break;
-			}
-		}
+		objBirType.selectedIndex=1;
+		objMonthType.selectedIndex = objPersonalData.birthmonth-1;
+		objDaysType.selectedIndex = objPersonalData.birthday-1;
 	}
 		
 	objBirType.onchange = BirType;
 	function BirType()
 	{
-		objPersonalData.birType = this.options[this.selectedIndex].text;
+		objPersonalData.birthtype = this.selectedIndex;
 		
-		var strBirType = this.options[this.selectedIndex].value;
-		if(strBirType == "lunar")
+		if(objPersonalData.birthtype==1)
 		{
 			LunarMonths();
 			LunarDays();
 		}
-		if(strBirType == "gregorian")
+		if(objPersonalData.birthtype==0)
 		{
 			GreMonths();
 			GreDays();
 		}	
-		objPersonalData.month = objMonthType.options[objMonthType.selectedIndex].text;
-		objPersonalData.day = objDaysType.options[objDaysType.selectedIndex].text;
+		objPersonalData.month = objMonthType.selectedIndex+1;
+		objPersonalData.day = objDaysType.selectedIndex+1;
 	}
 
-	function LunarMonths()///设置农历月份
+	function LunarMonths()//设置农历月份
 	{
 		objMonthType.options.length = 0;
 		for(var i = 0; i < 12; ++i)
@@ -942,7 +728,11 @@ alert(objPersonalData.dormNO);
 		
 		objDaysType.options.length = 0;
 		for(var i = 0; i < greMonthDays[iMonth]; ++i)
+        {
+            if(iMonth==2)
+            console.log(i);
 			objDaysType.options[i] = new Option(i+1);
+        }
 	}////生日日期设置结束
 	////////////显示修改前信息结束
 	
@@ -950,44 +740,46 @@ alert(objPersonalData.dormNO);
 	//修改生日
 	objMonthType.onchange = function()
 	{
-		objPersonalData.birType =objBirType.options[objBirType.selectedIndex].text;
-		objPersonalData.month = this.options[this.selectedIndex].text;
-		objPersonalData.day = objDaysType.options[objDaysType.selectedIndex].text;
+		objPersonalData.birthtype =objBirType.selectedIndex;
+		objPersonalData.birthmonth = this.selectedIndex+1;
+		objPersonalData.birthday = objDaysType.selectedIndex+1;
 	}
 	objDaysType.onchange = function()
 	{
-		objPersonalData.birType =objBirType.options[objBirType.selectedIndex].text;
-		objPersonalData.month = objMonthType.options[objMonthType.selectedIndex].text;
-		objPersonalData.day = this.options[this.selectedIndex].text;
+		objPersonalData.birthtype =objBirType.selectedIndex;
+		objPersonalData.birthmonth = objMonthType.selectedIndex+1;
+		objPersonalData.birthday =this.selectedIndex+1;
 	}	
 	//修改名字
 	document.getElementById("modf_user_name").onchange = function() 
-		{objPersonalData.name = this.value;}
+	{
+        objPersonalData.name = this.value;
+    }
 	//修改用户类型
 	var strUDE = "";
 	document.getElementById("modf_user_type").onchange = function() 
 	{
-		objPersonalData.userType = this.options[this.selectedIndex].text;
+		objPersonalData.type = this.selectedIndex+1;
 		CheckDepart();
 	}
 		
 	function CheckDepart()
 	{
-		if(objPersonalData.userType == "主席团")
+		if(arrUserType[objPersonalData.type-1] == "主席团")
 		{
-			if(objPersonalData.depart != "主席团")
+			if(arrDepartName[objPersonalData.apartment-1] != "主席团")
 				strUDE = "*用户类型为\"主席团\"时，所属部门必须为\"主席团\"" + "<br />";
 			else
 				strUDE = "";
 		}		
-		else if(objPersonalData.userType == "人力干事")
+		else if(arrUserType[objPersonalData.type-1] == "人力干事")
 		{
-			if(objPersonalData.depart != "人力资源部")			
+			if(arrDepartName[objPersonalData.apartment-1] != "人力资源部")			
 				strUDE = "*用户类型为\"人力干事\"时，所属部门必须为\"人力资源部\"" + "<br />";
 			else
 				strUDE = "";
 		}
-		else if(objPersonalData.depart == "主席团")
+		else if(arrDepartName[objPersonalData.apartment-1] == "主席团")
 			strUDE = "*用户类型为非\"主席团\"，所属部门不能为\"主席团\"" + "<br />";
 		else
 			strUDE = "";
@@ -995,18 +787,18 @@ alert(objPersonalData.dormNO);
 	//修改所属部门
 	document.getElementById("modf_user_department").onchange = function() 
 	{
-		objPersonalData.depart = this.options[this.selectedIndex].text;
+		objPersonalData.apartment = this.selectedIndex+1;
 		CheckDepart();
 	}	
 	CheckDepart();
 	//修改职位
-	document.getElementById("modf_user_position").onchange = function() {objPersonalData.post = this.value;}
+	document.getElementById("modf_user_position").onchange = function(){objPersonalData.position = this.value;}
 	//修改电话长号
 	var strULE = "";
 	function CheckLphum()
 	{
 		var re = /^[0-9]+$/;
-		var bool = re.test(objPersonalData.longPhoneNum);
+		var bool = re.test(objPersonalData.phone);
 		if(!bool)
 			strULE = "*请正确填写长号" + "<br />";
 		else
@@ -1015,7 +807,7 @@ alert(objPersonalData.dormNO);
 	CheckLphum();
 	document.getElementById("modf_user_lphnum").onchange = function() 
 	{ 
-		objPersonalData.longPhoneNum = this.value;
+		objPersonalData.phone = this.value;
 		CheckLphum();			
 	}
 	//修改电话短号
@@ -1023,7 +815,7 @@ alert(objPersonalData.dormNO);
 	function CheckSphnum()
 	{
 		var re = /^[0-9]{6}$/;
-		var bool = re.test(objPersonalData.shortPhoneNum);
+		var bool = re.test(objPersonalData.short);
 		if(!bool)
 			strUSE = "*请正确填写短号" + "<br />";
 		else
@@ -1032,7 +824,7 @@ alert(objPersonalData.dormNO);
 	CheckSphnum();
 	document.getElementById("modf_user_sphnum").onchange = function() 
 	{
-		objPersonalData.shortPhoneNum = this.value;
+		objPersonalData.short = this.value;
 		CheckSphnum();		
 	}
 	//修改QQ号
@@ -1040,7 +832,7 @@ alert(objPersonalData.dormNO);
 	function CheckQQ()
 	{
 		var re = /^[0-9]+$/;
-		var bool = re.test(objPersonalData.QQNum);
+		var bool = re.test(objPersonalData.qq);
 		if(!bool)
 			strUQE = "*请正确填写QQ号" + "<br />";
 		else
@@ -1049,7 +841,7 @@ alert(objPersonalData.dormNO);
 	CheckQQ();
 	document.getElementById("modf_user_qq").onchange = function() 
 	{
-		objPersonalData.QQNum = this.value;
+		objPersonalData.qq = this.value;
 		CheckQQ();
 	}
 	//修改宿舍号
@@ -1057,7 +849,7 @@ alert(objPersonalData.dormNO);
 	function CheckDorm()
 	{
 		var re = /^[0-9]{4}$/;
-		var bool = re.test(objPersonalData.dormNO);
+		var bool = re.test(objPersonalData.dorm);
 		if(!bool)
 			strMUDE = "*请正确填写宿舍号" + "<br />";
 		else
@@ -1066,7 +858,7 @@ alert(objPersonalData.dormNO);
 	CheckDorm();
 	document.getElementById("modf_user_dorm").onchange = function() 
 	{
-		objPersonalData.dormNO = this.value;
+		objPersonalData.dorm = this.value;
 		CheckDorm();
 	}
 	//修改常用邮箱
@@ -1075,7 +867,7 @@ alert(objPersonalData.dormNO);
 	{
 		//用正则表达式验证邮箱
 		var re = /^[a-z0-9](\w|\.|-)*@([a-z0-9]+-?[a-z0-9]+\.){1,3}[a-z]{2,4}$/;//(com|cn|net|org)+$/;
-		var bool = re.test(objPersonalData.Email);
+		var bool = re.test(objPersonalData.mail);
 		if(!bool)
 			strUEE = "*请正确填写邮箱" + "<br />";
 		else
@@ -1084,43 +876,41 @@ alert(objPersonalData.dormNO);
 	CheckEmail();
 	document.getElementById("modf_user_email").onchange = function() 
 	{
-		objPersonalData.Email = this.value;
+		objPersonalData.mail = this.value;
 		CheckEmail();
 	}
 	//修改性别
 	document.getElementById("modf_user_sex").onchange = function() 
-		{objPersonalData.sex = this.options[this.selectedIndex].text;}
+		{objPersonalData.sex = this.selectedIndex;}
 	//修改年级
 	document.getElementById("modf_user_grade").onchange = function() 
-		{objPersonalData.grade = this.options[this.selectedIndex].text;}
+		{objPersonalData.grade = this.selectedIndex;}
 	//修改专业
 	document.getElementById("modf_user_major").onchange = function() 
-		{objPersonalData.major = this.options[this.selectedIndex].text;}
+		{objPersonalData.major = this.selectedIndex;}
 	
 	//保存
 	document.getElementById("per_info_modf_submit").onclick = function()
 	{
-		objPersonalData.returnError = strUDE + strULE + strUSE + strUQE + strMUDE + strUEE;
-		if("" == objPersonalData.returnError)
+		strError= strUDE + strULE + strUSE + strUQE + strMUDE + strUEE;
+		if("" == strError)
 		{	
-			
+			console.log(objPersonalData);
+            document.getElementById("modf_error").innerHTML="";
 			if(PostPersonalDataToServer(objPersonalData))
 			{
 				ShowPersonalData();
-				objPersonalData.returnError = "";
 				document.getElementById("change_personal_data").innerHTML = "";
 				return true;
 			}
 			else
 			{
 				document.getElementById("modf_error").innerHTML = "*保存失败，请再次保存";
-				objPersonalData.returnError = "";
 			}
 		}
 		else
 		{
-			document.getElementById("modf_error").innerHTML = objPersonalData.returnError;
-			objPersonalData.returnError = "";
+			document.getElementById("modf_error").innerHTML = strError;
 		}
 	}
 }
@@ -1253,7 +1043,12 @@ function ChangePassWord()
 //显示空课表
 function  ShowEmptySchedule()
 {
-	var arrES = GetEmptySchedule();
+	//var arrES = GetEmptySchedule();
+    if(flagKKB==0)
+    {
+        arrES= GetEmptySchedule();
+        flagKKB=1;
+    }
 	var strESHTML = "<div class=\"sign_of_click\" id=\"kkb_sign\" >\n"
 			+ "</div>\n"
 			+ "<div class=\"work_filed\" id=\"kkb_work_filed\">\n"
@@ -1311,7 +1106,11 @@ function  ShowEmptySchedule()
 	document.getElementById("empty_schedule").innerHTML = strESHTML;
 	
 	document.getElementById("kkb_modf_apy").onclick = function()
-		{document.getElementById("empty_schedule").innerHTML=""; ChangeEmptySchedule(arrES); }
+	{
+        document.getElementById("empty_schedule").innerHTML="";
+        flagKKB=0;
+        ChangeEmptySchedule(arrES); 
+    }
 }
 //修改空课表
 function ChangeEmptySchedule(arrES)
