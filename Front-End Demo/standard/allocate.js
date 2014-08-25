@@ -5,12 +5,40 @@ var arrDepartName=new Array("秘书处","人力资源部","宣传部","信息编
 "体育部","KSC联盟","组织部","文娱部","公关部","心理服务部","主席团");
 var arrTypeName=new Array("干事","人力干事","部长级","主席团");
 var arrGenderName=new Array("不确定","女","男");
+//上课时间
+var arrSKSJ=new Array({"b":480,"e":530},{"b":540,"e":590},{"b":610,"e":660},{"b":670,"e":720},//早上4节课
+                       {"b":750,"e":810},{"b":810,"e":860},//中午两节课
+                       {"b":870,"e":920},{"b":930,"e":980},{"b":990,"e":1040},{"b":1050,"e":1100},
+                       {"b":1140,"e":1190},{"b":1200,"e":1250},{"b":1260,"e":1310},{"b":1320,"e":1370});
+    
+
 
 function changeButtonStyle(buttonName)
 {
 	document.getElementById(exChangedButton).className="alloc_check_div used";
 	document.getElementById(buttonName).className="alloc_check_div_click";
 	exChangedButton=buttonName;
+}
+
+function GetReqKongKeLst(bh,bm,eh,em)
+{
+  
+    var bt=bh*60+bm;
+    var et=eh*60+em;
+    var ret=new Array();
+    console.log("bh:"+bh+" bm:"+bm+" eh:"+eh+" em:"+em);
+    for(var i=0;i<arrSKSJ.length;i++)
+    {
+        if( (bt>=arrSKSJ[i].b&&bt<=arrSKSJ[i].e)//开始时间在一节课中间的，要求空
+        || (et>=arrSKSJ[i].b&&et<=arrSKSJ[i].e)//结束时间在一节课中间的，要求空
+        || (bt<=arrSKSJ[i].b&&et>=arrSKSJ[i].b)//在这节课前开始，在这节课前没结束的，要求空
+        )
+        {
+            ret.push(i)
+        }
+    }
+    console.log(ret);
+    return ret;
 }
 
 //当前用户信息
@@ -107,6 +135,7 @@ function GetUserData(strUserID)
 	return objUD;
 }
 
+
 //需要与服务器通信
 //发送查询条件
 function postAllocQueInfo(objQI)
@@ -119,19 +148,29 @@ function postAllocQueInfo(objQI)
 		obj.qEndHour和obj.EndMin是结束工作的时和分
 		obj.qGender是性别要求,0表示不限，1表示女，2表示男
 	*/
-	alert(objQI.qGender);
+   
+    var ret=GetReqKongKeLst(objQI.qBeginHour,objQI.qBeginMin,objQI.qEndHour,objQI.qEndMin);
+    var qArrKK=new Array();
+    //要求空课的数组
+    for(var i=0;i<ret.length;i++)
+    {
+        qArrKK.push({"qKongKe":ret[i]});
+    }
+    console.log(qArrKK);
 	var jsonPost=
 	{
-		"qDepart":objQI.qDepart,
+		"qDepart":objQI.qDepart,//部门
 		"qYear":objQI.qYear,
 		"qMonth":objQI.qMonth,
 		"qDay":objQI.qDay,
 		"qBeginHour":objQI.qBeginHour,
-		"qBeginMin":objQI.BeginMin,
+		"qBeginMin":objQI.qBeginMin,
 		"qEndHour":objQI.qEndHour,
-		"qEndMin":objQI.EndMin,
-		"qGender":objQI.qGender,
+		"qEndMin":objQI.qEndMin,
+		"qGender":objQI.qGender,//性别要求
+        "qArrKK":qArrKK,//要求空课
 	};
+    console.log(jsonPost);
 	/*此函数要返还一个查询结果的数组*/
 	var arrAnsPerInfo=new Array();
 	/*JSON示例*/
@@ -497,7 +536,7 @@ function showChaXunKeBiao()
 	{
 		strAllocQ +=  "<option value=\""+iCount+"0"+"\">"+iCount+"0"+"</option>\n";
 	}
-	strAllocQ += "</select>\n"
+	strAllocQ += "</select><a href=\"#\" id=\"help\">帮助</a>\n"
 				+"</p>\n"
 				+"<p>\n"
 				+"	性别要求：\n"
@@ -519,7 +558,14 @@ function showChaXunKeBiao()
 				+"<div id=\"q_result\"></div>"
 				+"<div id=\"alloc_succeed\"></div>";
 	document.getElementById("alloc_work_f").innerHTML=strAllocQ;
-	
+	document.getElementById("help").onclick=function()
+    {
+        alert("此处工作时间用于查询空课表\n"+
+            "系统先用此时间判断那节课需要为空才能符合工作时间\n"+
+            "判断标准如下：\n"+
+            "开始时间在一节课中间的，要求空\n结束时间在一节课中间的，要求空\n在这节课前开始，在这节课前没结束的，要求空");
+        return false;
+    }
 	document.getElementById("q_submit").onclick = function()
 	{
 		var strError=new String();
@@ -531,19 +577,16 @@ function showChaXunKeBiao()
 		{
 			strError += "*2月没有"+ objForm.elements["shijian_ri"].value;
 		}
-		
-		if(objForm.elements["shijian_kaishi_h"].value > objForm.elements["shijian_jieshu_h"].value)
-		{
-			
-			strError+="*开始时间晚于结束时间，这不科学\n";
-		}
-		if(objForm["shijian_kaishi_h"].value == objForm["shijian_jieshu_h"].value)
-		{
-			if(objForm["shijian_jieshu_fen"].value <= objForm["shijian_kaishi_fen"].value)
-			{
-				strError+="*开始时间晚于或等于结束时间，这不科学\n";
-			}
-		}
+		var bh=parseInt(objForm.elements["shijian_kaishi_h"].value);
+        var eh=parseInt(objForm.elements["shijian_jieshu_h"].value);
+        var em=parseInt(objForm["shijian_jieshu_fen"].value);
+        var bm=parseInt(objForm["shijian_kaishi_fen"].value);
+        
+        if( (bh*60+bm)-(eh*60+em)>0 )
+        {
+            strError+="*开始时间晚于结束时间，这不科学\n";
+        }
+        
 		if(strError!="")
 		{
 			document.getElementById("time_error").innerHTML=strError;
@@ -554,15 +597,15 @@ function showChaXunKeBiao()
 			document.getElementById("time_error").innerHTML="";
 			function objQueInfo()
 			{
-				this.qDepart=objForm.elements["shengqingbumen"].value;
-				this.qYear=objForm.elements["shijian_nian"].value;
-				this.qMonth=objForm.elements["shijian_yue"].value;
-				this.qDay=objForm.elements["shijian_ri"].value;
-				this.qBeginHour=objForm.elements["shijian_kaishi_h"].value;
-				this.qBeginMin=objForm.elements["shijian_kaishi_fen"].value;
-				this.qEndHour=objForm.elements["shijian_jieshu_h"].value;
-				this.qEndMin=objForm.elements["shijian_jieshu_fen"].value;
-				this.qGender=objForm.elements["teshu_sex"].value;
+				this.qDepart=parseInt(objForm.elements["shengqingbumen"].value);
+				this.qYear=parseInt(objForm.elements["shijian_nian"].value);
+				this.qMonth=parseInt(objForm.elements["shijian_yue"].value);
+				this.qDay=parseInt(objForm.elements["shijian_ri"].value);
+				this.qBeginHour=parseInt(objForm.elements["shijian_kaishi_h"].value);
+				this.qBeginMin=parseInt(objForm.elements["shijian_kaishi_fen"].value);
+				this.qEndHour=parseInt(objForm.elements["shijian_jieshu_h"].value);
+				this.qEndMin=parseInt(objForm.elements["shijian_jieshu_fen"].value);
+				this.qGender=parseInt(objForm.elements["teshu_sex"].value);
 			}
 			var objQI=new objQueInfo();
 			var arrResponse = postAllocQueInfo(objQI);
