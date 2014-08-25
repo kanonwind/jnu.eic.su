@@ -17,6 +17,21 @@ class InitAction extends Action
   {
     //究竟是要提供界面操作还是跑函数，有待商榷
   }
+  //根据人员信息，添加空课表
+  public function initTable()
+  {
+	//获取所有人员信息
+	$person_model=new Model("Person");
+	$timetable_model=new Model("Timetable");
+	$person_info=$person_model->select();
+	foreach($person_info as $v)
+	{
+		$add_account=$v['account'];
+		unset($data);
+		$data['account']=$add_account;
+		$timetable_model->data($data)->add();
+	}
+  }
   //人力干事跟进部门初始化
   public function initRlgj()
   {

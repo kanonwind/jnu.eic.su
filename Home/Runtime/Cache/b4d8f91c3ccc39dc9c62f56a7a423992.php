@@ -1,4 +1,5 @@
-<?php if (!defined('THINK_PATH')) exit();?><?xml version="1.0" encoding="UTF-8"?>
+<?php if (!defined('THINK_PATH')) exit();?>	<?php  $sto=new SaeStorage(); $domain="upload"; $imgURL=$sto->getUrl($domain,"image/"); if(!IS_SAE) { $imgURL="/".$imgURL; } ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="EN" xml:lang="EN">
@@ -8,7 +9,7 @@
 	<meta name="author" content="ZuohengDeng" /><!--作者-->
 	<meta name="copyright" content="jnu.ksc" /><!--声明版权-->	
 	
-	<link rel="shortcut icon" href="__PUBLIC__/image/logo.jpg" />
+	<link rel="shortcut icon" href="<?php echo $imgURL;?>logo.jpg" />
 	
 	<link href="__PUBLIC__/css/stdindex_footer.css" 	type="text/css" 	rel="stylesheet" />
 	<link href="__PUBLIC__/css/stdindex_title.css" 	type="text/css" 	rel="stylesheet" />
@@ -20,6 +21,7 @@
         var URL = "__URL__";
         var APP = "__APP__";
         var ROOT = "__ROOT__";
+		var PUBLIC = "__PUBLIC__";
     </script>
 
 <!--
@@ -51,7 +53,7 @@ function getjson()
 				<div id="hdr_top">
 					<!--表头徽标-->
 					<div id="logo">
-						<img src="__PUBLIC__/image/std_title_logo.png" width="54px" height="54px" alt="团委学生会的徽标"/>
+						<img src="<?php echo $imgURL;?>std_title_logo.png" width="54px" height="54px" alt="团委学生会的徽标"/>
 					</div>
 					<!--标题-->
 					<div id="title">
@@ -70,9 +72,9 @@ function getjson()
 					
 					<div id="search_and_info">
 						<div id="login_info">
-							<a class="user_info" id="login_info_user_name" href="#">邓作恒</a>
-							<a class="user_info" id="login_info_user_id" href="#">2012052207</a>
-							<a class="user_info" id="login_info_log_out" href="#">注销</a>
+							<a class="user_info" id="login_info_user_name" href="#"><?php echo ($name); ?></a>
+							<a class="user_info" id="login_info_user_id" href="#"><?php echo ($account); ?></a>
+							<a class="user_info" id="login_info_log_out" href="<?php echo __APP__; ?>/Login/logout">注销</a>
 						</div>
 					</div>
 					

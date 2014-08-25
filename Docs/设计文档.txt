@@ -66,9 +66,24 @@ tbl_quest
   D_g int
 //个人课表
 tbl_timetable
+一年有53周，最后一周可能是1天也可能是2天,可以用date的W参数来
+判断是这一年中的第几周
+每节课有四种状态：有课，单周有课，双周有课，没课
+前端传过来分别赋值3 2 1 0
+每天从08:00-21:50为课表时区，一共有13节课，
 课表的设计已经有所不同了，有个pk account，其他都是A1、A2...A7的形式
 周一到周日分别是ABCDEFG
-有四种状态：有课，没课，单周有课，双周有课
+需要用到的函数：array_fill()	str_split
+tbl_timetable(
+account
+mon //默认0000000000000共13个字符
+tue
+wed
+thu
+fri
+sat
+sun
+);
 暂时先这样子将这四个直接写进库里
 use union;
 create table tbl_timetable(
@@ -404,10 +419,10 @@ titlemin5DG int
 
 由于strcmp()函数对中文的支持不是很好，所以person 中的type
 比较确定下面规则：
-a 干事
-b 人力干事
-c 部长级
-d 主席团
+1 干事
+2 人力干事
+3 部长级
+4 主席团
 
 由于strcmp()函数对中文的支持不是很理想，所以对部门的处理只能改成数字来代替，到时往
 前台发送数据的时候，再简单转化一下即可

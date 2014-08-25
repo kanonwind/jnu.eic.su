@@ -68,6 +68,7 @@ function GetPersonalData()
 	    $.ajax({
 		url:URL+"/message",
 		data:{},
+		type:"post",
 		async:false,
 		dataType:"json",
 		success:function(result){obj=result;}
@@ -282,6 +283,7 @@ function PostPersonalDataToServer(objPersonalData)
 		url:URL+"/modify",
 		data:person_info,
 		async:false,
+		type:"post",
 		dataType:"json",
 		success:function(result){response=result;}
 		});
@@ -352,6 +354,17 @@ function GetEmptySchedule()
 	for(var i = 0; i < 7; ++i)
 		 arrSchedule[i] = new Array();
 		 
+	//ajax请求Center/message，接收当前账号的个人信息
+	var obj;
+	$.ajax({
+		url:URL+"/table",
+		data:{},
+		async:false,
+		dataType:"json",
+		success:function(result){obj=result;}
+	});
+
+	var classStatus=new Array("没课","双周有课","单周有课","有课");
 	/* 
     var arr=
 	{
@@ -372,7 +385,7 @@ function GetEmptySchedule()
 	{
 		for(var j = 0; j < 13; ++j)
 		{
-			arrSchedule[i][j] = "you课";
+			arrSchedule[i][j] = classStatus[obj[i][j]];
 		}
 	}
 		
@@ -408,7 +421,21 @@ function GetContactsBooks()
 			"组织部","宣传部","学术部","公关部","体育部","文娱部","心理服务部");
 	var arrPost = new Array("干事","副部长","部长","第一副书记兼主席");*/
 	//获取通讯录信息，赋值给arr
-	var arr=
+	var obj;
+	$.ajax({
+		url:URL+"/address",
+		data:{},
+		async:false,
+		dataType:"json",
+		type:"post",
+		success:function(result){obj=result;}
+	});
+	//alert(obj[0].name);
+	var arr={
+		"num":obj.length,
+		"person":obj
+	};
+/* 	var arr=
 	{
 	  "num":3,
 	  "person":
@@ -417,13 +444,13 @@ function GetContactsBooks()
 		{"depart":"KSC联盟","post":"部长级","name":"renzhan","QQNum":"2546606474","longPhoneNum":"13726247287","shortPhoneNum":"627287","dormNO":"3321","birType":"公历","month":"9","day":"18","grade":"12","major":"信息安全"},
 		{"depart":"公关部","post":"部长级","name":"邓大神","QQNum":"2546606474","longPhoneNum":"13726247287","shortPhoneNum":"627287","dormNO":"3321","birType":"公历","month":"9","day":"18","grade":"12","major":"信息安全"}
 	  ]
-	};
+	}; */
 	//alert(arr.person[0].name);
 	
 	for(var iCount = 0; iCount < arr.num; ++iCount)
 	{
 		//var objPD = new objContactsBooks("主席团", "部长", "林杰", "QQ", "13631261719", "641719", "3313", "农历", "八月", "廿一", "12", "软件工程");
-		var objPD = new objContactsBooks(arr.person[iCount].depart, "部长", arr.person[iCount].name, "QQ", "13631261719", "641719", "3313", "农历", "八月", "廿一", "12", "软件工程");
+		var objPD = new objContactsBooks(arr.person[iCount].depart, arr.person[iCount].post, arr.person[iCount].name, arr.person[iCount].QQNum, arr.person[iCount].longPhoneNum, arr.person[iCount].shortPhoneNum, arr.person[iCount].dormNO, arr.person[iCount].birType, arr.person[iCount].month, arr.person[iCount].day, arr.person[iCount].grade, arr.person[iCount].major);
 		
 		/*objPD.userId = 11111;
 		//objPD.password = _password;
@@ -464,8 +491,28 @@ function GetContactsBooks()
 function PostESToServer(arrES)
 {
     //需要将arrES数组转化为json格式
-	alert(arrES[0][12]+arrES[1][1]);
-	if(1)
+	var postTableData={
+		'sun':arrES[0],
+		'mon':arrES[1],
+		'tue':arrES[2],
+		'wed':arrES[3],
+		'thu':arrES[4],
+		'fri':arrES[5],
+		'sat':arrES[6],
+	};
+	//alert(arrES[0][12]+arrES[1][1]);
+	//ajax请求
+	var obj;
+	$.ajax({
+		url:URL+"/gettable",
+		data:postTableData,
+		type:"post",
+		async:false,
+		dataType:"json",
+		success:function(result){obj=result;}
+	});
+	//alert(obj.back);
+	if(obj.back)
 		return true;
 	else
 		return false;

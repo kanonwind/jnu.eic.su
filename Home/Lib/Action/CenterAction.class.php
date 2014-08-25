@@ -4,6 +4,7 @@
 */
 class CenterAction extends Action
 {
+	
 	//index为首页，只负责渲染首页，
 	public function index()
 	{   
@@ -108,10 +109,40 @@ class CenterAction extends Action
         session_start();
         if(!$this->judgelog())
             $this->redirect('Login/index');
-		//不是js请求拒绝访问
-		if(empty($_GET['account']))
-			$this->redirect('Center/index');
+		$person_model=new Model("Person");
+
+		$person_info=$person_model->select();
+			foreach($person_info as $value)
+			{
+				$arr[]=$this->getAddress($value['account']);
+			}
+			
+
 		
+		echo $this->_encode($arr);
+		
+	}
+	private function getAddress($account)
+	{	
+		$apartArr=Array("秘书处","人力资源部","宣传部","信息编辑部",
+			"学术部","体育部","KSC联盟","组织部","文娱部","公关部","心理服务部","主席团");
+		$postArr=Array("干事","人力干事","部长级","主席团");
+		$person_model=new Model("Person");
+		$v=$person_model->where("account=$account")->find();
+		unset($data);
+		$data['depart']=$apartArr[$v['apartment']-1];
+		$data['post']=$postArr[$v['type']-1];
+		$data['name']=$v['name'];
+		$data['QQNum']=(empty($v['qq']))?" ":$v['qq'];
+		$data['longPhoneNum']=(empty($v['phone']))?" ":$v['phone'];
+		$data['shortPhoneNum']=(empty($v['short']))?" ":$v['short'];		
+		$data['dormNO']=(empty($v['dorm']))?" ":$v['dorm'];
+		$data['birType']=(empty($v['birthtype']))?" ":$v['birthtype'];
+		$data['month']=(empty($v['birthmonth']))?" ":$v['birthmonth'];
+		$data['day']=(empty($v['birthday']))?" ":$v['birthday'];
+		$data['grade']=(empty($v['grade']))?" ":$v['grade'];
+		$data['major']=(empty($v['major']))?" ":$v['major'];
+		return $data;
 	}
 	//index的js脚本请求空课表信息，table找到数据整理后返回json数据
 	public function table()
@@ -120,7 +151,94 @@ class CenterAction extends Action
 		session_name('LOGIN');
         session_start();
         if(!$this->judgelog())
-            $this->redirect('Login/index');
+            $this->redirect('Login/index');	
+		//查找数据
+		$account=$_SESSION['account'];
+/* 		$arr=array_fill(0,13,0);
+		unset($str);
+		for($i=0;$i<count($arr);$i++)
+		{
+			$str.=$arr[$i];
+		}
+		//echo $str; */
+		$timetable_model=new Model("Timetable");
+		$timetable_info=$timetable_model->where("account=$account")->find();		
+		$mon=$timetable_info['mon'];
+		$tue=$timetable_info['tue'];
+		$wed=$timetable_info['wed'];
+		$thu=$timetable_info['thu'];
+		$fri=$timetable_info['fri'];
+		$sat=$timetable_info['sat'];
+		$sun=$timetable_info['sun'];
+		$tableData[]=str_split($sun);
+		$tableData[]=str_split($mon);
+		$tableData[]=str_split($tue);
+		$tableData[]=str_split($wed);
+		$tableData[]=str_split($thu);
+		$tableData[]=str_split($fri);
+		$tableData[]=str_split($sat);
+		
+		//返回json数据
+		echo $this->_encode($tableData);
+		
+		
+	}
+	//接收前端发送的修改后的课表数据
+	public function gettable()
+	{
+	/* 有课，单周有课，双周有课，没课赋值3 2 1 0 */
+
+		//拒绝未登录访问
+		session_name('LOGIN');
+        session_start();
+        if(!$this->judgelog())
+            $this->redirect('Login/index');	
+		//查找数据
+		$account=$_SESSION['account'];
+		$sun=$this->changeClass($_POST['sun']);
+		$mon=$this->changeClass($_POST['mon']);
+		$tue=$this->changeClass($_POST['tue']);
+		$wed=$this->changeClass($_POST['wed']);
+		$thu=$this->changeClass($_POST['thu']);
+		$fri=$this->changeClass($_POST['fri']);
+		$sat=$this->changeClass($_POST['sat']);
+		$data['sun']=$sun;
+		$data['mon']=$mon;
+		$data['tue']=$tue;
+		$data['wed']=$wed;
+		$data['thu']=$thu;
+		$data['fri']=$fri;
+		$data['sat']=$sat;
+		$timetable_model=new Model("Timetable");
+		$timetable_info=$timetable_model->where("account=$account")->save($data);
+		$back=1;
+		if(false==$timetable_info)
+		{
+			$back=0;
+		}
+		$arr=Array(
+			'back'=>$back,
+		);
+		echo $this->_encode($arr);
+	}
+	//函数：修改课表
+	private function changeClass($day)
+	{	
+		$arr=Array(
+			"有课"=>3,
+			"单周有课"=>2,
+			"双周有课"=>1,
+			"没课"=>0,
+		);
+		for($i=0;$i<13;$i++)
+		{
+			$day[$i]=$arr[$day[$i]];
+		}
+		for($i=0;$i<13;$i++)
+		{
+			$str.=$day[$i];
+		}
+		return $str;
 	}
 	//modify为修改个人信息的数据库操作
 	public function modify()
@@ -133,7 +251,7 @@ class CenterAction extends Action
             $this->redirect('Login/index');
 		/*
 		//不是js请求拒绝访问
-		if(empty($_GET['account']))
+		if(empty($_POST['account']))
 			$this->redirect('Center/index');
 */
 		//接收index脚本传过来的json数据,并将数据存入数据库中
@@ -143,25 +261,25 @@ class CenterAction extends Action
 			//账户信息
 		
 			'account'=>$_SESSION['account'],
-		    'name'=>$_GET['name'],
-		    'type'=>$_GET['type'],
-			'apartment'=>$_GET['apartment'],
-			'position'=>$_GET['position'],
+		    'name'=>$_POST['name'],
+		    'type'=>$_POST['type'],
+			'apartment'=>$_POST['apartment'],
+			'position'=>$_POST['position'],
 			//个人信息     
-		    'sex'=>$_GET['sex'],
-		    'grade'=>$_GET['grade'],
-		    'major'=>$_GET['major'],
+		    'sex'=>$_POST['sex'],
+		    'grade'=>$_POST['grade'],
+		    'major'=>$_POST['major'],
 			
-			'birthtype'=>$_GET['birthtype'],
-			'birthmonth'=>$_GET['birthmonth'],
-			'birthday'=>$_GET['birthday'],
+			'birthtype'=>$_POST['birthtype'],
+			'birthmonth'=>$_POST['birthmonth'],
+			'birthday'=>$_POST['birthday'],
 			//联系方式
 			
-			'phone'=>$_GET['phone'],
-			'short'=>$_GET['short'],
-			'qq'=>$_GET['qq'],
-			'dorm'=>$_GET['dorm'],
-			'mail'=>$_GET['mail'],
+			'phone'=>$_POST['phone'],
+			'short'=>$_POST['short'],
+			'qq'=>$_POST['qq'],
+			'dorm'=>$_POST['dorm'],
+			'mail'=>$_POST['mail'],
 			
 		);
 		
@@ -173,9 +291,9 @@ class CenterAction extends Action
 			$flag=0;
 		//var_dump($_POST['data']);
 		//flag为1表示正常
-		//$data=$_GET['name'];
-		$arr=Array('name'=>$_GET['name'],'account'=>$account,'status'=>$flag);
-		//$arr=Array('status'=>$flag.$_GET['birthmonth']);
+		//$data=$_POST['name'];
+		$arr=Array('name'=>$_POST['name'],'account'=>$account,'status'=>$flag);
+		//$arr=Array('status'=>$flag.$_POST['birthmonth']);
 		echo $this->_encode($arr);
 		//echo json_encode($arr,JSON_UNESCAPED_UNICODE);
 	}
@@ -216,6 +334,7 @@ class CenterAction extends Action
 		//echo json_encode($arr,JSON_UNESCAPED_UNICODE);
 
 	}
+	//修改密码
 	public function change()
 	{
 		//拒绝未登录访问
@@ -243,15 +362,7 @@ class CenterAction extends Action
 		//echo json_encode($arr,JSON_UNESCAPED_UNICODE);
 	}
 
-	//revise为修改空课表的数据库操作
-	public function revise()
-	{
-		//拒绝未登录访问
-		session_name('LOGIN');
-        session_start();
-        if(!$this->judgelog())
-            $this->redirect('Login/index');
-	}
+
   //调用—_encode()函数，将数组进行编码转哈
    public  function _encode($arr)
   {
