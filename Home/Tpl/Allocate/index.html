@@ -119,14 +119,14 @@
 						<div id="alloc_user_info">
 							<!--这里的几个段落标签是需要php脚本的，内容如例子-->
 							<div class="alloc_body float_left">
-								<p>用户名：邓作恒</p>
-								<p>用户类型：人力干事</p>
-								<p>所属部门:KSC联盟</p>
+								<p>用户名：<?php echo $name;?></p>
+								<p>用户类型：<?php echo $type;?></p>
+								<p>所属部门: <?php echo $apartment;?></p>
 							</div>
 							<div class="alloc_body float_left">
-								<p>累计被外调次数：1024</p>
-								<p>本月被外调次数：1024</p>
-								<p>最近外调：20120240-KGHJ</p>
+								<p>累计被外调次数：<?php echo $timeTotal;?></p>
+								<p>本月被外调次数：<?php echo $timeNow;?></p>
+								<p>最近外调：<?php echo $allocResent;?></p>
 							</div>
 							
 						</div>

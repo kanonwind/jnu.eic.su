@@ -116,7 +116,7 @@ function GetUserData(strUserID)
 	//请求数据	
 		var jsonReturn;
 	    $.ajax({
-		url:URL+"/getAllocInfo",//请求用户类型
+		url:URL+"/postUserData",//请求用户类型
 		data:{},
 		async:false,
 		dataType:"json",
@@ -300,7 +300,8 @@ function postAllocQueInfo(objQI)
 			
 		],
 	}; */
-			
+	if(jsonGet.arrAnsPerInfo.length!=0)		
+	{
 	jsonGet.arrAnsPerInfo.sort(function(lhs,rhs)
 	{
 		if(lhs.conformity==rhs.conformity)//符合度最优先
@@ -333,6 +334,7 @@ function postAllocQueInfo(objQI)
 			return (lhs.conformity-rhs.conformity)<0;//符合度高的排前面
 		}
 	});
+	}
 	return jsonGet.arrAnsPerInfo;
 }
 
@@ -374,9 +376,18 @@ function postAllocFormArr(arrIDList)
 function getKKBList()
 {
 	//返回的是空课表的名字，如”KSC联盟空课表“及其连接
-	
-	
-	var jsonGet=
+	//请求数据	
+		var jsonReturn;
+	    $.ajax({
+		url:URL+"/postKongKeBiao",//请求用户类型
+		data:{},
+		async:false,
+		dataType:"json",
+		type:"POST",
+		success:function(result){jsonReturn=result;}
+		});			
+	var jsonGet=jsonReturn;
+/* 	var jsonGet=
 	{
 		"arrKKBLinkList":
 		[
@@ -394,7 +405,7 @@ function getKKBList()
 			},
 			
 		],
-	};
+	}; */
 		
 	
 	return jsonGet.arrKKBLinkList;
@@ -418,7 +429,7 @@ function postAllocCode(strCode)
 		success:function(result){jsonReturn=result;}
 		});		
 		//var jsonGet=jsonReturn;
-		alert(jsonReturn.arrAllocedList[0].name);
+		//alert(jsonReturn.arrAllocedList[0].name);
 	//返回外调人员的ID，姓名的数组
 	var jsonGet=jsonReturn;
 /* 	var jsonGet=//外调序列号对应的被外调人员
@@ -463,6 +474,22 @@ function postAllocPerfValue(arrAllocedStudents)
 		jsonArr.push(jsonPer);
 	}
 	console.log(jsonArr);
+	var AllocCode=document.forms["code_input"].elements["alloc_code"].value;
+	//alert("序列号是："+AllocCode);
+	var jsonPOST={"arrAllocedPerf":jsonArr,
+				  "AllocCode":AllocCode,
+	};
+
+	//请求数据	
+		var jsonReturn;
+	    $.ajax({
+		url:URL+"/getAllocPerform",//请求用户类型
+		data:jsonPOST,
+		async:false,
+		dataType:"json",
+		type:"POST",
+		success:function(result){jsonReturn=result;}
+		});	
 	//用于发送的json
 	var jsonPOST={"arrAllocedPerf":jsonArr};
 	

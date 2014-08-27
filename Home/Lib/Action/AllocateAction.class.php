@@ -15,24 +15,83 @@ class AllocateAction extends Action
 
 		$account=$_SESSION['account'];
 		$person_model=new Model("Person");
+		$resource_model=new Model("Resource");
 		//非人力部门拒绝访问
-
+		$arrDepartName=Array("秘书处","人力资源部","宣传部","信息编辑部","学术部",
+"体育部","KSC联盟","组织部","文娱部","公关部","心理服务部","主席团");
+		$arrTypeName=Array("干事","人力干事","部长级","主席团");
 		$person_info=$person_model->where("account=$account")->find();
 		if($person_info['apartment']!=2)
 			$this->redirect('Index/index');
 		$name=$person_info['name'];
+		//所属部门
+		$apartment=$arrDepartName[$person_info['apartment']-1];
+		//用户类型
+		$type=$arrTypeName[$person_info['type']-1];
+		$resource_info=$resource_model->where("account=$account")->select();
+		$timeTotal=count($resource_info);
+		//找出最近一次外调
+		if($timeTotal==0)
+		{
+			$allocResent=" ";
+		}
+		else{
+			foreach($resource_info as $v)
+			{
+				$arrAllocTime[]=Array(
+					"create_time"=>$v['create_time'],
+				);
+			}
+			sort($arrAllocTime);
+			$timeResent=$arrAllocTime[count($arrAllocTime)-1];
+			$resource_info=$resource_model->where("create_time=$timeResent")->find();
+			$allocResent=$resource_info['code'];
+		}
+		$monthNow=date("n");
+		$yearNow=date("Y");
+		$resource_info=$resource_model->where("account=$account and month=$monthNow and year=$yearNow")->select();
+		//累计外调次数
+		$timeNow=count($resource_info);
+		
+		
 		$this->assign('account',$account);
 		$this->assign('name',$name);
+		$this->assign('type',$type);
+		$this->assign('apartment',$apartment);
+		$this->assign('timeNow',$timeNow);
+		$this->assign('timeTotal',$timeTotal);
+		$this->assign('allocResent',$allocResent);
 		$this->display();
 	}
 	//展示空课表
-	private function show()
+	public function show()
 	{
-		$this->getKongKeBiao(1);
+		$apartment=$_GET['apartment'];
+		$arrDepartName=Array("秘书处","人力资源部","宣传部","信息编辑部","学术部",
+"体育部","KSC联盟","组织部","文娱部","公关部","心理服务部","主席团");
+		$arr=$this->getKongKeBiao($apartment);
+		$this->assign("arr",$arr);
+		$this->assign("apartment",$arrDepartName[$apartment-1]);
 		$this->display();
 	}
+	//返回空课表链接
+	public function postKongKeBiao()
+	{
+		for($i=0;$i<12;$i++)
+		{
+			$arrDepartName=Array("秘书处","人力资源部","宣传部","信息编辑部","学术部",
+"体育部","KSC联盟","组织部","文娱部","公关部","心理服务部","主席团");
+			$apartment=$i+1;
+			$arrKKBLinkList[]=Array(
+				"name"=>$arrDepartName[$i]."空课表",
+				"link"=>__APP__."/Allocate/show?apartment=".$apartment,
+			);	
+		}
+		$arr=Array("arrKKBLinkList"=>$arrKKBLinkList);
+		echo $this->_encode($arr);
+	}
 	//函数：获取对应部门的空课情况
-	private function getKongKeBiao()
+	private function getKongKeBiao($apartment)
 	{
 		$arrWeek=Array("sun","mon","tue","wed","thu","fri","sat");
 		$arrParity=Array(
@@ -42,15 +101,17 @@ class AllocateAction extends Action
 		);
 		$person_model=new Model("Person");
 		$timetable_model=new Model("Timetable");
-		//周一到周日
-		for($i=0;$i<7;$i++)
+		//第一节到第十三节
+		for($j=0;$j<13;$j++)
 		{
-			$weekDay=$arrWeek[$i];
-			//第一节到第十三节
-			for($j=0;$j<13;$j++)
+		//周一到周日
+			for($i=0;$i<7;$i++)
 			{
+			$weekDay=$arrWeek[$i];
+			
+
 				unset($strClass);
-				$person_info=$person_model->where("apartment=1")->select();
+				$person_info=$person_model->where("apartment=$apartment")->select();
 				//循环部门1
 				foreach($person_info as $v)
 				{
@@ -67,14 +128,19 @@ class AllocateAction extends Action
 						case 0: $strClass.=$name." "; break;
 					}
 				}
-				$arrClass[]=$strClass;		
+				$arrWeekDay[$weekDay]=$strClass;
+				//$arrClass[]=$strClass;		
 				//echo "今天是周".$weekDay."第".$j."节课，没课的人包括：".$strClass."</br>";
+			
+			
+			
 			}
-			$arrWeekDay[$weekDay]=$arrClass;
-			unset($arrClass);
+			$arr[$j]=$arrWeekDay;
+			unset($arrWeekDay);
 		}
-		//var_dump($arrWeekDay);
-		echo $this->_encode($arrWeekDay);
+		//var_dump($arr);
+		//echo $this->_encode($arrWeekDay);
+		return $arr;
 		
 	}
 	//发送个人信息
@@ -90,12 +156,12 @@ class AllocateAction extends Action
 		$person_info=$person_model->where("account=$account")->find();
 		$arr=Array(
 			"_userID"=>$account,
-			"_userType"=>$arrTypeName[$person_info['type']-1],
-			"_depart"=>$arrDepartName[$person_info['apartment']-1],
+			"_userType"=>$person_info['type'],
+			"_depart"=>$person_info['apartment'],
 		);
 		echo $this->_encode($arr);
 	}
-	//接收查询条件
+	//查询可调人员：接收查询条件
 	public function getAllocInfo()
 	{
 		$arrWeek=Array("sun","mon","tue","wed","thu","fri","sat");
@@ -207,7 +273,7 @@ class AllocateAction extends Action
 		//echo $this->_encode($arr);
 		
 	}
-	//接收被勾选的学生的学号信息并返回序列号
+	//查询可调人员：接收被勾选的学生的学号信息并返回序列号
 	public function postAllocCode()
 	{
 		//拒绝未登录访问
@@ -253,33 +319,35 @@ class AllocateAction extends Action
 		);
 		echo $this->_encode($arr);
 	}
-	//接收查询的序列号并返回外调人员
+	//签到签离记录；接收查询的序列号并返回外调人员
 	public function getAllocCode()
 	{
 		$code=$_POST['allocCode'];
+		//$code="20140827-FAYE";
 		if(!empty($code))
 		{
 			$resource_model=new Model("Resource");
 			$person_model=new Model("Person");
-			$resource_info=$resource_model->select();
+			$condition['code']=$code;
+			$resource_info=$resource_model->where($condition)->select();
 			for($i=0;$i<count($resource_info);$i++)
 			{
-				if($resource_info[$i]['code']==$code)
-				{
-					$arrStu[]=Array(
-						'account'=>$resource_info[$i]['account'],
-					);
-				}
+				$arrStu[]=Array(
+					'account'=>$resource_info[$i]['account'],
+					'assess'=>empty($resource_info[$i]['assess'])?3:$resource_info[$i]['assess'],
+				);
+				
 			}
 			for($i=0;$i<count($arrStu);$i++)
 			{
 				unset($data);
 				$account=$arrStu[$i]['account'];
+				$assess=$arrStu[$i]['assess'];
 				//echo $account;
 				$person_info=$person_model->where("account=$account")->find();
 				$data['ID']=$account;
 				$data['name']=$person_info['name'];
-				$data['allocResult']=3;//暂时默认3
+				$data['allocResult']=1;//$assess;//暂时默认3
 				$arrAllocedList[]=$data;
 			}
 			$arr=Array(
@@ -293,10 +361,39 @@ class AllocateAction extends Action
 		}
 		echo $this->_encode($arr);
 	}
-	//接收序列号返回取消信息
+	//签到签离记录；获取外调表现评价
+	public function getAllocPerform()
+	{
+		$arrAllocedPerf=$_POST['arrAllocedPerf'];
+		$AlloCode=$_POST['AllocCode'];
+		$back="不要爆粗口";
+		
+		
+			$resource_model=new Model("Resource");
+			$back.="不想再这么辛苦了";
+			for($k=0;$k<count($arrAllocedPerf);$k++)
+			{
+				
+				$data['account']=$arrAllocedPerf[$k]['ID'];
+				$data['assess']=$arrAllocedPerf[$k]['BX'];
+				
+				unset($condition);
+				$back.="最后一战".$AlloCode.$arrAllocedPerf[$k]['ID'].$arrAllocedPerf[$k]['BX'];
+				$condition['code']=$AlloCode;
+				$condition['account']=$arrAllocedPerf[$k]['ID'];
+				$resource_info=$resource_model->where($condition)->data($data)->save();
+			}	
+		
+		$arr=Array(
+			"back"=>$_POST['AllocCode'],
+		);
+		echo $this->_encode($arr);
+		
+	}
+	//取消/修改外调：接收序列号返回取消信息
 	public function getAllocCancel()
 	{
-		$code="20140827-IWZR";//$_POST['allocCode'];
+		$code=$_POST['allocCode'];
 		if(!empty($code))
 		{
 			$resource_model=new Model("Resource");
@@ -306,11 +403,13 @@ class AllocateAction extends Action
 			//有匹配
 			if($resource_info)
 			{
+				$waccount=$resource_info['waccount'];
+				$person_info=$person_model->where("account=$waccount")->find();
 				$arr=Array(
 					"exist"=>"exist",
 					"code"=>$code,
 					"applyTime"=>date("Y-m-d h:i:s",$resource_info['create_time']),
-					"operator"=>"邓作恒",
+					"operator"=>$person_info['name'],
 					"applyDepart"=>$resource_info['apartment'],
 					"workTime"=>$resource_info['worktime'],
 				);
