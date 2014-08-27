@@ -72,7 +72,7 @@ function allocateSystemInit()
 	objAllocBuDiv.innerHTML=strButtonInfo;
 	
 	//根据用户类型绑定函数和样式
-	if(currentUser.userType!="人力干事")
+	if(currentUser.userType!=1)//不是人力干事
 	{
 		
 		document.getElementById("qiandao_qianli").className="alloc_check_div used unable";
@@ -455,13 +455,14 @@ function postAllocCode(strCode)
 function postAllocPerfValue(arrAllocedStudents)
 {
 	var jsonArr=new Array();
-	
+	console.log(arrAllocedStudents);
 	for(var i=0;i<arrAllocedStudents.length;i++)
 	{
-		var jsonPer={"ID":arrAllocedStudents.ID};
+		var jsonPer={"ID":arrAllocedStudents[i].ID,"BX":arrAllocedStudents[i].allocResult};
+        //用户id和表现
 		jsonArr.push(jsonPer);
 	}
-	
+	console.log(jsonArr);
 	//用于发送的json
 	var jsonPOST={"arrAllocedPerf":jsonArr};
 	
@@ -713,7 +714,7 @@ function showChaXunKeBiao()
 									+"</tr>";
 				}
 				strQueryReTable += "</tbody></table><div id=\"verification\"><div>";
-				if(currentUser.userType=="人力干事")
+				if(currentUser.userType==1)//如果是人力干事
 				{
 					strQueryReTable += "<button class=\"alloc_sub_bu\"	type=\"button\" name=\"al_submit\" id=\"al_submit\" title=\"调用选中人\">\n"
 									+	"调用选中人\n"
