@@ -11,7 +11,19 @@ var arrSKSJ=new Array({"b":480,"e":530},{"b":540,"e":590},{"b":610,"e":660},{"b"
                        {"b":870,"e":920},{"b":930,"e":980},{"b":990,"e":1040},{"b":1050,"e":1100},
                        {"b":1140,"e":1190},{"b":1200,"e":1250},{"b":1260,"e":1310},{"b":1320,"e":1370});
     
+function debug()
+{
+    return false;
+}
 
+function errmsg()
+{
+    if(!debug())
+    {
+        alert("AJAX通信错误,请与管理员联系");
+        throw "ajax error";
+    }
+}
 
 function changeButtonStyle(buttonName)
 {
@@ -112,13 +124,29 @@ function allocateSystemInit()
 //获取个人信息，尤其是用户类型
 function GetUserData(strUserID)
 {
-	//JSON示例
-	var jsonUD=
-	{
-		"_userID":strUserID,
-		"_userType":2,
-		"_depart":2,
-	};
+//请求数据	
+    try{
+        var jsonReturn;
+        $.ajax({
+        url:URL+"/postUserData",//请求用户类型
+        data:{},
+        async:false,
+        dataType:"json",
+        type:"POST",
+        success:function(result){jsonReturn=result;}
+        });	
+        var jsonUD=jsonReturn;
+    }
+    catch(err){
+        //JSON示例
+        var jsonUD=
+        {
+            "_userID":strUserID,
+            "_userType":2,
+            "_depart":2,
+        };
+        errmsg();
+    }
 	
 	
 	
@@ -131,7 +159,7 @@ function GetUserData(strUserID)
 	}
 	
 	var objUD = new objUserData(jsonUD._userID,jsonUD._userType,jsonUD._depart);
-	
+	console.log(objUD);
 	return objUD;
 }
 
@@ -398,7 +426,6 @@ function postAllocCode(strCode)
 		],
 	};
 			
-	
 	
 	//如果查询的外调不存在，则这个数组是空的，长度为0
 	return jsonGet.arrAllocedList;
@@ -789,7 +816,10 @@ function showQianDaoQianLi(currentUser)
 			}
             
 			document.getElementById("pref_radio_s").innerHTML=strAllocPerf;
-           
+            if(!document.getElementById("alloc_pref_sub"))
+            {
+                return;
+            }
 			document.getElementById("alloc_pref_sub").onclick = function()
 			{
 				for(var iCount=0;iCount<arrAllocedStudents.length;iCount++)
