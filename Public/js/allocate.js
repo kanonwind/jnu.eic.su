@@ -149,6 +149,14 @@ function GetUserData(strUserID)
         };
         errmsg();
     }
+    
+    //个人信息对象构造函数
+	function objUserData(_userID,_userType,_depart)
+	{
+		this.userID = _userID;
+		this.userType = _userType;
+		this.depart = _depart;
+	}
 	
 	var objUD = new objUserData(jsonUD._userID,jsonUD._userType,jsonUD._depart);
 	
