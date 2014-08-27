@@ -1,4 +1,4 @@
-先用yiic生成基本骨架。
+﻿先用yiic生成基本骨架。
 按照之前的设计思路，建立数据库
 union
 //管理员登陆信息
@@ -66,6 +66,12 @@ tbl_quest
   D_g int
 //个人课表
 tbl_timetable
+
+
+外调系统
+性别定义：0为不确定1为女性2为男性
+用户对象分为人力资源部、非人力资源部
+判断是第几周，单周还是双周，按理说只有上学阶段课表才有意义，暂时不管
 一年有53周，最后一周可能是1天也可能是2天,可以用date的W参数来
 判断是这一年中的第几周
 每节课有四种状态：有课，单周有课，双周有课，没课
@@ -84,120 +90,37 @@ fri
 sat
 sun
 );
-暂时先这样子将这四个直接写进库里
-use union;
-create table tbl_timetable(
-`account` VARCHAR( 20 ) NOT NULL ,
-`A1` VARCHAR( 20 )  NULL DEFAULT 'n',
-`A2` VARCHAR( 20 )  NULL DEFAULT 'n',
-`A3` VARCHAR( 20 )  NULL DEFAULT 'n',
-`A4` VARCHAR( 20 )  NULL DEFAULT 'n',
-`A5` VARCHAR( 20 )  NULL DEFAULT 'n',
-`A6` VARCHAR( 20 )  NULL DEFAULT 'n',
-`A7` VARCHAR( 20 )  NULL DEFAULT 'n',
-`A8` VARCHAR( 20 )  NULL DEFAULT 'n',
-`A9` VARCHAR( 20 )  NULL DEFAULT 'n',
-`A10` VARCHAR( 20 )  NULL DEFAULT 'n',
-`A11` VARCHAR( 20 )  NULL DEFAULT 'n',
-`A12` VARCHAR( 20 )  NULL DEFAULT 'n',
-`A13` VARCHAR( 20 )  NULL DEFAULT 'n',
-`A14` VARCHAR( 20 )  NULL DEFAULT 'n',
-`B1` VARCHAR( 20 )  NULL DEFAULT 'n',
-`B2` VARCHAR( 20 )  NULL DEFAULT 'n',
-`B3` VARCHAR( 20 )  NULL DEFAULT 'n',
-`B4` VARCHAR( 20 )  NULL DEFAULT 'n',
-`B5` VARCHAR( 20 )  NULL DEFAULT 'n',
-`B6` VARCHAR( 20 )  NULL DEFAULT 'n',
-`B7` VARCHAR( 20 )  NULL DEFAULT 'n',
-`B8` VARCHAR( 20 )  NULL DEFAULT 'n',
-`B9` VARCHAR( 20 )  NULL DEFAULT 'n',
-`B10` VARCHAR( 20 )  NULL DEFAULT 'n',
-`B11` VARCHAR( 20 )  NULL DEFAULT 'n',
-`B12` VARCHAR( 20 )  NULL DEFAULT 'n',
-`B13` VARCHAR( 20 )  NULL DEFAULT 'n',
-`B14` VARCHAR( 20 )  NULL DEFAULT 'n',
-`C1` VARCHAR( 20 )  NULL DEFAULT 'n',
-`C2` VARCHAR( 20 )  NULL DEFAULT 'n',
-`C3` VARCHAR( 20 )  NULL DEFAULT 'n',
-`C4` VARCHAR( 20 )  NULL DEFAULT 'n',
-`C5` VARCHAR( 20 )  NULL DEFAULT 'n',
-`C6` VARCHAR( 20 )  NULL DEFAULT 'n',
-`C7` VARCHAR( 20 )  NULL DEFAULT 'n',
-`C8` VARCHAR( 20 )  NULL DEFAULT 'n',
-`C9` VARCHAR( 20 )  NULL DEFAULT 'n',
-`C10` VARCHAR( 20 )  NULL DEFAULT 'n',
-`C11` VARCHAR( 20 )  NULL DEFAULT 'n',
-`C12` VARCHAR( 20 )  NULL DEFAULT 'n',
-`C13` VARCHAR( 20 )  NULL DEFAULT 'n',
-`C14` VARCHAR( 20 )  NULL DEFAULT 'n',
-`D1` VARCHAR( 20 )  NULL DEFAULT 'n',
-`D2` VARCHAR( 20 )  NULL DEFAULT 'n',
-`D3` VARCHAR( 20 )  NULL DEFAULT 'n',
-`D4` VARCHAR( 20 )  NULL DEFAULT 'n',
-`D5` VARCHAR( 20 )  NULL DEFAULT 'n',
-`D6` VARCHAR( 20 )  NULL DEFAULT 'n',
-`D7` VARCHAR( 20 )  NULL DEFAULT 'n',
-`D8` VARCHAR( 20 )  NULL DEFAULT 'n',
-`D9` VARCHAR( 20 )  NULL DEFAULT 'n',
-`D10` VARCHAR( 20 )  NULL DEFAULT 'n',
-`D11` VARCHAR( 20 )  NULL DEFAULT 'n',
-`D12` VARCHAR( 20 )  NULL DEFAULT 'n',
-`D13` VARCHAR( 20 )  NULL DEFAULT 'n',
-`D14` VARCHAR( 20 )  NULL DEFAULT 'n',
-`E1` VARCHAR( 20 )  NULL DEFAULT 'n',
-`E2` VARCHAR( 20 )  NULL DEFAULT 'n',
-`E3` VARCHAR( 20 )  NULL DEFAULT 'n',
-`E4` VARCHAR( 20 )  NULL DEFAULT 'n',
-`E5` VARCHAR( 20 )  NULL DEFAULT 'n',
-`E6` VARCHAR( 20 )  NULL DEFAULT 'n',
-`E7` VARCHAR( 20 )  NULL DEFAULT 'n',
-`E8` VARCHAR( 20 )  NULL DEFAULT 'n',
-`E9` VARCHAR( 20 )  NULL DEFAULT 'n',
-`E10` VARCHAR( 20 )  NULL DEFAULT 'n',
-`E11` VARCHAR( 20 )  NULL DEFAULT 'n',
-`E12` VARCHAR( 20 )  NULL DEFAULT 'n',
-`E13` VARCHAR( 20 )  NULL DEFAULT 'n',
-`E14` VARCHAR( 20 )  NULL DEFAULT 'n',
-`F1` VARCHAR( 20 )  NULL DEFAULT 'n',
-`F2` VARCHAR( 20 )  NULL DEFAULT 'n',
-`F3` VARCHAR( 20 )  NULL DEFAULT 'n',
-`F4` VARCHAR( 20 )  NULL DEFAULT 'n',
-`F5` VARCHAR( 20 )  NULL DEFAULT 'n',
-`F6` VARCHAR( 20 )  NULL DEFAULT 'n',
-`F7` VARCHAR( 20 )  NULL DEFAULT 'n',
-`F8` VARCHAR( 20 )  NULL DEFAULT 'n',
-`F9` VARCHAR( 20 )  NULL DEFAULT 'n',
-`F10` VARCHAR( 20 )  NULL DEFAULT 'n',
-`F11` VARCHAR( 20 )  NULL DEFAULT 'n',
-`F12` VARCHAR( 20 )  NULL DEFAULT 'n',
-`F13` VARCHAR( 20 )  NULL DEFAULT 'n',
-`F14` VARCHAR( 20 )  NULL DEFAULT 'n',
-`G1` VARCHAR( 20 )  NULL DEFAULT 'n',
-`G2` VARCHAR( 20 )  NULL DEFAULT 'n',
-`G3` VARCHAR( 20 )  NULL DEFAULT 'n',
-`G4` VARCHAR( 20 )  NULL DEFAULT 'n',
-`G5` VARCHAR( 20 )  NULL DEFAULT 'n',
-`G6` VARCHAR( 20 )  NULL DEFAULT 'n',
-`G7` VARCHAR( 20 )  NULL DEFAULT 'n',
-`G8` VARCHAR( 20 )  NULL DEFAULT 'n',
-`G9` VARCHAR( 20 )  NULL DEFAULT 'n',
-`G10` VARCHAR( 20 )  NULL DEFAULT 'n',
-`G11` VARCHAR( 20 )  NULL DEFAULT 'n',
-`G12` VARCHAR( 20 )  NULL DEFAULT 'n',
-`G13` VARCHAR( 20 )  NULL DEFAULT 'n',
-`G14` VARCHAR( 20 )  NULL DEFAULT 'n',
-PRIMARY KEY ( `account` )
-);
+tbl_resource
+{
+ id//pk
+ account//被外调的账号
+ year//
+ month//
+ code//外调的序列号
+ assess//外调的评价，1到4分别表示：缺席，迟到早退，一般，表现突出
+}
 
 //人力管理表（专用于外调）
 tbl_resource
 {
+year
+month
 account//对应的
 id //生成时间 自增
 code//序列号
 assess//评估
 }
-
+//记录外调次数
+tbl_wdcs
+{
+id
+year 
+month
+account
+apartment
+wdcs//默认为0
+rank//部门内排名
+}
 
 
 
@@ -236,13 +159,10 @@ person
 
 
 
-用户登录和新闻编辑模块基本完成了，先在需要着手解决的是绩效考核系统
-用户中心：
-用gii新建一个模块user，
 
 
-取消邮箱验证，改成is_active
-是时候解决权限问题了。
+
+
 
 整个人力管理系统的设计不单单是数据的存储这么简单
 除了主要的功能，还需要注意细节方面的东西
@@ -260,76 +180,7 @@ person
 而且还可以进行评价
 
 一下着重设计绩效考核系统
-测试需要：
-//干事自评表大项目,a表示干事
-tbl_atitle
-{
-title 大项目 private key
-text1
-text2
-text3 小项目
-}
-//干事自评表小项目及分数,a表示干事
-tbl_atext
-{
-title 前面的小项目private key
-text1
-text2
-text3
-text4  具体选项内容
-grade1
-grade2
-grade3
-grade4  具体选项得分
-}
-进行增删查改时，记得要同步操作
 
-由于考核表有六张基本相同，而采用上面的方式实现是太多了，但思路不错，所以进行整合：
-//大项目表
-tbl_titlemax
-{
-id //表的种类
-title1//大项目的标题，这种考核表最多只能开设5个大项目
-title2//每个大项目又是中项目的重要索引
-title3//可以为空
-title4
-title5
-}
-//中项目表
-tbl_titlemid
-{
-id//表的种类
-title//大项目
-title1//中项目，情况跟大项目差不多，最多5个
-title2
-title3
-title4
-title5
-}
-//小项目表
-tbl_titlemin
-{
-id//表的种类
-title//中项目
-title1//选项ABCD，规定只能有四个选项
-title2
-title3
-title4
-}
-还有一种考核表是没有大项目的，而且中项目多达7个，如果强制跟上面的表并起来会很吃力，所以单独开
-tbl_othermid
-{
-id//表的种类
-title1//规定最多只能有9个中项目，
-title2//鉴于每个中项目对应的小项目也是ABCD固定的，所以可以沿用上面的tbl_titlemin
-title3
-title4
-title5
-title6
-title7
-title8
-title9
-}
 
 为了方便，规定id为下列值时分别对应的表
 1：干事自评表（干事填）
@@ -354,58 +205,7 @@ SET character_set_results=gbk_chinese_ci;
 SET character_set_server=gbk_chinese_ci;
 SET collation_connection=gbk_chinese_ci;
 SET collation_server=gbk_chinese_ci;
-create table tbl_evaone
-{
-pkid primary int not NULL,//作为一个主键，没什么用
-id int not NULL,//表的种类
-titleid int not NULL,//大项目的编号，最多是5
-titlemax varchar(20),//大项目
-titlemid1 varchar(20),//中项目1
-titlemid2 varchar(20),
-titlemid3 varchar(20),
-titlemid4 varchar(20),
-titlemid5 varchar(20),
-titlemin1A varchar(100),
-titlemin1B varchar(100),
-titlemin1C varchar(100),
-titlemin1D varchar(100),
-titlemin2A varchar(100),
-titlemin2B varchar(100),
-titlemin2C varchar(100),
-titlemin2D varchar(100),
-titlemin3A varchar(100),
-titlemin3B varchar(100),
-titlemin3C varchar(100),
-titlemin3D varchar(100),
-titlemin4A varchar(100),
-titlemin4B varchar(100),
-titlemin4C varchar(100),
-titlemin4D varchar(100),
-titlemin5A varchar(100),
-titlemin5B varchar(100),
-titlemin5C varchar(100),
-titlemin5D varchar(100),
-titlemin1AG int,
-titlemin1BG int,
-titlemin1CG int,
-titlemin1DG int,
-titlemin2AG int,
-titlemin2BG int,
-titlemin2CG int,
-titlemin2DG int,
-titlemin3AG int,
-titlemin3BG int,
-titlemin3CG int,
-titlemin3DG int,
-titlemin4AG int,
-titlemin4BG int,
-titlemin4CG int,
-titlemin4DG int,
-titlemin5AG int,
-titlemin5BG int,
-titlemin5CG int,
-titlemin5DG int
-};
+
 
 按照当前的情况，绩效考核分三步走：
 第一，考核表格的生成。因为考核表格数量巨多，而且后期又会有所变动，需要进行数据库存储。
@@ -1322,8 +1122,6 @@ act_slogan	活动口号
 act_bigposter	活动大海报
 act_smallposter	活动小海报
 }
-
-
 
 
 
