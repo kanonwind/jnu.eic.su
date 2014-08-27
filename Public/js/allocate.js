@@ -130,12 +130,12 @@ function GetUserData(strUserID)
     try{
         var jsonReturn;
         $.ajax({
-        url:URL+"/postUserData",//请求用户类型
-        data:{},
-        async:false,
-        dataType:"json",
-        type:"POST",
-        success:function(result){jsonReturn=result;}
+            url:URL+"/postUserData",//请求用户类型
+            data:{},
+            async:false,
+            dataType:"json",
+            type:"POST",
+            success:function(result){jsonReturn=result;}
         });	
         var jsonUD=jsonReturn;
     }
@@ -185,171 +185,177 @@ function postAllocQueInfo(objQI)
         qArrKK.push({"qKongKe":ret[i]});
     }
     console.log(qArrKK);
-	var jsonPost=
-	{
-		"qDepart":objQI.qDepart+1,//部门
-		"qYear":objQI.qYear,
-		"qMonth":objQI.qMonth,
-		"qDay":objQI.qDay,
-		"qBeginHour":objQI.qBeginHour,
-		"qBeginMin":objQI.qBeginMin,
-		"qEndHour":objQI.qEndHour,
-		"qEndMin":objQI.qEndMin,
-		"qGender":objQI.qGender,//性别要求
-        "qArrKK":qArrKK,//要求空课
-	};
-	//alert(jsonPost.qDepart+"aaa");
-    console.log(jsonPost);
-	//请求数据	
-		var jsonReturn;
-	    $.ajax({
-		url:URL+"/getAllocInfo",//请求用户类型
-		data:jsonPost,
-		async:false,
-		dataType:"json",
-		type:"POST",
-		success:function(result){jsonReturn=result;}
-		});		
-		//alert(jsonReturn.back);
-		//alert("时间是："+jsonReturn.time+"星期"+jsonReturn.week);
-		
-	/*此函数要返还一个查询结果的数组*/
-	var arrAnsPerInfo=new Array();
-	var jsonGet=jsonReturn;
-	arrAllocRequire=jsonReturn.arrAllocRequire;
+    try{
+        var jsonPost=
+        {
+            "qDepart":objQI.qDepart+1,//部门
+            "qYear":objQI.qYear,
+            "qMonth":objQI.qMonth,
+            "qDay":objQI.qDay,
+            "qBeginHour":objQI.qBeginHour,
+            "qBeginMin":objQI.qBeginMin,
+            "qEndHour":objQI.qEndHour,
+            "qEndMin":objQI.qEndMin,
+            "qGender":objQI.qGender,//性别要求
+            "qArrKK":qArrKK,//要求空课
+        };
+        //alert(jsonPost.qDepart+"aaa");
+        console.log(jsonPost);
+        //请求数据	
+        var jsonReturn;
+        $.ajax({
+            url:URL+"/getAllocInfo",//请求用户类型
+            data:jsonPost,
+            async:false,
+            dataType:"json",
+            type:"POST",
+            success:function(result){jsonReturn=result;}
+        });		
+        //alert(jsonReturn.back);
+        //alert("时间是："+jsonReturn.time+"星期"+jsonReturn.week);
+        
+        /*此函数要返还一个查询结果的数组*/
+        var arrAnsPerInfo=new Array();
+        var jsonGet=jsonReturn;
+        arrAllocRequire=jsonReturn.arrAllocRequire;
+    }
+    catch(err){
+        
 	/*JSON示例*/
-/* 	var jsonGet=
-	{
-		"arrAnsPerInfo":[
-			{
-				"conformity":"0.3",//符合度用来排序
-				"userID":"2012052201",//用户账号
-				"userName":"邓作恒",//用户姓名
-				"freeTime":"0.3",//查询时间附近的空课时间
-				"depart":"2",//部门
-				"userType":"3",//用户类型
-				"gender":"1",//性别
-				"longPhoneNumber":"13726247196",
-				"shortPhoneNumber":"617196",
-				"total_alloc_time":"5",//总的外调次数
-				"recently_alloc_time":"2",//最近一个月
-			},
-			{
-				"conformity":"0.2",//符合度用来排序
-				"userID":"2012052202",//用户账号
-				"userName":"邓作恒",//用户姓名
-				"freeTime":"0.2",//查询时间附近的空课时间
-				"depart":"2",//部门
-				"userType":"3",//用户类型
-				"gender":"1",//性别
-				"longPhoneNumber":"13726247196",
-				"shortPhoneNumber":"617196",
-				"total_alloc_time":"5",//总的外调次数
-				"recently_alloc_time":"2",//最近一个月
-			},
-			{
-				"conformity":"0.2",//符合度用来排序
-				"userID":"2012052203",//用户账号
-				"userName":"邓作恒",//用户姓名
-				"freeTime":"0.2",//查询时间附近的空课时间
-				"depart":"2",//部门
-				"userType":"1",//用户类型
-				"gender":"1",//性别
-				"longPhoneNumber":"13726247196",
-				"shortPhoneNumber":"617196",
-				"total_alloc_time":"5",//总的外调次数
-				"recently_alloc_time":"2",//最近一个月
-			},
-			{
-				"conformity":"0.2",//符合度用来排序
-				"userID":"2012052204",//用户账号
-				"userName":"邓作恒",//用户姓名
-				"freeTime":"0.2",//查询时间附近的空课时间
-				"depart":"2",//部门
-				"userType":"1",//用户类型
-				"gender":"1",//性别
-				"longPhoneNumber":"13726247196",
-				"shortPhoneNumber":"617196",
-				"total_alloc_time":"4",//总的外调次数
-				"recently_alloc_time":"2",//最近一个月
-			},
-			{
-				"conformity":"0.2",//符合度用来排序
-				"userID":"2012052205",//用户账号
-				"userName":"邓作恒",//用户姓名
-				"freeTime":"0.2",//查询时间附近的空课时间
-				"depart":"2",//部门
-				"userType":"1",//用户类型
-				"gender":"1",//性别
-				"longPhoneNumber":"13726247196",
-				"shortPhoneNumber":"617196",
-				"total_alloc_time":"4",//总的外调次数
-				"recently_alloc_time":"1",//最近一个月
-			},
-			{
-				"conformity":"0.1",//符合度用来排序
-				"userID":"2012052206",//用户账号
-				"userName":"邓作恒",//用户姓名
-				"freeTime":"0.1",//查询时间附近的空课时间
-				"depart":"2",//部门
-				"userType":"1",//用户类型
-				"gender":"0",//性别
-				"longPhoneNumber":"13726247196",
-				"shortPhoneNumber":"617196",
-				"total_alloc_time":"4",//总的外调次数
-				"recently_alloc_time":"1",//最近一个月
-			},
-			{
-				"conformity":"0.1",//符合度用来排序
-				"userID":"2012052207",//用户账号
-				"userName":"邓作恒",//用户姓名
-				"freeTime":"0.1",//查询时间附近的空课时间
-				"depart":"2",//部门
-				"userType":"1",//用户类型
-				"gender":"1",//性别
-				"longPhoneNumber":"13726247196",
-				"shortPhoneNumber":"617196",
-				"total_alloc_time":"4",//总的外调次数
-				"recently_alloc_time":"1",//最近一个月
-			},
-			
-			
-		],
-	}; */
+        var jsonGet=
+        {
+            "arrAnsPerInfo":[
+                {
+                    "conformity":"0.3",//符合度用来排序
+                    "userID":"2012052201",//用户账号
+                    "userName":"邓作恒",//用户姓名
+                    "freeTime":"0.3",//查询时间附近的空课时间
+                    "depart":"2",//部门
+                    "userType":"3",//用户类型
+                    "gender":"1",//性别
+                    "longPhoneNumber":"13726247196",
+                    "shortPhoneNumber":"617196",
+                    "total_alloc_time":"5",//总的外调次数
+                    "recently_alloc_time":"2",//最近一个月
+                },
+                {
+                    "conformity":"0.2",//符合度用来排序
+                    "userID":"2012052202",//用户账号
+                    "userName":"邓作恒",//用户姓名
+                    "freeTime":"0.2",//查询时间附近的空课时间
+                    "depart":"2",//部门
+                    "userType":"3",//用户类型
+                    "gender":"1",//性别
+                    "longPhoneNumber":"13726247196",
+                    "shortPhoneNumber":"617196",
+                    "total_alloc_time":"5",//总的外调次数
+                    "recently_alloc_time":"2",//最近一个月
+                },
+                {
+                    "conformity":"0.2",//符合度用来排序
+                    "userID":"2012052203",//用户账号
+                    "userName":"邓作恒",//用户姓名
+                    "freeTime":"0.2",//查询时间附近的空课时间
+                    "depart":"2",//部门
+                    "userType":"1",//用户类型
+                    "gender":"1",//性别
+                    "longPhoneNumber":"13726247196",
+                    "shortPhoneNumber":"617196",
+                    "total_alloc_time":"5",//总的外调次数
+                    "recently_alloc_time":"2",//最近一个月
+                },
+                {
+                    "conformity":"0.2",//符合度用来排序
+                    "userID":"2012052204",//用户账号
+                    "userName":"邓作恒",//用户姓名
+                    "freeTime":"0.2",//查询时间附近的空课时间
+                    "depart":"2",//部门
+                    "userType":"1",//用户类型
+                    "gender":"1",//性别
+                    "longPhoneNumber":"13726247196",
+                    "shortPhoneNumber":"617196",
+                    "total_alloc_time":"4",//总的外调次数
+                    "recently_alloc_time":"2",//最近一个月
+                },
+                {
+                    "conformity":"0.2",//符合度用来排序
+                    "userID":"2012052205",//用户账号
+                    "userName":"邓作恒",//用户姓名
+                    "freeTime":"0.2",//查询时间附近的空课时间
+                    "depart":"2",//部门
+                    "userType":"1",//用户类型
+                    "gender":"1",//性别
+                    "longPhoneNumber":"13726247196",
+                    "shortPhoneNumber":"617196",
+                    "total_alloc_time":"4",//总的外调次数
+                    "recently_alloc_time":"1",//最近一个月
+                },
+                {
+                    "conformity":"0.1",//符合度用来排序
+                    "userID":"2012052206",//用户账号
+                    "userName":"邓作恒",//用户姓名
+                    "freeTime":"0.1",//查询时间附近的空课时间
+                    "depart":"2",//部门
+                    "userType":"1",//用户类型
+                    "gender":"0",//性别
+                    "longPhoneNumber":"13726247196",
+                    "shortPhoneNumber":"617196",
+                    "total_alloc_time":"4",//总的外调次数
+                    "recently_alloc_time":"1",//最近一个月
+                },
+                {
+                    "conformity":"0.1",//符合度用来排序
+                    "userID":"2012052207",//用户账号
+                    "userName":"邓作恒",//用户姓名
+                    "freeTime":"0.1",//查询时间附近的空课时间
+                    "depart":"2",//部门
+                    "userType":"1",//用户类型
+                    "gender":"1",//性别
+                    "longPhoneNumber":"13726247196",
+                    "shortPhoneNumber":"617196",
+                    "total_alloc_time":"4",//总的外调次数
+                    "recently_alloc_time":"1",//最近一个月
+                },
+                
+                
+            ],
+        }; 
+        errmsg();
+    }
 	if(jsonGet.arrAnsPerInfo.length!=0)		
 	{
-	jsonGet.arrAnsPerInfo.sort(function(lhs,rhs)
-	{
-		if(lhs.conformity==rhs.conformity)//符合度最优先
-		{
-			if(lhs.userType==rhs.userType)
-			{
-				if(lhs.total_alloc_time==rhs.total_alloc_time)
-				{
-					if(lhs.recently_alloc_time==rhs.recently_alloc_time)
-					{
-						return lhs.gender<rhs.gender;//男生排前面
-					}
-					else
-					{
-						lhs.recently_alloc_time>rhs.recently_alloc_time;//最近外调数少的排前面
-					}
-				}
-				else
-				{
-					return lhs.total_alloc_time>rhs.total_alloc_time;//累计外调数少的排前面
-				}
-			}
-			else
-			{
-				return (lhs.userType-rhs.userType)>0;//干事排前面
-			}
-		}
-		else
-		{
-			return (lhs.conformity-rhs.conformity)<0;//符合度高的排前面
-		}
-	});
+        jsonGet.arrAnsPerInfo.sort(function(lhs,rhs)
+        {
+            if(lhs.conformity==rhs.conformity)//符合度最优先
+            {
+                if(lhs.userType==rhs.userType)
+                {
+                    if(lhs.total_alloc_time==rhs.total_alloc_time)
+                    {
+                        if(lhs.recently_alloc_time==rhs.recently_alloc_time)
+                        {
+                            return lhs.gender<rhs.gender;//男生排前面
+                        }
+                        else
+                        {
+                            lhs.recently_alloc_time>rhs.recently_alloc_time;//最近外调数少的排前面
+                        }
+                    }
+                    else
+                    {
+                        return lhs.total_alloc_time>rhs.total_alloc_time;//累计外调数少的排前面
+                    }
+                }
+                else
+                {
+                    return (lhs.userType-rhs.userType)>0;//干事排前面
+                }
+            }
+            else
+            {
+                return (lhs.conformity-rhs.conformity)<0;//符合度高的排前面
+            }
+        });
 	}
 	return jsonGet.arrAnsPerInfo;
 }
@@ -370,15 +376,15 @@ function postAllocFormArr(arrIDList)
 		"arrAllocRequire":arrAllocRequire,
 	}
 	//请求数据	
-		var jsonReturn;
-	    $.ajax({
-		url:URL+"/postAllocCode",//请求用户类型
-		data:jsonPOST,
-		async:false,
-		dataType:"json",
-		type:"POST",
-		success:function(result){jsonReturn=result;}
-		});	
+    var jsonReturn;
+    $.ajax({
+        url:URL+"/postAllocCode",//请求用户类型
+        data:jsonPOST,
+        async:false,
+        dataType:"json",
+        type:"POST",
+        success:function(result){jsonReturn=result;}
+    });	
 	//arrIDList 是学生的学号，说明这些人被外调
 	//返回的是外调序列号
 	//alert(jsonReturn.code);
@@ -393,37 +399,41 @@ function getKKBList()
 {
 	//返回的是空课表的名字，如”KSC联盟空课表“及其连接
 	//请求数据	
+    try{
 		var jsonReturn;
 	    $.ajax({
-		url:URL+"/postKongKeBiao",//请求用户类型
-		data:{},
-		async:false,
-		dataType:"json",
-		type:"POST",
-		success:function(result){jsonReturn=result;}
+            url:URL+"/postKongKeBiao",//请求用户类型
+            data:{},
+            async:false,
+            dataType:"json",
+            type:"POST",
+            success:function(result){jsonReturn=result;}
 		});			
-	var jsonGet=jsonReturn;
-/* 	var jsonGet=
-	{
-		"arrKKBLinkList":
-		[
-			{
-				"name":"KSC联盟空课表",//空课表的名字
-				"link":"#",//空课表的连接
-			},
-			{
-				"name":"人力资源部空课表",
-				"link":"#",
-			},
-			{
-				"name":"体育部空课表",
-				"link":"#",
-			},
-			
-		],
-	}; */
+        var jsonGet=jsonReturn;
+   }
+   catch(err){
+        var jsonGet=
+        {
+            "arrKKBLinkList":
+            [
+                {
+                    "name":"KSC联盟空课表",//空课表的名字
+                    "link":"#",//空课表的连接
+                },
+                {
+                    "name":"人力资源部空课表",
+                    "link":"#",
+                },
+                {
+                    "name":"体育部空课表",
+                    "link":"#",
+                },
+                
+            ],
+        };
+        errmsg();
+    }
 		
-	
 	return jsonGet.arrKKBLinkList;
 }
 
@@ -433,45 +443,53 @@ function getKKBList()
 function postAllocCode(strCode)
 {
 	//发送外调序列号
-	var jsonPsot={"allocCode":strCode};
-	//请求数据	
-		var jsonReturn;
-	    $.ajax({
-		url:URL+"/getAllocCode",//请求用户类型
-		data:jsonPsot,
-		async:false,
-		dataType:"json",
-		type:"POST",
-		success:function(result){jsonReturn=result;}
-		});		
-		//var jsonGet=jsonReturn;
-		//alert(jsonReturn.arrAllocedList[0].name);
-	//返回外调人员的ID，姓名的数组
-	var jsonGet=jsonReturn;
-/* 	var jsonGet=//外调序列号对应的被外调人员
-	{
-		"arrAllocedList":
-		[
-			{
-				"ID":"2012052207",//学号
-				"name":"邓作恒1",//姓名
-				"allocResult":"3",//这个全部是3
-			},
-			{
-				"ID":"2012052208",//学号
-				"name":"邓作恒2",//姓名
-				"allocResult":"3",//这个全部是3
-			},
-			{
-				"ID":"2012052209",//学号
-				"name":"邓作恒3",//姓名
-				"allocResult":"3",//这个全部是3
-			},
-		],
-	}; */
+    try{
+        var jsonPsot={"allocCode":strCode};
+        //请求数据	
+        var jsonReturn;
+        $.ajax({
+            url:URL+"/getAllocCode",//请求用户类型
+            data:jsonPsot,
+            async:false,
+            dataType:"json",
+            type:"POST",
+            success:function(result){jsonReturn=result;}
+        });		
+        //var jsonGet=jsonReturn;
+        //alert(jsonReturn.arrAllocedList[0].name);
+        //返回外调人员的ID，姓名的数组
+        var jsonGet=jsonReturn;
+    }
+    catch(err){
+        var jsonGet=//外调序列号对应的被外调人员
+        {
+            "arrAllocedList":
+            [
+                {
+                    "ID":"2012052207",//学号
+                    "name":"邓作恒1",//姓名
+                    "allocResult":"1",//这个全部是3
+                },
+                {
+                    "ID":"2012052208",//学号
+                    "name":"邓作恒2",//姓名
+                    "allocResult":"2",//这个全部是3
+                },
+                {
+                    "ID":"2012052209",//学号
+                    "name":"邓作恒3",//姓名
+                    "allocResult":"3",//这个全部是3
+                },
+                {
+                    "ID":"2012052210",//学号
+                    "name":"邓作恒4",//姓名
+                    "allocResult":"4",//这个全部是3
+                },
+            ],
+        }; 
+        errmsg();
+    }
 			
-	
-	
 	//如果查询的外调不存在，则这个数组是空的，长度为0
 	return jsonGet.arrAllocedList;
 }
@@ -521,28 +539,32 @@ function postAllocCodeforCancel(strCode)
 	谁生成的外调、申请外调的部门、外调工作时间*/
 	
 	//发送外调序列号
-	var jsonPsot={"allocCode":strCode};
-	//请求数据	
-		var jsonReturn;
-	    $.ajax({
-		url:URL+"/getAllocCancel",//请求用户类型
-		data:jsonPsot,
-		async:false,
-		dataType:"json",
-		type:"POST",
-		success:function(result){jsonReturn=result;}
-		});	
-	var jsonGet=jsonReturn;
-/* 	//获取json对象
-	var jsonGet=
-	{
-		"exist":"exist",//此外调是否存在
-		"code":strCode,//此外调序列号
-		"applyTime":"2012-13-13 25:60:60",//该序列号的生成日期
-		"operator":"邓作恒",//生成序列号时是谁操作的
-		"applyDepart":"KSC联盟",//生成序列号时，”申请部门“填的是什么
-		"workTime":"2012-14-14 16:30--17:40",//该外调的工作日期
-	} */
+    try{
+        var jsonPost={"allocCode":strCode};
+        //请求数据	
+        var jsonReturn;
+        $.ajax({
+            url:URL+"/getAllocCancel",//请求用户类型
+            data:jsonPost,
+            async:false,
+            dataType:"json",
+            type:"POST",
+            success:function(result){jsonReturn=result;}
+        });	
+        var jsonGet=jsonReturn;
+    }
+    catch(err){
+        //获取json对象
+        var jsonGet=
+        {
+            "exist":"exist",//此外调是否存在
+            "code":strCode,//此外调序列号
+            "applyTime":"2012-13-13 25:60:60",//该序列号的生成日期
+            "operator":"邓作恒",//生成序列号时是谁操作的
+            "applyDepart":"KSC联盟",//生成序列号时，”申请部门“填的是什么
+            "workTime":"2012-14-14 16:30--17:40",//该外调的工作日期
+        }
+    }
 	
 	//然后给我返回这样一个对象
 	return jsonGet;
