@@ -72,7 +72,7 @@ function allocateSystemInit()
 	objAllocBuDiv.innerHTML=strButtonInfo;
 	
 	//根据用户类型绑定函数和样式
-	if(currentUser.userType!=1)//不是人力干事
+	if(currentUser.userType!=2)//不是人力干事
 	{
 		
 		document.getElementById("qiandao_qianli").className="alloc_check_div used unable";
@@ -538,16 +538,16 @@ function showChaXunKeBiao()
 						+"<form name=\"alloc_q_form\" method=\"post\" action=\"#\">\n"
 							+"<h2>申请部门</h2>\n"
 							+"<select class=\"alloc_select\" name=\"shenqingbumen\" id=\"shengqingbumen\">\n";
-	var arrDepartList=new Array("秘书处","人力资源部","KSC联盟","信息编辑部","组织部","宣传部","学术部","公关部","体育部","文娱部","心理服务部");
+	
 	//选择部门
-	for(var iCount=0;iCount<11;iCount++)
+	for(var iCount=0;iCount<arrDepartName.length;iCount++)
 	{
 		strAllocQ += "<option value=\""+iCount+"\"";
-		if(arrDepartList[iCount]==currentUser.depart)
+		if(iCount==currentUser.depart-1)
 		{
 			strAllocQ += "selected=\"selected\"";
 		}
-		strAllocQ += ">"+arrDepartList[iCount]+"</opyion>\n";
+		strAllocQ += ">"+arrDepartName[iCount]+"</opyion>\n";
 	}
 	strAllocQ +="</select>\n"	
 				+"<h2>查询条件</h2>\n"
@@ -680,7 +680,7 @@ function showChaXunKeBiao()
 			}
 			var objQI=new objQueInfo();
 			var arrResponse = postAllocQueInfo(objQI);
-			if(arrResponse.length!==0)
+			if(arrResponse.length!=0)
 			{
 				var strQueryReTable = new String();
 				strQueryReTable+="<h2>查询结果</h2>\n"
@@ -714,7 +714,7 @@ function showChaXunKeBiao()
 									+"</tr>";
 				}
 				strQueryReTable += "</tbody></table><div id=\"verification\"><div>";
-				if(currentUser.userType==1)//如果是人力干事
+				if(currentUser.userType==2)//如果是人力干事
 				{
 					strQueryReTable += "<button class=\"alloc_sub_bu\"	type=\"button\" name=\"al_submit\" id=\"al_submit\" title=\"调用选中人\">\n"
 									+	"调用选中人\n"
@@ -822,40 +822,27 @@ function showQianDaoQianLi(currentUser)
 								+"			</tr>\n"
 								+"		</thead>\n"
 								+"		<tbody>\n";
+				var arrResultName=new Array("缺席","迟到或早退","一般","表项突出");
 				for(var i=0;i<arrAllocedStudents.length;i++)
 				{
 					strAllocPerf+="<tr><td>"
 								+arrAllocedStudents[i].name
-								+"</td><td class=\"width_400\">"
-								+"<label for=\""+(arrAllocedStudents[i].ID+"_p1")+"\">缺席</label>"
+								+"</td><td class=\"width_400\">";
+                    for(var j=0;j<4;j++)
+                    {
+                        strAllocPerf+="<label for=\""+(arrAllocedStudents[i].ID+"_p"+j)+"\">"+arrResultName[j]+"</label>"
 								+"<input type=\"radio\" name=\""
 								+arrAllocedStudents[i].ID
 								+"\" id=\""
 								+(arrAllocedStudents[i].ID+"_p1")
-								+"\" value=\"1\" class=\"alloc_perf_radio\" />"
-								
-								+"<label for=\""+(arrAllocedStudents[i].ID+"_p2")+"\">迟到或早退</label>"
-								+"<input type=\"radio\" name=\""
-								+arrAllocedStudents[i].ID
-								+"\" id=\""
-								+(arrAllocedStudents[i].ID+"_p2")
-								+"\" value=\"2\" class=\"alloc_perf_radio\"/>"
-								
-								+"<label for=\""+(arrAllocedStudents[i].ID+"_p3")+"\">一般</label>"
-								+"<input type=\"radio\" name=\""
-								+arrAllocedStudents[i].ID
-								+"\" id=\""
-								+(arrAllocedStudents[i].ID+"_p3")
-								+"\" value=\"3\" checked=\"checked\" class=\"alloc_perf_radio\"/>"
-								
-								+"<label for=\""+(arrAllocedStudents[i].ID+"_p4")+"\">表现突出</label>"
-								+"<input type=\"radio\" name=\""
-								+arrAllocedStudents[i].ID
-								+"\" id=\""
-								+(arrAllocedStudents[i].ID+"_p4")
-								+"\" value=\"4\" class=\"alloc_perf_radio\" />"
-								
-								+"</td></tr>";
+								+"\" value=\""+(j+1)+"\" ";
+                        if(j==arrAllocedStudents[i].allocResult-1)
+                        {
+                            strAllocPerf+="checked=\"checked\"";
+                        }
+                        strAllocPerf+="class=\"alloc_perf_radio\" />";
+                    }
+					
 				}
 				strAllocPerf +="</tbody></table>\n"
 								+"<button type=\"button\" id=\"alloc_pref_sub\" name=\"alloc_pref_sub\" class=\"alloc_sub_bu\" title=\"外调表现表提交按钮\">提交</button>\n"
