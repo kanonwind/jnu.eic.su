@@ -29,8 +29,8 @@ function errmsg()
 
 function changeButtonStyle(buttonName)
 {
-	document.getElementById(exChangedButton).className="alloc_check_div used";
-	document.getElementById(buttonName).className="alloc_check_div_click";
+	$("#"+exChangedButton).attr("class","alloc_check_div used");
+	$("#"+buttonName).attr("class","alloc_check_div_click");
 	exChangedButton=buttonName;
 }
 
@@ -63,7 +63,7 @@ function allocateSystemInit()
 {
 	
 	//获取当前用户信息
-	currentUser=GetUserData(document.getElementById("login_info_user_id").innerHTML);
+	currentUser=GetUserData($("#login_info_user_id").html());
 	
 	var strButtonInfo="<div class=\"alloc_check_div used\" id=\"cha_xun_ke_biao\" title=\"查询可调人员\">\n"
 					+	"<p>查询可调人员</p>\n"
@@ -80,43 +80,21 @@ function allocateSystemInit()
 					+"<div class=\"alloc_check_div wacd\">\n"
 					+"	<p></p>\n"
 					+"</div>\n";
-					
-	var objAllocBuDiv=document.getElementById("alloc_bu_div");
-	objAllocBuDiv.innerHTML=strButtonInfo;
+	$("#alloc_bu_div").hide().html(strButtonInfo).slideDown();				
 	
 	//根据用户类型绑定函数和样式
 	if(currentUser.userType!=2)//不是人力干事
 	{
-		
-		document.getElementById("qiandao_qianli").className="alloc_check_div used unable";
-		document.getElementById("cancle_alloc").className="alloc_check_div used unable";
-		document.getElementById("cha_xun_ke_biao").onclick = function()
-		{
-			showChaXunKeBiao();
-		}
-		document.getElementById("cha_xun_kkb").onclick = function()
-		{
-			showChaXunKKB();
-		}
+		$("#qiandao_qianli,#cancle_alloc").attr("class","alloc_check_div used unable");
+		$("#cha_xun_ke_biao").click(showChaXunKeBiao);
+		$("#cha_xun_kkb").click(showChaXunKKB);
 	}
 	else
 	{
-		document.getElementById("cha_xun_ke_biao").onclick = function()
-		{
-			showChaXunKeBiao();
-		}
-		document.getElementById("cha_xun_kkb").onclick = function()
-		{
-			showChaXunKKB();
-		}
-		document.getElementById("qiandao_qianli").onclick = function()
-		{
-			showQianDaoQianLi();
-		}
-		document.getElementById("cancle_alloc").onclick = function()
-		{
-			showCancleAlloc();
-		}
+        $("#cha_xun_ke_biao").click(showChaXunKeBiao);
+		$("#cha_xun_kkb").click(showChaXunKKB);
+		$("#qiandao_qianli").click(showQianDaoQianLi);
+		$("#cancle_alloc").click(showCancleAlloc);
 	}
 	showChaXunKeBiao();
 }	
@@ -128,6 +106,8 @@ function GetUserData(strUserID)
 {
 //请求数据	
     try{
+        if(debug)
+            throw("ajax");
         var jsonReturn;
         $.ajax({
             url:URL+"/postUserData",//请求用户类型
@@ -157,7 +137,7 @@ function GetUserData(strUserID)
 		this.userType = _userType;
 		this.depart = _depart;
 	}
-	
+	console.log(jsonUD);
 	var objUD = new objUserData(jsonUD._userID,jsonUD._userType,jsonUD._depart);
 	
 	return objUD;
@@ -186,6 +166,8 @@ function postAllocQueInfo(objQI)
     }
     console.log(qArrKK);
     try{
+        if(debug)
+            throw("ajax");
         var jsonPost=
         {
             "qDepart":objQI.qDepart+1,//部门
@@ -228,7 +210,7 @@ function postAllocQueInfo(objQI)
                 {
                     "conformity":"0.3",//符合度用来排序
                     "userID":"2012052201",//用户账号
-                    "userName":"邓作恒",//用户姓名
+                    "userName":"邓作恒1",//用户姓名
                     "freeTime":"0.3",//查询时间附近的空课时间
                     "depart":"2",//部门
                     "userType":"3",//用户类型
@@ -241,7 +223,7 @@ function postAllocQueInfo(objQI)
                 {
                     "conformity":"0.2",//符合度用来排序
                     "userID":"2012052202",//用户账号
-                    "userName":"邓作恒",//用户姓名
+                    "userName":"邓作恒2",//用户姓名
                     "freeTime":"0.2",//查询时间附近的空课时间
                     "depart":"2",//部门
                     "userType":"3",//用户类型
@@ -254,7 +236,7 @@ function postAllocQueInfo(objQI)
                 {
                     "conformity":"0.2",//符合度用来排序
                     "userID":"2012052203",//用户账号
-                    "userName":"邓作恒",//用户姓名
+                    "userName":"邓作恒3",//用户姓名
                     "freeTime":"0.2",//查询时间附近的空课时间
                     "depart":"2",//部门
                     "userType":"1",//用户类型
@@ -267,7 +249,7 @@ function postAllocQueInfo(objQI)
                 {
                     "conformity":"0.2",//符合度用来排序
                     "userID":"2012052204",//用户账号
-                    "userName":"邓作恒",//用户姓名
+                    "userName":"邓作恒4",//用户姓名
                     "freeTime":"0.2",//查询时间附近的空课时间
                     "depart":"2",//部门
                     "userType":"1",//用户类型
@@ -280,7 +262,7 @@ function postAllocQueInfo(objQI)
                 {
                     "conformity":"0.2",//符合度用来排序
                     "userID":"2012052205",//用户账号
-                    "userName":"邓作恒",//用户姓名
+                    "userName":"邓作恒5",//用户姓名
                     "freeTime":"0.2",//查询时间附近的空课时间
                     "depart":"2",//部门
                     "userType":"1",//用户类型
@@ -293,7 +275,7 @@ function postAllocQueInfo(objQI)
                 {
                     "conformity":"0.1",//符合度用来排序
                     "userID":"2012052206",//用户账号
-                    "userName":"邓作恒",//用户姓名
+                    "userName":"邓作恒6",//用户姓名
                     "freeTime":"0.1",//查询时间附近的空课时间
                     "depart":"2",//部门
                     "userType":"1",//用户类型
@@ -306,7 +288,7 @@ function postAllocQueInfo(objQI)
                 {
                     "conformity":"0.1",//符合度用来排序
                     "userID":"2012052207",//用户账号
-                    "userName":"邓作恒",//用户姓名
+                    "userName":"邓作恒7",//用户姓名
                     "freeTime":"0.1",//查询时间附近的空课时间
                     "depart":"2",//部门
                     "userType":"1",//用户类型
@@ -375,21 +357,31 @@ function postAllocFormArr(arrIDList)
 		"jsonITList":jsonArr,
 		"arrAllocRequire":arrAllocRequire,
 	}
-	//请求数据	
-    var jsonReturn;
-    $.ajax({
-        url:URL+"/postAllocCode",//请求用户类型
-        data:jsonPOST,
-        async:false,
-        dataType:"json",
-        type:"POST",
-        success:function(result){jsonReturn=result;}
-    });	
-	//arrIDList 是学生的学号，说明这些人被外调
-	//返回的是外调序列号
-	//alert(jsonReturn.code);
-	var jsonGet={"allocCode": jsonReturn.code};
-	return jsonGet.allocCode;
+    console.log(jsonPOST);
+	//请求数据
+    try{
+        if(debug())
+            throw("ajax");
+            
+        var jsonReturn;
+        $.ajax({
+            url:URL+"/postAllocCode",//请求用户类型
+            data:jsonPOST,
+            async:false,
+            dataType:"json",
+            type:"POST",
+            success:function(result){jsonReturn=result;}
+        });	
+        //arrIDList 是学生的学号，说明这些人被外调
+        //返回的是外调序列号
+        //alert(jsonReturn.code);
+        var jsonGet={"allocCode": jsonReturn.code};
+        return jsonGet.allocCode;
+    }
+    catch(err){
+        errmsg();
+        return "20140828-QWER";
+    }
 }	
 
 
@@ -400,6 +392,8 @@ function getKKBList()
 	//返回的是空课表的名字，如”KSC联盟空课表“及其连接
 	//请求数据	
     try{
+        if(debug)
+            throw("ajax");
 		var jsonReturn;
 	    $.ajax({
             url:URL+"/postKongKeBiao",//请求用户类型
@@ -444,6 +438,8 @@ function postAllocCode(strCode)
 {
 	//发送外调序列号
     try{
+        if(debug)
+            throw("ajax");
         var jsonPsot={"allocCode":strCode};
         //请求数据	
         var jsonReturn;
@@ -513,7 +509,9 @@ function postAllocPerfValue(arrAllocedStudents)
 	var jsonPOST={"arrAllocedPerf":jsonArr,
 				  "AllocCode":AllocCode,
 	};
-
+    try{
+        if(debug())
+            throw("ajax");
 	//请求数据	
 		var jsonReturn;
 	    $.ajax({
@@ -524,11 +522,16 @@ function postAllocPerfValue(arrAllocedStudents)
 		type:"POST",
 		success:function(result){jsonReturn=result;}
 		});	
-	//用于发送的json
-	var jsonPOST={"arrAllocedPerf":jsonArr};
-	
-	//成功返回true
-	return true;
+        console.log("发送外调表现结果的返回值:"+jsonReturn);
+        
+        return true;
+	}
+    catch(err)
+    {   
+        //成功返回true
+        errmsg();
+        return true;
+    }
 }
 
 //需要与服务器通信
@@ -540,6 +543,8 @@ function postAllocCodeforCancel(strCode)
 	
 	//发送外调序列号
     try{
+        if(debug)
+            throw("ajax");
         var jsonPost={"allocCode":strCode};
         //请求数据	
         var jsonReturn;
@@ -574,21 +579,30 @@ function postAllocCodeforCancel(strCode)
 //取消序列号对应的外调
 function cancelAlloc(strCode)
 {
-	//发送外调序列号
-	var jsonPsot={"allocCode":strCode};
-	//请求数据	
-		var jsonReturn;
-	    $.ajax({
-		url:URL+"/setAllocCancel",//请求用户类型
-		data:jsonPsot,
-		async:false,
-		dataType:"json",
-		type:"POST",
-		success:function(result){jsonReturn=result;}
-		});	
-	alert(jsonReturn.back);
-	//取消成功或外调不存在返回true
-	return true;
+    try{
+        //发送外调序列号
+        if(debug())
+            throw("ajax");
+        var jsonPsot={"allocCode":strCode};
+        //请求数据	
+        var jsonReturn;
+        $.ajax({
+            url:URL+"/setAllocCancel",//请求用户类型
+            data:jsonPsot,
+            async:false,
+            dataType:"json",
+            type:"POST",
+            success:function(result){jsonReturn=result;}
+        });	
+        console.log(jsonReturn.back);
+        //取消成功或外调不存在返回true
+        return true;
+    }
+    catch(err)
+    {
+        errmsg();
+        return true;
+    }
 }
 
 
@@ -596,8 +610,7 @@ function cancelAlloc(strCode)
 function showChaXunKeBiao()
 {
 	changeButtonStyle("cha_xun_ke_biao");
-	
-	document.getElementById("alloc_work_f").innerHTML="";
+	$("#alloc_work_f").html("<div id='alloc_work_f_inner'></div>");
 	
 	var strAllocQ="<div id=\"alloc_q\">\n"
 						+"<form name=\"alloc_q_form\" method=\"post\" action=\"#\">\n"
@@ -693,30 +706,29 @@ function showChaXunKeBiao()
 				+"</div>\n"
 				+"<div id=\"q_result\"></div>"
 				+"<div id=\"alloc_succeed\"></div>";
-	document.getElementById("alloc_work_f").innerHTML=strAllocQ;
-	document.getElementById("help").onclick=function()
-    {
+	$("#alloc_work_f_inner").hide().html(strAllocQ).slideDown();
+	$("#help").click(function(){
         alert("此处工作时间用于查询空课表\n"+
             "系统先用此时间判断那节课需要为空才能符合工作时间\n"+
             "判断标准如下：\n"+
             "开始时间在一节课中间的，要求空\n结束时间在一节课中间的，要求空\n在这节课前开始，在这节课前没结束的，要求空");
         return false;
-    }
-	document.getElementById("q_submit").onclick = function()
+    });
+	$("#q_submit").click(function()
 	{
 		var strError=new String();
 		
 		//闰年此处bug，待修正
 		var objForm = document.forms["alloc_q_form"];
 		
-		if(2==objForm.elements["shijian_yue"].value && 29<objForm.elements["shijian_ri"].value )
+		if(2==$("#shijian_yue").val()&& 29<$("#shijian_ri").val())
 		{
-			strError += "*2月没有"+ objForm.elements["shijian_ri"].value;
+			strError += "*2月没有"+ $("#shijian_ri").val();
 		}
-		var bh=parseInt(objForm.elements["shijian_kaishi_h"].value);
-        var eh=parseInt(objForm.elements["shijian_jieshu_h"].value);
-        var em=parseInt(objForm["shijian_jieshu_fen"].value);
-        var bm=parseInt(objForm["shijian_kaishi_fen"].value);
+		var bh=parseInt($("#shijian_kaishi_h").val());
+        var eh=parseInt($("shijian_jieshu_h").val());
+        var em=parseInt($("shijian_jieshu_fen").val());
+        var bm=parseInt($("shijian_kaishi_fen").val());
         
         if( (bh*60+bm)-(eh*60+em)>0 )
         {
@@ -725,23 +737,23 @@ function showChaXunKeBiao()
         
 		if(strError!="")
 		{
-			document.getElementById("time_error").innerHTML=strError;
+			$("#time_error").html(strError);
 			return false;
 		}
 		else
 		{
-			document.getElementById("time_error").innerHTML="";
+			$("#time_error").html("");
 			function objQueInfo()
 			{
-				this.qDepart=parseInt(objForm.elements["shengqingbumen"].value);
-				this.qYear=parseInt(objForm.elements["shijian_nian"].value);
-				this.qMonth=parseInt(objForm.elements["shijian_yue"].value);
-				this.qDay=parseInt(objForm.elements["shijian_ri"].value);
-				this.qBeginHour=parseInt(objForm.elements["shijian_kaishi_h"].value);
-				this.qBeginMin=parseInt(objForm.elements["shijian_kaishi_fen"].value);
-				this.qEndHour=parseInt(objForm.elements["shijian_jieshu_h"].value);
-				this.qEndMin=parseInt(objForm.elements["shijian_jieshu_fen"].value);
-				this.qGender=parseInt(objForm.elements["teshu_sex"].value);
+				this.qDepart=parseInt($("#shengqingbumen").val());
+				this.qYear=parseInt($("#shijian_nian").val());
+				this.qMonth=parseInt($("#shijian_yue").val());
+				this.qDay=parseInt($("#shijian_ri").val());
+				this.qBeginHour=parseInt($("#shijian_kaishi_h").val());
+				this.qBeginMin=parseInt($("#shijian_kaishi_fen").val());
+				this.qEndHour=parseInt($("#shijian_jieshu_h").val());
+				this.qEndMin=parseInt($("#shijian_jieshu_fen").val());
+				this.qGender=parseInt($("#teshu_sex").val());
 			}
 			var objQI=new objQueInfo();
 			var arrResponse = postAllocQueInfo(objQI);
@@ -785,14 +797,14 @@ function showChaXunKeBiao()
 									+	"调用选中人\n"
 									+	"</button>\n"
 									+"</form>\n"
-					document.getElementById("q_result").innerHTML=strQueryReTable;
+					$("#q_result").hide().html(strQueryReTable).slideDown();
 					
 				}
 				else
 				{
-					document.getElementById("q_result").innerHTML=strQueryReTable;
+					$("#q_result").hide().html(strQueryReTable).slideDown();
 				}
-				document.getElementById("al_submit").onclick = function()
+				$("#al_submit").click(function()
 				{
 					var objAllocFormList = document.forms["alloc_list_form"];
 					var arrIDList = new Array();
@@ -819,24 +831,21 @@ function showChaXunKeBiao()
 									+	"确认并返回\n"
 									+	"</button>\n";
 						
-						document.getElementById("alloc_succeed").innerHTML=strAllSucceed;
-						document.getElementById("al_submit").style.visibility="hidden";
-						document.getElementById("al_succeed").onclick = function()
-						{
-							showChaXunKeBiao();
-						}
+						$("#alloc_succeed").hide().html(strAllSucceed).slideDown();
+						$("#al_submit").hide();
+						$("#al_succeed").click(showChaXunKeBiao);
 					}	
-				}	
+				});	
 			}
 			else
 			{
 				var strQueryReTable;
 				strQueryReTable="<h2>查询无结果o(╯□╰)o</h2>\n";
-				document.getElementById("q_result").innerHTML=strQueryReTable;
+				$("#q_result").html(strQueryReTable);
 			}
 			
 		}
-	}
+	});
 	
 }
 
@@ -859,19 +868,21 @@ function showQianDaoQianLi(currentUser)
 				+"		<hr />\n"
 				+"	</div>\n"
 				+"	<div id=\"pref_radio_s\"></div>\n";
-	document.getElementById("alloc_work_f").innerHTML=strCodeQue;
+    $("#alloc_work_f").html("<div id='alloc_work_f_inner'></div>");
+    $("#alloc_work_f_inner").hide().html(strCodeQue).slideDown();
+	
 	function invalidCode(Code)
 	{
 		var re =/^\d{8}-[A-Z]{4}$/;
 		return re.test(Code);
 		
 	}
-	document.getElementById("alloc_code_sub").onclick=function()
+	$("#alloc_code_sub").click(function()
 	{
-		var strCode=document.forms["code_input"].elements["alloc_code"].value;
+		var strCode=$("#alloc_code").val();
 		if(true == invalidCode(strCode))
 		{
-			document.getElementById("alloc_code_error").innerHTML="";
+			$("#alloc_code_error").html("");
 			var arrAllocedStudents=postAllocCode(strCode);
 			
 			var strAllocPerf = new String();
@@ -917,44 +928,43 @@ function showQianDaoQianLi(currentUser)
 			{
 				strAllocPerf += "<h2>找不到"+strCode+"对应的外调!</h2>";
 			}
-			document.getElementById("pref_radio_s").innerHTML=strAllocPerf;
-            if(!document.getElementById("alloc_pref_sub"))
-            {
-                return;
-            }
-			document.getElementById("alloc_pref_sub").onclick = function()
-			{
-				for(var iCount=0;iCount<arrAllocedStudents.length;iCount++)
-				{
-					
-					var arrRadios=document.getElementsByName(arrAllocedStudents[iCount].ID);
-					
-					for(var j=0;j<arrRadios.length;j++)
-					{
-						
-						if(true == arrRadios[j].checked)
-						{
-							arrAllocedStudents[iCount].allocResult=arrRadios[j].value;
-						}
-					}
-				}
-				if( true == postAllocPerfValue(arrAllocedStudents) )
-				{
-					alert("外调"+strCode+"的考核结果提交成功！点击确定返回");
-					showQianDaoQianLi();
-				}
-				else
-				{
-					alert("提交失败。。请重试。。");
-				}
-					
-			}
+            $("#pref_radio_s").hide().html(strAllocPerf).slideDown();
+			
+            try{
+                $("#alloc_pref_sub").click(function()
+                {
+                    for(var iCount=0;iCount<arrAllocedStudents.length;iCount++)
+                    {
+                        
+                        var arrRadios=document.getElementsByName(arrAllocedStudents[iCount].ID);
+                        
+                        for(var j=0;j<arrRadios.length;j++)
+                        {
+                            
+                            if(true == arrRadios[j].checked)
+                            {
+                                arrAllocedStudents[iCount].allocResult=arrRadios[j].value;
+                            }
+                        }
+                    }
+                    if( true == postAllocPerfValue(arrAllocedStudents) )
+                    {
+                        alert("外调"+strCode+"的考核结果提交成功！点击确定返回");
+                        showQianDaoQianLi();
+                    }
+                    else
+                    {
+                        alert("提交失败。。请重试。。");
+                    }
+                        
+                });
+            }catch(err){}
 		}
 		else
 		{
-			document.getElementById("alloc_code_error").innerHTML="*外调序列号格式错误";
+			$("#alloc_code_error").html("*外调序列号格式错误");
 		}
-	}
+	});
 }
 
 //查询空课表页
@@ -969,13 +979,17 @@ function showChaXunKKB()
 		+arrKKBLinkList[i].link+"\" class=\"bmkkb\"><p>"
 		+arrKKBLinkList[i].name+"</p></a></div>";
 	}
-	document.getElementById("alloc_work_f").innerHTML=strLinkButton;
+    $("#alloc_work_f").html("<div id='alloc_work_f_inner'></div>");
+    $("#alloc_work_f_inner").hide().html(strLinkButton).slideDown();
+	
 }
 
 //取消或修改外调
 function showCancleAlloc()
 {
+    
 	changeButtonStyle("cancle_alloc");
+     $("#alloc_work_f").html("<div id='alloc_work_f_inner'></div>");
 	var strCodeQue = new String();
 	
 	strCodeQue +="	<div id=\"code_s_q\">\n"
@@ -991,20 +1005,21 @@ function showCancleAlloc()
 				+"		<hr />\n"
 				+"	</div>\n"
 				+"	<div id=\"decide_cancel_alloc\"></div>\n";
-	document.getElementById("alloc_work_f").innerHTML=strCodeQue;
+    $("#alloc_work_f_inner").hide().html(strCodeQue).slideDown();
+	
 	function invalidCode(Code)
 	{
 		var re =/^\d{8}-[A-Z]{4}$/;
 		return re.test(Code);	
 	}
 	
-	document.getElementById("alloc_code_sub").onclick=function()
+	$("#alloc_code_sub").click(function()
 	{
-		var strCode=document.forms["code_input"].elements["alloc_code"].value;
+		var strCode=$("#alloc_code").val();
 	
 		if(true == invalidCode(strCode))
 		{
-			document.getElementById("alloc_code_error").innerHTML="";
+			$("#alloc_code_error").html("");
 			var objAllocData = postAllocCodeforCancel(strCode);
 			
 			var strVerifyInfo = new String();
@@ -1027,32 +1042,32 @@ function showCancleAlloc()
 			{
 				strVerifyInfo+="<h2>找不到"+strCode+"对应的外调!</h2>";
 			}
-			document.getElementById("decide_cancel_alloc").innerHTML = strVerifyInfo;
-			document.getElementById("decide_cancel_alloc_sub").onclick = function()
+            $("#decide_cancel_alloc").hide().html(strVerifyInfo).slideDown();
+			
+			$("#decide_cancel_alloc_sub").click(function()
 			{
+                $(this).slideUp();
 				if(true==cancelAlloc(strCode))
 				{
 					strCancelSucceed = new String();
 					strCancelSucceed+="<p>外调"+strCode+"已经被取消</p>"
 									+"<button type=\"button\" id=\"confirm_the_result\" name=\"confirm_the_result\" class=\"alloc_sub_bu\" title=\"确定并返回\">"
-									+"确定并返回</button>"
-					document.getElementById("cancel_succeed").innerHTML=strCancelSucceed;
-					document.getElementById("decide_cancel_alloc_sub").style.display="none";
-					document.getElementById("confirm_the_result").onclick = function()
-					{
-						showCancleAlloc();
-					}
+									+"确定并返回</button>";
+                    
+					$("#cancel_succeed").hide().html(strCancelSucceed).slideDown();
+					$("#decide_cancel_alloc_sub").hide();
+					$("#confirm_the_result").click(showCancleAlloc);
 				}
 				else
 				{
 					alert("操作失败，请重试。。");
 					return false;
 				}
-			}
+			});
 		}
 		else
 		{
-			document.getElementById("alloc_code_error").innerHTML="*外调序列号格式错误";
+			$("#alloc_code_error").html("*外调序列号格式错误");
 		}
-	}
+	});
 }
