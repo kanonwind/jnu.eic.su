@@ -16,13 +16,12 @@ class AllocateAction extends Action
 		$account=$_SESSION['account'];
 		$person_model=new Model("Person");
 		$resource_model=new Model("Resource");
-		//非人力部门拒绝访问
+		
 		$arrDepartName=Array("秘书处","人力资源部","宣传部","信息编辑部","学术部",
 "体育部","KSC联盟","组织部","文娱部","公关部","心理服务部","主席团");
 		$arrTypeName=Array("干事","人力干事","部长级","主席团");
 		$person_info=$person_model->where("account=$account")->find();
-		if($person_info['apartment']!=2)
-			$this->redirect('Index/index');
+
 		$name=$person_info['name'];
 		//所属部门
 		$apartment=$arrDepartName[$person_info['apartment']-1];
@@ -43,9 +42,13 @@ class AllocateAction extends Action
 				);
 			}
 			sort($arrAllocTime);
-			$timeResent=$arrAllocTime[count($arrAllocTime)-1];
+			
+			$timeResent=$arrAllocTime[count($arrAllocTime)-1]['create_time'];
+			
+			
 			$resource_info=$resource_model->where("create_time=$timeResent")->find();
 			$allocResent=$resource_info['code'];
+			
 		}
 		$monthNow=date("n");
 		$yearNow=date("Y");
@@ -163,7 +166,7 @@ class AllocateAction extends Action
 	}
 	//查询可调人员：接收查询条件
 	public function getAllocInfo()
-	{
+	{		
 		$arrWeek=Array("sun","mon","tue","wed","thu","fri","sat");
 		$arrParity=Array(2,1);//1表示双周有课,如果这周是单周，则参加匹配
 		$apartment=$_POST['qDepart'];
@@ -347,7 +350,7 @@ class AllocateAction extends Action
 				$person_info=$person_model->where("account=$account")->find();
 				$data['ID']=$account;
 				$data['name']=$person_info['name'];
-				$data['allocResult']=1;//$assess;//暂时默认3
+				$data['allocResult']=$assess;//暂时默认3
 				$arrAllocedList[]=$data;
 			}
 			$arr=Array(
@@ -366,11 +369,11 @@ class AllocateAction extends Action
 	{
 		$arrAllocedPerf=$_POST['arrAllocedPerf'];
 		$AlloCode=$_POST['AllocCode'];
-		$back="不要爆粗口";
+		//$back="不要爆粗口";
 		
 		
 			$resource_model=new Model("Resource");
-			$back.="不想再这么辛苦了";
+			//$back.="不想再这么辛苦了";
 			for($k=0;$k<count($arrAllocedPerf);$k++)
 			{
 				
@@ -378,7 +381,7 @@ class AllocateAction extends Action
 				$data['assess']=$arrAllocedPerf[$k]['BX'];
 				
 				unset($condition);
-				$back.="最后一战".$AlloCode.$arrAllocedPerf[$k]['ID'].$arrAllocedPerf[$k]['BX'];
+				//$back.="最后一战".$AlloCode.$arrAllocedPerf[$k]['ID'].$arrAllocedPerf[$k]['BX'];
 				$condition['code']=$AlloCode;
 				$condition['account']=$arrAllocedPerf[$k]['ID'];
 				$resource_info=$resource_model->where($condition)->data($data)->save();

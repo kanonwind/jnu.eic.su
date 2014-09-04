@@ -195,6 +195,10 @@ class NewsAction extends Action{
 			$this->Success("添加成功，正在返回......",__APP__."/News/create");
 		}
 	}
-
+	//新闻编辑，编辑界面在Index/show，修改操作在News/update
+	public function update()
+	{
+		echo "asdf";
+	}
 }
 ?>
