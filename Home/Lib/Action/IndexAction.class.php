@@ -399,22 +399,48 @@ class IndexAction extends Action
 	}
 	//拒绝访问：没有$_GET['id']值
 	if(empty($_GET['id']))
-		$this->redirect("Home/newscenter");
+		$this->redirect("Index/newscenter");
 	$id=$_GET['id'];
 	$news_model=new Model("News");
 	$news_info=$news_model->where("id=$id")->find();
 	if(false==$news_info)
 	{
-		$this->redirect("Home/newscenter");
+		$this->redirect("Index/newscenter");
 	}
 	//转化时间
 	$create_time=date("Y-m-d",$news_info['create_time']);
+	//转化关键词
+	if(empty($news_info['keyword']))
+	{
+		$keyword="";
+	}
+	else
+	{
+		if(false==strpos($news_info['keyword'],"|"))
+		{	
+			$keyword=$news_info['keyword'];
+		}
+		else{
+			$keyword=explode("|",$news_info['keyword']);
+		}
+	}
+	//是否提供编辑按钮
+	$account=$_SESSION['account'];
+	$person_info=$person_model->where("account=$account")->find();
+	if($person_info['apartment']==4)
+	{
+		$editFlag=1;
+	}
+	else{
+		$editFlag=0;
+	}
 	$newsArr=Array(
 		'title'=>$news_info['title'],
 		'author'=>$news_info['author'],
 		'create_time'=>$create_time,
-		'keyword'=>$news_info['keyword'],
+		'keyword'=>$keyword,
 		'text'=>$news_info['text'],
+		'editFlag'=>$editFlag,
 	);
 	$this->assign('newsArr',$newsArr);
 	$this->display();

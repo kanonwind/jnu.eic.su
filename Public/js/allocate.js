@@ -106,7 +106,7 @@ function GetUserData(strUserID)
 {
 //请求数据	
     try{
-        if(debug)
+        if(debug())
             throw("ajax");
         var jsonReturn;
         $.ajax({
@@ -121,6 +121,7 @@ function GetUserData(strUserID)
     }
     catch(err){
         //JSON示例
+		console.log(err);
         var jsonUD=
         {
             "_userID":strUserID,
@@ -128,6 +129,7 @@ function GetUserData(strUserID)
             "_depart":2,
         };
         errmsg();
+		
     }
     
     //个人信息对象构造函数
@@ -166,7 +168,7 @@ function postAllocQueInfo(objQI)
     }
     console.log(qArrKK);
     try{
-        if(debug)
+        if(debug())
             throw("ajax");
         var jsonPost=
         {
@@ -392,7 +394,7 @@ function getKKBList()
 	//返回的是空课表的名字，如”KSC联盟空课表“及其连接
 	//请求数据	
     try{
-        if(debug)
+        if(debug())
             throw("ajax");
 		var jsonReturn;
 	    $.ajax({
@@ -438,7 +440,7 @@ function postAllocCode(strCode)
 {
 	//发送外调序列号
     try{
-        if(debug)
+        if(debug())
             throw("ajax");
         var jsonPsot={"allocCode":strCode};
         //请求数据	
@@ -543,7 +545,7 @@ function postAllocCodeforCancel(strCode)
 	
 	//发送外调序列号
     try{
-        if(debug)
+        if(debug())
             throw("ajax");
         var jsonPost={"allocCode":strCode};
         //请求数据	
