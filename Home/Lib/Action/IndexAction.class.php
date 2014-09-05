@@ -440,6 +440,7 @@ class IndexAction extends Action
 		}
 	}
 	$newsArr=Array(
+		'id'=>$news_info['id'],
 		'title'=>$news_info['title'],
 		'author'=>$news_info['author'],
 		'create_time'=>$create_time,

@@ -19,12 +19,17 @@
 	<meta name="description" content="电气信息学院团委学生会门户网站" /><!--网站概述-->
 	<meta name="keywords" content="暨大 暨南大学 电气院 电气信息学院 团委学生会 暨南大学电气信息学院团委学生会 团委学生会首页" /><!--关键词-->
 	<meta name="keywords" content="Electrcal and Information College of Jinan University Youth League Committee Student Union" />
-	
+	<script type="text/javascript" src="__PUBLIC__/js/jquery-2.0.3.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/tinymce/tinymce.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/news.js"></script>
+	<script src="__PUBLIC__/js/jquery_form.js"></script>
 	<link rel="shortcut icon" href="<?php echo $imgURL;?>logo.jpg" />
 	<link href="__PUBLIC__/css/stdindex_footer.css" 	type="text/css" 	rel="stylesheet" />
 	<link href="__PUBLIC__/css/stdindex_title.css" 	type="text/css" 	rel="stylesheet" />
 	<link href="__PUBLIC__/css/newscenter.css"			type="text/css"		rel="stylesheet" />
-
+	<script type="text/javascript">
+	var APP = "__APP__";
+	</script>
 	<title>暨南大学电气信息学院团委学生会</title>
 	</head>
 	<body>
@@ -79,19 +84,19 @@
 						<table id="main_guide">
 							<tr>
 								<td class="about_us_td">
-									<a class="main_nav" id="a_home" href="home.html">首页</a>
+									<a class="main_nav" id="a_home" href="__APP__">首页</a>
 								</td>
 								<td class="about_us_td">
-									<a class="main_nav" id="a_news" href="news.html">新闻中心</a>
+									<a class="main_nav" id="a_news" href="__URL__/newscenter">新闻中心</a>
 								</td>
 								<td class="about_us_td">
-									<a class="main_nav" id="a_work" href="work.html">学生工作</a>
+									<a class="main_nav" id="a_work" href="__URL__/work">学生工作</a>
 								</td>
 								<td class="about_us_td">
-									<a class="main_nav" id="a_act" href="activities.html">活动</a>
+									<a class="main_nav" id="a_act" href="__URL__/activity">活动</a>
 								</td>
 								<td class="about_us_td">
-									<a class="main_nav" id="a_files" href="files.html">现行制度浏览与下载</a>
+									<a class="main_nav" id="a_files" href="__URL__/files">现行制度浏览与下载</a>
 								</td>
 							</tr>
 						</table>					
@@ -108,7 +113,7 @@
 			</div>
 		</div>
 		<hr class="xxxcenter_hr" />
-            <form id="article_form" name="article_form" method="post" action="#" ><!--这是为了提交准备的，因为一开始就要携带一些信息，直接放到一个form里比较好-->
+            <form id="article_form" name="article_form" method="post" action="<?php echo __APP__."/News/update?id=".$newsArr['id'];?>" ><!--这是为了提交准备的，因为一开始就要携带一些信息，直接放到一个form里比较好-->
             <input type="hidden" value="$this_article_id$" id="article_id" name="article_id"/>
             <!--这个input的value就是这篇文章的id-->
             <input type="hidden" value="1" id="article_type_init" name="article_type_init"/>
@@ -171,7 +176,7 @@ str;
                     <div id="edit_button">
                         <!--应该只有学生会成员才有这个链接-->
 						<?php
-						if($editFlag==1)
+						if($newsArr['editFlag']==1)
 						{
 						unset($str);
 						$str=<<<str
@@ -187,7 +192,50 @@ str;
 	
             </div>
         </form>
-       
+		<!--图片上传-->
+		<div id="uploadPhotoArea" style="display:none;">
+			<form id="uploadphoto" action="__APP__/News/uploadpic" method="post" enctype="multipart/form-data">
+				<input type="file" name="myfile"><br>
+				<input type="submit" value="Upload File to Server">
+			</form> 
+			<div class="progress">
+				<div class="bar"></div >
+				<div class="percent">0%</div >
+			</div>  
+			<div id="status"></div>
+		</div>
+ <script>
+(function() {
+    
+var bar = $('.bar');
+var percent = $('.percent');
+var status = $('#status');
+   
+$('#uploadphoto').ajaxForm({
+    beforeSend: function() {
+        status.empty();
+        var percentVal = '0%';
+        bar.width(percentVal)
+        percent.html(percentVal);
+    },
+    uploadProgress: function(event, position, total, percentComplete) {
+        var percentVal = percentComplete + '%';
+        bar.width(percentVal)
+        percent.html(percentVal);
+		//console.log(percentVal, position, total);
+    },
+    success: function() {
+        var percentVal = '100%';
+        bar.width(percentVal)
+        percent.html(percentVal);
+    },
+	complete: function(xhr) {
+		status.html(xhr.responseText);
+	}
+}); 
+
+})();       
+</script>   
 		<div id="footer">
 			<div id="footer_bg">
 			
@@ -303,10 +351,8 @@ str;
 				</div>
 			</div>
 		</div>
-        <script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
-        <script type="text/javascript" src="__PUBLIC__/js/tinymce/tinymce.min.js"></script>
-        <script type="text/javascript" src="__PUBLIC__/js/news.js"></script>
-	</body>
+        
+ 	</body>
 </html>
 			
 			
