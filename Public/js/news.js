@@ -100,7 +100,8 @@ $(document).ready(function()
             //init_instance_callback :"initcallback",
             });
             //TODO:表单检查
-            
+            $("#cancel").click(function(){location.reload();});
         });
+       
     }
 });
