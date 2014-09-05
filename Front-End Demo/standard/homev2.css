@@ -30,7 +30,7 @@ div#hot_and_notice{font-size:14px;}
 
 div#what_s_hot,div#notice{padding-left:20px;padding-right:20px;}
 
-div#hot_key_word,div#hot_stuwork,div#hot_activity{height:25px;border-bottom-style:dotted;border-width:1px;border-bottom-color:#dedfe0;}
+div#hot_key_word,div#hot_stuwork,div#hot_activity{height:25px;border-bottom-style:dotted;border-width:1px;border-bottom-color:#dedfe0;overflow:hidden;vertical-align:middle;}
 
 div#coming_soon{width:100%;height:440px;}
 

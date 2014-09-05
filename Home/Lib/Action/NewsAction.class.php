@@ -21,15 +21,16 @@ class NewsAction extends Action{
 		$size=$_FILES['myfile']['size'];
 		$name=$_FILES['myfile']['name'];
 		$tmp_name=$_FILES['myfile']['tmp_name'];
+		
 		//验证图片类型
 		switch($type)
 		{
 			case "image/jpeg":
 				$pic_type=".jpg";break;
-			case "image/png" :
+/* 			case "image/png" :
 				$pic_type=".png";break;
 			case "image/bmp" :
-				$pic_type=".bmp";break;
+				$pic_type=".bmp";break; */
 			default:
 				$flag=0;
 		}
@@ -46,8 +47,9 @@ class NewsAction extends Action{
 			$destFileName=md5($time.$name).$pic_type;
 			//将文件搬运到storage存储
 			$sto=new SaeStorage();
-			$domain="upload/newsImage";
-			if($sto->upload($domain,$destFileName,$tmp_name))
+			$domain="news";
+			//$storage->upload($domain,$destFileName, $srcFileName, -1, $attr, true);
+			if($sto->upload($domain,$destFileName,$tmp_name,-1))
 			{
 				$imgURL=$sto->getUrl($domain,$destFileName);
 				if(!IS_SAE)
@@ -86,7 +88,7 @@ class NewsAction extends Action{
 		//$text=$_POST['article_text'];
 		//判断正文哪种形式，直接编辑或者是文件上传
 		$sto=new SaeStorage();
-		$domain="upload/newsText";
+		$domain="news";
 		if(isset($_FILES['uploaded_file']['name'])&&!empty($_FILES['uploaded_file']['name']))
 		{
 			$tmp_name=$_FILES['uploaded_file']['tmp_name'];
@@ -112,13 +114,13 @@ class NewsAction extends Action{
 			$startPosition=strpos($target,"src=\"");
 			$endPosition=strripos($target,"alt=\"");	
 			$target=substr($target,$startPosition,$endPosition-$startPosition);
-			var_dump($target);
+			//var_dump($target);
 			//截取图片文件名
 			$startPosition=strripos($target,"/");
 			$endPosition=strripos($target,"\"");
-			var_dump($startPosition);
-			var_dump($endPosition);
-			var_dump(substr($target,$startPosition+1,$endPosition-$startPosition-1));
+			//var_dump($startPosition);
+			//var_dump($endPosition);
+			$url=substr($target,$startPosition+1,$endPosition-$startPosition-1);
 		}
 		else
 		{
@@ -134,6 +136,7 @@ class NewsAction extends Action{
 		$data['type']=$type;
 		$data['url']=$url;
 		$data['text']=$text;
+		var_dump($data);
 		if(false==$news_model->data($data)->add())
 		{
 			$this->error("添加出错，正在返回......");
@@ -198,7 +201,65 @@ class NewsAction extends Action{
 	//新闻编辑，编辑界面在Index/show，修改操作在News/update
 	public function update()
 	{
-		echo "asdf";
+		$person_model=new Model("Person");
+		//非编辑部门拒绝访问
+		if(!empty($_GET['id']) && !empty($_SESSION['account']))
+		{
+			$account=$_SESSION['account'];
+			$person_info=$person_model->where("account=$account")->find();
+			if($person_info['apartment']!=4)
+			{
+				$this->redirect("Index/index");
+			}
+		}
+		else{
+			$this->redirect("Index/index");
+		}
+		$text=$_POST['article_text'];
+		//获取正文$text中的第一个图片链接的SRC，即url值,并且抽取出图片文件名，与路径无关
+		if($startPosition=strpos($text,"<img src="))
+		{
+			//截取整个<img/>
+			$endPosition=strpos($text,"/>",$startPosition);
+			$target=substr($text,$startPosition,$endPosition-$startPosition);
+			//var_dump($target);
+			//截取src属性
+			$startPosition=strpos($target,"src=\"");
+			$endPosition=strripos($target,"alt=\"");	
+			$target=substr($target,$startPosition,$endPosition-$startPosition);
+			//var_dump($target);
+			//截取图片文件名
+			$startPosition=strripos($target,"/");
+			$endPosition=strripos($target,"\"");
+			//var_dump($startPosition);
+			//var_dump($endPosition);
+			$url=substr($target,$startPosition+1,$endPosition-$startPosition-1);
+		}
+		else
+		{
+			$url="#";
+		}
+		unset($data);
+		$id=$_GET['id'];
+		$data['id']=$_GET['id'];
+		$data['title']=$_POST['article_title'];
+		$data['author']=$_POST['article_author'];
+		$data['keyword']=$_POST['artcle_key_word'];
+		$data['update_time']=time();
+		$data['type']=$_POST['article_type'];
+		$data['url']=$url;
+		$data['text']=$_POST['article_text'];
+		$news_model=new Model("News");
+		$news_info=$news_model->where("id=$id")->save($data);
+		if(false==$news_info)
+		{
+			$this->error("修改出错，正在返回......");
+		}
+		else
+		{
+			$this->Success("修改成功，正在返回......",__APP__."/Index/show?id=".$id);
+
+		}
 	}
 }
 ?>

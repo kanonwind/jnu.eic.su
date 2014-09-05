@@ -68,7 +68,8 @@ $(document).ready(function()
                 
             
             $("#the_latest_news").html(strInnerHTML);
-            
+           $("#uploadPhotoArea").show();
+		  
              //填充value
             $("#article_type").val(varArticleType);
             $("#article_title").val(strTitle);
@@ -98,8 +99,9 @@ $(document).ready(function()
                 ],
             //init_instance_callback :"initcallback",
             });
-            TODO:表单检查
-            
+            //TODO:表单检查
+            $("#cancel").click(function(){location.reload();});
         });
+       
     }
 });

@@ -59,7 +59,7 @@ a.xxxcenter_a:active{color:black;}
 a.xxxcenter_a:focus{color:black;}
 a.xxxcenter_a:hover{color:blue;}
 a.xxxcenter_a:link{color:black;}
-a.xxxcenter_a:visited{color:pink;}
+a.xxxcenter_a:visited{color:#609;}
 
 div.art_tit_div{width:920px;text-align:center;}
 
@@ -92,3 +92,7 @@ button#submitbutton,button#cancel{margin-top:30px;width:100px;height:30px;margin
 button{cursor:pointer}
 
 #edit_the_article{cursor:pointer;color:blue}
+
+#uploadPhotoArea{width:920px;margin-left:auto;margin-right:auto}
+
+h1{font-weight:normal;}

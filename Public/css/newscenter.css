@@ -59,7 +59,7 @@ a.xxxcenter_a:active{color:black;}
 a.xxxcenter_a:focus{color:black;}
 a.xxxcenter_a:hover{color:blue;}
 a.xxxcenter_a:link{color:black;}
-a.xxxcenter_a:visited{color:pink;}
+a.xxxcenter_a:visited{color:#609;}
 
 div.art_tit_div{width:920px;text-align:center;}
 
@@ -72,3 +72,27 @@ div.art_body_div{padding-bottom:50px;}
 
 hr.article_hr{border:none;height:4px;background:#f8b551;}
 
+
+form#article_form tr{width:800px;}
+
+form#article_form td{min-width:100px;padding:0px;}
+
+form#article_form input{width:810px;outline:none;}
+
+button.publish_center_button{cursor:pointer;height:30px;width:200px;border:none;margin:0px;padding:0px;font-size:20px;color:white;}
+
+button#articles,button#announcement,button#coming_soon{background:#888888;}
+
+button#artcle_type_online,button#artcle_type_upload,button#submitbutton,button#cancel{border:none;width:100px;background:#444444;color:white;}
+
+form#article_form input#uploaded_file{border:solid 1px #888888;height:120%;width:300px;margin-left:62px;}
+
+button#submitbutton,button#cancel{margin-top:30px;width:100px;height:30px;margin:30px}
+
+button{cursor:pointer}
+
+#edit_the_article{cursor:pointer;color:blue}
+
+#uploadPhotoArea{width:920px;margin-left:auto;margin-right:auto}
+
+h1{font-weight:normal;}
