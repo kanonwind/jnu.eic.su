@@ -21,15 +21,16 @@ class NewsAction extends Action{
 		$size=$_FILES['myfile']['size'];
 		$name=$_FILES['myfile']['name'];
 		$tmp_name=$_FILES['myfile']['tmp_name'];
+		
 		//验证图片类型
 		switch($type)
 		{
 			case "image/jpeg":
 				$pic_type=".jpg";break;
-			case "image/png" :
+/* 			case "image/png" :
 				$pic_type=".png";break;
 			case "image/bmp" :
-				$pic_type=".bmp";break;
+				$pic_type=".bmp";break; */
 			default:
 				$flag=0;
 		}
@@ -46,8 +47,9 @@ class NewsAction extends Action{
 			$destFileName=md5($time.$name).$pic_type;
 			//将文件搬运到storage存储
 			$sto=new SaeStorage();
-			$domain="upload/newsImage";
-			if($sto->upload($domain,$destFileName,$tmp_name))
+			$domain="news";
+			//$storage->upload($domain,$destFileName, $srcFileName, -1, $attr, true);
+			if($sto->upload($domain,$destFileName,$tmp_name,-1))
 			{
 				$imgURL=$sto->getUrl($domain,$destFileName);
 				if(!IS_SAE)
@@ -86,7 +88,7 @@ class NewsAction extends Action{
 		//$text=$_POST['article_text'];
 		//判断正文哪种形式，直接编辑或者是文件上传
 		$sto=new SaeStorage();
-		$domain="upload/newsText";
+		$domain="news";
 		if(isset($_FILES['uploaded_file']['name'])&&!empty($_FILES['uploaded_file']['name']))
 		{
 			$tmp_name=$_FILES['uploaded_file']['tmp_name'];

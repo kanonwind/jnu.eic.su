@@ -2,7 +2,7 @@
 		$sto=new SaeStorage();
 		$domain="upload";
 		$imgURL=$sto->getUrl($domain,"image/");
-		$newsImgURL=$sto->getUrl($domain,"newsImage/");
+		$newsImgURL=$sto->getUrl("news","");
 		if(!IS_SAE)
 		{
 			$imgURL="/".$imgURL;
