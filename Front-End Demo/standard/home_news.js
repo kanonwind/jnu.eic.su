@@ -239,8 +239,12 @@ function RotateNews()
 {	
 	if(true==boolIsFocus && boolIsOnNewPic == false && booIsNewsShow == false)
 	{
-		clearTimeout(Time);
-		Time = setTimeout(RotateNews, 5*1000);
+		//clearTimeout(Time);
+		//Time = setTimeout(RotateNews, 5*1000);
+		clearInterval(Time);
+		Time = setInterval(RotateNews, 5*1000);
+
+		
 		NextNewsPicture();
 	}
 }
@@ -321,7 +325,10 @@ function IsOnNewPic()
 			if(strTop == "342px")
 			{
 				boolIsOnNewPic = false;
-				RotateNews();
+				//RotateNews();
+				clearInterval(Time);
+				Time = setInterval(RotateNews, 5*1000);
+
 			}
 			if(strTop == "0px")
 			{
