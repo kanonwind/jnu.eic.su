@@ -189,7 +189,7 @@ $(document).ready(function(){
         }
     })();
 
-    $.getScript('/js/prettify/prettify.js',function(){
+    $.getScript('http://kanonwind.github.io/jnu.eic.su/js/prettify/prettify.js',function(){
         prettyPrint();
     });
 
