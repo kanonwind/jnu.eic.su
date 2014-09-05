@@ -126,9 +126,32 @@
                     </p>
                     <!--关键词，由文章作者决定-->
                     <p class="article_key_word" id="article_key_word">
-					<?php echo $newsArr['keyword'];?>
-<!--                         <span>关键词：</span>
-                        <span>关键词1</span>
+
+                        <span>关键词：</span>
+						<?php 
+						
+						unset($str);
+						if(count($newsArr['keyword'])>1)
+						{
+							for($i=0;$i<count($newsArr['keyword']);$i++)
+							{
+								$word=$newsArr['keyword'][$i];
+								$str.=<<<str
+									<span>$word</span>
+str;
+							}
+						
+						}
+						else
+						{
+							$word=$newsArr['keyword'];
+							$str=<<<str
+							<span>$word</span>
+str;
+						}
+						echo $str;
+						?>
+<!--                         <span>关键词1</span>
                         <span>关键词2</span>
                         <span>关键词3</span> -->
                     </p>
@@ -147,7 +170,17 @@
                     <hr class="article_hr" />
                     <div id="edit_button">
                         <!--应该只有学生会成员才有这个链接-->
+						<?php
+						if($editFlag==1)
+						{
+						unset($str);
+						$str=<<<str
                         <span id="edit_the_article" alt="在线编辑此文档">[编辑]</span>
+str;
+						echo $str;
+						}
+						
+						?>
                     </div>
                 </div>
             

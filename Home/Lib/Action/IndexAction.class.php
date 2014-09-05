@@ -123,13 +123,17 @@ class IndexAction extends Action
 	{
 		for($i=0;$i<8;$i++)
 		{
-			$arr[]=Array(
+			$arrNewsInfo[]=Array(
 				'title'=>$news_info[$i]['title'],
 				'author'=>$news_info[$i]['author'],
 				'abst'=>$news_info[$i]['keyword'],
 				'picpath'=>$news_info[$i]['url'],
+				'newslink'=>__URL__."/show?id=".$news_info[$i]['id'],
 			);
 		}
+		$arr=Array(
+			"arrNewsInfo"=>$arrNewsInfo,
+		);
 	}
 	else{
 		//没有8条新闻
@@ -425,14 +429,15 @@ class IndexAction extends Action
 		}
 	}
 	//是否提供编辑按钮
-	$account=$_SESSION['account'];
-	$person_info=$person_model->where("account=$account")->find();
-	if($person_info['apartment']==4)
+	$editFlag=0;
+	if(!empty($_SESSION['account']))
 	{
-		$editFlag=1;
-	}
-	else{
-		$editFlag=0;
+		$account=$_SESSION['account'];
+		$person_info=$person_model->where("account=$account")->find();
+		if($person_info['apartment']==4)
+		{
+			$editFlag=1;
+		}
 	}
 	$newsArr=Array(
 		'title'=>$news_info['title'],

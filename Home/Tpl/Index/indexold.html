@@ -22,21 +22,21 @@
 	<meta name="keywords" content="暨大 暨南大学 电气院 电气信息学院 团委学生会 暨南大学电气信息学院团委学生会 团委学生会首页" /><!--关键词-->
 	<meta name="keywords" content="Electrcal and Information College of Jinan University Youth League Committee Student Union" />
 	
-	<link rel="shortcut icon" href="<?php echo $imgURL;?>logo.jpg" />
 	
+	<link rel="shortcut icon" href="<?php echo $imgURL;?>logo.jpg" />
 	<link href="__PUBLIC__/css/stdindex_footer.css" 	type="text/css" 	rel="stylesheet" />
 	<link href="__PUBLIC__/css/stdindex_title.css" 	type="text/css" 	rel="stylesheet" />
-	<link href="__PUBLIC__/css/homev2.css"				type="text/css"		rel="stylesheet" />
-	<script src="__PUBLIC__/js/home_news.js" type="text/javascript"> </script>
-		<script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
+	<link href="__PUBLIC__/css/home.css"				type="text/css"		rel="stylesheet" />
+	<script type="text/javascript" src="__PUBLIC__/js/news_javascript.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
 	<script type="text/javascript" src="__PUBLIC__/js/searchbutton.js"></script>
-	
-	<title>暨南大学电气信息学院团委学生会</title>
+
 	<script type="text/javascript">
 		var imgURL="<?php echo $imgURL;?>";
 		var newsImgURL="<?php echo $newsImgURL;?>";
 		var APP="__APP__";
 	</script>
+	<title>暨南大学电气信息学院团委学生会</title>
 	</head>
 	<body>
 		<div id="hdr">
@@ -44,7 +44,9 @@
 				<div id="hdr_top">
 					<!--表头徽标-->
 					<div id="logo">
+						
 						<img src="<?php echo $imgURL;?>std_title_logo.png" width="54px" height="54px" alt="团委学生会的徽标"/>
+						
 					</div>
 					<!--标题-->
 					<div id="title">
@@ -69,16 +71,21 @@
 						<!--站内搜索框，样式和代码均未完成-->
 						<div id="search_bar">
 							<input type="text" name="q" id="query" title="站内搜索" />
-							<button type="submit" name="qsub" id="searchsubmit" title="搜索" value="" ><img src="<?php echo $imgURL;?>site_search.png" alt="搜索按钮徽标" /></button>
+							<button type="submit" name="qsub" id="searchsubmit" title="搜索" value="" >
+							<img src="<?php echo $imgURL;?>site_search.png" alt="搜索按钮徽标" />
+							
+							</button>
 						</div>
 					
 						<!--用户信息，未登陆是为“登陆”锚标签，登陆后为“用户名”，“个人中心”，“注销”3个锚标签-->
 						<div id="login_info">
-						{$link}
-<!-- 							<a class="user_info" id="login_info_user_name" href="#">邓作恒</a>
-							<a class="user_info" id="login_info_user_id" href="#">2012052207</a>
-							<a class="user_info" id="login_info_user_center" href="#">个人中心</a>
-							<a class="user_info" id="login_info_log_out" href="#">注销</a> -->
+							{$link}
+							<!--
+							<a class="user_info" id="login_info_user_name" href="#">{$name}</a>
+							<a class="user_info" id="login_info_user_id" href="#">{$account}</a>
+							<a class="user_info" id="login_info_user_center" href="#">{$center}</a>
+							<a class="user_info" id="login_info_log_out" href="#">{$logout}</a>
+							-->
 						</div>
 						
 					</div>
@@ -90,6 +97,7 @@
 					<div id="guide_table">
 						<table id="main_guide">
 							<tr>
+								<!--这里几个链接的url还没决定的-->
 								<td class="about_us_td">
 									<a class="main_nav" id="a_home" href="__APP__">首页</a>
 								</td>
@@ -115,9 +123,33 @@
 		
 		<div id="real_body">
 			<div id="slide_news">
-                <div id="loading">
-                    <img src="<?php echo $imgURL;?>Preloader_5.gif" id="loadinggif" alt="加载中" width="128px" height="128px"/>
-                </div>
+				<div id="main_news_div">
+					<a href="#"><img src="<?php echo $imgURL;?>news_picture7.jpg" id="pic1" alt="newsPic"/></a>
+					<a href="#"><img src="<?php echo $imgURL;?>news_picture0.jpg" id="pic2" alt="newsPic"/></a>
+					<a href="#"><img src="<?php echo $imgURL;?>news_picture1.jpg" id="pic3" alt="newsPic"/></a>
+					
+					<div id="news">
+						<p id="news_text"></p>
+					</div>
+					
+					<div class="news_slide_button" id="button">
+						<img id="pre_news" src="<?php echo $imgURL;?>pre_mouseout.png" alt="pre_mouseout" />
+						<img id="next_news" src="<?php echo $imgURL;?>next_mouseout.png" alt="next_mouseout" />
+					</div>
+					
+				</div>
+				
+				<div class="s-mod-hotnews-newstitle-mask" id="mask"></div>
+				<div id="news_active">
+					<img id="Active" src="<?php echo $imgURL;?>news_mouseout.png" alt="point_buttom" />
+					<img id="pic1" src="<?php echo $imgURL;?>news_mouseout.png" alt="point_buttom" />
+					<img id="pic2" src="<?php echo $imgURL;?>news_mouseout.png" alt="point_buttom" />
+					<img id="pic3" src="<?php echo $imgURL;?>news_mouseout.png" alt="point_buttom" />
+					<img id="pic4" src="<?php echo $imgURL;?>news_mouseout.png" alt="point_buttom" />
+					<img id="pic5" src="<?php echo $imgURL;?>news_mouseout.png" alt="point_buttom" />
+					<img id="pic6" src="<?php echo $imgURL;?>news_mouseout.png" alt="point_buttom" />
+					<img id="pic7" src="<?php echo $imgURL;?>news_mouseout.png" alt="point_buttom" />
+				</div>
 			</div>
 			<div id="main_stu_sys" class="main_right_top">
 				<div id="inner_border" >
@@ -162,6 +194,15 @@
 					<!--这里是热点的几个链接，其中新版首页反馈是基本固定的，其余3个就从新闻、活动的数据库里面检索文章的
 					关键词，以访问量和更新日期最好最新的3篇生成链接，锚标签的class是"hot_a"是决定样式的,下面仅举例-->
 					<div id="hot_key_word">
+					<!-- 						<a href="#" class="hot_a">
+							APP嘉年华
+						</a>
+						<a href="#" class="hot_a">
+							群雄争霸
+						</a>
+						<a href="#" class="hot_a">
+							留学那点事
+						</a> -->
 						<a href="#" class="hot_a">
 							新版首页反馈
 						</a>
@@ -177,15 +218,8 @@ str;
 						}
 						echo $str;
 						?>
-<!-- 						<a href="#" class="hot_a">
-							APP嘉年华
-						</a>
-						<a href="#" class="hot_a">
-							群雄争霸
-						</a>
-						<a href="#" class="hot_a">
-							留学那点事
-						</a> -->
+						
+
 					</div>
 					
 					<!--这里是热点活动，从活动的数据库你选取最新的活动文章，生成链接，标签的样式依旧是“hot_a",下面仅举例-->
@@ -266,11 +300,13 @@ str;
 						</p>
 					</div>
 					<div id="coming_activity_main_post">
-						<img src="<?php echo $imgURL;?>coming_activity_main_post.png" width="520px" height="380px" alt="活动主海报"/>		
+						<!-- <img src="<?php echo $imgURL;?>coming_activity_main_post.png" width="520px" height="380px" alt="活动主海报"/> -->	
+						<img src="<?php echo $activityExpected['act_bigposter'];?>" width="520px" height="380px" alt="活动主海报"/>						
 					</div>
 					<div id="coming_activity_small_post">
 						<div id="small_post_img">
-							<img src="<?php echo $imgURL;?>coming_activity_small_psot.png" width="160px" height="180px" alt="活动副海报"/>
+							<!-- <img src="<?php echo $imgURL;?>coming_activity_small_psot.png" width="160px" height="180px" alt="活动副海报"/> -->
+							<img src="<?php echo $activityExpected['act_smallposter'];?>" width="160px" height="180px" alt="活动副海报"/>
 						</div>
 						<p id="activity_slogan">
 							<!-- 挡我者挂高数 -->
@@ -287,7 +323,7 @@ str;
 			</div>
 		
 		</div>
-		
+
 		<div id="footer">
 			<div id="footer_bg">
 			
@@ -310,6 +346,7 @@ str;
 									<th class="footer_about_us_th"></th>	
 								</tr>
 							</thead>
+							<!--以下一系列锚标签的url都是无效的、实验性的-->
 							<tbody>
 								<tr>
 									<th class="footer_about_us_th"></th>	

@@ -1,0 +1,20 @@
+HTML文件：
+abouttwxsh.html	(暂无)
+admin.html	Home/tpl/Admin/index.html
+allocate.html	Home/tpl/Allocate/index.html
+distributioncenter.html	Home/tpl/News/create.html
+homev2.html	Home/tpl/Index/index.html
+kongkebiao.html	Home/tpl/Allocate/show.html
+login.html	Home/tpl/Login/index.html
+news.html	Home/tpl/Index/show.html
+newscenter.html	Home/tpl/Index/newscenter.html
+perform.html	Home/tpl/Perform/index.html
+usercenter.html	Home/tpl/Center/index.html
+JS文件：
+全部放在Public/js/目录下，名称不变
+CSS文件：
+全部放在Public/css/目录下，名称不变
+页面图片：
+全部放在upload/image/目录下，名称不变
+新闻图片：
+全部放在upload/newsImage/目录下，名称不变
