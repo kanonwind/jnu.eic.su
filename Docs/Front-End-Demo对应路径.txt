@@ -1,5 +1,5 @@
-HTMLÎÄ¼ş£º
-abouttwxsh.html	(ÔİÎŞ)
+HTMLæ–‡ä»¶ï¼š
+abouttwxsh.html	(æš‚æ— )
 admin.html	Home/tpl/Admin/index.html
 allocate.html	Home/tpl/Allocate/index.html
 distributioncenter.html	Home/tpl/News/create.html
@@ -10,11 +10,11 @@ news.html	Home/tpl/Index/show.html
 newscenter.html	Home/tpl/Index/newscenter.html
 perform.html	Home/tpl/Perform/index.html
 usercenter.html	Home/tpl/Center/index.html
-JSÎÄ¼ş£º
-È«²¿·ÅÔÚPublic/js/Ä¿Â¼ÏÂ£¬Ãû³Æ²»±ä
-CSSÎÄ¼ş£º
-È«²¿·ÅÔÚPublic/css/Ä¿Â¼ÏÂ£¬Ãû³Æ²»±ä
-Ò³ÃæÍ¼Æ¬£º
-È«²¿·ÅÔÚupload/image/Ä¿Â¼ÏÂ£¬Ãû³Æ²»±ä
-ĞÂÎÅÍ¼Æ¬£º
-È«²¿·ÅÔÚupload/newsImage/Ä¿Â¼ÏÂ£¬Ãû³Æ²»±ä
+JSæ–‡ä»¶ï¼š
+å…¨éƒ¨æ”¾åœ¨Public/js/ç›®å½•ä¸‹ï¼Œåç§°ä¸å˜
+CSSæ–‡ä»¶ï¼š
+å…¨éƒ¨æ”¾åœ¨Public/css/ç›®å½•ä¸‹ï¼Œåç§°ä¸å˜
+é¡µé¢å›¾ç‰‡ï¼š
+å…¨éƒ¨æ”¾åœ¨upload/image/ç›®å½•ä¸‹ï¼Œåç§°ä¸å˜
+æ–°é—»å›¾ç‰‡ï¼š
+å…¨éƒ¨æ”¾åœ¨upload/newsImage/ç›®å½•ä¸‹ï¼Œåç§°ä¸å˜
