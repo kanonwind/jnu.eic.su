@@ -665,7 +665,7 @@ function ChangePersonalData(objPersonalData)
         
 		objBirType.selectedIndex = 0;
 		objMonthType.selectedIndex = objPersonalData.birthmonth-1;
-		bjDaysType.selectedIndex = objPersonalData.birthday-1;
+		objDaysType.selectedIndex = objPersonalData.birthday-1;
 	}
 	else
 	{
