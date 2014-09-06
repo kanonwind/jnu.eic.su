@@ -44,8 +44,8 @@ $(document).ready(function(){
             var h3 = [];
             var h2index = 0;
 
-            $.each($('.entry h2, .entry h3'),function(index,item){
-                if(item.tagName.toLowerCase() == 'h2'){
+            $.each($('.entry h3, .entry h4'),function(index,item){
+                if(item.tagName.toLowerCase() == 'h3'){
                     var h2item = {};
                     h2item.name = $(item).text();
                     h2item.id = 'menuIndex'+index;
