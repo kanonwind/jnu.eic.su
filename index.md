@@ -6,9 +6,9 @@ layout: home
     <div class="section">
         <ul class="artical-cate">
             <li class="on"><a href="http://doc.eicsu.com/system"><span>制度文档</span></a></li>
-            <li style="text-align:center"><a href="http://doc.eicsu.com/planning"><span>策划</span></a></li>
-            <li style="text-align:right"><a href="http://doc.eicsu.com/summary"><span>总结</span></a></li>
-            <li style="text-align:right"><a href="http://doc.eicsu.com/survey"><span>调研</span></a></li>
+            <li ><a href="http://doc.eicsu.com/planning"><span>策划</span></a></li>
+            <li ><a href="http://doc.eicsu.com/summary"><span>总结</span></a></li>
+            <li ><a href="http://doc.eicsu.com/survey"><span>调研</span></a></li>
         </ul>
 
         <div class="cate-bar"><span id="cateBar"></span></div>
