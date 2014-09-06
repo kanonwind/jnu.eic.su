@@ -56,6 +56,7 @@ pre ol{margin-left:25px;list-style-type:decimal;}
 
 
 /****************entry style**************/
+*{line-height:1.8em;}
 .sidenav { width:240px; background:#fff; float:right; padding:20px; margin-bottom:50px; box-shadow:0 1px 4px #ccc; }
 .sidenav h2 { font-size:18px; color:#333; margin-bottom:15px; }
 .sidenav ul { margin-bottom:50px; }
