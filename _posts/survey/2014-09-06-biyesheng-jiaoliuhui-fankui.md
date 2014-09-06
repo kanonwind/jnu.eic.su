@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 电气信息学院团委学生会活动调研反馈表
+title: 朋辈分享会之毕业生交流会活动调研反馈表
 description:
 category: survey
 ---
