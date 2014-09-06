@@ -16,7 +16,7 @@ layout: home
         <ul class="artical-list">
         {% for post in site.categories.system %}
             <li>
-                <h2><a href="http://doc.eicsu.com/{{ post.url }}">{{ post.title }}</a></h2>
+                <h2><a href="http://doc.eicsu.com{{ post.url }}">{{ post.title }}</a></h2>
                 <div class="title-desc">{{ post.description }}</div>
             </li>
         {% endfor %}
