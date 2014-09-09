@@ -31,6 +31,140 @@ function CheckLegalStr(strCheck)//检查输入的字符串是否含有非法字�
 		return true;
 }
 
+//获取时间
+function Get_Time()
+{
+	var json_Get_Times = 
+	{
+		
+		"evaluation":
+		[
+			{"year":"2014", "month":"4"},
+			{"year":"2014", "month":"5"},
+			{"year":"2014", "month":"12"},
+			{"year":"2014", "month":"1"},
+			{"year":"2014", "month":"2"},
+			{"year":"2014", "month":"3"},
+			{"year":"2013", "month":"12"},
+			{"year":"2013", "month":"6"},
+			{"year":"2013", "month":"8"},
+			{"year":"2012", "month":"3"},
+			{"year":"2012", "month":"5"},
+			
+		],
+		"feedback":
+		[
+			{"year":"2014", "month":"4"},
+			{"year":"2011", "month":"4"},
+			{"year":"2014", "month":"5"},
+			
+		],
+		"control":
+		[
+			{"year":"2014", "month":"4"},
+			{"year":"2010", "month":"4"},
+			{"year":"2010", "month":"2"},
+			{"year":"2014", "month":"5"},
+			
+		],
+		"excellent":
+		[
+			{"year":"2014", "month":"4"},
+			{"year":"2015", "month":"1"},
+			{"year":"2014", "month":"5"},
+			
+		],
+	};
+	
+	function compYear(a, b)
+	{
+		return (b - a);
+	}
+	
+	function compMonth(_month)
+	{
+		return function (object1, object2) 
+		{ 
+			var value1 = object1[_month]; 
+			var value2 = object2[_month]; 
+			return value2 - value1;
+		} 
+	}
+	
+	
+	//alert(json_Get_Times);
+	function sortTime(time)
+	{
+		var arrYearTemp = new Array();
+		var yearTemp = time[0].year;
+		
+		arrYearTemp.push(yearTemp);
+		for(var i = 1; i < time.length; ++i)
+		{
+			var flag = 1;
+			for(var j = 0; j < arrYearTemp.length; ++j)
+			{
+				if(arrYearTemp[j] == time[i].year)
+				{		
+					flag = 0;
+					break;
+				}
+			}
+			if(flag == 1)
+			{
+				yearTemp = time[i].year;
+				arrYearTemp.push(yearTemp);
+			}
+		}
+		arrYearTemp.sort(compYear);
+		
+		var arrMonthTemp = new Array(arrYearTemp.length);
+		for(var i = 0; i < arrYearTemp.length; ++i)
+		{
+			arrMonthTemp[i] = new Array();
+		}
+		
+		for(var i = 0; i < time.length; ++i)
+		{
+			for(var j = 0; j < arrYearTemp.length; ++j)
+			{
+				if(arrYearTemp[j] == time[i].year)
+				{
+					arrMonthTemp[j].push({"month":time[i].month});
+				}
+			}
+		}
+		
+		var arrTime = new Array();
+		for(var i = 0; i < arrYearTemp.length; ++i)
+		{
+			arrMonthTemp[i].sort(compMonth("month"));
+			arrTime.push({"year":arrYearTemp[i], "arrMonth":arrMonthTemp[i]});
+		}
+
+		return arrTime;
+	}
+	
+	var Times = 
+	{
+		"evaluation":sortTime(json_Get_Times.evaluation),
+		"feedback":sortTime(json_Get_Times.feedback),
+		"control":sortTime(json_Get_Times.control),
+		"excellent":sortTime(json_Get_Times.excellent),
+		/*[
+			{
+				"year":
+				"arrMonth":
+				[
+				
+				],
+			},
+		],*/
+		
+	};
+	
+	return Times;
+}
 
 //把字符串的一些特殊字符转化再存入数据库
 function TranStr_Post(str)
@@ -3264,7 +3398,7 @@ function ActiveTableButton()
 			iPreTable = iCurTable;
 			iCurTable = parseInt(arr[1]);
 			ChangStyle(iPreTable, iCurTable);//改变当前激活的按钮的样式
-			SelectTime(iCurTable, this.value);//处理当前被激活的按钮对应的信息
+			SelectTime(iCurTable);//处理当前被激活的按钮对应的信息
 			GetObjById("show_more").innerHTML = "";
 			//PostTable(this.value);//把点击的表传给服务器			
 		}
@@ -3312,46 +3446,72 @@ function ZhiBiaoHuaDong(iPreTable, iCurTable)
 
 
 //根据选择时间显示内容
-function SelectTime(iCurShowFunction, btnText)
+function SelectTime(iCurShowFunction)
 {
-	/*var date = new Date();
-	var curYear = date.getFullYear();
-	var curMonth = date.getMonth();
+	var arrTable = GetTable();
+	var objTimes = Get_Time();
 	
+	var btnText = arrTable[iCurShowFunction];
+	
+	function TimeType(btnText)
+	{
+		switch(btnText)
+		{
+			case "干事自评表":			
+			case "跟进部门出勤统计表":
+			case "调研意见采纳表":			
+			case "部长自评表":
+			case "干事考核表":			
+			case "部长考核表":
+			case "部门考核表":
+			case "优秀部长评定表":			
+			case "其他情况加减分":
+				return "evaluation";
+			
+			case "主席团反馈表":	
+			case "部长反馈表":
+			case "整体考核结果反馈表":
+			case "干事考核反馈表":
+				return "feedback"
+			
+			case "考核进程控制表":
+				return "control";
+
+			case "优秀评定限制表":
+				return "excellent";
+		}
+	}
+	
+	var timeType = TimeType(btnText);
+	var time = objTimes[timeType];
+
 	var objYear = GetObjById("year");
 	var objMonth = GetObjById("month");
-	
-	objYear.options[3] = new Option((curYear-3));
-	objYear.options[2] = new Option((curYear-2));
-	objYear.options[1] = new Option((curYear-1));
-	objYear.options[0] = new Option(curYear);
-	
-	objYear.selectedIndex = 0
 	objMonth.options.length = 0;
-	for(var i = curMonth; i >= 1; --i)
+	objYear.options.length = 0;
+	
+	for(var i = 0; i < time.length; ++i)
 	{
-		objMonth.options[curMonth - i] = new Option(i);
+		objYear.options[i] = new Option(time[i].year);
+	}
+	objYear.selectedIndex = 0;
+	for(var j = 0; j < time[0].arrMonth.length; ++j)
+	{
+		objMonth.options[j] = new Option(time[0].arrMonth[j].month);
 	}
 	objMonth.selectedIndex = 0;
 	
 	objYear.onchange = function()
-	{	
-		if(this.selectedIndex == 0)
+	{
+		objMonth.options.length = 0;
+		var index = objYear.selectedIndex;
+
+		for(var i = 0; i < time[index].arrMonth.length; ++i)
 		{
-			objMonth.options.length = 0;
-			for(var i = curMonth; i >= 1; --i)
-			{
-				objMonth.options[curMonth - i] = new Option(i);
-			}
-		}
-		else
-		{
-			for(var j = 12; j >= 1; --j)
-			{
-				objMonth.options[12 - j] = new Option(j);
-			}
+			objMonth.options[i] = new Option(time[index].arrMonth[i].month);
 		}
 	}
+	
 
 	GetObjById("OK_button").onclick = function()
 	{
@@ -3359,30 +3519,8 @@ function SelectTime(iCurShowFunction, btnText)
 		month = objMonth.options[objMonth.selectedIndex].text;
 		var arrShowFun = ArrShowTable();
 		//if(PostTimeToServer(year, month, btnText ))//把获取到的时间的表传回服务器
-	
 		arrShowFun[iCurShowFunction]();//调用被激活的按钮对应的信息的函数
-	}*/
-	
-	
-	var objYear = GetObjById("year");
-	var objMonth = GetObjById("month");
-	var curYear = 1;
-	var curMonth = 2;
-	objMonth.options.length = 0;
-	objYear.options.length = 0;
-	objYear.options[0] = new Option("2014");
-	objYear.selectedIndex = 0;
-	objMonth.options[0] = new Option("4");
-	objMonth.options[1] = new Option("5");
-	objMonth.selectedIndex = 0;
-	GetObjById("OK_button").onclick = function()
-	{
-		year = objYear.options[objYear.selectedIndex].text;
-		month = objMonth.options[objMonth.selectedIndex].text;
-		var arrShowFun = ArrShowTable();
-		//if(PostTimeToServer(year, month, btnText ))//把获取到的时间的表传回服务器
-
-		arrShowFun[iCurShowFunction]();//调用被激活的按钮对应的信息的函数
+		//alert(year + "  "+month);
 	}
 }
 
