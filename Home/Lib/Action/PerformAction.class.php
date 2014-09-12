@@ -160,33 +160,18 @@ class PerformAction extends Action
       $this->redirect('Login/index'); 
     //获取授权状态 status 	  
 	$status=$this->getStatus();
-	//账号，时间
 	$account=$_SESSION['account'];
-	//$account="2013053165";
-	//$year=date("Y");
-	//$month = date("n");
-	//$year="2014";
-	//$month="4";
 	$year=$_POST['year'];
 	$month=$_POST['month'];
-	//获取请求的时间
-	//$year=$_POST['year'];
-	//$month=$_POST['month'];
-	//判断时间是否合理
 	$gszp_model=new Model("Gszp");
 
 	//获得类型，部门
 	$person_model=new Model("Person");
 	$person_info=$person_model->where("account=$account")->find();
-	//var_dump($person_info);
 	$type=$person_info['type'];
-	//var_dump($type);
 	$apartment=$person_info['apartment'];
-	
     //除己之外干事
-	$person_model=new Model("Person");
 	$person_info=$person_model->where("apartment=$apartment and type=$type")->select();
-    //var_dump($person_info);
 	foreach($person_info as $v)
 	{
 	  if($v['account']!=$account)
@@ -197,19 +182,14 @@ class PerformAction extends Action
 	  );	  
 	  }
 	}
-
-    //echo json_encode($arr_TongShi,JSON_UNESCAPED_UNICODE);
 	//获取推优干事账号，名字，推优理由（该年该月，谁对谁）
 	$interact_model=new Model('Interact');
-	
 	$interact_info=$interact_model->where("(year=$year and month=$month) and waccount=$account and rtype=$type")->find();
 	if(!empty($interact_info['raccount']))
 	{
 	$tygs_account=$interact_info['raccount'];
 	$tygs_tyly=$interact_info['text'];
-	//var_dump($tygs_account);
 	$person_info=$person_model->where("account=$tygs_account")->find();
-	//var_dump($person_info);
 	$tygs_name=$person_info['name'];
 	}
 	else
@@ -219,16 +199,13 @@ class PerformAction extends Action
 	  $tygs_account=$person_info['account'];
 	  $tygs_tyly="空";
 	}
-	//var_dump($tygs_name);
 	$arr_tygs=Array(
 	  'tygs'=>$tygs_name,
 	  'account'=>$tygs_account,
 	  'tyly'=>$tygs_tyly,
 	);	
-	//echo json_encode($arr_tygs,JSON_UNESCAPED_UNICODE);
 	//获取部长级的姓名，账号，得分，评价
 	$person_info=$person_model->where("apartment=$apartment and type!=$type")->select();
-	//var_dump($person_info);
 	foreach($person_info as $v)
 	{
 	  $bz_account=$v['account'];
@@ -244,26 +221,21 @@ class PerformAction extends Action
 	    $bz_df=0;
 	  $arr_DBZPJ[]=Array('account'=>$bz_account,'name'=>$bz_name,'fs'=>$bz_df,'pj'=>$bz_pj);
 	}
-	//echo json_encode($arr_DBZPJ,JSON_UNESCAPED_UNICODE);
 	//按照当前账号找出干事自评表的信息
-      $gszp_model=new Model("Gszp");
+    $gszp_model=new Model("Gszp");
 	$gszp_info=$gszp_model->where("(year=$year and month=$month) and account=$account")->find();
-	    //$status=$this->judgetext($gszp_info['zptext']);
 	    //生成得分
-	    $arrDF[]=Array('df'=>$this->judgedf($gszp_info['DF1']),);
-	    $arrDF[]=Array('df'=>$this->judgedf($gszp_info['DF2']),);
-	    $arrDF[]=Array('df'=>$this->judgedf($gszp_info['DF3']),);
-	    $arrDF[]=Array('df'=>$this->judgedf($gszp_info['DF4']),);
-	    $arrDF[]=Array('df'=>$this->judgedf($gszp_info['DF5']),);
-	    $arrDF[]=Array('df'=>$this->judgedf($gszp_info['DF6']),);
-	    $arrDF[]=Array('df'=>$this->judgedf($gszp_info['DF7']),);
-	    $arrDF[]=Array('df'=>$this->judgedf($gszp_info['DF8']),);
-	    $arrDF[]=Array('df'=>$this->judgedf($gszp_info['DF9']),);
-	    $arrDF[]=Array('df'=>$this->judgedf($gszp_info['DF10']),);
-	    $arrDF[]=Array('df'=>$this->judgedf($gszp_info['DF11']),);
-	    $arrDF[]=Array('df'=>$this->judgedf($gszp_info['DF12']),);
-		$zongfen=$this->judgedf($gszp_info['total']);
-		$zwpj=$this->judgetext($gszp_info['zptext']);
+	    $arrDF[]=Array('df'=>$gszp_info['DF1'],);
+	    $arrDF[]=Array('df'=>$gszp_info['DF2'],);
+	    $arrDF[]=Array('df'=>$gszp_info['DF3'],);
+	    $arrDF[]=Array('df'=>$gszp_info['DF4'],);
+	    $arrDF[]=Array('df'=>$gszp_info['DF5'],);
+	    $arrDF[]=Array('df'=>$gszp_info['DF6'],);
+	    $arrDF[]=Array('df'=>$gszp_info['DF7'],);
+	    $arrDF[]=Array('df'=>$gszp_info['DF8'],);
+	    $arrDF[]=Array('df'=>$gszp_info['DF9'],);
+		$zongfen=$gszp_info['total'];
+		$zwpj=$gszp_info['zptext'];
 
 	//生成将要返回的json数组
 	$arr=Array(
@@ -3662,207 +3634,7 @@ class PerformAction extends Action
 	//向前端返回status信息
   }
 
-  //成员的原始添加
-  public function funcaddperson()
-  {
- //主席团
-$this->funcinsert("2011052351", "邓蔓菁", "2011052351", 4, 12);
-$this->funcinsert("2011052363", "何颖欣", "2011052363", 4, 12);
-$this->funcinsert("2011052418", "施国安", "2011052418", 4, 12);
-$this->funcinsert("2011052473", "陈浩龙", "2011052473", 4, 12);
-$this->funcinsert("2011052449", "盛茗珉", "2011052449", 4, 12);
-$this->funcinsert("2011052364", "区靖雯", "2011052364", 4, 12);
 
-//秘书处
-$this->funcinsert("2012052297", "田聪聪", "2012052297", 3, 1);
-$this->funcinsert("2012052345", "吴英文", "2012052345", 3, 1);
-$this->funcinsert("2012053187", "刘小洁", "2012053187", 3, 1);
-$this->funcinsert("2013053073", "张春梅", "2013053073", 1, 1);
-$this->funcinsert("2013053193", "韦长杰", "2013053193", 1, 1);
-$this->funcinsert("2013053064", "张雪", "2013053064", 1, 1);
-$this->funcinsert("2013053068", "周可慧", "2013053068", 1, 1);
-$this->funcinsert("2013053176", "温武佑", "2013053176", 1, 1);
-$this->funcinsert("2013053089", "黄芷然", "2013053089", 1, 1);
-$this->funcinsert("2013053106", "张舒婧", "2013053106", 1, 1);
-$this->funcinsert("2013053091", "李薛毅", "2013053091", 1, 1);
-$this->funcinsert("2013052949", "李辉峰", "2013052949", 1, 1);
-$this->funcinsert("2013053122", "张雨晨", "2013053122", 1, 1);
-
-//编辑部
-$this->funcinsert("2012052358", "周嘉林", "2012052358", 3, 4);
-$this->funcinsert("2012052306", "彭冬毡", "2012052306", 3, 4);
-$this->funcinsert("2012052300", "何景源", "2012052300", 3, 4);
-$this->funcinsert("2013052952", "薛梦钰", "2013052952", 1, 4);
-$this->funcinsert("2013053166", "李露", "2013053166", 1, 4);
-$this->funcinsert("2013053149", "罗婕", "2013053149", 1, 4);
-$this->funcinsert("2013053136", "张蕾", "2013053136", 1, 4);
-$this->funcinsert("2013053195", "周莹", "2013053195", 1, 4);
-$this->funcinsert("2013053235", "王嘉仪", "2013053235", 1, 4);
-$this->funcinsert("2013053054", "高耀源", "2013053054", 1, 4);
-$this->funcinsert("2013053035", "郭兆能", "2013053035", 1, 4);
-$this->funcinsert("2013053053", "杨卓权", "2013053053", 1, 4);
-$this->funcinsert("2013053013", "吕俊龙", "2013053013", 1, 4);
-$this->funcinsert("2013053098", "马坚津", "2013053098", 1, 4);
-$this->funcinsert("2013052960", "黄搁贤", "2013052960", 1, 4);
-
-//人力资源部
-$this->funcinsert("2012052180", "卢思翰", "2012052180", 3, 2);
-$this->funcinsert("2012052195", "陈蔚", "2012052195", 3, 2);
-$this->funcinsert("2012052339", "陈康明", "2012052339", 3, 2);
-$this->funcinsert("2013053175", "凌旺", "2013053175", 2, 2);
-$this->funcinsert("2013053188", "陈桂涛", "2013053188", 2, 2);
-$this->funcinsert("2013053189", "曾治金", "2013053189", 2, 2);
-$this->funcinsert("2013053062", "彭勃", "2013053062", 2, 2);
-$this->funcinsert("2013053092", "郑桂坤", "2013053092", 2, 2);
-$this->funcinsert("2013053219", "欧海杰", "2013053219", 2, 2);
-$this->funcinsert("2013053162", "董彩芹", "2013053162", 2, 2);
-$this->funcinsert("2013053146", "李慧婷", "2013053146", 2, 2);
-$this->funcinsert("2013053015", "高琳", "2013053015", 2, 2);
-$this->funcinsert("2013053241", "余臻", "2013053241", 2, 2);
-$this->funcinsert("2013053207", "陈玥轩", "2013053207", 2, 2);
-
-//组织部
-$this->funcinsert("2012052194", "陈慧莹", "2012052194", 3, 8);
-$this->funcinsert("2012052206", "叶伟珊", "2012052206", 3, 8);
-$this->funcinsert("2013053017", "李荣荣", "2013053017", 1, 8);
-$this->funcinsert("2013053228", "张锴翰", "2013053228", 1, 8);
-$this->funcinsert("2013053107", "王俊淞", "2013053107", 1, 8);
-$this->funcinsert("2013053245", "冯梦西", "2013053245", 1, 8);
-$this->funcinsert("2013053072", "张丹瑜", "2013053072", 1, 8);
-$this->funcinsert("2013053143", "何楚仪", "2013053143", 1, 8);
-$this->funcinsert("2013053215", "陈晓琳", "2013053215", 1, 8);
-$this->funcinsert("2013053206", "陆  涛", "2013053206", 1, 8);
-$this->funcinsert("2013053087", "曾  凯", "2013053087", 1, 8);
-$this->funcinsert("2013053002", "张伟龙", "2013053002", 1, 8);
-
-
-//宣传部
-$this->funcinsert("2012052201","陈杰东","2012052201",3,3);//部长
-$this->funcinsert("2012052331","周敏妹","2012052331",3,3);
-$this->funcinsert("2012052245","邓小东","2012052245",3,3);
-$this->funcinsert("2013053101","陈焕杰","2013053101",1,3);//干事
-$this->funcinsert("2013052974","崔良梁","2013052974",1,3);
-$this->funcinsert("2013053004","郭雪瑶","2013053004",1,3);
-$this->funcinsert("2013052977","何雪","2013052977",1,3);
-$this->funcinsert("2013053187","洪升耿","2013053187",1,3);
-$this->funcinsert("2013052958","李进杰","2013052958",1,3);
-$this->funcinsert("2013053007","林宏端","2013053007",1,3);
-$this->funcinsert("2013053218","林伟南","2013053218",1,3);
-$this->funcinsert("2013053005","林炜哲","2013053005",1,3);
-$this->funcinsert("2013053067","刘英琪","2013053067",1,3);
-$this->funcinsert("2013053042","陆舒豪","2013053042",1,3);
-$this->funcinsert("2013053249","罗臻","2013053249",1,3);
-$this->funcinsert("2013052987","马泽钰","2013052987",1,3);
-$this->funcinsert("2013052966","许仲毅","2013052966",1,3);
-$this->funcinsert("2013053071","唐睿婕","2013053071",1,3);
-
-//学术部
-$this->funcinsert("2012052254","冯泳钊","2012052254",3,5);//部长
-$this->funcinsert("2012052377","余玫佳","2012052377",3,5);
-$this->funcinsert("2013053167","张丹","2013053167",3,5);
-$this->funcinsert("2013053145","伍书怡","2013053145",1,5);//干事
-$this->funcinsert("2013053202","方力","2013053202",1,5);
-$this->funcinsert("2013053065","凡梦霞","2013053065",1,5);
-$this->funcinsert("2013053038","纪杰伦","2013053038",1,5);
-$this->funcinsert("2013053034","谭灼伟","2013053034",1,5);
-$this->funcinsert("2013052983","郝天英","2013052983",1,5);
-$this->funcinsert("2013053024","张明珠","2013053024",1,5);
-
-//公关部
-$this->funcinsert("2012052296","苏迪","2012052296",3,10);//部长
-$this->funcinsert("2012052348","曾炜瑶","2012052348",3,10);
-$this->funcinsert("2012052338","李惠贤","2012052338",3,10);
-$this->funcinsert("2013053117","李雁婷","2013053117",1,10);//干事
-$this->funcinsert("2013053111","王冕","2013053111",1,10);
-$this->funcinsert("2013053047","李澳","2013053047",1,10);
-$this->funcinsert("2013053099","胡钦楼","2013053099",1,10);
-$this->funcinsert("2013053240","蒋芷若","2013053240",1,10);
-$this->funcinsert("2013053025","管必成","2013053025",1,10);
-$this->funcinsert("2013053211","魏春雪","2013053211",1,10);
-$this->funcinsert("2013053223","范施雅","2013053223",1,10);
-$this->funcinsert("2013053082","曹琉","2013053082",1,10);
-$this->funcinsert("2013053119","张宇豪","2013053119",1,10);
-$this->funcinsert("2013052982","王馨茁","2013052982",1,10);
-$this->funcinsert("2013053047","何文聪","2013053047",1,10);
-
-//体育部
-$this->funcinsert("2012052282","黄柳朋","2012052282",3,6);//部长
-$this->funcinsert("2012053229","奚云逸","2012053229",3,6);
-$this->funcinsert("2012052264","伍亚星","2012052264",3,6);
-$this->funcinsert("2012052281","袁月明","2012052281",3,6);
-$this->funcinsert("2013053139","范露","2013053139",1,6);//干事
-$this->funcinsert("2013053095","邢建坤","2013053095",1,6);
-$this->funcinsert("2013053123","李佳","2013053123",1,6);
-$this->funcinsert("2013053037","陈高敏","2013053037",1,6);
-$this->funcinsert("2013053213","谷博珊","2013053213",1,6);
-$this->funcinsert("2013053088","李健龙","2013053088",1,6);
-$this->funcinsert("2013052950","叶冠宇","2013052950",1,6);
-$this->funcinsert("2013053093","邓阳","2013053093",1,6);
-$this->funcinsert("2013052970","黄帝玲","2013052970",1,6);
-$this->funcinsert("2013053134","李萍","2013053134",1,6);
-$this->funcinsert("2013053157","李文想","2013053157",1,6);
-$this->funcinsert("2013055027","陈有铭","2013055027",1,6);
-$this->funcinsert("2013053171","赵耀之","2013053171",1,6);
-$this->funcinsert("2013052393","陈泓锡","2013052393",1,6);
-$this->funcinsert("2013053178","汤炜聪","2013053178",1,6);
-
-//文娱部
-$this->funcinsert("2012052364","陈敏慧","2012052364",3,9);
-$this->funcinsert("2012052321","李慈","2012052321",3,9);
-$this->funcinsert("2012053203","许莉婍","2012053203",3,9);
-$this->funcinsert("2013053127","冯帆","2013053127",1,9);
-$this->funcinsert("2013053151","陈雁佳","2013053151",1,9);
-$this->funcinsert("2013053028","吴梦宇","2013053028",1,9);
-$this->funcinsert("2013053110","周开泰","2013053110",1,9);
-$this->funcinsert("2013053232","吴国山","2013053232",1,9);
-$this->funcinsert("2013053179","陈旭琳","2013053179",1,9);
-$this->funcinsert("2013057131","王业德","2013057131",1,9);
-$this->funcinsert("2013053010","阮振杰","2013053010",1,9);
-$this->funcinsert("2013053194","潘怡君","2013053194",1,9);
-$this->funcinsert("2013052986","高艳阳","2013052986",1,9);
-$this->funcinsert("2013053059","母国良","2013053059",1,9);
-$this->funcinsert("2013053238","冉超","2013053238",1,9);
-
-//KSC联盟
-$this->funcinsert("2012053245","苗效毅","2012053245",3,7);
-$this->funcinsert("2012052275","庄双玲","2012052275",3,7);
-$this->funcinsert("2013052990","蓝梓蓉","2013052990",1,7);
-$this->funcinsert("2011052449","李耀猛","2011052449",1,7);
-$this->funcinsert("2013053220","莫敏华","2013053220",1,7);
-$this->funcinsert("2013052991","龙伟强","2013052991",1,7);
-$this->funcinsert("2013053026","孙雯曦","2013053026",1,7);
-$this->funcinsert("2013052992","覃振宇","2013052992",1,7);
-$this->funcinsert("2013053181","邵天木","2013053181",1,7);
-$this->funcinsert("2013053158","杨雅希","2013053158",1,7);
-$this->funcinsert("2013053125","余海铭","2013053125",1,7);
-$this->funcinsert("2013053020","徐冬","2013053020",1,7);
-
-//心理服务部
-$this->funcinsert("2012053239","杨帅","2012053239",3,11);
-$this->funcinsert("2012052294","田淼蕾","2012052294",3,11);
-$this->funcinsert("2013053174","谢思维","2013053174",1,11);
-$this->funcinsert("2013052297","陈昱栋","2013052297",1,11);
-$this->funcinsert("2013053008","梁茗皓","2013053008",1,11);
-$this->funcinsert("2013052993","骆竞潮","2013052993",1,11);
-$this->funcinsert("2013053155","梁义千","2013053155",1,11);
-$this->funcinsert("2013053160","石芮","2013053160",1,11);
-$this->funcinsert("2013053165","孙铭谦","2013053165",1,11);
-
-
-   
-  
-  }
- public function funcinsert($account,$name,$password,$type,$apartment)
-{
-	$data['account']=$account;//"2012052308";//账号
-	$data['name']=$name;//"朱林杰";//名字
-	$data['password']=$password;//"2012052308";//初始密码
-	$data['type']=$type;//1;//类型
-	$data['apartment']=$apartment;//1;//部门
-	$person_model=new Model("Person");
-	$person_model->add($data);
-
-}
   //外调加分函数
   public function funcwdjf($year,$month,$account,$assess,$count)
   {
@@ -3881,54 +3653,7 @@ $this->funcinsert("2013053165","孙铭谦","2013053165",1,11);
 		  echo "Fail to add data </br>";
 	}
   }
-  //CRUD
-  public function funccrud()
-  {
-    //信编
-    $this->funcwdjf(2014,5,2013053166,3,3);
-	$this->funcwdjf(2014,5,2013053149,3,4);
-	$this->funcwdjf(2014,5,2013053195,3,1);
-	$this->funcwdjf(2014,5,2013053035,3,1);
-	$this->funcwdjf(2014,5,2013053053,3,3);
-	$this->funcwdjf(2014,5,2013053098,3,3);
-	$this->funcwdjf(2014,5,2013052960,3,6);
-	//人力
-	$this->funcwdjf(2014,5,2013053175,3,1);
-	$this->funcwdjf(2014,5,2013053188,3,1);
-	$this->funcwdjf(2014,5,2013053189,3,1);
-	$this->funcwdjf(2014,5,2013053092,3,1);
-	$this->funcwdjf(2014,5,2013053162,3,3);
-	$this->funcwdjf(2014,5,2013053015,3,2);
-	$this->funcwdjf(2014,5,2013053207,3,1);
-	$this->funcwdjf(2014,5,2013053241,3,1);
-	//学术
-	$this->funcwdjf(2014,5,2013053034,3,1);
-	$this->funcwdjf(2014,5,2013052983,3,2);
-	//秘书
-	$this->funcwdjf(2014,5,2013053068,3,1);
-	$this->funcwdjf(2014,5,2013053089,3,1);
-	$this->funcwdjf(2014,5,2013052949,3,1);
-	//组织
-	$this->funcwdjf(2014,5,2013053072,3,2);
-	//文娱
-	$this->funcwdjf(2014,5,2013053179,3,1);
-	$this->funcwdjf(2014,5,2013052986,3,2);
-	//体育
-	$this->funcwdjf(2014,5,2013053178,3,1);
-	$this->funcwdjf(2014,5,2013052950,3,1);
-	$this->funcwdjf(2014,5,2013053037,3,1);
-	$this->funcwdjf(2014,5,2013052970,3,1);
-	$this->funcwdjf(2014,5,2013052393,3,2);
-	$this->funcwdjf(2014,5,2013053139,3,1);
-	//宣传
-	$this->funcwdjf(2014,5,2013052974,3,1);
-	$this->funcwdjf(2014,5,2013053004,3,1);
-	$this->funcwdjf(2014,5,2013053005,3,1);
-	$this->funcwdjf(2014,5,2013053249,3,12);
-	//公关
-	$this->funcwdjf(2014,5,2013052982,1,1);
-	$this->funcwdjf(2014,5,2013052297,3,1);
-  }
+
 
   }
 ?>

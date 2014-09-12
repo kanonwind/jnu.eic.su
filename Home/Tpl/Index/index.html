@@ -230,7 +230,8 @@ str;
 				-->
 				<div id="notice">
 					<h2>公告</h2>
-					新版首页已正式上线，请使用mozilla firefox或google chrome最新版浏览器以获得最好使用体验.
+					<!-- 新版首页已正式上线，请使用mozilla firefox或google chrome最新版浏览器以获得最好使用体验. -->
+					<?php echo $announcement; ?>
 				</div>		
 			</div>
 			
@@ -266,11 +267,11 @@ str;
 						</p>
 					</div>
 					<div id="coming_activity_main_post">
-						<img src="<?php echo $imgURL;?>coming_activity_main_post.png" width="520px" height="380px" alt="活动主海报"/>		
+						<img src="<?php echo $activityExpected['act_bigposter'];?>" width="520px" height="380px" alt="活动主海报"/>		
 					</div>
 					<div id="coming_activity_small_post">
 						<div id="small_post_img">
-							<img src="<?php echo $imgURL;?>coming_activity_small_psot.png" width="160px" height="180px" alt="活动副海报"/>
+							<img src="<?php echo $activityExpected['act_smallposter'];?>" width="160px" height="180px" alt="活动副海报"/>
 						</div>
 						<p id="activity_slogan">
 							<!-- 挡我者挂高数 -->

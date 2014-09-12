@@ -109,7 +109,7 @@ class NewsAction extends Action{
 			//截取整个<img/>
 			$endPosition=strpos($text,"/>",$startPosition);
 			$target=substr($text,$startPosition,$endPosition-$startPosition);
-			var_dump($target);
+			//var_dump($target);
 			//截取src属性
 			$startPosition=strpos($target,"src=\"");
 			$endPosition=strripos($target,"alt=\"");	
@@ -136,16 +136,75 @@ class NewsAction extends Action{
 		$data['type']=$type;
 		$data['url']=$url;
 		$data['text']=$text;
-		var_dump($data);
+		//var_dump($data);
 		if(false==$news_model->data($data)->add())
 		{
 			$this->error("添加出错，正在返回......");
 		}
 		else
 		{
+			unset($data);
+			//获取将要操作的id
+			$news_info=$news_model->where("create_time=$create_time and type=$type")->find();
+			//echo "根据创建时间".$create_time."获取id";
+			//var_dump($news_info);
+			$id=$news_info['id'];
+			//最新新闻上限是8篇，活动等其他的最新就只有一篇
+			if($type==1)
+			{
+				if($url!='#')
+					$this->rankLatest($id,$type,8);
+			}
+			else
+			{
+				$this->rankLatest($id,$type,1);
+			}
 			$this->Success("添加成功，正在返回......",__APP__."/News/create");
 		} 
 		
+	}
+	private function rankLatest($id,$type,$numLimited)
+	{
+			$data['id']=$id;
+			$data['type']=$type;
+			//添加成功，整理到tbl_latest
+			$latest_model=new Model("Latest");
+			//最新要求大于一个，比如三个，或者8个
+			if($numLimited>1)
+			{
+				$latest_info=$latest_model->where("type=$type")->select();
+				if(count($latest_info)<$numLimited)
+				{
+					//1~($numLimited-1)篇，则直接添加
+					$data['rank']=count($latest_info)+1;
+					//echo "8篇以内，直接添加";
+					//var_dump($data);
+					$latest_model->data($data)->add();
+				}
+				//比如要求是三篇，删掉第一篇,2和3向上替换，新增第三篇
+				else{
+					$latest_model->where("rank=1 and type=$type")->delete();
+					for($i=2;$i<$numLimited+1;$i++)
+					{
+						$data_update['rank']=$i-1;
+						$latest_model->where("rank=$i and type=$type")->save($data_update);
+					}
+					$data['rank']=$numLimited;
+					//echo "8篇以上，替换增加";
+					//var_dump($data);
+					$latest_model->data($data)->add();
+				}	
+			}
+			//最新只要求一个，直接删除再添加
+			else
+			{
+				//echo "别的类型，只能有一次，直接删除后添加";
+				
+				$latest_model->where("rank=1 and type=$type")->delete();
+				$data['rank']=1;
+				//var_dump($data);
+				$latest_model->data($data)->add();
+			}
 	}
 	//公告	执行添加
 	public function createAnnouncement()
@@ -167,7 +226,12 @@ class NewsAction extends Action{
 		}
 		else
 		{
-			$this->Success("添加成功，正在返回......",__APP__."/News/create");
+			unset($data);
+			//获取将要操作的id
+			$announcement_info=$announcement_model->where("create_time=$create_time")->find();
+			$id=$announcement_info['id'];
+			$this->rankLatest($id,5,1);
+			//$this->Success("添加成功，正在返回......",__APP__."/News/create");
 		}
 	}
 	//即将举办的活动	执行添加
@@ -195,6 +259,11 @@ class NewsAction extends Action{
 		}
 		else
 		{
+			unset($data);
+			//获取将要操作的id
+			$activity_info=$activity_model->where("create_time=$create_time")->find();
+			$id=$activity_info['id'];
+			$this->rankLatest($id,6,1);
 			$this->Success("添加成功，正在返回......",__APP__."/News/create");
 		}
 	}
@@ -257,6 +326,8 @@ class NewsAction extends Action{
 		}
 		else
 		{
+			//echo "修改成功";
+			//var_dump($data);
 			$this->Success("修改成功，正在返回......",__APP__."/Index/show?id=".$id);
 
 		}

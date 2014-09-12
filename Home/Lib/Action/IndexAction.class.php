@@ -28,74 +28,52 @@ class IndexAction extends Action
 		$link.="<a class=\"user_info\" id=\"login_info_log_out\" href=\"".__APP__."/Login/logout\">注销</a>";
 		$this->assign('link',$link);
 	}
-	//获取3篇热点新闻
+	//获取最新3篇热点新闻
 	$news_model=new Model("News");
-	$news_info=$news_model->where("type=1")->select();
-	unset($arr);
-	foreach($news_info as $v)
+	$latest_model=new Model("Latest");
+	$latest_info=$latest_model->where("type=1 and rank>5")->select();
+	for($i=0;$i<count($latest_info);$i++)
 	{
-		$arr[]=Array(
-			'create_time'=>$v['create_time'],
-		);
-	}		
-	sort($arr);	
-	for($i=0;$i<3;$i++)
-	{
-		$create_time=$arr[count($arr)-$i-1]['create_time'];
-		$news_info=$news_model->where("create_time=$create_time")->find();
+		$rank=$latest_info[count($latest_info)-$i-1]['rank'];
+		$latest_info2=$latest_model->where("type=1 and rank=$rank")->find();
+		$id=$latest_info2['id'];
+		$news_info=$news_model->where("id=$id")->find();
+		$keyword=explode("|",$news_info['keyword']);
 		$hot[]=Array(
-			'keyword'=>$news_info['keyword'],
-			'id'=>$news_info['id'],
+			'keyword'=>$keyword[0],
+			'id'=>$id,
 		);//最新新闻存储完毕
 	}
-	//获取最新活动
-	$news_info=$news_model->where("type=3")->select();
-	unset($arr);
-	foreach($news_info as $v)
-	{
-		$arr[]=Array(
-			'create_time'=>$v['create_time'],
-		);
-	}		
-	sort($arr);	
-	$create_time=$arr[count($arr)-1]['create_time'];
-	$news_info=$news_model->where("create_time=$create_time")->find();
+	//获取最新活动	
+	$latest_info=$latest_model->where("type=3 and rank=1")->find();
+	$id=$latest_info['id'];
+	$news_info=$news_model->where("id=$id")->find();
+	$keyword=explode("|",$news_info['keyword']);
 	$activity=Array(
-		'keyword'=>$news_info['keyword'],
-		'id'=>$news_info['id'],
+		'keyword'=>$keyword[0],
+		'id'=>$id,
 	);
 	//获取最新学生工作
-	$news_info=$news_model->where("type=2")->select();
-	unset($arr);
-	foreach($news_info as $v)
-	{
-		$arr[]=Array(
-			'create_time'=>$v['create_time'],
-		);
-	}		
-	sort($arr);	
-	$create_time=$arr[count($arr)-1]['create_time'];
-	$news_info=$news_model->where("create_time=$create_time")->find();
+	$latest_info=$latest_model->where("type=2 and rank=1")->find();
+	$id=$latest_info['id'];
+	$news_info=$news_model->where("id=$id")->find();
+	$keyword=explode("|",$news_info['keyword']);
 	$work=Array(
-		'keyword'=>$news_info['keyword'],
-		'id'=>$news_info['id'],
+		'keyword'=>$keyword[0],
+		'id'=>$id,
 	);
 	//获取公告
+	$announcement_model=new Model("Announcement");
+	$latest_info=$latest_model->where("type=5 and rank=1")->find();
+	$id=$latest_info['id'];
+	$announcement_info=$announcement_model->where("id=$id")->find();
+	$announcement=$announcement_info['text'];
+	
 	//获取即将举办
-	unset($arr);
 	$activity_model=new Model("Activity");
-	$activity_info=$activity_model->select();
-	
-	foreach($activity_info as $v)
-	{
-		$arr[]=Array(
-			'create_time'=>$v['create_time'],
-		);
-	}		
-	sort($arr);
-	
-	$create_time=$arr[count($arr)-1]['create_time'];
-	$activity_info=$activity_model->where("create_time=$create_time")->find();
+	$latest_info=$latest_model->where("type=6 and rank=1")->find();
+	$id=$latest_info['id'];
+	$activity_info=$activity_model->where("id=$id")->find();
 	$activityExpected=Array(
 		'act_name'=>$activity_info['act_name'],
 		'act_time'=>$activity_info['act_time'],
@@ -109,6 +87,7 @@ class IndexAction extends Action
 	$this->assign('hot',$hot);
 	$this->assign('activity',$activity);
 	$this->assign('work',$work);
+	$this->assign('announcement',$announcement);
 	$this->assign('activityExpected',$activityExpected);
 	$this->display();
   }
@@ -117,28 +96,24 @@ class IndexAction extends Action
   {
 	//带有图片URL的新闻方可
 	$news_model=new Model("News");
-	$news_info=$news_model->where("url!='#'")->select();
-	//有8条新闻
-	if(count($news_info)>7)
+	$latest_model=new Model("Latest");
+	$latest_info=$latest_model->where("type=1")->select();
+	for($i=0;$i<count($latest_info);$i++)
 	{
-		for($i=0;$i<8;$i++)
-		{
-			$arrNewsInfo[]=Array(
-				'title'=>$news_info[$i]['title'],
-				'author'=>$news_info[$i]['author'],
-				'abst'=>$news_info[$i]['keyword'],
-				'picpath'=>$news_info[$i]['url'],
-				'newslink'=>__URL__."/show?id=".$news_info[$i]['id'],
-			);
-		}
-		$arr=Array(
-			"arrNewsInfo"=>$arrNewsInfo,
+		$id=$latest_info[$i]['id'];
+		$news_info=$news_model->where("id=$id")->find();
+		$abst=mb_substr($news_info['text'], 0, 20, 'utf-8');  
+		$arrNewsInfo[]=Array(
+			'title'=>$news_info['title'],
+			'author'=>$news_info['author'],
+			'abst'=>$abst,
+			'picpath'=>$news_info['url'],
+			'newslink'=>__URL__."/show?id=".$news_info['id'],		
 		);
 	}
-	else{
-		//没有8条新闻
-		$arr=false;
-	}
+	$arr=Array(
+		"arrNewsInfo"=>$arrNewsInfo,
+	);
 	echo $this->_encode($arr);
   }
   
