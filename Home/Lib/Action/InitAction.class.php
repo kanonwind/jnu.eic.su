@@ -1,17 +1,11 @@
 ﻿<?php
 /*
-*系统初始化
+*系统初始化说明：
+1、最基本的数据要求包括：人员信息初始化、空课表、人力干事跟进部门、主席主管部门，如果没能达到这是个要求，不能使用绩效考核和外调
+2、满足了最基本的数据要求之后，根据时间初始化一次绩效考核
 */
 class InitAction extends Action
 {
-  //整个系统重置，只保留管理员tbl_admin
-  public function resetAll()
-  {
-    //删除成员信息tbl_person	//删除跟进部门信息tbl_rlgj、tbl_president	//删除基本考核表信息tbl_bmkh,tbl_bmty,tbl_bzkh,tbl_bzzp,tbl_gskh,tbl_gszp,tbl_interact,tbl_oneway,tbl_resource,	//删除外调出勤等特殊表格tbl_chuqin,tbl_diaoyan,tbl_wdcs,tbl_yxbz,tbl_yxbzhx,tbl_yxchxz
-	//删除反馈表信息tbl_bmfk,tbl_bzfk,tbl_gsfk,
-	//删除课表tbl_timetable
-	//删除考核授权tbl_authority	
-  }
   //人员信息初始化
   public function initPerson()
   {
