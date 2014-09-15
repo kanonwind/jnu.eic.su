@@ -6,10 +6,11 @@ var arrDepartName=new Array("秘书处","人力资源部","宣传部","信息编
 var arrTypeName=new Array("干事","人力干事","部长级","主席团");
 var arrGenderName=new Array("不确定","女","男");
 //上课时间
-var arrSKSJ=new Array({"b":480,"e":530},{"b":540,"e":590},{"b":610,"e":660},{"b":670,"e":720},//早上4节课
-                       {"b":750,"e":810},{"b":810,"e":860},//中午两节课
-                       {"b":870,"e":920},{"b":930,"e":980},{"b":990,"e":1040},{"b":1050,"e":1100},
-                       {"b":1140,"e":1190},{"b":1200,"e":1250},{"b":1260,"e":1310},{"b":1320,"e":1370});
+var arrSKSJ=new Array({"b":480,"e":525},{"b":535,"e":580},{"b":600,"e":645},{"b":655,"e":700},
+{"b":760,"e":805},{"b":815,"e":860},
+{"b":870,"e":915},{"b":925,"e":970},{"b":980,"e":1025},
+{"b":1035,"e":1080},
+{"b":1140,"e":1185},{"b":1195,"e":1240},{"b":1250,"e":1295});
 //返回要求查询的条件worktime apartment，勾选并确定外调人员的时候再次发送
 var arrAllocRequire;
     
@@ -106,7 +107,7 @@ function GetUserData(strUserID)
 {
 //请求数据	
     try{
-        if(debug)
+        if(debug())
             throw("ajax");
         var jsonReturn;
         $.ajax({
@@ -121,6 +122,7 @@ function GetUserData(strUserID)
     }
     catch(err){
         //JSON示例
+		console.log(err);
         var jsonUD=
         {
             "_userID":strUserID,
@@ -128,6 +130,7 @@ function GetUserData(strUserID)
             "_depart":2,
         };
         errmsg();
+		
     }
     
     //个人信息对象构造函数
@@ -166,7 +169,7 @@ function postAllocQueInfo(objQI)
     }
     console.log(qArrKK);
     try{
-        if(debug)
+        if(debug())
             throw("ajax");
         var jsonPost=
         {
@@ -392,7 +395,7 @@ function getKKBList()
 	//返回的是空课表的名字，如”KSC联盟空课表“及其连接
 	//请求数据	
     try{
-        if(debug)
+        if(debug())
             throw("ajax");
 		var jsonReturn;
 	    $.ajax({
@@ -438,7 +441,7 @@ function postAllocCode(strCode)
 {
 	//发送外调序列号
     try{
-        if(debug)
+        if(debug())
             throw("ajax");
         var jsonPsot={"allocCode":strCode};
         //请求数据	
@@ -543,7 +546,7 @@ function postAllocCodeforCancel(strCode)
 	
 	//发送外调序列号
     try{
-        if(debug)
+        if(debug())
             throw("ajax");
         var jsonPost={"allocCode":strCode};
         //请求数据	
