@@ -6,6 +6,7 @@ var month;//月份
 var arrDepartName=new Array("秘书处","人力资源部","宣传部","信息编辑部","学术部",
 "体育部","KSC联盟","组织部","文娱部","公关部","心理服务部","主席团");
 var arrTypeName=new Array("干事","人力干事","部长级","主席团");
+var arrWeiJiBiao=new Array("秘书处制度违纪登记表","人力资源部制度违纪登记表","宣传部制度违纪登记表","信息编辑部制度违纪登记表","公关部制度违纪登记表","司仪礼仪队违纪登记表");
    
 function debug()
 {
@@ -279,6 +280,7 @@ function GetTable()
         {
           "account":"2012052308",
           "type":"YBGS",
+          "weiji":[{"table":"0"},{"table":"1"},{"table":"2"},{"table":"3"},{"table":"4"},{"table":"5"}],
         };
         errmsg();
     }
@@ -305,19 +307,25 @@ function GetTable()
 	var arrBZJ = new Array("部长自评表","干事考核表","部长反馈表","整体考核结果反馈表");
 	var arrZXT = new Array("部长考核表","部门考核表","优秀部长评定表","整体考核结果反馈表","主席团反馈表");
 	//alert(arr.type);
+    var arrWeiJi=new Array();
+    for(var i=0;i<arr.weiji.length;++i)
+    {
+        arrWeiJi.push(arrWeiJiBiao[arr.weiji[i].table]);
+    }
 	if(debug())
     {
-        return arrCeShiTable;
+        //console.log(arrCeShiTable.concat(arrWeiJi));
+        return arrCeShiTable.concat(arrWeiJi);
     }
     else
     {
         switch(arr.type)
         {
-          case "BZJ": return arrBZJ;
-          case "YBGS": return arrYBGS;
-          case "RLGS": return arrRLGS;
-          case "ZXT": return arrZXT;
-          case "RLBZ":return arrRLBZ;
+          case "BZJ": return arrBZJ.concat(arrWeiJi);
+          case "YBGS": return arrYBGS.concat(arrWeiJi);
+          case "RLGS": return arrRLGS.concat(arrWeiJi);
+          case "ZXT": return arrZXT.concat(arrWeiJi);
+          case "RLBZ":return arrRLBZ.concat(arrWeiJi);
         };
     }
 	
@@ -384,6 +392,381 @@ function PostTable(buttonText)
 	}
 	return iCurButton;
 }*/
+
+
+
+function PerformInit()
+{
+    ajaxcheck();
+	AutoHideHead();
+
+	var arrTable = GetTable();
+	GetObjById("table_name").innerHTML = arrTable[0];
+		
+	ActiveTableButton();
+	SelectTime(0);
+}
+
+
+//自动隐藏头部
+function AutoHideHead() 
+{
+	var iTopHide = 0;
+	var iTopDisplay = 0;
+	var flag = 1;
+	var ySite = 0;
+
+	GetObjById("hdr").style.top = "0px";
+	
+	setTimeout(HideDisplay, 500);
+	function HideDisplay() 
+	{
+		function getScrollTop() 
+		{
+			var scrollPos;
+			if (window.pageYOffset) 
+			{
+				scrollPos = window.pageYOffset;
+			} 
+			else if (document.compatMode && document.compatMode != 'BackCompat') 
+			{
+				scrollPos = document.documentElement.scrollTop;
+			} 
+			else if (document.body) 
+			{
+				scrollPos = document.body.scrollTop;
+			}
+			return scrollPos;
+		}
+
+		function SlideToDisplay()
+		{
+			if (getScrollTop() < GetObjById("perform_hdr").offsetTop) 
+			{
+				GetObjById("hdr").style.top = 0 + "px";
+				return;
+			}
+
+			if (iTopDisplay < 0) 
+			{
+				iTopDisplay += 2;
+				GetObjById("hdr").style.top = iTopDisplay + "px";
+				setTimeout(SlideToDisplay, 5);
+			}
+			else
+				GetObjById("hdr").style.top = "0px";
+		}
+
+		function SlideToHide() 
+		{
+			if (iTopHide > -134) 
+			{
+				iTopHide -= 2;
+				GetObjById("hdr").style.top = iTopHide + "px";
+				setTimeout(SlideToHide, 5);
+			}
+			if (getScrollTop() < GetObjById("perform_hdr").offsetTop) 
+			{
+				GetObjById("hdr").style.top = 0 + "px";
+				return;
+			}
+		}
+
+		document.onmouseover = function (e) 
+		{
+			ySite = e.clientY;
+			window.onscroll = function () 
+			{
+				if (getScrollTop() >= GetObjById("perform_hdr").offsetTop) 
+				{
+					if (GetObjById("hdr").style.top == "0px" && ySite > 140) 
+					{
+						iTopHide = 0;
+						setTimeout(SlideToHide, 1000);
+					}
+				} 
+				else 
+				{
+					GetObjById("hdr").style.top = 0 + "px";
+				}
+			}
+
+			setTimeout(AutoHide, 2000);
+			function AutoHide() 
+			{
+				if (getScrollTop() >= GetObjById("perform_hdr").offsetTop) 
+				{
+					if (GetObjById("hdr").style.top == "0px" && ySite > 140) 
+					{
+						if (flag == 1) 
+						{
+							iTopHide = 0;
+							SlideToHide();
+						}
+					}
+				} 
+				else 
+				{
+					GetObjById("hdr").style.top = 0 + "px";
+				}
+			}
+
+			if (getScrollTop() >= GetObjById("perform_hdr").offsetTop) 
+			{
+				if (GetObjById("hdr").style.top == "-134px" && ySite <= 6)
+				{
+					iTopDisplay = parseInt(GetObjById("hdr").style.top);
+					SlideToDisplay();
+				}
+			} 
+			else 
+			{
+				GetObjById("hdr").style.top = 0 + "px";
+			}
+		}
+		
+	}
+}
+
+
+function ActiveTableButton()
+{
+	var arrTable = GetTable();
+
+	var strHTML = "";
+	for(var i=0; i<arrTable.length; ++i)
+	{
+		var strId = "button_" + i;
+		strHTML += "<button type=\"button\" class=\"perf_ctrl_button\" id=\"" 
+				+ strId + "\" value=\"" + arrTable[i] + "\">" + arrTable[i] + "</button>\n";
+	}
+	
+	strHTML += "<img id=\"zhibiao\" src=\"zhibiao2.png\" />"
+	
+	GetObjById("control_group").innerHTML = strHTML;	
+	
+	var iPreTable = 0;
+	var iCurTable = 0;
+	
+	GetObjById("button_"+iCurTable).style.background = "#018f89";
+	for(var iCount=0; iCount<arrTable.length; ++iCount )
+	{
+		var strId = "button_" + iCount;
+		document.getElementById(strId).onclick=function(e)
+		{		
+			strId=GetId(e);
+			var arr = strId.split("_");
+			iPreTable = iCurTable;
+			iCurTable = parseInt(arr[1]);
+			ChangStyle(iPreTable, iCurTable);//改变当前激活的按钮的样式
+			SelectTime(iCurTable);//处理当前被激活的按钮对应的信息
+			GetObjById("show_more").innerHTML = "";
+			//PostTable(this.value);//把点击的表传给服务器			
+		}
+	}
+}
+
+
+//改变选中的部分的样式
+function ChangStyle(iPreTable, iCurTable)
+{
+	GetObjById("button_"+iPreTable).style.background = "#79c0be";
+	ZhiBiaoHuaDong(iPreTable, iCurTable);//滑动指标指向当前别激活的按钮
+	GetObjById("button_"+iCurTable).style.background = "#018f89";
+	
+	var arrTable = GetTable();
+	GetObjById("table_name").innerHTML = arrTable[iCurTable];//打印当前被激活的按钮的内容的名字
+}
+
+
+//设置三角形指标滑动
+function ZhiBiaoHuaDong(iPreTable, iCurTable)
+{
+	var iImgLocation = 43 + 105*iPreTable;
+	var iDif = (iCurTable-iPreTable) * 105;
+	if(iDif != 0)
+		Slide();
+	function Slide()
+	{
+		var iChange = iDif/10;
+		
+		if(Math.abs(iDif) >= 1)
+		{
+			iImgLocation  += iChange;
+			GetObjById("zhibiao").style.top = iImgLocation + "px";
+			iDif -= iChange;
+			setTimeout(Slide, 5);
+		}
+		else
+		{
+			iImgLocation  += iDif;
+			GetObjById("zhibiao").style.top = iImgLocation + "px";
+		}
+	}
+}
+
+
+//根据选择时间显示内容
+function SelectTime(iCurShowFunction)
+{
+	var arrTable = GetTable();
+	var objTimes = Get_Time();
+	
+	var btnText = arrTable[iCurShowFunction];
+	
+	function TimeType(btnText)
+	{
+		switch(btnText)
+		{
+			case "干事自评表":			
+			case "跟进部门出勤统计表":
+			case "调研意见采纳表":			
+			case "部长自评表":
+			case "干事考核表":			
+			case "部长考核表":
+			case "部门考核表":
+			case "优秀部长评定表":			
+			case "其他情况加减分":
+            case "秘书处制度违纪登记表":
+            case "人力资源部制度违纪登记表":
+            case "宣传部制度违纪登记表":
+            case "信息编辑部制度违纪登记表":
+            case "公关部制度违纪登记表":
+            case "司仪礼仪队违纪登记表":
+				return "evaluation";
+			
+			case "主席团反馈表":	
+			case "部长反馈表":
+			case "整体考核结果反馈表":
+			case "干事考核反馈表":
+				return "feedback"
+			
+			case "考核进程控制表":
+            case "查看未完成情况":
+				return "control";
+
+			case "优秀评定限制表":
+				return "excellent";
+		}
+	}
+	
+	var timeType = TimeType(btnText);
+	var time = objTimes[timeType];
+
+	var objYear = GetObjById("year");
+	var objMonth = GetObjById("month");
+	objMonth.options.length = 0;
+	objYear.options.length = 0;
+	
+	for(var i = 0; i < time.length; ++i)
+	{
+		objYear.options[i] = new Option(time[i].year);
+	}
+	objYear.selectedIndex = 0;
+	for(var j = 0; j < time[0].arrMonth.length; ++j)
+	{
+		objMonth.options[j] = new Option(time[0].arrMonth[j].month);
+	}
+	objMonth.selectedIndex = 0;
+	
+	objYear.onchange = function()
+	{
+		objMonth.options.length = 0;
+		var index = objYear.selectedIndex;
+
+		for(var i = 0; i < time[index].arrMonth.length; ++i)
+		{
+			objMonth.options[i] = new Option(time[index].arrMonth[i].month);
+		}
+	}
+	
+
+	GetObjById("OK_button").onclick = function()
+	{
+		year = objYear.options[objYear.selectedIndex].text;
+		month = objMonth.options[objMonth.selectedIndex].text;
+		var arrShowFun = ArrShowTable();
+		//if(PostTimeToServer(year, month, btnText ))//把获取到的时间的表传回服务器
+		arrShowFun[iCurShowFunction]();//调用被激活的按钮对应的信息的函数
+		//alert(year + "  "+month);
+	}
+}
+
+
+function ArrShowTable()
+{
+	var arrTable = GetTable();
+	var arrShowFunction = new Array();//存放显示各种表格函数的数组
+	
+	for(var i=0; i<arrTable.length; ++i)
+	{
+		switch(arrTable[i])
+		{
+			case "干事自评表":
+			arrShowFunction.push(Show_GSZP);
+			break;
+			case "干事考核反馈表":
+			arrShowFunction.push(Show_GSKHFK);
+			break;
+			case "跟进部门出勤统计表":
+			arrShowFunction.push(Show_GJBMCQTJ);
+			break;
+			case "调研意见采纳表":
+			arrShowFunction.push(Show_DYYJCN);
+			break;
+			case "整体考核结果反馈表":
+			arrShowFunction.push(Show_ZTKHJGFK);
+			break;
+			case "部长自评表":
+			arrShowFunction.push(Show_BZZP);
+			break;
+			case "干事考核表":
+			arrShowFunction.push(Show_GSKH);
+			break;
+			case "部长反馈表":
+			arrShowFunction.push(Show_BZFK);
+			break;
+			case "部长考核表":
+			arrShowFunction.push(Show_BZKH);
+			break;
+			case "部门考核表":
+			arrShowFunction.push(Show_BMKH);
+			break;
+			case "优秀部长评定表":
+			arrShowFunction.push(Show_YXBZPD);
+			break;
+			case "主席团反馈表":
+			arrShowFunction.push(Show_ZXTFK);
+			break;
+			case "考核进程控制表":
+			arrShowFunction.push(Show_KHJCKZ);
+			break;
+			case "其他情况加减分":
+			arrShowFunction.push(Show_QTQKJJF);
+			break;	
+			case "优秀评定限制表":
+			arrShowFunction.push(Show_YXPDXZ);
+			break;	
+			case "查看未完成情况":
+			arrShowFunction.push(Show_CKWWCQK);
+            case "秘书处制度违纪登记表":
+            arrShowFunction.push(function(){Show_WJDJ(0);});
+            case "人力资源部制度违纪登记表":
+            arrShowFunction.push(function(){Show_WJDJ(1);});
+            case "宣传部制度违纪登记表":
+            arrShowFunction.push(function(){Show_WJDJ(2);});
+            case "信息编辑部制度违纪登记表":
+            arrShowFunction.push(function(){Show_WJDJ(3);});
+            case "公关部制度违纪登记表":
+            arrShowFunction.push(function(){Show_WJDJ(4);});
+            case "司仪礼仪队违纪登记表":
+            arrShowFunction.push(function(){Show_WJDJ(5);});
+		}
+	}
+	return arrShowFunction;
+}
+
+
 
 
 //干事自评表的考核项目和评分标准
@@ -3401,360 +3784,45 @@ function Get_CKWWCQK()
 			
 }
 
-
-function PerformInit()
+function Get_WJDJ(iType)
 {
-    ajaxcheck();
-	AutoHideHead();
-
-	var arrTable = GetTable();
-	GetObjById("table_name").innerHTML = arrTable[0];
-		
-	ActiveTableButton();
-	SelectTime(0);
+    //iType是指表的种类,比如0表示秘书处制度违纪登记表
+    try
+    {
+        if(debug())
+            throw("ajax");
+        //ajax代码
+    }
+    catch(err)
+    {
+        json_Get_WJDJ=
+        {
+            "status":1,
+            "arrWJDJB":
+            [
+                {"bm":"1","kf":"0.5","ly":"1借物资没有提前联系"},
+                {"bm":"2","kf":"0.6","ly":"2借物资没有提前联系"},
+                //每个部门都有
+            ]
+        }
+        errmsg();
+    }
+    return json_Get_WJDJ;
 }
 
-
-//自动隐藏头部
-function AutoHideHead() 
+function Post_WJDJ(obj,iType)
 {
-	var iTopHide = 0;
-	var iTopDisplay = 0;
-	var flag = 1;
-	var ySite = 0;
-
-	GetObjById("hdr").style.top = "0px";
-	
-	setTimeout(HideDisplay, 500);
-	function HideDisplay() 
-	{
-		function getScrollTop() 
-		{
-			var scrollPos;
-			if (window.pageYOffset) 
-			{
-				scrollPos = window.pageYOffset;
-			} 
-			else if (document.compatMode && document.compatMode != 'BackCompat') 
-			{
-				scrollPos = document.documentElement.scrollTop;
-			} 
-			else if (document.body) 
-			{
-				scrollPos = document.body.scrollTop;
-			}
-			return scrollPos;
-		}
-
-		function SlideToDisplay()
-		{
-			if (getScrollTop() < GetObjById("perform_hdr").offsetTop) 
-			{
-				GetObjById("hdr").style.top = 0 + "px";
-				return;
-			}
-
-			if (iTopDisplay < 0) 
-			{
-				iTopDisplay += 2;
-				GetObjById("hdr").style.top = iTopDisplay + "px";
-				setTimeout(SlideToDisplay, 5);
-			}
-			else
-				GetObjById("hdr").style.top = "0px";
-		}
-
-		function SlideToHide() 
-		{
-			if (iTopHide > -134) 
-			{
-				iTopHide -= 2;
-				GetObjById("hdr").style.top = iTopHide + "px";
-				setTimeout(SlideToHide, 5);
-			}
-			if (getScrollTop() < GetObjById("perform_hdr").offsetTop) 
-			{
-				GetObjById("hdr").style.top = 0 + "px";
-				return;
-			}
-		}
-
-		document.onmouseover = function (e) 
-		{
-			ySite = e.clientY;
-			window.onscroll = function () 
-			{
-				if (getScrollTop() >= GetObjById("perform_hdr").offsetTop) 
-				{
-					if (GetObjById("hdr").style.top == "0px" && ySite > 140) 
-					{
-						iTopHide = 0;
-						setTimeout(SlideToHide, 1000);
-					}
-				} 
-				else 
-				{
-					GetObjById("hdr").style.top = 0 + "px";
-				}
-			}
-
-			setTimeout(AutoHide, 2000);
-			function AutoHide() 
-			{
-				if (getScrollTop() >= GetObjById("perform_hdr").offsetTop) 
-				{
-					if (GetObjById("hdr").style.top == "0px" && ySite > 140) 
-					{
-						if (flag == 1) 
-						{
-							iTopHide = 0;
-							SlideToHide();
-						}
-					}
-				} 
-				else 
-				{
-					GetObjById("hdr").style.top = 0 + "px";
-				}
-			}
-
-			if (getScrollTop() >= GetObjById("perform_hdr").offsetTop) 
-			{
-				if (GetObjById("hdr").style.top == "-134px" && ySite <= 6)
-				{
-					iTopDisplay = parseInt(GetObjById("hdr").style.top);
-					SlideToDisplay();
-				}
-			} 
-			else 
-			{
-				GetObjById("hdr").style.top = 0 + "px";
-			}
-		}
-		
-	}
+    try
+    {
+        if(debug())
+            return true;
+        //ajax代码,obj是获取的时候一样的格式
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
 }
-
-
-function ActiveTableButton()
-{
-	var arrTable = GetTable();
-
-	var strHTML = "";
-	for(var i=0; i<arrTable.length; ++i)
-	{
-		var strId = "button_" + i;
-		strHTML += "<button type=\"button\" class=\"perf_ctrl_button\" id=\"" 
-				+ strId + "\" value=\"" + arrTable[i] + "\">" + arrTable[i] + "</button>\n";
-	}
-	
-	strHTML += "<img id=\"zhibiao\" src=\"zhibiao2.png\" />"
-	
-	GetObjById("control_group").innerHTML = strHTML;	
-	
-	var iPreTable = 0;
-	var iCurTable = 0;
-	
-	GetObjById("button_"+iCurTable).style.background = "#018f89";
-	for(var iCount=0; iCount<arrTable.length; ++iCount )
-	{
-		var strId = "button_" + iCount;
-		document.getElementById(strId).onclick=function(e)
-		{		
-			strId=GetId(e);
-			var arr = strId.split("_");
-			iPreTable = iCurTable;
-			iCurTable = parseInt(arr[1]);
-			ChangStyle(iPreTable, iCurTable);//改变当前激活的按钮的样式
-			SelectTime(iCurTable);//处理当前被激活的按钮对应的信息
-			GetObjById("show_more").innerHTML = "";
-			//PostTable(this.value);//把点击的表传给服务器			
-		}
-	}
-}
-
-
-//改变选中的部分的样式
-function ChangStyle(iPreTable, iCurTable)
-{
-	GetObjById("button_"+iPreTable).style.background = "#79c0be";
-	ZhiBiaoHuaDong(iPreTable, iCurTable);//滑动指标指向当前别激活的按钮
-	GetObjById("button_"+iCurTable).style.background = "#018f89";
-	
-	var arrTable = GetTable();
-	GetObjById("table_name").innerHTML = arrTable[iCurTable];//打印当前被激活的按钮的内容的名字
-}
-
-
-//设置三角形指标滑动
-function ZhiBiaoHuaDong(iPreTable, iCurTable)
-{
-	var iImgLocation = 43 + 105*iPreTable;
-	var iDif = (iCurTable-iPreTable) * 105;
-	if(iDif != 0)
-		Slide();
-	function Slide()
-	{
-		var iChange = iDif/10;
-		
-		if(Math.abs(iDif) >= 1)
-		{
-			iImgLocation  += iChange;
-			GetObjById("zhibiao").style.top = iImgLocation + "px";
-			iDif -= iChange;
-			setTimeout(Slide, 5);
-		}
-		else
-		{
-			iImgLocation  += iDif;
-			GetObjById("zhibiao").style.top = iImgLocation + "px";
-		}
-	}
-}
-
-
-//根据选择时间显示内容
-function SelectTime(iCurShowFunction)
-{
-	var arrTable = GetTable();
-	var objTimes = Get_Time();
-	
-	var btnText = arrTable[iCurShowFunction];
-	
-	function TimeType(btnText)
-	{
-		switch(btnText)
-		{
-			case "干事自评表":			
-			case "跟进部门出勤统计表":
-			case "调研意见采纳表":			
-			case "部长自评表":
-			case "干事考核表":			
-			case "部长考核表":
-			case "部门考核表":
-			case "优秀部长评定表":			
-			case "其他情况加减分":
-				return "evaluation";
-			
-			case "主席团反馈表":	
-			case "部长反馈表":
-			case "整体考核结果反馈表":
-			case "干事考核反馈表":
-				return "feedback"
-			
-			case "考核进程控制表":
-            case "查看未完成情况":
-				return "control";
-
-			case "优秀评定限制表":
-				return "excellent";
-		}
-	}
-	
-	var timeType = TimeType(btnText);
-	var time = objTimes[timeType];
-
-	var objYear = GetObjById("year");
-	var objMonth = GetObjById("month");
-	objMonth.options.length = 0;
-	objYear.options.length = 0;
-	
-	for(var i = 0; i < time.length; ++i)
-	{
-		objYear.options[i] = new Option(time[i].year);
-	}
-	objYear.selectedIndex = 0;
-	for(var j = 0; j < time[0].arrMonth.length; ++j)
-	{
-		objMonth.options[j] = new Option(time[0].arrMonth[j].month);
-	}
-	objMonth.selectedIndex = 0;
-	
-	objYear.onchange = function()
-	{
-		objMonth.options.length = 0;
-		var index = objYear.selectedIndex;
-
-		for(var i = 0; i < time[index].arrMonth.length; ++i)
-		{
-			objMonth.options[i] = new Option(time[index].arrMonth[i].month);
-		}
-	}
-	
-
-	GetObjById("OK_button").onclick = function()
-	{
-		year = objYear.options[objYear.selectedIndex].text;
-		month = objMonth.options[objMonth.selectedIndex].text;
-		var arrShowFun = ArrShowTable();
-		//if(PostTimeToServer(year, month, btnText ))//把获取到的时间的表传回服务器
-		arrShowFun[iCurShowFunction]();//调用被激活的按钮对应的信息的函数
-		//alert(year + "  "+month);
-	}
-}
-
-
-function ArrShowTable()
-{
-	var arrTable = GetTable();
-	var arrShowFunction = new Array();//存放显示各种表格函数的数组
-	
-	for(var i=0; i<arrTable.length; ++i)
-	{
-		switch(arrTable[i])
-		{
-			case "干事自评表":
-			arrShowFunction.push(Show_GSZP);
-			break;
-			case "干事考核反馈表":
-			arrShowFunction.push(Show_GSKHFK);
-			break;
-			case "跟进部门出勤统计表":
-			arrShowFunction.push(Show_GJBMCQTJ);
-			break;
-			case "调研意见采纳表":
-			arrShowFunction.push(Show_DYYJCN);
-			break;
-			case "整体考核结果反馈表":
-			arrShowFunction.push(Show_ZTKHJGFK);
-			break;
-			case "部长自评表":
-			arrShowFunction.push(Show_BZZP);
-			break;
-			case "干事考核表":
-			arrShowFunction.push(Show_GSKH);
-			break;
-			case "部长反馈表":
-			arrShowFunction.push(Show_BZFK);
-			break;
-			case "部长考核表":
-			arrShowFunction.push(Show_BZKH);
-			break;
-			case "部门考核表":
-			arrShowFunction.push(Show_BMKH);
-			break;
-			case "优秀部长评定表":
-			arrShowFunction.push(Show_YXBZPD);
-			break;
-			case "主席团反馈表":
-			arrShowFunction.push(Show_ZXTFK);
-			break;
-			case "考核进程控制表":
-			arrShowFunction.push(Show_KHJCKZ);
-			break;
-			case "其他情况加减分":
-			arrShowFunction.push(Show_QTQKJJF);
-			break;	
-			case "优秀评定限制表":
-			arrShowFunction.push(Show_YXPDXZ);
-			break;	
-			case "查看未完成情况":
-			arrShowFunction.push(Show_CKWWCQK);
-		}
-	}
-	return arrShowFunction;
-}
-
 
 //干事自评表
 function Show_GSZP()
@@ -6439,7 +6507,7 @@ function Show_QTQKJJF()
 			+ "		<tr><td>姓名</td><td>职位</td><td>加减分</td><td>理由</td>";
 	for(var i = 0; i < obj_QTQKJJF.persons.length; ++i)
 	{
-		strHTML += "<tr><td>" + obj_QTQKJJF.persons[i].name + "</td><td>" + arrTypeName[obj_QTQKJJF.persons[i].depart-1] + "</td>"
+		strHTML += "<tr><td>" + obj_QTQKJJF.persons[i].name + "</td><td>" + obj_QTQKJJF.persons[i].depart + "</td>"
 				+  "<td class=\"normal_input\"><input id=\"" + ("jiajianfen_"+i) + "\" type=\"text\" size=\"5\" class=\"perf_textarea\" value=\"" + obj_QTQKJJF.persons[i].jiajianfen + "\" /></td>"
 				+  "<td class=\"normal_input\"><input id=\"" + ("liyou_"+i) + "\" type=\"texteara\" size=\"80\" class=\"perf_textarea\" value=\"" + obj_QTQKJJF.persons[i].liyou + "\" /></td></tr>\n";
 	}
@@ -6930,7 +6998,122 @@ function Show_CKWWCQK()
 	
 }
 
+//各种违纪表
+function Show_WJDJ(iType)
+{
+    objWJDJ=Get_WJDJ(iType);
+    var strHTML=new String();
+    for(var i=0;i<objWJDJ.arrWJDJB.length;i++)
+    {
+        strHTML+="<h3>"+arrDepartName[objWJDJ.arrWJDJB[i].bm-1]+"</h3>"
+        +"<p class=\"fill_in_tips\"><span class=\"fill_part\">填写指引:</span>"
+        +"请填写"+arrDepartName[objWJDJ.arrWJDJB[i].bm-1]+"的违纪情况,多个理由请用'|'隔开"
+        +"</p>"
+        +"<h4>违纪扣分:</h4>"
+        +"<input id=\"df_"+objWJDJ.arrWJDJB[i].bm+"\" class=\"perf_textarea\" type=\"text\" name=\"#\" size=\"10\" />"
+        +"<h4>理由:</h4>"
+        +"<textarea id=\"ly_"+objWJDJ.arrWJDJB[i].bm+"\" class=\"perf_textarea\" name=\"#\" rows=\"4\" cols=\"50\"></textarea>";
+    }
+    strHTML+= "<br /><input type=\"button\" value=\"提交\" id=\"submit\"  class=\"perf_button\" />\n";
+    
+    $("#show_more").hide().html(strHTML);
+    
+    //填充value绑定消息相应
+    for(var i=0;i<objWJDJ.arrWJDJB.length;i++)
+    {
+        $("#df_"+objWJDJ.arrWJDJB[i].bm).val(objWJDJ.arrWJDJB[i].kf).change(
+            function(){
+                var val=$(this).val();
+                var index=-1;
+                var strID=new String($(this).attr("id"));
+                strID=strID.replace("df_","");
+                console.log(strID);
+                //查找匹配索引
+                for(var j=0;j<objWJDJ.arrWJDJB.length;j++)
+                {
+                    if(objWJDJ.arrWJDJB[j].bm==strID)//找到匹配部门
+                    {
+                        index=j;
+                        break;
+                    }
+                }
+                if(val<=0&&val>=-100)
+                {
+                    objWJDJ.arrWJDJB[j].kf=$(this).val();   
+                }
+                else
+                {
+                    alert("您填写的内容含有非法字符,请重新填写");
+                    $(this).val(objWJDJ.arrWJDJB[index].kf);
+                    if($(this).val()=="")
+                    {
+                        $(this).val("0");
+                        objWJDJ.arrWJDJB[index].kf="0";
+                    }
+                }
+            });
+        $("#ly_"+objWJDJ.arrWJDJB[i].bm).val(objWJDJ.arrWJDJB[i].ly).change(
+            function(){
+                var val=$(this).val();
+                var index=-1;
+                var strID=new String($(this).attr("id"));
+                strID=strID.replace("ly_","");
+                console.log(strID);
+                //查找匹配索引
+                for(var j=0;j<objWJDJ.arrWJDJB.length;j++)
+                {
+                    if(objWJDJ.arrWJDJB[j].bm==strID)
+                    {
+                        index=j;
+                        break;
+                    }
+                }
+                
+                if(CheckLegalStr(val))
+                {
+                    
+                    objWJDJ.arrWJDJB[index].ly=$(this).val();
+                }
+                else 
+                {
+                    alert("您填写的内容含有非法字符,请重新填写");
+                    $(this).val(objWJDJ.arrWJDJB[index].ly);
+                    if($(this).val()=="")
+                    {
+                        $(this).val("null");
+                        objWJDJ.arrWJDJB[index].ly="null";
+                    }
+                }
+            });
+    }
+    if(objWJDJ.status==0)
+    {
+    
+        $("#submit").click(function(){
+            if(Post_WJDJ(objWJDJ,iType))
+            {
+                alert("提交成功");
+                $("#show_more").html("");
+            }
+            else
+            {
+                alert("*提交失败，请重试");
+            }
+        });
+    }
+    else
+    {
+        $("#submit").val("确定").click(function(){
+            $("#show_more").html("");
+        });
+        
+        $("#show_more input,#show_more textarea").attr("readonly",true);
+        
+    }
+    //其他操作
+    $("h4").css("margin","0");
+    
+    $("#show_more").slideDown();            
 
-
-
+}
 
