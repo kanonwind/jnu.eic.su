@@ -21,8 +21,10 @@ var arrMajorName = new Array("包装工程","软件工程","电气工程及其�
 
 var flagUserData=0;//用户信息，0为要从后台获取数据，1为不用
 var flagKKB=0;//空课表，0为要从后台获取数据，1为不用
+var flagTXL=0;//通讯录,0为要从后台获取数据,1为不用
 var objPersonalData;
 var arrES;
+var arrObjSortPD;
 function UserCenterInit()
 {
 	ShowPersonalData();
@@ -95,6 +97,7 @@ function GetPersonalData()
         };
     console.log(json_Get);
     */
+    console.log("接收数据:");
     console.log(obj);
     //if debug
     //return json_Get;
@@ -244,7 +247,7 @@ function GetContactsBooks()
 		this.birType = birType;
 		this.month = month;
 		this.day = day;
-		this.birthday = this.birType + " " + this.month + this.day;
+		//this.birthday = this.birType + " " + this.month + this.day;
 	}
 	
 	
@@ -328,8 +331,10 @@ function GetContactsBooks()
 	///
 	
 	//从服务器获取个人信息对象的数组
-	var arrObjPersonalData = arrObjPD;
-	return arrObjPersonalData;
+	
+    console.log("通讯录接收数据:");
+    console.log(arrObjPD);
+	return arrObjPD;
 }
 //把修改后的空课表传回服务器
 function PostESToServer(arrES)
@@ -388,11 +393,11 @@ function ShowPersonalData()
                         + "<p>职位：</p>\n"
                     + "</div>\n"
                     + "<div class=\"info_item\" id=\"account_info_detail\"><!--这是要从服务器拿数据的，这里只是例子-->\n"
-                        + "<p>" + objPersonalData.account + "</p>\n"
-                        + "<p>" + objPersonalData.name + "</p>\n"
-                        + "<p>" + arrUserType[objPersonalData.type-1] + "</p>\n"
-                        + "<p>" + arrDepartName[objPersonalData.apartment-1] + "</p>\n"
-                        + "<p>" + objPersonalData.position + "</p>\n"
+                        + "<p>" + objPersonalData.account + "&nbsp;</p>\n"
+                        + "<p>" + objPersonalData.name + "&nbsp;</p>\n"
+                        + "<p>" + arrUserType[objPersonalData.type-1] + "&nbsp;</p>\n"
+                        + "<p>" + arrDepartName[objPersonalData.apartment-1] + "&nbsp;</p>\n"
+                        + "<p>" + objPersonalData.position + "&nbsp;</p>\n"
                      + "</div>\n"
                 + "</div>\n"
                 + "<div class=\"account\" id=\"contact_info\">\n"
@@ -405,11 +410,11 @@ function ShowPersonalData()
                         + "<p>常用邮箱：</p>\n"
                     + "</div>\n"
                     + "<div class=\"info_item\" id=\"contact_info_detail\">\n"
-                        + "<p>" + objPersonalData.phone + "</p>\n"
-                        + "<p>" + objPersonalData.short + "</p>\n"
-                        + "<p>" + objPersonalData.qq + "</p>\n"
-                        + "<p>" + objPersonalData.dorm + "</p>\n"
-                        + "<p>" + objPersonalData.mail + "</p>\n"
+                        + "<p>" + objPersonalData.phone + "&nbsp;</p>\n"
+                        + "<p>" + objPersonalData.short + "&nbsp;</p>\n"
+                        + "<p>" + objPersonalData.qq + "&nbsp;</p>\n"
+                        + "<p>" + objPersonalData.dorm + "&nbsp;</p>\n"
+                        + "<p>" + objPersonalData.mail + "&nbsp;</p>\n"
                     + "</div>\n"
                 + "</div>\n"
                 + "<div class=\"account\" id=\"personal_info\">\n"
@@ -421,21 +426,27 @@ function ShowPersonalData()
                         + "<p>生日：</p>\n"
                     + "</div>\n"
                     + "<div class=\"info_item\" id=\"personal_info_detail\">\n"
-                        + "<p>" + arrGender[objPersonalData.sex] + "</p>\n"
-                        + "<p>" + objPersonalData.grade + "</p>\n"
-                        + "<p>" + objPersonalData.major + "</p>\n"
+                        + "<p>" + arrGender[objPersonalData.sex] + "&nbsp;</p>\n"
+                        + "<p>" + objPersonalData.grade + "&nbsp;</p>\n"
+                        + "<p>" + arrMajorName[objPersonalData.major] + "&nbsp;</p>\n"
                         + "<p>" ;
-                        
-            if(objPersonalData.birthtype==1)
+            if(objPersonalData.birthmonth==""|| objPersonalData.birthday=="")
             {
-                strPersonalDataHTML+="农历 "+lunarMonths[objPersonalData.birthmonth-1]+lunarMonthDays[objPersonalData.birthday-1];
+                strPersonalDataHTML+="生日未填写- -";
             }
             else
             {
-                strPersonalDataHTML+="公历 "+objPersonalData.birthmonth+"月"+objPersonalData.birthday+"日";
+                if(objPersonalData.birthtype==1)
+                {
+                    strPersonalDataHTML+="农历 "+lunarMonths[objPersonalData.birthmonth-1]+lunarMonthDays[objPersonalData.birthday-1];
+                }
+                else
+                {
+                    strPersonalDataHTML+="公历 "+gregorianMonths[objPersonalData.birthmonth-1]+gregorianDays[objPersonalData.birthday-1];
+                }
             }
             
-            strPersonalDataHTML+= "</p>\n"
+            strPersonalDataHTML+= "&nbsp;</p>\n"
                     + "</div>\n"
                 + "</div>\n"
             + "</div>\n"
@@ -449,20 +460,16 @@ function ShowPersonalData()
             + "</div>\n"
         + "</div>\n";
     
-
-    document.getElementById("personal_data").innerHTML = strPersonalDataHTML;
-	
-	document.getElementById("per_info_modf_apy").onclick = function()
-    {
-        document.getElementById("personal_data").innerHTML=""; 
+    $("#personal_data").hide().html(strPersonalDataHTML);
+	$("#per_info_modf_apy").click(function(){
+        $("#personal_data").html("");
         flagUserData=0;
         ChangePersonalData(objPersonalData); 
-    }
-	document.getElementById("passworld_change").onclick = function()
-    {
-        document.getElementById("personal_data").innerHTML=""; 
-        ChangePassWord();
-    }
+    });
+	$("#passworld_change").click(function(){
+        $("#personal_data").html("");
+    });
+	$("#personal_data").slideDown();
 		
 
 }
@@ -616,7 +623,8 @@ function PrintToHTML(objPersonalData, curYear)
 function ChangePersonalData(objPersonalData)
 {
 	//var objPersonalData = GetPersonalData();   
-	
+	flagUserData=0;
+    falgTXL=0;
 	////确定当前大一入学的年份
 	var curYear;
 	var myDate = new Date();
@@ -640,17 +648,10 @@ function ChangePersonalData(objPersonalData)
 			
 	document.getElementById("modf_user_sex").selectedIndex = objPersonalData.sex;
 	
-	var usrGrade = new Array((curYear-2), (curYear-1), curYear);
-	for(var i = 0; i < usrGrade.length; ++i)
-	{
-		if(objPersonalData.grade == usrGrade[i])
-		{
-			document.getElementById("modf_user_grade").selectedIndex = i;
-			break;
-		}
-	}
 	
-	document.getElementById("modf_user_major").selectedIndex = arrMajorName.indexOf(objPersonalData.major);
+    $("#modf_user_grade").val(objPersonalData.grade);
+	$("#modf_user_major").val(objPersonalData.major);
+	
 
 	/////设置生日日期	
 	var objBirType = document.getElementById("birthday_type");
@@ -703,7 +704,7 @@ function ChangePersonalData(objPersonalData)
 			objMonthType.options[i] = new Option(lunarMonths[i]);
 	}
 	
-	function GreMonths()///设置公历月份
+	function GreMonths()//设置公历月份
 	{
 		objMonthType.options.length = 0;
 		for(var i = 0; i < 12; ++i)
@@ -714,14 +715,14 @@ function ChangePersonalData(objPersonalData)
 		}
 	}	
 	
-	function LunarDays()///设置农历日期
+	function LunarDays()//设置农历日期
 	{
 		objDaysType.options.length = 0;
 		for(var i = 0; i < 30; ++i)
 			objDaysType.options[i] = new Option(lunarMonthDays[i]);
 	}	
 
-	function GreDays()///设置公历日期
+	function GreDays()//设置公历日期
 	{	
 		var strMonth = objMonthType.options[objMonthType.selectedIndex].value;
 		var iMonth = parseInt(strMonth);
@@ -856,11 +857,8 @@ function ChangePersonalData(objPersonalData)
 			strMUDE = "";
 	}
 	CheckDorm();
-	document.getElementById("modf_user_dorm").onchange = function() 
-	{
-		objPersonalData.dorm = this.value;
-		CheckDorm();
-	}
+    $("#modf_user_dorm").change(function(){CheckDorm();objPersonalData.dorm=$(this).val();});
+	
 	//修改常用邮箱
 	var strUEE = "";
 	function CheckEmail()
@@ -874,45 +872,61 @@ function ChangePersonalData(objPersonalData)
 			strUEE = "";
 	}
 	CheckEmail();
-	document.getElementById("modf_user_email").onchange = function() 
-	{
-		objPersonalData.mail = this.value;
-		CheckEmail();
-	}
+    $("#modf_user_email").change(function(){objPersonalData.mail=$(this).val();CheckEmail();});
 	//修改性别
-	document.getElementById("modf_user_sex").onchange = function() 
-		{objPersonalData.sex = this.selectedIndex;}
+    $("#modf_user_sex").change(function(){objPersonalData.sex=$(this).val();});
 	//修改年级
-	document.getElementById("modf_user_grade").onchange = function() 
-		{objPersonalData.grade = this.selectedIndex;}
+    $("#modf_user_grade").change(function(){objPersonalData.grade=$(this).val();});
 	//修改专业
-	document.getElementById("modf_user_major").onchange = function() 
-		{objPersonalData.major = this.selectedIndex;}
+    $("#modf_user_major").change(function(){objPersonalData.major=$(this).val();});
 	
 	//保存
-	document.getElementById("per_info_modf_submit").onclick = function()
-	{
-		strError= strUDE + strULE + strUSE + strUQE + strMUDE + strUEE;
+    $("#per_info_modf_submit").click(function(){
+        strError= strUDE + strULE + strUSE + strUQE + strMUDE + strUEE;
 		if("" == strError)
 		{	
-			console.log(objPersonalData);
-            document.getElementById("modf_error").innerHTML="";
+			console.log("发送数据:");
+            console.log(objPersonalData);
+            $("#modf_error").html("");
 			if(PostPersonalDataToServer(objPersonalData))
 			{
 				ShowPersonalData();
-				document.getElementById("change_personal_data").innerHTML = "";
+				$("#change_personal_data").html("");
 				return true;
 			}
 			else
 			{
-				document.getElementById("modf_error").innerHTML = "*保存失败，请再次保存";
+				$("#modf_error").html("*保存失败，请再次保存");
 			}
 		}
 		else
 		{
-			document.getElementById("modf_error").innerHTML = strError;
+			$("#modf_error").html(strError);
 		}
-	}
+    });
+	$("#per_info_modf_submit").click(function(){
+		strError= strUDE + strULE + strUSE + strUQE + strMUDE + strUEE;
+		if("" == strError)
+		{	
+			console.log("发送数据:");
+            console.log(objPersonalData);
+            $("#modf_error").html("");
+			if(PostPersonalDataToServer(objPersonalData))
+			{
+				ShowPersonalData();
+				$("#change_personal_data").html("");
+				return true;
+			}
+			else
+			{
+				$("#modf_error").html("*保存失败，请再次保存");
+			}
+		}
+		else
+		{
+			$("#modf_error").html(strError);
+		}
+	});
 }
 
 
@@ -1068,9 +1082,9 @@ function  ShowEmptySchedule()
 					+ "<tbody>\n";						
 
 	//一天每节课对应的时间
-	var arrTime = new Array("08:00-08:50","09:00-09:50","10:10-11:00","11:10-12:00",
-							"12:30-13:20","13:30-14:20","14:30-15:20","15:30-16:20",
-							"16:30-17:20","17:30-18:20","19:00-19:50","20:00-20:50","21:00-21:50");						
+	var arrTime = new Array("08:00-08:45","08:55-09:40","10:00-10:45","10:55-11:40",
+							"12:40-13:25","13:35-14:20","14:30-15:15","15:25-16:10",
+							"16:20-17:05","17:15-18:00","19:00-19:45","19:55-20:40","20:50-21:35");						
 	
 	for(var j = 0; j < 13; ++j)
 	{
@@ -1115,6 +1129,7 @@ function  ShowEmptySchedule()
 //修改空课表
 function ChangeEmptySchedule(arrES)
 {
+    flagKKB=0;
 	var strESHTML = "<div class=\"sign_of_click\" id=\"kkb_sign\" >\n"
 			+ "</div>\n"
 			+ "<div class=\"work_filed\" id=\"kkb_work_filed\">\n"
@@ -1339,6 +1354,7 @@ function SortPersonalDataObj()
 					fubuzhang.push(arrObjSortPD[i][j]);
 					break;
 				case "干事":
+                case "人力干事":
 					ganshi.push(arrObjSortPD[i][j]);
 					break;
 				default:
@@ -1371,8 +1387,11 @@ function SortPersonalDataObj()
  //显示通信录
 function ShowContactsBooks()
 {
-	var arrObjSortPD = SortPersonalDataObj();
-	
+    if(flagTXL==0)
+    {
+        arrObjSortPD = SortPersonalDataObj();
+        flagTXL=1;
+    }
 	var strHTML = "<div class=\"sign_of_click\" id=\"txl_sign\">\n"
 			+ "</div>\n"
 			+ "<div class=\"work_filed\" id=\"txl_work_filed\">\n"
@@ -1412,11 +1431,30 @@ function ShowContactsBooks()
 	var strTBody = "";
 	var arrDepart = new Array("主席团","秘书处","人力资源部","KSC联盟","信息编辑部",
 			"组织部","宣传部","学术部","公关部","体育部","文娱部","心理服务部");
+            
+    function getBirthStr(pObj)
+    {
+        try{
+            if(pObj.birType=="")
+            {
+                return "";
+            }
+            else if(pObj.birType==1)
+            {
+                return "农历 "+lunarMonths[pObj.month-1]+lunarMonthDays[pObj.day-1];
+            }
+            else
+            {
+                return "公历 "+gregorianMonths[pObj.month-1]+gregorianDays[pObj.day-1];
+            }
+        }catch(err){return "";}
+    }
 	for(var iCount = 0; iCount < arrObjSortPD.length -1; ++iCount)
 	{		
 		var iLength = arrObjSortPD[iCount].length;
 		if(arrObjSortPD[iCount].length > 0)
-		{var strDepart = "<tr class=\"first_line\">\n"
+		{
+            var strDepart = "<tr class=\"first_line\">\n"
 						+ "<th rowspan=" + iLength + " scope=\"row\">" + arrObjSortPD[iCount][0].depart + "</th>\n"
 						+ "<td>" + arrObjSortPD[iCount][0].post + "</td>\n"
 							+ "<td>" + arrObjSortPD[iCount][0].name + "</td>\n"
@@ -1424,8 +1462,8 @@ function ShowContactsBooks()
 							+ "<td>" + arrObjSortPD[iCount][0].longPhoneNum + "</td>\n"
 							+ "<td>" + arrObjSortPD[iCount][0].shortPhoneNum + "</td>\n"
 							+ "<td>" + arrObjSortPD[iCount][0].dormNO + "</td>\n"
-							+ "<td>" + arrObjSortPD[iCount][0].birthday + "</td>\n"
-							+ "<td>" + arrObjSortPD[iCount][0].major + "</td>\n"
+							+ "<td>" + getBirthStr(arrObjSortPD[iCount][0]) + "</td>\n"
+							+ "<td>" + arrMajorName[arrObjSortPD[iCount][0].major] + "</td>\n"
 						+ "</tr>\n";
 		var strPersons = "";
 		for(var jCount = 1; jCount < iLength; ++jCount)
@@ -1437,8 +1475,8 @@ function ShowContactsBooks()
 							+ "<td>" + arrObjSortPD[iCount][jCount].longPhoneNum + "</td>\n"
 							+ "<td>" + arrObjSortPD[iCount][jCount].shortPhoneNum + "</td>\n"
 							+ "<td>" + arrObjSortPD[iCount][jCount].dormNO + "</td>\n"
-							+ "<td>" + arrObjSortPD[iCount][jCount].birthday + "</td>\n"
-							+ "<td>" + arrObjSortPD[iCount][jCount].major + "</td>\n"
+							+ "<td>" + getBirthStr(arrObjSortPD[iCount][jCount])+ "</td>\n"
+							+ "<td>" + arrMajorName[arrObjSortPD[iCount][jCount].major] + "</td>\n"
 						+ "</tr>\n";
 		}
 		strDepart += strPersons;
@@ -1448,7 +1486,8 @@ function ShowContactsBooks()
 	strHTML += "</tbody>\n"
 			+"</table>\n"								
 		+"</div>\n";
-	document.getElementById("contacts_books").innerHTML = strHTML;
+    $("#contacts_books").hide().html(strHTML);
+	
 	
 	//合并列相同的行
 	function UnitTable(tableId)
@@ -1459,8 +1498,8 @@ function ShowContactsBooks()
 		var startRow = 0;
 		for(var i=0; i<rowsCount-2; i++)
 		{
-			if(objTable.rows[startRow].cells[0].innerHTML == "干事" &&
-				objTable.rows[startRow].cells[0].innerHTML == objTable.rows[i+1].cells[0].innerHTML)
+			if( (objTable.rows[startRow].cells[0].innerHTML == "干事"||objTable.rows[startRow].cells[0].innerHTML == "人力干事") 
+            &&objTable.rows[startRow].cells[0].innerHTML == objTable.rows[i+1].cells[0].innerHTML)
 			{
 				objTable.rows[i+1].removeChild(objTable.rows[i+1].cells[0]);
 				objTable.rows[startRow].cells[0].rowSpan=(objTable.rows[startRow].cells[0].rowSpan|0)+1;
@@ -1472,4 +1511,5 @@ function ShowContactsBooks()
 		}
 	}
 	UnitTable("whole_add");
+    $("#contacts_books").slideDown();
 }

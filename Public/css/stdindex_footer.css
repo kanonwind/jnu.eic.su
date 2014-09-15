@@ -102,4 +102,6 @@ a.footer_about_a:focus{color:#999999;}
 a.footer_about_a:link{color:#999999;}
 a.footer_about_a:visited{color:#999999;}
 a.footer_about_a:hover{color:#FFFFFF;}
+
+*{outline:none;}
 	
