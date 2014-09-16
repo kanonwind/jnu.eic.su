@@ -1,0 +1,9 @@
+1、设置一名系统管理员。
+第一，清空所有数据库表的数据，
+第二，为数据库表tbl_authority新增一条记录，设置字段is_init的值为0，is_center的值为0，
+第三，联系网站维护人员，为数据库表tbl_admin新增一条记录，比如account=2012052308,password=2012052308
+2、初始化成员信息
+第二，联系网站维护人员，找到Home/Lib/Action/InitAction.class.php，将函数private function iniPerson()的修饰符改为public function iniPerson()，打开浏览器，运行下面地址：http://jnu.eicsu.com/index.php/Init/initPerson,如果没有报错，则初始化成功，成功之后记得将函数initPerson()的修饰符改为private
+3、设定人力干事跟进部门，主席团主管部门
+打开:http://jnu.eicsu.com/index.php/Init/index，完成相应的操作。注意，系统设定人力资源部有11个干事，负责跟进11个部门，人数有变，系统会出错。
+4、,初始化一次绩效考核

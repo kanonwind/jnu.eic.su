@@ -4,10 +4,7 @@ var arrDepartName=new Array("秘书处","人力资源部","宣传部","信息编
 window.onload=function()
 {
 	//document.getElementById("bind-depart-chairman").innerHTML="加载中...";
-	 //alert(222);
-	
 	var objGetInfo=GetBindInfo();
-	
 	if(typeof(objGetInfo)=="undefined")
 	{
 		document.getElementById("bind-depart-chairman").innerHTML="加载失败-_-|||";
@@ -116,8 +113,7 @@ window.onload=function()
 					this.account=objGetInfo.arrZXT[i].account;
 					this.arrZGBM=arrDepart;
 				}
-				arrChecked.push( new classChecked() );
-				
+				arrChecked.push(new classChecked() );
 			}
 			
 			//获取人力干事跟进部门表单信息
@@ -140,13 +136,10 @@ window.onload=function()
 				{
 					this.account=objGetInfo.arrRLGS[i].account;
 					this.department=checkIndex;
-					
 				}
-				arrGJBM.push( new classGJBM() );
-				
+				arrGJBM.push(new classGJBM);
 			}
-			
-			if(true==PostBindInfo(chmId,arrChecked,arrGJBM) )
+			if(true==PostBindInfo(chmId, arrChecked,arrGJBM))
 			{
 				alert("提交成功!");
 			}
@@ -165,10 +158,9 @@ window.onload=function()
 }
 
 //发送表单数据到服务器
-function PostBindInfo(chmId,arrChecked,arrGJBM)
+function PostBindInfo(chmId, arrChecked,arrGJBM)
 {
 	var arrZXT=new Array();
-	
 	for(var i=0;i<arrChecked.length;i++)
 	{
 		var arrZGBM=new Array();
@@ -177,24 +169,21 @@ function PostBindInfo(chmId,arrChecked,arrGJBM)
 			arrZGBM[j]={"num":arrChecked[i].arrZGBM[j]};
 		}
 		arrZXT[i]={
-		"account":arrChecked[i].account,
+		"account":arrChecked.account,
 		"arrZGBM":arrZGBM,
 		};
 	}
 	var arrRLGS=new Array();
 	for(var i=0;i<arrGJBM.length;i++)
 	{
-		
-		arrRLGS[i]={"account":arrGJBM[i].account,"department":arrGJBM[i].department};
-		
+		arrRLGS[i]={"account":arrGJBM.account,"department":arrGJBM.department};
 	}
 	
 	var jsonPost={
-		"chairman":chmId,
+		"chairman":chmid,
 		"arrZXT":arrZXT,
 		"arrRLGS":arrRLGS,
 		};
-		//alert(jsonPost.arrRLGS[0].account+"dsfsdfdsfsf");
 	/*json示例	
 	var jsonPost={
 		"chairman":"2012052207",
@@ -215,18 +204,7 @@ function PostBindInfo(chmId,arrChecked,arrGJBM)
 		]
 	};
 	*/	
-	    //alert(jsonPost.arrZXT[0].account);
-        //ajax请求
-		var obj;
-	    $.ajax({
-		url:URL+"/post_BindInfo",
-		data:jsonPost,
-		async:false,
-		dataType:"json",
-		type:"POST",
-		success:function(result){obj=result;}
-		});
-		
+	
 	return true;//发送成功返回true
 }
 				
@@ -236,27 +214,24 @@ function PostBindInfo(chmId,arrChecked,arrGJBM)
 //从服务器获取主席主管部门与人力跟进部门信息
 function GetBindInfo()
 {
-        //alert(222);
-        //ajax请求
-		var obj;
-	    $.ajax({
-		url:URL+"/funcBindInfo",
-		data:{},
-		async:false,
-		dataType:"json",
-		type:"POST",
-		success:function(result){obj=result;}
-		});
-		var jsonGet=obj;
-		
-/*
+    var obj;
+    $.ajax({
+    url:URL+"/getJsonAdmin",
+    data:{},
+    type:"post",
+    async:false,
+    dataType:"json",
+    success:function(result){obj=result;}
+    });
+	var jsonGet=obj;
 	//json格式示例
+	/*
 	var jsonGet={
 		"arrZXT"://主席团主管部门信息
 		[
 			{
 				"account":"2012052207",
-				"name":"主席1",
+				"name":"主席111",
 				"department"://因为可以主管多个部门，所以是数组
 					[
 						{"num":"1"},
@@ -265,7 +240,7 @@ function GetBindInfo()
 			},
 			{
 				"account":"2012052208",
-				"name":"主席2",
+				"name":"主席222",
 				"department":
 					[
 						{"num":"3"},
@@ -292,7 +267,6 @@ function GetBindInfo()
 			"name":"主席2",
 		}
 	};
-
 	*/
 	return jsonGet;
 }

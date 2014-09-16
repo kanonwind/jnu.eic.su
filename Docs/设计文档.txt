@@ -1,21 +1,10 @@
-﻿先用yiic生成基本骨架。
-按照之前的设计思路，建立数据库
-union
-//管理员登陆信息
+﻿
+数据库名称：app_jnueicsu
+//管理员信息
 tbl_admin
-  account varchar primary key
-  password varchar
-//新闻栏目一
-tbl_news1
-  id int  primary key auto
-  title varchar
-  content text
-  authod varchar
-  time varchar
-//新闻栏目二
-tbl_news2
-//新闻栏目三
-tbl_news3
+  id pk
+  account 
+  password 
 //个人中心
 tbl_person
   account varchar primary key
@@ -41,31 +30,7 @@ tbl_person
   is_buzhang default n
   is_zhuxi default n
   is_xiaoyou default n
-//评分管理
-tbl_eva
-  account varchar
-  month_id int primary key
-  month int
-  self_g int
-  mate_g int
-  up_g int
-  self_e text
-  mate_e text
-  up_e text
-//问卷
-tbl_quest
-  id int primary key
-  title varchar
-  choice_A varchar
-  choice_B varchar
-  choice_C varchar
-  choice_D varchar
-  A_g int
-  B_g int
-  C_g int
-  D_g int
-//个人课表
-tbl_timetable
+
 
 
 外调系统

@@ -49,7 +49,7 @@ try{
                     var obj;
                     $.ajax({
                         type:"POST",
-                        url:URL+"/vertication",
+                        url:APP+"/Login/vertication",
                         data:{'checknumber':checknumber},
                         dataType:"json",
                         async:false,
@@ -102,8 +102,8 @@ try{
                 });
         
         //验证码切换图片
-        $('#vertication_img').attr('src',URL+'/vertication').click(function(){
-            $('#vertication_img').attr('src',URL+'/vertication');	
+        $('#vertication_img').attr('src',APP+'/Login/vertication').click(function(){
+            $('#vertication_img').attr('src',APP+'/Login/vertication');	
         });
 
     });
