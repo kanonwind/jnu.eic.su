@@ -1,6 +1,21 @@
 var arrDepartName=new Array("秘书处","人力资源部","宣传部","信息编辑部","学术部",
 "体育部","KSC联盟","组织部","文娱部","公关部","心理服务部");
 
+function debug()
+{
+    return false;
+}
+
+function errmsg()
+{
+    if(!debug())
+    {
+        alert("AJAX通信错误,请与管理员联系");
+        throw "ajax error";
+    }
+}
+
+
 window.onload=function()
 {
 	//document.getElementById("bind-depart-chairman").innerHTML="加载中...";
@@ -82,9 +97,53 @@ window.onload=function()
 		}
 		strInnerHtml+="</table>"
 			+"<hr class=\"perf_hr\" />"
+        //指定违纪登记人
+        strInnerHtml+="<h2>绑定违纪登记人</h2>"
+            +"<table class=\"erjibiao\">"
+            +"<tr><td>对应制度</td><td>违纪登记表填写人</td></tr>"
+            +"<tr><td>秘书处制度</td><td class=\"normal_input\"><select id=\"mswjdjr\" name=\"mswjdjr\">";
+        for(var i=0;i<objGetInfo.allStudentName.length;++i)
+        {
+            strInnerHtml+="<option value=\""+objGetInfo.allStudentName[i].account+"\">"+objGetInfo.allStudentName[i].name+"</option>";
+        }
+        strInnerHtml+= "<tr><td>人力资源部制度</td><td class=\"normal_input\"><select id=\"rlwjdjr\" name=\"rlwidjr\">";
+        for(var i=0;i<objGetInfo.allStudentName.length;++i)
+        {
+            strInnerHtml+="<option value=\""+objGetInfo.allStudentName[i].account+"\">"+objGetInfo.allStudentName[i].name+"</option>";
+        }
+        strInnerHtml+= "<tr><td>司仪礼队仪制度</td><td class=\"normal_input\"><select id=\"sylywjdjr\" name=\"sylywjdjr\">";
+        for(var i=0;i<objGetInfo.allStudentName.length;++i)
+        {
+            strInnerHtml+="<option value=\""+objGetInfo.allStudentName[i].account+"\">"+objGetInfo.allStudentName[i].name+"</option>";
+        }
+        strInnerHtml+= "<tr><td>宣传部制度</td><td class=\"normal_input\"><select id=\"xcwjdjr\" name=\"xcwidjr\">";
+        for(var i=0;i<objGetInfo.allStudentName.length;++i)
+        {
+            strInnerHtml+="<option value=\""+objGetInfo.allStudentName[i].account+"\">"+objGetInfo.allStudentName[i].name+"</option>";
+        }
+        strInnerHtml+= "<tr><td>信息编辑部制度</td><td class=\"normal_input\"><select id=\"xbwjdjr\" name=\"xbwidjr\">";
+        for(var i=0;i<objGetInfo.allStudentName.length;++i)
+        {
+            strInnerHtml+="<option value=\""+objGetInfo.allStudentName[i].account+"\">"+objGetInfo.allStudentName[i].name+"</option>";
+        }
+        strInnerHtml+= "<tr><td>公关部部制度</td><td class=\"normal_input\"><select id=\"ggwjdjr\" name=\"ggwidjr\">";
+        for(var i=0;i<objGetInfo.allStudentName.length;++i)
+        {
+            strInnerHtml+="<option value=\""+objGetInfo.allStudentName[i].account+"\">"+objGetInfo.allStudentName[i].name+"</option>";
+        }
+        
+        strInnerHtml+="</table>"
+			+"<hr class=\"perf_hr\" />"
 			+"<button type=\"button\" class=\"perf_button\" id=\"adminsubmit\">确定</button>";
 		
 		document.getElementById("bind-depart-chairman").innerHTML=strInnerHtml;
+        //指定违纪登记人的默认选项
+        $("#mswjdjr").val(objGetInfo.MSWJDJR);
+        $("#rlwjdjr").val(objGetInfo.RLWJDJR);
+        $("#xcwjdjr").val(objGetInfo.XCWJDJR);
+        $("#ggwjdjr").val(objGetInfo.GGWJDJR);
+        $("#sylywjdjr").val(objGetInfo.SYLYWJDJR);
+        
 		document.getElementById("adminsubmit").onclick=function()
 		{
 			var sltChm=document.getElementById("chairman");
@@ -115,6 +174,41 @@ window.onload=function()
 				}
 				arrChecked.push(new classChecked() );
 			}
+            function checkArrChecked()
+            {
+                var arrBM=new Array(0,0,0,0,0,0,0,0,0,0,0);
+                //不允许主管超过两个部门
+                for(var i=0;i<arrChecked.length;++i)
+                {
+                    if(arrChecked[i].arrZGBM.length>2||arrChecked[i].arrZGBM.length<1)
+                    {
+                        alert("主席团第"+(i+1)+"个成员的主管部门数目不科学");
+                        return false;
+                    }
+                    //检查主管部门重复
+                    for(var j=0;j<arrChecked[i].arrZGBM.length;++j)
+                    {
+                        arrBM[arrChecked[i].arrZGBM[j]-1]++;
+                    }
+                }
+                //每个部门应该被主管一次
+                //console.log(arrBM);
+                for(var i=0;i<arrBM.length;++i)
+                {
+                    if(arrBM[i]!=1)
+                    {
+                        alert("主席团主管部门那里不科学,检查一下");
+                        return false;
+                    }
+                }
+                return true;
+            
+            }
+            if(!checkArrChecked())
+            {
+                return false;
+            }
+                
 			
 			//获取人力干事跟进部门表单信息
 			var  arrGJBM=new Array();
@@ -139,7 +233,45 @@ window.onload=function()
 				}
 				arrGJBM.push(new classGJBM);
 			}
-			if(true==PostBindInfo(chmId, arrChecked,arrGJBM)
+            var arrBM=new Array(0,0,0,0,0,0,0,0,0,0,0);
+            function checkArrGJBM()
+            {
+                for(var i=0;i<arrGJBM.length;++i)
+                {
+                    arrBM[arrGJBM[i].department-1]++;
+                }
+                //console.log(arrBM);
+                for(var i=0;i<arrBM.length;i++)
+                {
+                    if(arrBM!=1)
+                    {
+                        alert("跟进干事那里不科学,检查一下");
+                        return false;
+                    }
+                   
+                }
+               
+                return true;
+            }
+            
+            if(!checkArrGJBM())
+            {
+                return false;
+            }
+            //获取各违纪登记人信息
+            var jsonWJDJ={
+                "MSWJDJR":$("#mswjdjr").val(),
+                "RLWJDJR":$("#rlwjdjr").val(),
+                "XCWJDJR":$("#xcwjdjr").val(),
+                "XBWJDJR":$("#xbwjdjr").val(),
+                "GGWJDJR":$("#ggwjdjr").val(),
+                "SYLYWJDJR":$("#sylywjdjr").val(),
+                };
+            console.log(chmId);
+            console.log(arrChecked);
+            console.log(arrGJBM);
+            console.log(jsonWJDJ);
+			if(true==PostBindInfo(chmId, arrChecked,arrGJBM,jsonWJDJ))
 			{
 				alert("提交成功!");
 			}
@@ -158,7 +290,7 @@ window.onload=function()
 }
 
 //发送表单数据到服务器
-function PostBindInfo(chmId, arrChecked,arrGJBM)
+function PostBindInfo(chmId, arrChecked,arrGJBM,jsonWJDJ)
 {
 	var arrZXT=new Array();
 	for(var i=0;i<arrChecked.length;i++)
@@ -180,9 +312,10 @@ function PostBindInfo(chmId, arrChecked,arrGJBM)
 	}
 	
 	var jsonPost={
-		"chairman":chmid,
+		"chairman":chmId,
 		"arrZXT":arrZXT,
 		"arrRLGS":arrRLGS,
+        "jsonWJDJ":jsonWJDJ,//***新增,违纪登记表信息
 		};
 	/*json示例	
 	var jsonPost={
@@ -197,11 +330,21 @@ function PostBindInfo(chmId, arrChecked,arrGJBM)
 					{"num":"2"},
 				],
 			},
-		]
+		],
 		"arrRLGS":
 		[
 			{"account":"2012052206","department":"1"}
-		]
+		],
+        "jsonWJDJ":
+        {
+            "MSWJDJR":"2012052206",
+            "RLWJDJR":"2013123456",
+            "XCWJDJR":"2014123456",
+            "XBWJDJR":"2015123456",
+            "GGWJDJR":"2016123456",
+            "SYLYWJDJR":"2017123456",
+        },
+       
 	};
 	*/	
 	
@@ -215,47 +358,86 @@ function PostBindInfo(chmId, arrChecked,arrGJBM)
 function GetBindInfo()
 {
 	//json格式示例
-	var jsonGet={
-		"arrZXT"://主席团主管部门信息
-		[
-			{
-				"account":"2012052207",
-				"name":"主席1",
-				"department"://因为可以主管多个部门，所以是数组
-					[
-						{"num":"1"},
-						{"num":"2"}
-					]
-			},
-			{
-				"account":"2012052208",
-				"name":"主席2",
-				"department":
-					[
-						{"num":"3"},
-						{"num":"4"}
-					]
-			},
-		],
-		"arrRLGS"://人力干事跟进部门
-		[
-			{
-				"account":"2012052209",
-				"name":"人力干事1",
-				"department":"5",//因为只能跟进一个部门，所以不是数组
-			},
-			{
-				"account":"2012052210",
-				"name":"人力干事2",
-				"department":"6",//因为只能跟进一个部门，所以不是数组
-			}
-		],
-		"chairman":
-		{
-			"account":"2012052208",
-			"name":"主席2",
-		}
-	};
+    try{
+        if(debug())
+            throw("ajax");
+        var obj;
+        $.ajax({
+            url:URL+"/getJsonAdmin",
+            data:{},
+            type:"post",
+            async:false,
+            dataType:"json",
+            success:function(result){obj=result;}
+        });
+        var jsonGet=obj;
+    }
+    catch(err)
+    {
+        
+        var jsonGet={
+            "arrZXT"://主席团主管部门信息
+            [
+                {
+                    "account":"2012052207",
+                    "name":"主席1",
+                    "department"://因为可以主管多个部门，所以是数组
+                        [
+                            {"num":"1"},
+                            {"num":"2"}
+                        ]
+                },
+                {
+                    "account":"2012052208",
+                    "name":"主席2",
+                    "department":
+                        [
+                            {"num":"3"},
+                            {"num":"4"}
+                        ]
+                },
+            ],
+            "arrRLGS"://人力干事跟进部门
+            [
+                {
+                    "account":"2012052209",
+                    "name":"人力干事1",
+                    "department":"5",//因为只能跟进一个部门，所以不是数组
+                },
+                {
+                    "account":"2012052210",
+                    "name":"人力干事2",
+                    "department":"6",//因为只能跟进一个部门，所以不是数组
+                }
+            ],
+            "chairman":
+            {
+                "account":"2012052208",
+                "name":"主席2",
+            },
+            "MSWJDJR":"2012123456",//秘书处违纪登记人
+            "RLWJDJR":"2013123456",//人力制度违纪登记人
+            "XCWJDJR":"2014123456",//宣传部违纪登记人
+            "XBWJDJR":"2015123456",//信编
+            "GGWJDJR":"2016123456",//公关
+            "SYLYWJDJR":"2017123456",//司仪礼仪队
+            "allStudentName"://把所有成员的账号和姓名给我
+            [
+                {"account":"2012123456","name":"赵作恒"},
+                {"account":"2013123456","name":"钱作恒"},
+                {"account":"2014123456","name":"孙作恒"},
+                {"account":"2015123456","name":"李作恒"},
+                {"account":"2016123456","name":"周作恒"},
+                {"account":"2017123456","name":"吴作恒"},
+                {"account":"2018123456","name":"郑作恒"},
+                {"account":"2019123456","name":"王作恒"},
+                {"account":"2010123456","name":"冯作恒"},
+                {"account":"2011123456","name":"陈作恒"},
+            ],
+                
+        };
+        errmsg();
+    }
 	
 	return jsonGet;
 }
