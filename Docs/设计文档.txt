@@ -5,6 +5,17 @@ tbl_admin
   id pk
   account 
   password 
+//整体控制表，只能有单条记录
+tbl_authority
+  id
+  is_init
+//绩效考核控制表
+tbl_control
+  id
+  year 
+  month
+  is_yxbz
+  is_over
 //个人中心
 tbl_person
   account varchar primary key
@@ -335,10 +346,10 @@ tbl_interact
  month
  waccount//写评价的账号
  wapartment//写评价的部门
- wposition//写评价的职位，干事，部长，主席团
- raccount//被评价的账号
+ wtype//写评价的职位，干事，部长，主席团
+ raccount//被评价的账号,如果是部门，直接填充代表部门的数字
  rapartment//被评价的人的部门
- rposition//被评价的人的职位
+ rtype//被评价的人的职位
  text//评价的内容
  nm//0表示正常，1表示匿名
 }
@@ -350,10 +361,10 @@ tbl_evaluate
  month
  waccount//写评价的账号
  wapartment//写评价的部门
- wposition//写评价的职位，干事，部长，主席团
+ wtype//写评价的职位，干事，部长，主席团
  raccount//被评价的账号
  rapartment//被评价的人的部门
- rposition//被评价的人的职位
+ rtype//被评价的人的职位
  df//评价的分数
  text//评价的内容
  nm//0表示正常，1表示匿名
@@ -366,10 +377,10 @@ tbl_tuiyou
  month
  waccount//写推优的账号
  wapartment
- wposition
- raccount//被推优的账号
+ wtype
+ raccount//被推优的账号，如果是部门直接填充代表部门的数字
  rapartment
- rposition
+ rtype
  text
  nm//0表示正常，1表示匿名
 }
@@ -379,7 +390,6 @@ tbl_bzzp
  id//pk
  waccount//填写考核表的部长账号
  wapartment//所属部门
- //raccount//被评价的账号
  year//考核年份
  month//考核月份
  zptext//自我评价

@@ -18,7 +18,7 @@ function errmsg()
     if(!debug())
     {
         alert("AJAX通信错误,请与管理员联系");
-        throw "ajax error";
+        //throw "ajax error";
     }
 }
 
@@ -44,7 +44,7 @@ function ajaxcheck()
         var jsonPOST={
         "chstr":"中文",};
         //发送这个字符串,然后后台返回这个字符串到jsonGet,结构一样
-        if(jsonGet.chstr!="中文")
+        if(jsonPOST.chstr!="中文")
         {
             alert("与服务器通信错误,请联系你的系统管理员");
             throw("ajax error");//抛出错误,干掉js
@@ -72,7 +72,7 @@ function CheckLegalStr(strCheck)//检查输入的字符串是否含有非法字�
 function Get_Time()
 {
     try{
-        if(debug())
+        if(!debug())
         {
             throw("ajax");
         }
@@ -541,7 +541,7 @@ function ActiveTableButton()
 				+ strId + "\" value=\"" + arrTable[i] + "\">" + arrTable[i] + "</button>\n";
 	}
 	
-	strHTML += "<img id=\"zhibiao\" src=\"zhibiao2.png\" />"
+	strHTML += "<img id=\"zhibiao\" src="+imgURL+"zhibiao2.png />"
 	
 	GetObjById("control_group").innerHTML = strHTML;	
 	
@@ -966,7 +966,7 @@ function Get_GSZP()
                 {"name":"同事D","account":2012052213},	
               ],
               
-              "TYGS":
+              "TYGS"://大神，页面上的干事推优下拉列表出现还要包括上面的同事，而不仅仅是这里的已经被推优干事
               {
                  "tygs":"同事C",
                  "account":2012052211,//学号
@@ -1107,6 +1107,8 @@ function Post_GSZP(obj_GSZP)//obj_GSZP为Get_GSZP()定义的对象
 		"hadSubmit":obj_GSZP.hadSubmit,//新增字段，1表示这是点提交按钮来的，所以数据库要存起来
 		//如果数据库检查用户没填完必要部分，但是这个字段却显示提交过，则说明存入数据库时有错
 	};
+	console.log(json_Post_GSZP);
+	alert(json_Post_GSZP.bumenliuyan.length)
 	//alert(json_Post_GSZP.TYGS.account);
 	try
     {
@@ -1122,10 +1124,10 @@ function Post_GSZP(obj_GSZP)//obj_GSZP为Get_GSZP()定义的对象
             type:"POST",
             success:function(result){obj=result;}
 		});	
-   
-        //alert(obj.status)
+	//alert(obj.status);
+        
         //服务器成功接收信息，则返回true，否则返回false
-        if(1)
+        if(obj.flagCrud)
             return true;
         else
             return false;

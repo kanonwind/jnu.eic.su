@@ -6,4 +6,5 @@
 第二，联系网站维护人员，找到Home/Lib/Action/InitAction.class.php，将函数private function iniPerson()的修饰符改为public function iniPerson()，打开浏览器，运行下面地址：http://jnu.eicsu.com/index.php/Init/initPerson,如果没有报错，则初始化成功，成功之后记得将函数initPerson()的修饰符改为private
 3、设定人力干事跟进部门，主席团主管部门
 打开:http://jnu.eicsu.com/index.php/Init/index，完成相应的操作。注意，系统设定人力资源部有11个干事，负责跟进11个部门，人数有变，系统会出错。
-4、,初始化一次绩效考核
+4、初始化一次绩效考核
+5、每月27号后不要进行人员外调

@@ -3,7 +3,7 @@ var arrDepartName=new Array("秘书处","人力资源部","宣传部","信息编
 
 function debug()
 {
-    return false;
+    return true;
 }
 
 function errmsg()
