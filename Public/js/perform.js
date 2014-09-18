@@ -1108,7 +1108,7 @@ function Post_GSZP(obj_GSZP)//obj_GSZP为Get_GSZP()定义的对象
 		//如果数据库检查用户没填完必要部分，但是这个字段却显示提交过，则说明存入数据库时有错
 	};
 	console.log(json_Post_GSZP);
-	alert(json_Post_GSZP.bumenliuyan.length)
+	
 	//alert(json_Post_GSZP.TYGS.account);
 	try
     {
@@ -1259,11 +1259,12 @@ function Get_GJBMCQTJ()
                 type:"POST",
                 success:function(result){obj=result;}
             });
-            //alert(obj.str);
+           
             var json_Get_GJBMCQTJ = obj;
         }   
 		catch(err)
         {
+			alert("hehehheeeeeeeee");
             var json_Get_GJBMCQTJ = 
             {
                 "gjbm":2,
@@ -1334,14 +1335,12 @@ function Post_GJBMCQTJ(obj_GJBMCQTJ)//obj_GJBMCQTJ为Get_GJBMCQTJ()定义的对�
             type:"POST",
             success:function(result){obj=result;}
 		});
+		alert(obj.flagCrud+"adsfadsfa");
+		return obj.flagCrud;
     }
     catch(err)
     {	
-        //alert(obj.str+"adsf");
-        if(1)
-            return true;
-        else
-            return false;
+       return false;       
     }
 }
 
@@ -1470,7 +1469,7 @@ function Post_DYYJCN(obj_DYYJCN)//obj_DYYJCN为Get_DYYJCN()定义的对象
 		});
 	    //var json_Get_GJBMCQTJ = obj;	
         
-        if(1)
+        if(obj.flagCrud)
             return true;
         else
             return false;
@@ -1864,6 +1863,7 @@ function Get_BZZP()
 			
 	function obj_BZZP() 
 	{
+		//alert(json_Get_BZZP.zongfen);
 		this.zongfen = json_Get_BZZP.zongfen;//总分
 		this.status = json_Get_BZZP.status;//是否为可提交状态
 		this.arrDF = new Array(); //得分数组
@@ -1996,7 +1996,7 @@ function Post_BZZP(obj_BZZP)//obj_BZZP为Get_BZZP()定义的对象
             success:function(result){obj=result;}
 		});
 		
-        if(obj.status)
+        if(obj.flagCrud)
             return true;
         else
             return false;
@@ -2394,7 +2394,7 @@ function Post_GSKH(obj_GSKH)//obj_GSKH为Get_GSKH()定义的对象
 		});	
 	
 	//服务器成功接收信息，则返回true，否则返回false
-        if(obj.status)
+        if(obj.flagCrud)
             return true;
         else
             return false;
@@ -3563,8 +3563,8 @@ function POST_QTQKJJF(obj_QTQKJJF)
             type:"POST",
             success:function(result){obj=result;}
         });
-        //alert(json_POST_QTQKJJF.persons[3].jiajianfen);
-        if(1)//发送成功返回true，否则返回false
+        //alert(obj.flagCrud);
+        if(obj.flagCrud)//发送成功返回true，否则返回false
             return true;
         else
             return false;
@@ -4856,6 +4856,11 @@ function Show_BZZP()
 			return false;
 		}
 		var newItem={"account":obj_BZZP.arrTongShi[0].account,"liuyan":""};
+		if(obj_BZZP.arrTSLY=="")
+		{
+			obj_BZZP.arrTSLY=new Array();
+		}
+		console.log(obj_BZZP.arrTSLY);
 		obj_BZZP.arrTSLY.push(newItem);
 		
 		reRender();
