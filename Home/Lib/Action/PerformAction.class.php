@@ -3,7 +3,7 @@
 class PerformAction extends Action
 {
  	//每个需要用到判断用户是否登录的地方，都要调用这个方法，每个控制器都有相同的一个
-	public function judgelog()
+	private function judgelog()
 	{
 		$judgelog=1;
 		session_name('LOGIN');
@@ -98,7 +98,7 @@ class PerformAction extends Action
   }
   */
   //调用—_encode()函数，将数组进行编码转哈
-   public  function _encode($arr)
+   private  function _encode($arr)
   {
     $na = array();
     foreach ( $arr as $k => $value ) {  
@@ -107,7 +107,7 @@ class PerformAction extends Action
     //return addcslashes(urldecode(json_encode($na)),"\\r");
 	return urldecode(json_encode($na));
   }
-   public function _urlencode($elem)
+   private function _urlencode($elem)
   {
     if(is_array($elem)){
     foreach($elem as $k=>$v){
@@ -117,36 +117,16 @@ class PerformAction extends Action
   }
   return urlencode($elem);
   }
-  //是否过了填表时间的判断
-  public function check()
+  //获取时间
+  private function getTime()
   {
-/* 	//拒绝未登录访问
-	session_name('LOGIN');
-    session_start();
-    if(!$this->judgelog())
-      $this->redirect('Login/index');  
-	//判断状态status,默认为0，表示不能编辑，当为1时则可以编辑
-	$status=0;
-	//获取当前时间
-	$year=date("Y");
-    //获取当前的月份，数字，1，或者23
-    $month = date("n");
-    $day=date("j");
-    //20号到24号允许访问
-	//获取数据库表tbl_authority,验证当前是否可写
-	$auth_model=new Model("Authority");
-	$auth_info=$auth_model->where("year=$year and month=$month")->find();
-	if($auth_info['active']=='y'&& (20<=$day&&$day<=24))
-	  $status=1;
-	//根据传送过来的表的id，决定要生成那些数据返回
-	$table_id=1;//$_POST['table_id'];
-	switch($table_id)
-	{
-	  case "1":$table_info=$this->gszp($status);break;
-	}
-	$arr=Array('status'=>$status,);
-	echo $this->_encode($arr);
-	//echo json_encode($arr,JSON_UNESCAPED_UNICODE); */
+	$year=2014;
+	$month=9;
+	$arr=Array(
+		'month'=>$month,
+	    'year'=>$year,
+	);
+	return $arr;
   }
   //干事自评表
   public function funcgszp()
@@ -160,10 +140,9 @@ class PerformAction extends Action
     //获取授权状态 status 	  
 	$status=$this->getStatus();
 	$account=$_SESSION['account'];
-	//$year=$_POST['year'];
-	//$month=$_POST['month'];
-	$year=2014;
-	$month=9;
+	$arrTime=$this->getTime();
+	$year=$arrTime['year'];
+	$month=$arrTime['month'];
 	$gszp_model=new Model("Gszp");
 	$interact_model=new Model("Interact");
 	//获得类型，部门
@@ -281,14 +260,12 @@ class PerformAction extends Action
 	$status=$this->getStatus();
 	//账号，时间
 	$waccount=$_SESSION['account'];
-	//$year=date("Y");
-	//$month = date("n");
+
 	
 	//获取请求的时间
-	//$year=$_POST['year'];
-	//$month=$_POST['month'];
-	$year="2014";
-	$month="9";
+	$arrTime=$this->getTime();
+	$year=$arrTime['year'];
+	$month=$arrTime['month'];
 	//判断时间是否合理
 	$gskh_model=new Model("Gskh");
 
@@ -369,13 +346,9 @@ class PerformAction extends Action
 	$status=$this->getStatus();
 	//账号，时间
 	$account=$_SESSION['account'];
-	$year=2014;//date("Y");
-	$month = 9;//date("n");
-	//$year=$_POST['year'];
-	//$month=$_POST['month'];
-	//获取请求的时间
-	//$year=$_POST['year'];
-	//$month=$_POST['month'];
+	$arrTime=$this->getTime();
+	$year=$arrTime['year'];
+	$month=$arrTime['month'];
 	$bzzp_model=new Model("Bzzp");
 	$interact_model=new Model("Interact");
 	$evaluate_model=new Model("Evaluate");
@@ -480,7 +453,7 @@ class PerformAction extends Action
  
 
   }
-  //部长考核表（前段有质疑，暂时留着）
+  //部长考核表
   public function funcbzkh()
   {
 	//拒绝未登录访问
@@ -492,13 +465,11 @@ class PerformAction extends Action
 	$status=$this->getStatus();
 	//账号，时间
 	$account=$_SESSION['account'];
-	//$year="2014";//date("Y");
-	//$month = "4";//date("n");
-	$year=$_POST['year'];
-	$month=$_POST['month'];
+	$arrTime=$this->getTime();
+	$year=$arrTime['year'];
+	$month=$arrTime['month'];
 	//获取部门，类型
 	$person_model=new Model("Person");
-	//echo $account;
 	$person_info=$person_model->where("account=$account")->find();
 	$type=$person_info['type'];
 	$apartment=$person_info['apartment'];   
@@ -568,9 +539,13 @@ class PerformAction extends Action
 	 //echo json_encode($arrBM,JSON_UNESCAPED_UNICODE);
 
 	//跳出判断
+	//是否提交过
+	$bzkh_info=$bzkh_model->where("(year=$year and month=$month) and waccount=$account")->find();
+	$hadSubmit=$bzkh_info['hadSubmit'];
 	//生成将要返回的json数组
 	$arr=Array(
       'status'=>$status,
+	  'hadSubmit'=>$hadSubmit,
 	  'BMBZ'=>Array(
 	  'bmsm'=>$bmsm,
 	  'arrBM'=>$arrBM,
@@ -592,22 +567,17 @@ class PerformAction extends Action
 	$status=$this->getStatus();
 	//账号，时间
 	$account=$_SESSION['account'];
-	//$year=date("Y");
-	//$month = date("n");
-	//$year="2014";
-	//$month="4";
-	$year=$_POST['year'];
-	$month=$_POST['month'];
+	$arrTime=$this->getTime();
+	$year=$arrTime['year'];
+	$month=$arrTime['month'];
 	//获取部门，类型
 	$person_model=new Model("Person");	//echo $account;
 	$person_info=$person_model->where("account=$account")->find();
 	$type=$person_info['type'];
 	$apartment=$person_info['apartment'];   
 	//获取该主席所主管的部门信息
-	$interact_model=new Model("Interact");
 	$president_model=new Model("President");
 	$bmkh_model=new Model("Bmkh");
-	$bzty_model=new Model("Bzty");
 	$president_info=$president_model->where("account=$account")->find();
 	//如果是副主席，找到两个部门
 	
@@ -624,21 +594,10 @@ class PerformAction extends Action
 	}
 	else{
 	  $sum=11;
-	  /*
-	  $apartment1=$president_info['apartment1'];
-	  $apartment2=$president_info['apartment2'];
-	  if($apartment1==0)
-	    $apartment=$apartment2;
-	  else 
-	    $apartment=$apartment1;
-		*/
 	  for($i=1;$i<=11;$i++)
 	  {
 	    $arrBM[]=$this->getarrBM($account,$i);
 	  }
-
-	    //$arrBM[]=$this->getarrBM($account,$apartment);
-
 
 	}
 	//跳出判断
@@ -655,27 +614,28 @@ class PerformAction extends Action
 	}
     //找到推优部门
 	  //推优部分
-	  $bmty_model=new Model("Bmty");
-	  $bmty_info=$bmty_model->where("(year=$year and month=$month) and waccount=$account")->find();
-	  $bm_account=$bmty_info['rapartment'];
-	  if(!empty($bm_account)) {//$person_info=$person_model->where("account=$bz_account")->find();
-	  //$bz_name=$person_info['name'];
-      $TYBM=$bm_account;
+	  $tuiyou_model=new Model("Tuiyou");
+	  $tuiyou_info=$tuiyou_model->where("(year=$year and month=$month) and waccount=$account")->find();
+	  $bm_account=$bmty_info['raccount'];
+	  if(!empty($bm_account))
+	  {
+		$TYBM=$bm_account;
 	  }
 	  else{
          $TYBM=$BuMen[0];
 	  }
+	  //是否提交过
+	  $bmkh_info=$bmkh_model->where("(year=$year and month=$month) and waccount=$account")->find();
+	$hadSubmit=$bmkh_info['hadSubmit'];
 	//生成将要返回的json数组
 	$arr=Array(
 	  'status'=>$status,
+	  'hadSubmit'=>$hadSubmit,
 	  'BM'=>Array(
 	    'sum'=>$sum,
 	    'arrBM'=>$arrBM,),
-		//'BuZhang'=>$BuZhang,
 		'BuMen'=>$BuMen,
 		'TYBM'=>$TYBM,
-		
-		
 	);
 	echo $this->_encode($arr);
 	//echo json_encode($arr,JSON_UNESCAPED_UNICODE);
@@ -691,10 +651,9 @@ class PerformAction extends Action
       $this->redirect('Login/index'); 
 	$account=$_SESSION['account'];
 	//获取请求的时间
-	//$year=$_POST['year'];
-	//$month=$_POST['month'];
-	$year=2014;
-	$month=9;
+	$arrTime=$this->getTime();
+	$year=$arrTime['year'];
+	$month=$arrTime['month'];
 	//获取状态
 	$status=$this->getStatus();
 	$rlgj_model=new Model("Rlgj");
@@ -852,10 +811,9 @@ class PerformAction extends Action
   public function funcqt()
   {
   //拒绝未登录访问
-    //$year=$_POST['year'];
-	//$month=$_POST['month'];
-	$year=2014;
-	$month=9;
+	$arrTime=$this->getTime();
+	$year=$arrTime['year'];
+	$month=$arrTime['month'];
 	session_name('LOGIN');
     session_start();
     if(!$this->judgelog())
@@ -920,28 +878,10 @@ class PerformAction extends Action
 	$status=$this->getStatus();
 	//账号，时间
 	$account=$_SESSION['account'];
-  /*	$year=date("Y");
-	$month = date("n");
-	//获取部门，类型
-	$person_model=new Model("Person");	//echo $account;
-	$person_info=$person_model->where("account=$account")->find();
-	$type=$person_info['type'];
-	$apartment=$person_info['apartment'];  
-    //获取所有部长排名第一的
-	$bzfk_model=new Model("Bzfk");
-	$rank=1;
-    $person_info=$bzfk_model->where("rank=$rank")->select();
-    $sum=count($person_info);
-    foreach($person_info as $v)
-    {
-	  $arrYXBZPDlist[]=$this->getyxbz($v['account'],$year,$month);
-	}	
-	// 
-	*/
-	//$year="2014";
-	//$month="5";
-	$year=$_POST['year'];
-	$month=$_POST['month'];
+
+	$arrTime=$this->getTime();
+	$year=$arrTime['year'];
+	$month=$arrTime['month'];
 	//从tbl_yxbzhx中找出十个候选人
 	$yxbzhx_model=new Model("Yxbzhx");
 	$yxbz_model=new Model("Yxbz");
@@ -1019,10 +959,9 @@ class PerformAction extends Action
 	//可编辑性：直接从tbl_authority中获取，判断是否active为y
 	$status=0;//默认为0，表示可以编辑
 	//获取时间
-	//$year=$_POST['year'];
-	//$month=$_POST['month'];
-	$year=2014;
-	$month=9;
+	$arrTime=$this->getTime();
+	$year=$arrTime['year'];
+	$month=$arrTime['month'];
 	$day=date("j");
 	if(empty($year)||empty($month))
 	  $status=1;
@@ -1039,8 +978,7 @@ class PerformAction extends Action
 	return $status;
   }
   //在部长考核表中，需要根据主席团的 account,主管的部门 apartment,来生成arrBZ,
-  //由于数量巨多，采用函数的方式解决
-  public function getarrBZ($account,$apartment)
+  private function getarrBZ($account,$apartment)
   {
 	//拒绝未登录访问
 	session_name('LOGIN');
@@ -1051,12 +989,9 @@ class PerformAction extends Action
 	$status=$this->getStatus();
 	//账号，时间
 	$account=$_SESSION['account'];
-	//$year=date("Y");
-	//$month = date("n");
-	//$year="2014";
-	//$month="4";
-	$year=$_POST['year'];
-	$month=$_POST['month'];
+	$arrTime=$this->getTime();
+	$year=$arrTime['year'];
+	$month=$arrTime['month'];
       //找到该本门部长
 	  $person_model=new Model("Person");
 	  $bzkh_model=new Model("Bzkh");
@@ -1084,18 +1019,13 @@ class PerformAction extends Action
 		  'df7'=>$bzkh_info['DF8'],
 		  'df8'=>$bzkh_info['DF9'],
 		  'df9'=>$bzkh_info['DF10'],
-		  'df10'=>$bzkh_info['DF11'],
-		  'df11'=>$bzkh_info['DF12'],
-		  'df12'=>$bzkh_info['DF13'],
-		  'df13'=>$bzkh_info['DF14'],
-		  'df14'=>$bzkh_info['DF15'],
 		);
 	  }    
 	  return $arrBZ;
   }  
   //在部门考核表中，需要根据主席团的 account,主管的部门 apartment,来生成arrBZ,
-  //由于数量巨多，采用函数的方式解决
-  public function getarrBM($account,$apartment)
+
+  private function getarrBM($account,$apartment)
   {
     //$account='2012052311';
 	//$apartment=1;
@@ -1108,17 +1038,14 @@ class PerformAction extends Action
 	$status=$this->getStatus();
 	//账号，时间
 	$account=$_SESSION['account'];
-	$year="2014";//date("Y");
-	$month = "4";//date("n");
-	$year=$_POST['year'];
-	$month=$_POST['month'];
+	$arrTime=$this->getTime();
+	$year=$arrTime['year'];
+	$month=$arrTime['month'];
 	$bmkh_model=new Model("Bmkh");
 	$bmkh_info=$bmkh_model->where("(year=$year and month=$month) and (waccount=$account and rapartment=$apartment)")->find();
-	$oneway_model=new Model("Oneway");
-	$oneway_info=$oneway_model->where("(year=$year and month=$month) and (waccount=$account and rapartment=$apartment)")->find();
 	$BM=Array(
 	  'bm'=>$apartment,
-	  'pj'=>$oneway_info['text'],
+	  'pj'=>$bmkh_info['text'],
 	  'df0'=>$bmkh_info['DF1'],
 	  'df1'=>$bmkh_info['DF2'],
 	  'df2'=>$bmkh_info['DF3'],
@@ -1168,10 +1095,9 @@ class PerformAction extends Action
  //自评后，反馈前，需要各种加分扣分，这次直接跑程序，回头再对接
  public function funcjfkf()
  {
-   //$year="2014";
-   //$month="4";
-   $year=$_POST['year'];
-   $month=$_POST['month'];
+	$arrTime=$this->getTime();
+	$year=$arrTime['year'];
+	$month=$arrTime['month'];
    //出勤扣分
    //秘书处
    $this->funcchuqin("2013053193",1,1,0,0);
@@ -1330,10 +1256,9 @@ class PerformAction extends Action
  public function funcchuqin($raccount,$rapartment,$qj,$ct,$qx)
  { 
     $chuqin_model=new Model("Chuqin");
-    //$year="2014";
-	//$month="4";
-	$year=$_POST['year'];
-	$month=$_POST['month'];
+	$arrTime=$this->getTime();
+	$year=$arrTime['year'];
+	$month=$arrTime['month'];
     $data['year']=$year;
 	$data['month']=$month;
 	$data['raccount']=$raccount;
@@ -1349,10 +1274,9 @@ class PerformAction extends Action
    for($i=1;$i<=$time;$i++)
    {
      $resource_model=new Model("Resource");
-     //$year="2014";
-     //$month="4";
-	 $year=$_POST['year'];
-	 $month=$_POST['month'];
+	$arrTime=$this->getTime();
+	$year=$arrTime['year'];
+	$month=$arrTime['month'];
      $data['year']=$year;
      $data['month']=$month;
      $data['account']=$account;
@@ -1364,10 +1288,9 @@ class PerformAction extends Action
  public function funcdiaoyan($raccount,$rapartment,$caina)
  {
    $diaoyan_model=new Model("Diaoyan");
-   //$year="2014";
-   //$month="4";
-   $year=$_POST['year'];
-   $month=$_POST['month'];
+	$arrTime=$this->getTime();
+	$year=$arrTime['year'];
+	$month=$arrTime['month'];
    $data['year']=$year;
    $data['month']=$month;
    $data['raccount']=$raccount;
@@ -1376,23 +1299,12 @@ class PerformAction extends Action
    $diaoyan_model->add($data);
  }
  
- //时间的获取从这里开始
-   public function funcsettime()
-  {
-    $year=2014;//$_POST['year'];
-	$month=5;//$_POST['month'];
-	$arr=Array(
-	  'year'=>$year,
-	  'month'=>$month,
-	);
-	return $arr;
-  }
  //一键反馈第一步：生成总分和排名
  //本地跑的时候速度非常的慢，所以分成几部分来跑
  //第一步之干事部分
  public function funcfkonegs()
  {
-    $TIME=$this->funcsettime();
+    $TIME=$this->getTime();
 	$year=$TIME['year'];
 	$month=$TIME['month'];
 	//$year=$_POST['year'];
@@ -1500,7 +1412,7 @@ class PerformAction extends Action
  {
    //$year="2014";
    //$month="4";
-   $TIME=$this->funcsettime();
+   $TIME=$this->getTime();
 	$year=$TIME['year'];
 	$month=$TIME['month'];
   //部长反馈表
@@ -1558,7 +1470,7 @@ class PerformAction extends Action
  {
    //$year="2014";
    //$month="4";
-   $TIME=$this->funcsettime();
+   $TIME=$this->getTime();
 	$year=$TIME['year'];
 	$month=$TIME['month'];
    $person_model=new Model("Person");
@@ -1657,7 +1569,7 @@ class PerformAction extends Action
  //一键反馈第三步，根据主席团的评优结果，生成最终的优秀部长
  public function funcfkthree()
  {
-    $TIME=$this->funcsettime();
+    $TIME=$this->getTime();
 	$year=$TIME['year'];
 	$month=$TIME['month'];
    //从tbl_yxbzhx中找出十个候选人,从tbl_yxbz中统计所有主席团的评优结果
@@ -1742,7 +1654,7 @@ class PerformAction extends Action
  {
    //$year="2014";
    //$month="4";
-   $TIME=$this->funcsettime();
+   $TIME=$this->getTime();
 	$year=$TIME['year'];
 	$month=$TIME['month'];
    for($i=1;$i<=11;$i++)
@@ -1832,7 +1744,7 @@ class PerformAction extends Action
    $resource_model=new Model("Resource");
    $person_model=new Model("Person");
    $wdcs_model=new Model("Wdcs");
-   $TIME=$this->funcsettime();
+   $TIME=$this->getTime();
 	$year=$TIME['year'];
 	$month=$TIME['month'];
    //按部门处理
@@ -2317,8 +2229,9 @@ class PerformAction extends Action
       $this->redirect('Login/index'); 
 	  
 	//获取请求的时间
-	$year=$_POST['year'];
-	$month=$_POST['month'];
+	$arrTime=$this->getTime();
+	$year=$arrTime['year'];
+	$month=$arrTime['month'];
 	//判断时间是否合理
 	$gsfk_model=new Model("Gsfk");
   
@@ -2449,10 +2362,9 @@ class PerformAction extends Action
     $apartment=$person_info['apartment'];
     //获取总分
 
-    $year=$_POST['year'];
-	$month=$_POST['month'];
-	//$year=2014;
-	//$month=4;
+	$arrTime=$this->getTime();
+	$year=$arrTime['year'];
+	$month=$arrTime['month'];
 	$bzfk_info=$bzfk_model->where("(year=$year and month=$month) and account=$account")->find();
     $ZongFen=$bzfk_info['total'];
     //获取得分细则
@@ -2748,8 +2660,9 @@ class PerformAction extends Action
 
 	$account=$_SESSION['account'];
    $bmfk_model=new Model("Bmfk");
-   $year=$_POST['year'];
-	$month=$_POST['month'];
+	$arrTime=$this->getTime();
+	$year=$arrTime['year'];
+	$month=$arrTime['month'];
    //获取部门排名
    for($i=1;$i<=11;$i++)
    {
@@ -2896,10 +2809,9 @@ class PerformAction extends Action
     $apartment=$person_info['apartment'];
 	$type=$person_info['type'];
 	//获取时间
-	$year="2014";
-	$month="9";
-	//$year=$_POST['year'];
-	//$month=$_POST['month'];
+	$arrTime=$this->getTime();
+	$year=$arrTime['year'];
+	$month=$arrTime['month'];
     $status=1;//操作是否成功的返回值\
 	$flagCrud=1;
 	//$DF=$_POST['arrDF'];
@@ -3003,11 +2915,9 @@ class PerformAction extends Action
     $apartment=$person_info['apartment'];
 	$type=$person_info['type'];
 	//获取当前时间
-	$year=2014;
-    //获取当前的月份，数字，1，或者23
-    $month = 9;
-	//$year=$_POST['year'];
-	//$month=$_POST['month'];
+	$arrTime=$this->getTime();
+	$year=$arrTime['year'];
+	$month=$arrTime['month'];
 	//记录数据库操作是否成功，默认为1表示成功
 	$flagCrud=1;
 	$status=1;
@@ -3102,10 +3012,9 @@ class PerformAction extends Action
     session_start();
     if(!$this->judgelog())
       $this->redirect('Login/index'); 
-    //$year=$_POST['year'];
-	//$month=$_POST['month'];
-	$year=2014;
-	$month=9;
+	$arrTime=$this->getTime();
+	$year=$arrTime['year'];
+	$month=$arrTime['month'];
 	$flagCrud=1;
 	$status=$this->getStatus();
 	$account=$_SESSION['account'];
@@ -3148,10 +3057,9 @@ class PerformAction extends Action
 	$person_model=new Model("Person");
 	$flagCrud=1;
 	$account=$_SESSION['account'];
-	//$year=$_POST['year'];
-	//$month=$_POST['month'];
-	$year=2014;
-	$month=9;
+	$arrTime=$this->getTime();
+	$year=$arrTime['year'];
+	$month=$arrTime['month'];
 	$status=$this->getStatus();
 	for($i=0;$i<count($_POST['arrBM']);$i++)
 	{
@@ -3190,10 +3098,9 @@ class PerformAction extends Action
     //部长账号
 	 $waccount=$_SESSION['account'];
 	 //获取时间
-	 //$year=$_POST['year'];
-	 //$month=$_POST['month'];
-	 $year=2014;
-	 $month=9;
+	$arrTime=$this->getTime();
+	$year=$arrTime['year'];
+	$month=$arrTime['month'];
 	 $flagCrud=1;
 	 $status=1;//操作是否成功的返回值
 	 //遍历得分
@@ -3247,12 +3154,11 @@ class PerformAction extends Action
 	//$account=$_SESSION['account'];
 	//主席账号
 	$waccount=$_SESSION['account'];
-	
-	//$year="2014";
-	//$month="4";
-	$year=$_POST['year'];
-	$month=$_POST['month'];
+	$arrTime=$this->getTime();
+	$year=$arrTime['year'];
+	$month=$arrTime['month'];
 	$status=1;
+	$flagCrud=1;
     $bzkh_model=new Model("Bzkh");
 	$interact_model=new Model("Interact");
 	//部门数目
@@ -3273,15 +3179,10 @@ class PerformAction extends Action
 		$data['DF7']=$_POST['BMBZ']['arrBM'][$i]['arrBZ'][$j]['df6'];
 		$data['DF8']=$_POST['BMBZ']['arrBM'][$i]['arrBZ'][$j]['df7'];
 		$data['DF9']=$_POST['BMBZ']['arrBM'][$i]['arrBZ'][$j]['df8'];
-		$data['DF10']=$_POST['BMBZ']['arrBM'][$i]['arrBZ'][$j]['df9'];
-		$data['DF11']=$_POST['BMBZ']['arrBM'][$i]['arrBZ'][$j]['df10'];
-		$data['DF12']=$_POST['BMBZ']['arrBM'][$i]['arrBZ'][$j]['df11'];
-		$data['DF13']=$_POST['BMBZ']['arrBM'][$i]['arrBZ'][$j]['df12'];
-		$data['DF14']=$_POST['BMBZ']['arrBM'][$i]['arrBZ'][$j]['df13'];
-		$data['DF15']=$_POST['BMBZ']['arrBM'][$i]['arrBZ'][$j]['df14'];
+		$data['hadSubmit']=$_POST['hadSubmit'];
 		$bzkh_info=$bzkh_model->where("(year=$year and month=$month) and waccount=$waccount and raccount=$raccount")->data($data)->save();	
 		if(!$bzkh_info)
-		  $status=0;
+		  $flagCrud=0;
 		unset($data);
 		$data['text']=$_POST['BMBZ']['arrBM'][$i]['arrBZ'][$j]['pj'];
 		$info.=$data['text'];
@@ -3289,14 +3190,15 @@ class PerformAction extends Action
 		$info.=$raccount;
 		$interact_info=$interact_model->where("(year=$year and month=$month) and waccount=$waccount and raccount=$raccount")->data($data)->save();
 		if(!$interact_info)
-		  $status=0;
+		  $flagCrud=0;
 	  }
 	}
      
 	$_POST['NMPJ'][0]['name'];
 	//返回信息
     $arr=Array(
-	  'status'=>$status,
+	  'status'=>$flagCrud,
+	  'flagCrud'=>$flagCrud,
 	  'info'=>$_POST['NMPJ'][0]['name'],
 	  'gjbm'=>$_POST['gjbm'],
 	  'renshu'=>$_POST['renshu'],
@@ -3315,16 +3217,13 @@ class PerformAction extends Action
       $this->redirect('Login/index');
 	//主席团账号
 	$waccount=$_SESSION['account'];
-	
-	//$year="2014";
-	//$month="4";    
-	$year=$_POST['year'];
-	$month=$_POST['month'];
+	$arrTime=$this->getTime();
+	$year=$arrTime['year'];
+	$month=$arrTime['month'];
 	$status=1;
+	$flagCrud=1;
 	$bmkh_model=new Model("Bmkh");
-	$oneway_model=new Model("Oneway");
-	$bzty_model=new Model("Bzty");
-	$bmty_model=new Model("Bmty");
+	$tuiyou_model=new Model("Tuiyou");
 	//获取部门数目
 	for($i=0;$i<count($_POST['BM']['arrBM']);$i++)
 	{
@@ -3339,62 +3238,22 @@ class PerformAction extends Action
 	  $data['DF5']=$_POST['BM']['arrBM'][$i]['df4'];
 	  $data['DF6']=$_POST['BM']['arrBM'][$i]['df5'];
 	  $data['DF7']=$_POST['BM']['arrBM'][$i]['df6'];
-	  $bmkh_info=$bmkh_model->where("(year=$year and month=$month) and waccount=$waccount and rapartment=$rapartment")->data($data)->save();
-	  unset($data);
-	  if(!$bmkh_info)
-	    $status=0;
 	  $data['text']=$_POST['BM']['arrBM'][$i]['pj'];
-	  $oneway_info=$oneway_model->where("(year=$year and month=$month) and waccount=$waccount and rapartment=$rapartment")->data($data)->save();
-	  if(!$oneway_info)
-	    $status=0;
+	  $data['hadSubmit']=$_POST['hadSubmit'];
+	  $bmkh_info=$bmkh_model->where("(year=$year and month=$month) and (waccount=$waccount and rapartment=$rapartment)")->data($data)->save();
+	  if(false==$bmkh_info)
+	    $flagCrud=0;
 	}
 	//部门推优
 	unset($data);
     $data['rapartment']=$_POST['TYBM'];
-	$bmty_info=$bmty_model->where("(year=$year and month=$month) and waccount=$waccount")->data($data)->save();
-	if(!bmty_info)
-	  $status=0;
-	/*
-	//$arrBM=$_POST['BM']['arrBM'];
-	//$arrBM[0]['df0'];
-	for($i=0;$i<count($arrBM);$i++)
-	{
-	  //将第i个部门信息存起来
-	  unset($data);
-	  $data['DF1']=$arrBM[$i]['df0'];
-	  $data['DF2']=$arrBM[$i]['df1'];
-	  $data['DF3']=$arrBM[$i]['df2'];
-	  $data['DF4']=$arrBM[$i]['df3'];
-	  $data['DF5']=$arrBM[$i]['df4'];
-	  $data['DF6']=$arrBM[$i]['df5'];
-	  $data['DF7']=$arrBM[$i]['df6'];
-	  $data['total']=
-	  $data['DF1']+
-	  $data['DF2']+
-	  $data['DF3']+
-	  $data['DF4']+
-	  $data['DF5']+
-	  $data['DF6']+
-	  $data['DF7'];
-	  $bmkh_model->where("(year=$year and month=$month) and (waccount=$account and rapartment=($i+1))")->data($data)->save();
-	  //评价
-	  unset($data);
-	  $data['text']=$arrBM[$i]['pj'];
-	  $oneway_model->where("(year=$year and month=$month) and (waccount=$account and rapartment=($i+1))")->data($data)->save();
-
-	}
-	//$TYBZ=$_POST['TYBZ'];
-	//$bz_account=$TYBZ['account'];
-	//$tyly=$TYBZ['tyly'];
-	unset($data);
-	$data['waccount']=$account;
-	$data['raccount']=$_POST['TYBM'];
-	//$data['tyly']=$tyly;
-	$bzty_model->where("(year=$year and month=$month) and (waccount=$account)")->data($data)->save();
-	*/
+	$tuiyou_info=$tuiyou_model->where("(year=$year and month=$month) and waccount=$waccount")->data($data)->save();
+	if(!$tuiyou_info)
+	  $flagCrud=0;
 	//返回信息
     $arr=Array(
-	  'status'=>$status,
+	  'status'=>$_POST['BM']['arrBM'][$i]['pj'],
+	  'flagCrud'=>$flagCrud,
 	  'gjbm'=>$_POST['gjbm'],
 	  'renshu'=>$_POST['renshu'],
 	);
@@ -3415,8 +3274,9 @@ class PerformAction extends Action
 	$waccount=$_SESSION['account'];   
     $yxbz_model=new Model("Yxbz");	
 	//获取时间
-	$year=$_POST['year'];
-	$month=$_POST['month'];
+	$arrTime=$this->getTime();
+	$year=$arrTime['year'];
+	$month=$arrTime['month'];
 	//将传过来的数据保存到tbl_yxbz中
 	if(!empty($_POST['arrIDlist'][0]['account']))
 	{
@@ -3459,10 +3319,9 @@ class PerformAction extends Action
     if(!$this->judgelog())
       $this->redirect('Login/index');  
 	$account=$_SESSION['account'];   
-	//$year=$_POST['year'];
-	//$month=$_POST['month'];
-	$year=2014;
-	$month=9;
+	$arrTime=$this->getTime();
+	$year=$arrTime['year'];
+	$month=$arrTime['month'];
 	$flagCrud=1;
 	$qt_model=new Model("Qt");
 	$person_model=new Model("Person");
@@ -3557,8 +3416,9 @@ class PerformAction extends Action
     if(!$this->judgelog())
       $this->redirect('Login/index'); 
     //对传过来的时间进行判断,看看数据库里是否已经激活过该时间了
-    $year=$_POST['year'];
-	$month=$_POST['month'];
+	$arrTime=$this->getTime();
+	$year=$arrTime['year'];
+	$month=$arrTime['month'];
 	$gszp_model=new Model("Gszp");
 	$flag=1;
 	//判断时间是否合理

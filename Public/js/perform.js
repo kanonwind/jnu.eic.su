@@ -3219,7 +3219,7 @@ function Post_BMKH(obj_BMKH)//obj_BMKH为Get_BMKH()定义的对象
             success:function(result){obj=result;}
 		});
 			
-        //alert(obj.status);
+        alert(json_Post_BMKH.TYBM);
         if(obj.status)
             return true;
         else
