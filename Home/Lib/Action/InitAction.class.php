@@ -408,6 +408,7 @@ class InitAction extends Action
 	$bzfk_model=new Model("Bzfk");
 	$bmfk_model=new Model("Bmfk");
 	$yxchxz_model=new Model("Yxchxz");
+	$bmwg_model=new Model("Bmwg");
 	//干事部分
 	$gszp_model->where("year=$year and month=$month")->delete();
 	$interact_model->where("year=$year and month=$month")->delete();
@@ -434,12 +435,13 @@ class InitAction extends Action
 	$bmfk_model->where("year=$year and month=$month")->delete();
 	//优秀称号限制
 	$yxchxz_model->where("year=$year and month=$month")->delete();
+	//部门违规
+	$bmwg_model->where("year=$year and month=$month")->delete();
 	echo $year."年".$month."月的绩效考核数据删除完毕，可以重新启动该月份的绩效考核</br>";
   }
   //某年某月考核系统初始化阶段一
   public function initPerform()
   {
-    //获取传过来的时间
 	//根据tbl_authority判断，若时间已经存在拒绝访问
 	//干事自评表，部长自评表，干事自评表，部长考核表，部门考核表
 	//开始一次绩效考核需要满足下面的条件：基本成员信息要求、该时间未考核过、系统不存在未结束的考核
@@ -478,6 +480,7 @@ class InitAction extends Action
 	$this->funcinitbzfk();
 	$this->funcinitbmfk();
 	$this->funcinityxchxz(); 
+	$this->funcinitbmwg();
 	echo "完毕</br>";
   } 
   //某年某月考核系统初始化阶段二
@@ -1137,8 +1140,41 @@ class InitAction extends Action
 	}
 	echo "其他情况加减分初始化结束</br>";
   }
+  //绩效考核初始化第一阶段，部门违规扣分表
+  private function funcinitbmwg()
+  {
+	echo "部门违规初始化开始</br>";
+	$arr=$this->funcsettime();
+	$year=$arr['year'];
+	$month=$arr['month'];
+	//找到所有人力干事
+	$person_model=new Model("Person");
+	$bmwg_model=new Model("Bmwg");
+	$person_info=$person_model->where("apartment=2 and type=2")->select();
+	$i=1;
+	foreach($person_info as $v)
+	{
+	for($j=1;$j<7;$j++)
+	{
+		unset($data);
+		$data['year']=$year;
+		$data['month']=$month;
+		$data['account']=$v['account'];
+		$data['apartment']=$i;
+		$data['wgkf']=0;
+		$data['type']=$j;
+		$data['text']="空";
+		$bmwg_info=$bmwg_model->add($data);
+		if(false==$bmwg_info)
+			 echo "部门违规初始化失败</br>";
+		
+	}
+	$i++;
+	}
+	echo "部门违规初始化结束</br>";
+  }
   //绩效考核初始化第一阶段，上月的优秀某某限定表
-  public function funcinityxchxz()
+  private function funcinityxchxz()
   {
     //获取上次考核的时间
 	$arr=$this->funcgettime();
@@ -1191,7 +1227,7 @@ class InitAction extends Action
 	echo "优秀部长限定初始化结束</br>";
   }
  //绩效考核初始化第二阶段，该月的优秀部长评定表
-  public function funcinityxbz()
+  private function funcinityxbz()
   {
 	$arr=$this->funcsettime();
 	$year=$arr['year'];
@@ -1252,7 +1288,7 @@ class InitAction extends Action
 	return $arr;
   }
  //调用—_encode()函数，将数组进行编码转哈
-   public  function _encode($arr)
+   private  function _encode($arr)
   {
     $na = array();
     foreach ( $arr as $k => $value ) {  
@@ -1261,7 +1297,7 @@ class InitAction extends Action
     //return addcslashes(urldecode(json_encode($na)),"\\r");
 	return urldecode(json_encode($na));
   }
-   public function _urlencode($elem)
+   private function _urlencode($elem)
   {
     if(is_array($elem)){
     foreach($elem as $k=>$v){

@@ -128,6 +128,92 @@ class PerformAction extends Action
 	);
 	return $arr;
   }
+  //向前端发送时间
+  public function sendTime()
+  {
+	//拒绝未登录访问
+	session_name('LOGIN');
+    session_start();
+    if(!$this->judgelog())
+      $this->redirect('Login/index'); 
+	//已经考核过的
+	$control_model=new Model("Control");
+	$control_info=$control_model->where()->select();
+	//自评
+	for($i=0;$i<count($control_info);$i++)
+	{	
+		$evaluation[]=Array(
+			'year'=>$control_info[$i]['year'],
+			'month'=>$control_info[$i]['month'],
+		);
+	}
+
+	//反馈：所有跑过优秀部长的记录
+	$control_info=$control_model->where("is_yxbz=1")->select();
+	for($i=0;$i<count($control_info);$i++)
+	{	
+		$feedback[]=Array(
+			'year'=>$control_info[$i]['year'],
+			'month'=>$control_info[$i]['month'],
+		);
+	}
+	//控制：已经考核过的+可能的下一个考核
+	$control_info=$control_model->select();
+	for($i=0;$i<count($control_info);$i++)
+	{	
+		$control[]=Array(
+			'year'=>$control_info[$i]['year'],
+			'month'=>$control_info[$i]['month'],
+		);
+	}
+	$control_info=$control_model->where("is_over=0")->select();
+	if(count($control_info)==0)
+	{
+		$month=date("n");
+		$year=date("Y");
+		$control_info=$control_model->where("year=$year and month=$month")->find();
+		if(empty($control_info))
+		{
+			$control[]=Array(
+				'year'=>$year,
+				'month'=>$month,
+			);	
+		}
+		else
+		{
+			if($month==12)
+			{
+				$year++;
+				$month=1;
+			}
+			else{
+				$month++;
+			}
+			$control[]=Array(
+				'year'=>$year,
+				'month'=>$month,
+			);
+		}
+	}
+
+	//优秀部长：跑过优秀部长的记录
+	$control_info=$control_model->where("is_yxbz=1")->select();
+	for($i=0;$i<count($control_info);$i++)
+	{	
+		$excellent[]=Array(
+			'year'=>$control_info[$i]['year'],
+			'month'=>$control_info[$i]['month'],
+		);
+	}
+
+	$arr=Array(
+		'evaluation'=>$evaluation,
+		'feedback'=>$feedback,
+		'control'=>$control,
+		'excellent'=>$excellent,
+	);
+	echo $this->_encode($arr);
+  }
   //干事自评表
   public function funcgszp()
   {
@@ -247,8 +333,7 @@ class PerformAction extends Action
 
   }
 
-  //干事考核表
-  //暂时忽略部门特色这一节
+  //干事考核表,暂时忽略部门特色这一节
   public function funcgskh()
   {
 	//拒绝未登录访问
@@ -616,13 +701,13 @@ class PerformAction extends Action
 	  //推优部分
 	  $tuiyou_model=new Model("Tuiyou");
 	  $tuiyou_info=$tuiyou_model->where("(year=$year and month=$month) and waccount=$account")->find();
-	  $bm_account=$bmty_info['raccount'];
+	  $bm_account=$tuiyou_info['raccount'];
 	  if(!empty($bm_account))
 	  {
 		$TYBM=$bm_account;
 	  }
 	  else{
-         $TYBM=$BuMen[0];
+         $TYBM=$BuMen[0]['name'];
 	  }
 	  //是否提交过
 	  $bmkh_info=$bmkh_model->where("(year=$year and month=$month) and waccount=$account")->find();
@@ -864,6 +949,26 @@ class PerformAction extends Action
 	  'bmjjf'=>$bmjjf,
 	);
 	echo $this->_encode($arr);
+  }
+  //违纪登记
+  public function funcbmwg()
+  {
+  //拒绝未登录访问
+	$arrTime=$this->getTime();
+	$year=$arrTime['year'];
+	$month=$arrTime['month'];
+	session_name('LOGIN');
+    session_start();
+    if(!$this->judgelog())
+      $this->redirect('Login/index'); 
+	$account=$_SESSION['account'];
+	$status=$this->getStatus();
+	$type=$_POST['type'];
+	$flagCrud=1;
+	$bmwg_model=new Model("Bmwg");
+	//获取执行该任务的指定人力人员
+	
+	$bmwg_info=$bmwg_model->where("(year=$year and month=$month)")->select();
   }
   //优秀部长评定表
   public function funcyxbz()
@@ -3246,13 +3351,13 @@ class PerformAction extends Action
 	}
 	//部门推优
 	unset($data);
-    $data['rapartment']=$_POST['TYBM'];
+    $data['raccount']=$_POST['TYBM'];
 	$tuiyou_info=$tuiyou_model->where("(year=$year and month=$month) and waccount=$waccount")->data($data)->save();
 	if(!$tuiyou_info)
 	  $flagCrud=0;
 	//返回信息
     $arr=Array(
-	  'status'=>$_POST['BM']['arrBM'][$i]['pj'],
+	  'status'=>$_POST['TYBM'],
 	  'flagCrud'=>$flagCrud,
 	  'gjbm'=>$_POST['gjbm'],
 	  'renshu'=>$_POST['renshu'],
@@ -3296,7 +3401,7 @@ class PerformAction extends Action
 	    $data['checked']=1;
 		$raccount=$_POST['arrIDlist'][$i]['account'];
 	    $yxbz_info=$yxbz_model->where("(year=$year and month=$month) and waccount=$waccount and raccount=$raccount")->data($data)->save();
-		if(!yxbz_info)
+		if(!$yxbz_info)
 		  $status=0;
 	  }
 	}

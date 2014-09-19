@@ -99,47 +99,6 @@ rank//部门内排名
 }
 
 
-
-
-
-
-
-
-
-
-登陆phpmyadmin，进行编写
-
-进行后台开发，先用gii生成home模块
-在main.php添加'home'
-
-生成控制器
-admin
-news123
-person
-
-处理admin控制器
- 有三个动作，index,login,check
- 生成admin 对应的model
-先开启数据库支持
-
-控制器admin基本搞定，只欠index上编写连接
-
-接下来编写news1控制器
-有动作：
-添加add
-删除del
-编辑edit
-展示show
-
-不会用auto让我走不少弯路
-
-
-
-
-
-
-
-
 整个人力管理系统的设计不单单是数据的存储这么简单
 除了主要的功能，还需要注意细节方面的东西
 第一，可以通过条件查找符合要求的人员。
@@ -960,8 +919,11 @@ tbl_bmwg//部门违规
  id
  year
  month
+ account//跟进的干事
  apartment
+ type//违规种类,有1到6共6个,分别是秘书，人力，宣传，信编，公关，司仪
  wgkf//违规总共的扣分，存正值
+ text
 }
 
 

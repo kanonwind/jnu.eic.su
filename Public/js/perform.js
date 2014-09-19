@@ -78,6 +78,17 @@ function Get_Time()
         }
         //ajax获取时间代码
         //填充一个json_Get_Times,格式如下:
+			var obj;
+            $.ajax({
+                url:URL+"/sendTime",
+                data:{"year":year,"month":month},
+                async:false,
+                dataType:"json",
+                type:"POST",
+                success:function(result){obj=result;}
+            });
+			json_Get_Times=obj;
+			console.log(json_Get_Times);
     }
     catch(err){
         var json_Get_Times = 
@@ -164,7 +175,7 @@ function Get_Time()
 				arrYearTemp.push(yearTemp);
 			}
 		}
-		arrYearTemp.sort(compYear);
+		//arrYearTemp.sort(compYear);
 		
 		var arrMonthTemp = new Array(arrYearTemp.length);
 		for(var i = 0; i < arrYearTemp.length; ++i)
@@ -191,6 +202,42 @@ function Get_Time()
 		}
 
 		return arrTime;
+	}
+	try{
+		if(json_Get_Times.evaluation.length==0)
+		{
+			json_Get_Times.evaluation=new Array();
+		}
+	}
+	catch(err){
+		json_Get_Times.evaluation=new Array();
+	}
+	try{
+		if(json_Get_Times.feedback.length==0)
+		{
+			json_Get_Times.feedback=new Array();
+		}
+	}
+	catch(err){
+		json_Get_Times.feedback=new Array();
+	}
+	try{
+		if(json_Get_Times.control.length==0)
+		{
+			json_Get_Times.control=new Array();
+		}
+	}
+	catch(err){
+		json_Get_Times.control=new Array();
+	}
+	try{
+		if(json_Get_Times.excellent.length==0)
+		{
+			json_Get_Times.excellent=new Array();
+		}
+	}
+	catch(err){
+		json_Get_Times.excellent=new Array();
 	}
 	
 	var Times = 
@@ -3153,7 +3200,7 @@ function Get_BMKH()
 			this.arrBuMen.push({"name":TranDigToText(json_BMKH.BuMen[i].name)});
 		}
 
-		this.TYBM = TranDigToText(json_BMKH.TYBM);
+		this.TYBM = json_BMKH.TYBM;
 		this.hadSubmit=json_BMKH.hadSubmit;
 	}
 	
@@ -3165,12 +3212,13 @@ function Get_BMKH()
 //把部门考核表的填写的内容传给服务器
 function Post_BMKH(obj_BMKH)//obj_BMKH为Get_BMKH()定义的对象
 {
+	
 	var _arrBM = new Array();
 	for(var i = 0; i < obj_BMKH.arrBM.length; ++i)
 	{
 		_arrBM.push(
 						{
-							"bm":TranTextToDig(obj_BMKH.arrBM[i].bm), //部门名字
+							"bm":arrDepartName.indexOf(obj_BMKH.arrBM[i].bm)+1, //部门名字
 							"pj":obj_BMKH.arrBM[i].pj,
 							"df0":obj_BMKH.arrBM[i].df0, //工作量/工作难度
 							"df1":obj_BMKH.arrBM[i].df1, //工作完成效果
@@ -3182,13 +3230,13 @@ function Post_BMKH(obj_BMKH)//obj_BMKH为Get_BMKH()定义的对象
 						}
 					);
 	}
-	
+	/*
 	var _arrBuMen = new Array();
 	for(var i = 0; i < obj_BMKH.arrBuMen.length; ++i)
 	{
 		_arrBuMen.push({"name":TranTextToDig(obj_BMKH.arrBuMen[i].name)});
 	}
-
+	*/
 	var json_Post_BMKH = 
 	{
 	    "year" : year,
@@ -3200,9 +3248,10 @@ function Post_BMKH(obj_BMKH)//obj_BMKH为Get_BMKH()定义的对象
 			"sum":obj_BMKH.arrBM.length,//部门数目
 			"arrBM":_arrBM,
 		},
-		//"BuMen":_arrBuMen,//推优部门
-		"TYBM":TranTextToDig(obj_BMKH.TYBM),
+		//"BuMen":_arrBuMen,
+		"TYBM":obj_BMKH.TYBM,//推优部门
 	};
+	console.log(json_Post_BMKH);
 	try{
         if(debug())
             return true;
@@ -3219,8 +3268,8 @@ function Post_BMKH(obj_BMKH)//obj_BMKH为Get_BMKH()定义的对象
             success:function(result){obj=result;}
 		});
 			
-        alert(json_Post_BMKH.TYBM);
-        if(obj.status)
+        alert(obj.status);
+        if(obj.flagCrud)
             return true;
         else
             return false;
@@ -3785,7 +3834,7 @@ function Get_CKWWCQK()
 	return json_Get_CKWWCQK;
 			
 }
-
+//获取违纪登记表数据
 function Get_WJDJ(iType)
 {
     //iType是指表的种类,比如0表示秘书处制度违纪登记表
@@ -3794,6 +3843,16 @@ function Get_WJDJ(iType)
         if(debug())
             throw("ajax");
         //ajax代码
+		
+		var obj;
+	    $.ajax({
+            url:URL+"/funcbmwg",
+            data:{'year':year,'month':month,'type':iType},
+            async:false,
+            dataType:"json",
+            type:"POST",
+            success:function(result){obj=result;}
+		});	
     }
     catch(err)
     {
@@ -3806,12 +3865,12 @@ function Get_WJDJ(iType)
                 {"bm":"2","kf":"0.6","ly":"2借物资没有提前联系"},
                 //每个部门都有
             ]
-        }
+        };
         errmsg();
     }
     return json_Get_WJDJ;
 }
-
+//将违纪登记表数据发送到服务器
 function Post_WJDJ(obj,iType)
 {
     try
@@ -6091,14 +6150,20 @@ function Show_BMKH()
 		//推优部分
 		GetObjById("tuiyou").options.length = 0;
 		var iIndex = 0;
+		
 		for(var i=0; i<obj_BMKH.arrBuMen.length; ++i)
 		{
+			var iBM=arrDepartName.indexOf(obj_BMKH.arrBuMen[i].name)+1;
+			var option=$("<option></option>").val(iBM).html(obj_BMKH.arrBuMen[i].name).appendTo($("#tuiyou"));
+			/*
 			GetObjById("tuiyou").options[i] = new Option(obj_BMKH.arrBuMen[i].name);
 			if(obj_BMKH.TYBM == obj_BMKH.arrBuMen[i].name)
 				iIndex = i;
+			*/
 		}
-
-		GetObjById("tuiyou").selectedIndex = iIndex;
+		
+		$("#tuiyou").val(obj_BMKH.TYBM);
+		//GetObjById("tuiyou").selectedIndex = iIndex;
 		//GetObjById("tuiyouliyou").value = obj_BMKH.TYBZ.tyly;
 		
 		GetObjById("tuiyou").onchange = function()
@@ -6108,7 +6173,7 @@ function Show_BMKH()
 			//else
 			//	GetObjById("tuiyouliyou").value = obj_BMKH.TYBZ.tyly;
 				
-			obj_BMKH.TYBM = this.options[this.selectedIndex].text;
+			obj_BMKH.TYBM = $("#tuiyou").val();
 			//obj_BMKH.TYBZ.account = obj_BMKH.arrBuZhang[this.selectedIndex].account;
 		}
 		/*GetObjById("tuiyouliyou").onchange = function()
