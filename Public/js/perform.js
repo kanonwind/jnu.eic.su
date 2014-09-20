@@ -672,7 +672,7 @@ function SelectTime(iCurShowFunction)
     }
     $("#year").change(function(){
         $("#month").html("");
-        var index=$(this).attr("selectedindex");
+        var index=$(this).prop("selectedIndex");
         for(var i=0;i<time[index].length;i++)
         {
             $("<option></option>",{
