@@ -72,7 +72,7 @@ function CheckLegalStr(strCheck)//检查输入的字符串是否含有非法字�
 function Get_Time()
 {
     try{
-        if(!debug())
+        if(debug())
         {
             throw("ajax");
         }
@@ -134,15 +134,8 @@ function Get_Time()
         };
         errmsg();
     }//catch
-	
-	var arrTimeTypeName=new Array("evaluation","feedback","constrol","excellent");
-    for(var i=0;i<arrTimeTypeName.length;i++)
-    {
-        //如果无法访问数组长度,则new一个数组
-        try{json_Get_Times[arrTimeTypeName[i]].length;}catch(err){
-            json_Get_Times[arrTimeTypeName[i]]=new Array();
-        }
-    }
+	console.log(json_Get_Times);
+	//排序谓词
 	function ymcmp(lhs,rhs)
     {
         if( (lhs.year*12+lhs.month)> (rhs.year*12+rhs.month))
@@ -154,6 +147,7 @@ function Get_Time()
             return false;
         }
     }
+	//格式化年月格式
     function ymformat(arrym)
     {
         var ret=new Array();
@@ -179,20 +173,24 @@ function Get_Time()
                             arrm.push(arrym[j].month);
                         }
                     }
+					return arrm;
                 })()});
             }
         }
         return ret;
     }
             
-        
-        
+    try{json_Get_Times.evaluation.sort(ymcmp);}catch(e){json_Get_Times.evaluation=new Array();}  
+    try{json_Get_Times.feedback.sort(ymcmp);}catch(e){json_Get_Times.feedback=new Array();}  
+	try{json_Get_Times.control.sort(ymcmp);}catch(e){json_Get_Times.control=new Array();}  
+	try{json_Get_Times.excellent.sort(ymcmp);}catch(e){json_Get_Times.excellent=new Array();}  
+	
 	var Times = 
 	{
-		"evaluation":ymformat(json_Get_Times.evaluation.sort(ymcmp)),
-		"feedback":ymformat(json_Get_Times.feedback.sort(ymcmp)),
-		"control":ymformat(json_Get_Times.control.sort(ymcmp)),
-		"excellent":ymformat(json_Get_Times.excellent.sort(ymcmp)),
+		"evaluation":ymformat(json_Get_Times.evaluation),
+		"feedback":ymformat(json_Get_Times.feedback),
+		"control":ymformat(json_Get_Times.control),
+		"excellent":ymformat(json_Get_Times.excellent),
 		/*[
 			{
 				"year":
@@ -204,7 +202,7 @@ function Get_Time()
 		],*/
 		
 	};
-	
+	console.log(Times);
 	return Times;
 }
 
@@ -645,17 +643,21 @@ function SelectTime(iCurShowFunction)
 	
 	var timeType = TimeType(btnText);
     var time=afxTimeInfo[timeType];
+	
 	$("#year").html("");
+	$("#month").html("");
+	
     for(var i=0;i<time.length;i++)
     {
         $("<option></option>",{
             "value":time[i].year,"text":time[i].year,
         }).appendTo($("#year"));
     }
+	
     try{
         //尝试设置数组的第一个值为默认年份
         $("#year").val(time[0].year);
-        for(var i=0;i<time[0].length;i++)
+        for(var i=0;i<time[0].arrMonth.length;i++)
         {
             $("<option></option>",{
                 "value":time[0].arrMonth[i],"text":time[0].arrMonth[i],
@@ -670,10 +672,11 @@ function SelectTime(iCurShowFunction)
     }catch(erryear){
         console.log("默认年份出错,请注意!");
     }
+	
     $("#year").change(function(){
         $("#month").html("");
         var index=$(this).prop("selectedIndex");
-        for(var i=0;i<time[index].length;i++)
+        for(var i=0;i<time[index].arrMonth.length;i++)
         {
             $("<option></option>",{
                 "value":time[index].arrMonth[i],"text":time[index].arrMonth[i],
@@ -686,53 +689,13 @@ function SelectTime(iCurShowFunction)
              console.log("默认月份设置出错,请注意!");
         }
     });
+	
     $("#OK_button").click(function(){
         year=$("#year").val();
         month=$("#month").val();
         var arrShowFun = ArrShowTable();
         arrShowFun[iCurShowFunction]();
-    });
-    
-    //////////////////////////////////
-    /*
-	var objYear = GetObjById("year");
-	var objMonth = GetObjById("month");
-	objMonth.options.length = 0;
-	objYear.options.length = 0;
-	
-	for(var i = 0; i < time.length; ++i)
-	{
-		objYear.options[i] = new Option(time[i].year);
-	}
-	objYear.selectedIndex = 0;
-	for(var j = 0; j < time[0].arrMonth.length; ++j)
-	{
-		objMonth.options[j] = new Option(time[0].arrMonth[j].month);
-	}
-	objMonth.selectedIndex = 0;
-	
-	objYear.onchange = function()
-	{
-		objMonth.options.length = 0;
-		var index = objYear.selectedIndex;
-
-		for(var i = 0; i < time[index].arrMonth.length; ++i)
-		{
-			objMonth.options[i] = new Option(time[index].arrMonth[i].month);
-		}
-	}
-	
-
-	GetObjById("OK_button").onclick = function()
-	{
-		year = objYear.options[objYear.selectedIndex].text;
-		month = objMonth.options[objMonth.selectedIndex].text;
-		var arrShowFun = ArrShowTable();
-		//if(PostTimeToServer(year, month, btnText ))//把获取到的时间的表传回服务器
-		arrShowFun[iCurShowFunction]();//调用被激活的按钮对应的信息的函数
-		//alert(year + "  "+month);
-	}
-    */
+    });  
 }
 
 
