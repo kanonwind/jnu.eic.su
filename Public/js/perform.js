@@ -7,7 +7,7 @@ var arrDepartName=new Array("秘书处","人力资源部","宣传部","信息编
 "体育部","KSC联盟","组织部","文娱部","公关部","心理服务部","主席团");
 var arrTypeName=new Array("干事","人力干事","部长级","主席团");
 var arrWeiJiBiao=new Array("秘书处制度违纪登记表","人力资源部制度违纪登记表","宣传部制度违纪登记表","信息编辑部制度违纪登记表","公关部制度违纪登记表","司仪礼仪队违纪登记表");
-   
+var afxTimeInfo;  
 function debug()
 {
     return false;
@@ -135,117 +135,64 @@ function Get_Time()
         errmsg();
     }//catch
 	
-	function compYear(a, b)
-	{
-		return (b - a);
-	}
-	
-	function compMonth(_month)
-	{
-		return function (object1, object2) 
-		{ 
-			var value1 = object1[_month]; 
-			var value2 = object2[_month]; 
-			return value2 - value1;
-		} 
-	}
-	
-	
-	//alert(json_Get_Times);
-	function sortTime(time)
-	{
-		var arrYearTemp = new Array();
-		var yearTemp = time[0].year;
-		
-		arrYearTemp.push(yearTemp);
-		for(var i = 1; i < time.length; ++i)
-		{
-			var flag = 1;
-			for(var j = 0; j < arrYearTemp.length; ++j)
-			{
-				if(arrYearTemp[j] == time[i].year)
-				{		
-					flag = 0;
-					break;
-				}
-			}
-			if(flag == 1)
-			{
-				yearTemp = time[i].year;
-				arrYearTemp.push(yearTemp);
-			}
-		}
-		//arrYearTemp.sort(compYear);
-		
-		var arrMonthTemp = new Array(arrYearTemp.length);
-		for(var i = 0; i < arrYearTemp.length; ++i)
-		{
-			arrMonthTemp[i] = new Array();
-		}
-		
-		for(var i = 0; i < time.length; ++i)
-		{
-			for(var j = 0; j < arrYearTemp.length; ++j)
-			{
-				if(arrYearTemp[j] == time[i].year)
-				{
-					arrMonthTemp[j].push({"month":time[i].month});
-				}
-			}
-		}
-		
-		var arrTime = new Array();
-		for(var i = 0; i < arrYearTemp.length; ++i)
-		{
-			arrMonthTemp[i].sort(compMonth("month"));
-			arrTime.push({"year":arrYearTemp[i], "arrMonth":arrMonthTemp[i]});
-		}
-
-		return arrTime;
-	}
-	try{
-		if(json_Get_Times.evaluation.length==0)
-		{
-			json_Get_Times.evaluation=new Array();
-		}
-	}
-	catch(err){
-		json_Get_Times.evaluation=new Array();
-	}
-	try{
-		if(json_Get_Times.feedback.length==0)
-		{
-			json_Get_Times.feedback=new Array();
-		}
-	}
-	catch(err){
-		json_Get_Times.feedback=new Array();
-	}
-	try{
-		if(json_Get_Times.control.length==0)
-		{
-			json_Get_Times.control=new Array();
-		}
-	}
-	catch(err){
-		json_Get_Times.control=new Array();
-	}
-	try{
-		if(json_Get_Times.excellent.length==0)
-		{
-			json_Get_Times.excellent=new Array();
-		}
-	}
-	catch(err){
-		json_Get_Times.excellent=new Array();
-	}
-	
+	var arrTimeTypeName=new Array("evaluation","feedback","constrol","excellent");
+    for(var i=0;i<arrTimeTypeName.length;i++)
+    {
+        //如果无法访问数组长度,则new一个数组
+        try{json_Get_Times[arrTimeTypeName[i]].length;}catch(err){
+            json_Get_Times[arrTimeTypeName[i]]=new Array();
+        }
+    }
+	function ymcmp(lhs,rhs)
+    {
+        if( (lhs.year*12+lhs.month)> (rhs.year*12+rhs.month))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    function ymformat(arrym)
+    {
+        var ret=new Array();
+        for(var i=0;i<arrym.length;++i)
+        {
+            if((function(yhs){
+                for(var j=0;j<ret.length;j++)
+                {
+                    if(ret[j].year==yhs)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            })(arrym[i].year)==false)
+            {
+                ret.push({"year":arrym[i].year,"arrMonth":(function(){
+                    var arrm=new Array();
+                    for(var j=0;j<arrym.length;j++)
+                    {
+                        if(arrym[j].year==arrym[i].year)
+                        {
+                            arrm.push(arrym[j].month);
+                        }
+                    }
+                })()});
+            }
+        }
+        return ret;
+    }
+            
+        
+        
 	var Times = 
 	{
-		"evaluation":sortTime(json_Get_Times.evaluation),
-		"feedback":sortTime(json_Get_Times.feedback),
-		"control":sortTime(json_Get_Times.control),
-		"excellent":sortTime(json_Get_Times.excellent),
+		"evaluation":ymformat(json_Get_Times.evaluation.sort(ymcmp)),
+		"feedback":ymformat(json_Get_Times.feedback.sort(ymcmp)),
+		"control":ymformat(json_Get_Times.control.sort(ymcmp)),
+		"excellent":ymformat(json_Get_Times.excellent.sort(ymcmp)),
 		/*[
 			{
 				"year":
@@ -446,9 +393,9 @@ function PerformInit()
 {
     ajaxcheck();
 	AutoHideHead();
-
+    afxTimeInfo=Get_Time();
 	var arrTable = GetTable();
-	GetObjById("table_name").innerHTML = arrTable[0];
+	$("#table_name").html(arrTable[0]);
 		
 	ActiveTableButton();
 	SelectTime(0);
@@ -657,7 +604,6 @@ function ZhiBiaoHuaDong(iPreTable, iCurTable)
 function SelectTime(iCurShowFunction)
 {
 	var arrTable = GetTable();
-	var objTimes = Get_Time();
 	
 	var btnText = arrTable[iCurShowFunction];
 	
@@ -698,8 +644,57 @@ function SelectTime(iCurShowFunction)
 	}
 	
 	var timeType = TimeType(btnText);
-	var time = objTimes[timeType];
-
+    var time=afxTimeInfo[timeType];
+	$("#year").html("");
+    for(var i=0;i<time.length;i++)
+    {
+        $("<option></option>",{
+            "value":time[i].year,"text":time[i].year,
+        }).appendTo($("#year"));
+    }
+    try{
+        //尝试设置数组的第一个值为默认年份
+        $("#year").val(time[0].year);
+        for(var i=0;i<time[0].length;i++)
+        {
+            $("<option></option>",{
+                "value":time[0].arrMonth[i],"text":time[0].arrMonth[i],
+            }).appendTo($("#month"));
+        }
+        try{
+            //尝试设置月份
+            $("#month").val(time[0].arrMonth[0]);
+        }catch(errmonth){
+            console.log("默认月份设置出错,请注意!");
+        }
+    }catch(erryear){
+        console.log("默认年份出错,请注意!");
+    }
+    $("#year").change(function(){
+        $("#month").html("");
+        var index=$(this).attr("selectedindex");
+        for(var i=0;i<time[index].length;i++)
+        {
+            $("<option></option>",{
+                "value":time[index].arrMonth[i],"text":time[index].arrMonth[i],
+            }).appendTo($("#month"));
+        }
+        try{
+            //尝试设置默认月份
+            $("#month").val(time[index].arrMonth[0]);
+        }catch(errmonth){
+             console.log("默认月份设置出错,请注意!");
+        }
+    });
+    $("#OK_button").click(function(){
+        year=$("#year").val();
+        month=$("#month").val();
+        var arrShowFun = ArrShowTable();
+        arrShowFun[iCurShowFunction]();
+    });
+    
+    //////////////////////////////////
+    /*
 	var objYear = GetObjById("year");
 	var objMonth = GetObjById("month");
 	objMonth.options.length = 0;
@@ -737,6 +732,7 @@ function SelectTime(iCurShowFunction)
 		arrShowFun[iCurShowFunction]();//调用被激活的按钮对应的信息的函数
 		//alert(year + "  "+month);
 	}
+    */
 }
 
 
