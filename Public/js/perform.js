@@ -690,12 +690,15 @@ function SelectTime(iCurShowFunction)
         }
     });
 	
-    $("#OK_button").click(function(){
+    $("#OK_button").get()[0].onclick=function(){
         year=$("#year").val();
         month=$("#month").val();
         var arrShowFun = ArrShowTable();
+		console.log("执行第"+iCurShowFunction+"个函数");
+		
         arrShowFun[iCurShowFunction]();
-    });  
+		
+    };  
 }
 
 
@@ -756,17 +759,23 @@ function ArrShowTable()
 			case "查看未完成情况":
 			arrShowFunction.push(Show_CKWWCQK);
             case "秘书处制度违纪登记表":
-            arrShowFunction.push(function(){Show_WJDJ(0);});
+            arrShowFunction.push((function(){Show_WJDJ(0);}));
+			break;
             case "人力资源部制度违纪登记表":
-            arrShowFunction.push(function(){Show_WJDJ(1);});
+            arrShowFunction.push((function(){Show_WJDJ(1);}));
+			break;
             case "宣传部制度违纪登记表":
-            arrShowFunction.push(function(){Show_WJDJ(2);});
+            arrShowFunction.push((function(){Show_WJDJ(2);}));
+			break;
             case "信息编辑部制度违纪登记表":
-            arrShowFunction.push(function(){Show_WJDJ(3);});
+            arrShowFunction.push((function(){Show_WJDJ(3);}));
+			break;
             case "公关部制度违纪登记表":
-            arrShowFunction.push(function(){Show_WJDJ(4);});
+            arrShowFunction.push((function(){Show_WJDJ(4);}));
+			break;
             case "司仪礼仪队违纪登记表":
-            arrShowFunction.push(function(){Show_WJDJ(5);});
+            arrShowFunction.push((function(){Show_WJDJ(5);}));
+			break;
 		}
 	}
 	return arrShowFunction;
@@ -3403,7 +3412,7 @@ function Get_ZXTFK()
 function Post_YXBZPD(arrIDlist)
 {	
 	//arrIDlist是一组学号（ID），学号对应的就是被推选为优秀部长的
-	
+	console.log(arrIDlist);
 	var jsonArr=new Array();
 	
 	for(var i=0;i<arrIDlist.length;i++)
@@ -3425,12 +3434,15 @@ function Post_YXBZPD(arrIDlist)
 	};
 	
 	*/
+	console.log(jsonPost);
 	try
     {
         if(debug())
             return true;
+		
 	//发送成功返回true，失败返回false
 		//ajax请求
+		
 		var obj;
             $.ajax({
             url:URL+"/post_yxbz",
@@ -3438,11 +3450,11 @@ function Post_YXBZPD(arrIDlist)
             async:false,
             dataType:"json",
             type:"POST",
-            success:function(result){obj=result;}
+            success:function(result){obj=result;alert(111);}
 		});
 		
-        //alert(obj.status);
-        if(obj.status)
+        alert(obj.status);
+        if(obj.flagCrud)
             return true;
         else
             return false;
@@ -3796,6 +3808,7 @@ function Get_CKWWCQK()
 //获取违纪登记表数据
 function Get_WJDJ(iType)
 {
+	//alert(iType+1);
     //iType是指表的种类,比如0表示秘书处制度违纪登记表
     try
     {
@@ -3806,12 +3819,14 @@ function Get_WJDJ(iType)
 		var obj;
 	    $.ajax({
             url:URL+"/funcbmwg",
-            data:{'year':year,'month':month,'type':iType},
+            data:{'year':year,'month':month,'type':iType+1},
             async:false,
             dataType:"json",
             type:"POST",
             success:function(result){obj=result;}
 		});	
+		alert(obj.type);
+		json_Get_WJDJ=obj;
     }
     catch(err)
     {
@@ -3837,6 +3852,20 @@ function Post_WJDJ(obj,iType)
         if(debug())
             return true;
         //ajax代码,obj是获取的时候一样的格式
+		//alert(iType);
+		var back;
+	    $.ajax({
+            url:URL+"/post_bmwg",
+            data:{'arrBMWG':obj,'type':iType+1,'year':year,'month':month},
+            async:false,
+            dataType:"json",
+            type:"POST",
+            success:function(result){back=result;}
+		});	
+		if(back.flagCrud)//发送成功返回true，否则返回false
+            return true;
+        else
+            return false;
     }
     catch(err)
     {
@@ -6315,7 +6344,7 @@ function Show_YXBZPD()
 		document.getElementById("show_more").innerHTML=strCheckForm;
 		document.getElementById("youxiubuzhan").onclick = function()
 		{
-			
+			alert("hehehhehehhe");
 			var objYXBZNameList = document.forms["yxbzpdb"];
 			var arrIDList = new Array();
 			for(var i=0;i<objYXBZPD.arrYXBZPDlist.length;i++)
@@ -6327,7 +6356,7 @@ function Show_YXBZPD()
 					
 				}
 			}
-			if(4 >= arrIDList.length&&0<arrIDList.length)
+			if(4 >= arrIDList.length && 0<arrIDList.length)
 			{
 				
 				if(true == Post_YXBZPD(arrIDList) )
@@ -7032,6 +7061,7 @@ function Show_CKWWCQK()
 //各种违纪表
 function Show_WJDJ(iType)
 {
+	alert("show违纪登记"+iType);
     objWJDJ=Get_WJDJ(iType);
     var strHTML=new String();
     for(var i=0;i<objWJDJ.arrWJDJB.length;i++)

@@ -143,7 +143,7 @@ window.onload=function()
         $("#xcwjdjr").val(objGetInfo.XCWJDJR);
         $("#ggwjdjr").val(objGetInfo.GGWJDJR);
         $("#sylywjdjr").val(objGetInfo.SYLYWJDJR);
-        
+		$("#xbwjdjr").val(objGetInfo.XBWJDJR);
 		document.getElementById("adminsubmit").onclick=function()
 		{
 			var sltChm=document.getElementById("chairman");
@@ -243,7 +243,7 @@ window.onload=function()
                 //console.log(arrBM);
                 for(var i=0;i<arrBM.length;i++)
                 {
-                    if(arrBM!=1)
+                    if(arrBM[i]!=1)
                     {
                         alert("跟进干事那里不科学,检查一下");
                         return false;
@@ -301,22 +301,32 @@ function PostBindInfo(chmId, arrChecked,arrGJBM,jsonWJDJ)
 			arrZGBM[j]={"num":arrChecked[i].arrZGBM[j]};
 		}
 		arrZXT[i]={
-		"account":arrChecked.account,
+		"account":arrChecked[i].account,
 		"arrZGBM":arrZGBM,
 		};
 	}
 	var arrRLGS=new Array();
 	for(var i=0;i<arrGJBM.length;i++)
 	{
-		arrRLGS[i]={"account":arrGJBM.account,"department":arrGJBM.department};
+		arrRLGS[i]={"account":arrGJBM[i].account,"department":arrGJBM[i].department};
 	}
-	
+	console.log(arrZXT);
 	var jsonPost={
 		"chairman":chmId,
 		"arrZXT":arrZXT,
 		"arrRLGS":arrRLGS,
         "jsonWJDJ":jsonWJDJ,//***新增,违纪登记表信息
 		};
+			var obj;
+	        $.ajax({
+            url:URL+"/postJsonAdmin",
+            data:jsonPost,
+            type:"post",
+            async:false,
+            dataType:"json",
+            success:function(result){obj=result;}
+        });
+		alert(obj.flagCrud);
 	/*json示例	
 	var jsonPost={
 		"chairman":"2012052207",
@@ -348,7 +358,7 @@ function PostBindInfo(chmId, arrChecked,arrGJBM,jsonWJDJ)
 	};
 	*/	
 	
-	return true;//发送成功返回true
+	return obj.flagCrud;//发送成功返回true
 }
 				
 		

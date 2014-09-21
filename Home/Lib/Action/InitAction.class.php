@@ -21,7 +21,7 @@ class InitAction extends Action
         if($this->judgelog())		
 		{
 			//如果当前有已经登录，直接跳转到新闻首页，只能通过注销或者关闭浏览器来退出	  
-            $this->redirect();		
+            $this->redirect("Init/index");		
 		}
 	    $account=$_POST['user_login_name'];
 	    $password=$_POST['user_login_pw'];
@@ -106,12 +106,13 @@ class InitAction extends Action
 		$this->redirect();
 	}
   }
-  //响应AJAX请求，向前端发送主席主管部门与人力跟进部门信息
+  //向前端发送主席主管部门,人力跟进部门，违规登记负责人信息
   public function getJsonAdmin()
   {
 	$person_model=new Model("Person");
 	$president_model=new Model("President");
 	$rlgj_model=new Model("Rlgj");
+	$bmwgfzr_model=new Model("Bmwgfzr");
 	//主席团
 	$person_info=$person_model->where("type=4")->select();
 	foreach($person_info as $v)
@@ -170,14 +171,117 @@ class InitAction extends Action
 		'account'=>$chairmanAccount,
 		'name'=>$chairmanName,
 		);
+
+	//违规登记负责人
+	$bmwgfzr_info=$bmwgfzr_model->where("type=1")->find();
+	$MSWJDJR=$bmwgfzr_info['account'];
+	$bmwgfzr_info=$bmwgfzr_model->where("type=2")->find();
+	$RLWJDJR=$bmwgfzr_info['account'];
+	$bmwgfzr_info=$bmwgfzr_model->where("type=3")->find();
+	$XCWJDJR=$bmwgfzr_info['account'];
+	$bmwgfzr_info=$bmwgfzr_model->where("type=4")->find();
+	$XBWJDJR=$bmwgfzr_info['account'];
+	$bmwgfzr_info=$bmwgfzr_model->where("type=5")->find();
+	$GGWJDJR=$bmwgfzr_info['account'];
+	$bmwgfzr_info=$bmwgfzr_model->where("type=6")->find();
+	$SYLYWJDJR=$bmwgfzr_info['account'];
+	$person_info=$person_model->where("type!=4")->select();
+	foreach($person_info as $v)
+	{
+		$allStudentName[]=Array(
+			'account'=>$v['account'],
+			'name'=>$v['name'],
+		);
+	}
 	$arr=Array(
 		'arrZXT'=>$arrZXT,
 		'arrRLGS'=>$arrRLGS,
 		'chairman'=>$chairman,
+        "MSWJDJR"=>$MSWJDJR,//秘书处违纪登记人
+        "RLWJDJR"=>$RLWJDJR,//人力制度违纪登记人
+        "XCWJDJR"=>$XCWJDJR,//宣传部违纪登记人
+        "XBWJDJR"=>$XBWJDJR,//信编
+        "GGWJDJR"=>$GGWJDJR,//公关
+        "SYLYWJDJR"=>$SYLYWJDJR,//司仪礼仪队
+        "allStudentName"=>$allStudentName,//把所有成员的账号和姓名给我		
 	);
 	echo $this->_encode($arr);
   }
-  //人员信息初始化
+  //接收前端信息，整理主席主管部门，人力跟进部门，违规登记负责人。
+  public function postJsonAdmin()
+  {
+	$person_model=new Model("Person");
+	$president_model=new Model("President");
+	$rlgj_model=new Model("Rlgj");
+	$bmwgfzr_model=new Model("Bmwgfzr");
+	$flagCrud=1;
+	$chairman=$_POST['chairman'];
+	$arrZXT=$_POST['arrZXT'];
+	$arrRLGS=$_POST['arrRLGS'];
+	$jsonWJDJ=$_POST['jsonWJDJ'];
+	//主席
+	unset($data);
+	$data['is_sub']='y';
+	$president_info=$president_model->where("account!=0")->save($data);
+	unset($data);
+	$data['is_sub']='n';
+	$president_info=$president_model->where("account=$chairman")->save($data);
+	if(false==$president_info)
+		$flagCrud=0;
+	//主席主管部门
+	for($i=0;$i<count($arrZXT);$i++)
+	{
+		unset($data);
+		$zxt_account=$arrZXT[$i]['account'];
+		if(count($arrZXT[$i]['arrZGBM'])==1)
+		{
+			$data['apartment1']=$arrZXT[$i]['arrZGBM'][0]['num'];
+			$data['apartment2']=0;
+			$president_info=$president_model->where("account=$zxt_account")->save($data);
+			if(false==$president_info)
+				$flagCrud=0;
+		}
+		else
+		{
+			$data['apartment1']=$arrZXT[$i]['arrZGBM'][0]['num'];
+			$data['apartment2']=$arrZXT[$i]['arrZGBM'][1]['num'];
+			$president_info=$president_model->where("account=$zxt_account")->save($data);
+			if(false==$president_info)
+				$flagCrud=0;
+		}
+	}
+	//人力跟进部门,
+	$arrRLGS=$_POST['arrRLGS'];
+	for($i=0;$i<count($arrRLGS);$i++)
+	{
+		unset($data);
+		$account=$arrRLGS[$i]['account'];
+		$data['apartment']=$arrRLGS[$i]['department'];
+		$rlgj_info=$rlgj_model->where("account=$account")->save($data);
+		if(false==$president_info)
+			$flagCrud=0;
+	}
+	//违规登记负责人
+	$jsonWJDJ=$_POST['jsonWJDJ'];
+	$data['account']=$jsonWJDJ['MSWJDJR'];
+	$bmwgfzr_info=$bmwgfzr_model->where("type=1")->save($data);
+	$data['account']=$jsonWJDJ['RLWJDJR'];
+	$bmwgfzr_info=$bmwgfzr_model->where("type=2")->save($data);
+	$data['account']=$jsonWJDJ['XCWJDJR'];
+	$bmwgfzr_info=$bmwgfzr_model->where("type=3")->save($data);
+	$data['account']=$jsonWJDJ['XBWJDJR'];
+	$bmwgfzr_info=$bmwgfzr_model->where("type=4")->save($data);
+	$data['account']=$jsonWJDJ['GGWJDJR'];
+	$bmwgfzr_info=$bmwgfzr_model->where("type=5")->save($data);
+	$data['account']=$jsonWJDJ['SYLYWJDJR'];
+	$bmwgfzr_info=$bmwgfzr_model->where("type=6")->save($data);
+	$arr=Array(
+		'flagCrud'=>$flagCrud,
+		'status'=>$jsonWJDJ,
+	);
+	echo $this->_encode($arr);
+  }  
+ //人员信息初始化
   private function initPerson()
   {
     //按照格式添加数据,参数分别为：账号，名字，类型，标志参数
@@ -187,18 +291,18 @@ class InitAction extends Action
 	//10公关部	11心理服务部	12主席团
 	$person_model=new Model("Person");
 	$authority_model=new Model("Authority");
+	$timetable_model=new Model("Timetable");
+	$rlgj_model=new Model("Rlgj");
+	$president_model=new Model("Rlgj");
+	$bmwgfzr_model=new Model("Bmwgfzr");
 	echo "成员信息初始化开始</br>";
 	$flagInitPerson=1;
 	$person_info=$person_model->where("account!=0")->select();
 	if(count($person_info)>0)
 	{
 		$flagInitPerson=2;
-	}
-	else
-	{
-		unset($data);
-		$data['is_init']=0;
-		$authority_model->where("id>0")->data($data)->save();		
+		echo "数据库表tbl_person已有数据，成员添加失败</br>";
+		return;
 	}
 	//添加主席团成员
 	$this->initPersonCrud("2011052351","邓蔓菁",4,12,$flagInitPerson);
@@ -291,15 +395,16 @@ class InitAction extends Action
 		$this->initTable();
 		$this->initRlgj();
 		$this->initZxzg();
+		$this->initBmwgfzr();
 	}
 	else if($flagInitPerson==0)
 	{
 		$person_model->where("account!=0")->delete();
+		$timetable_model->where("account!=0")->delete();
+		$rlgj_model->where("account!=0")->delete();
+		$president_model->where("account!=0")->delete();
+		$bmwgfzr_model->where("account!=0")->delete();
 		echo "本次成员信息初始化失败</br>";
-	}
-	else if($flagInitPerson==2)
-	{
-		echo "数据库表tbl_person已有数据，成员添加失败</br>";
 	}
   }
   private function initPersonCrud($account,$name,$type,$apartment,&$flagInitPerson)
@@ -374,6 +479,28 @@ class InitAction extends Action
 	    "主席团".$data['account']."初始化失败</br>";
 	}
   }
+  //违规登记负责人初始化
+  private function initBmwgfzr()
+  {
+    
+	$bmwgfzr_model=new Model("Bmwgfzr");
+	$person_model=new Model("Person");
+	$person_info=$person_model->where("type!=4")->select();
+	if(count($person_info)>6)
+	{
+		for($i=0;$i<6;$i++)
+		{
+			unset($data);
+			$data['account']=$person_info[$i]['account'];
+			$data['type']=$i+1;
+			$bmwgfzr_info=$bmwgfzr_model->add($data);
+			if(false==$bmwgfzr_info)
+			{
+				echo ($i+1)."部门违规登记初始化失败</br>";
+			}
+		}
+	}
+  }
   //时间获取函数
   private function funcsettime()
   {
@@ -439,7 +566,7 @@ class InitAction extends Action
 	$bmwg_model->where("year=$year and month=$month")->delete();
 	echo $year."年".$month."月的绩效考核数据删除完毕，可以重新启动该月份的绩效考核</br>";
   }
-  //某年某月考核系统初始化阶段一
+  //考核系统初始化阶段一
   public function initPerform()
   {
 	//根据tbl_authority判断，若时间已经存在拒绝访问
@@ -486,36 +613,7 @@ class InitAction extends Action
   //某年某月考核系统初始化阶段二
   public function initYxbz()
   {
-    //设置年月
-	$authority_model=new Model("Authority");
-	$arr=$this->funcsettime();
-	$year=$arr['year'];
-	$month=$arr['month'];	
-	$flagInitYxbz=1;
-	//需要满足下面条件:基本成员信息要求、该时间正在考核、系统不存在未结束的考核
-	$authority_info=$authority_model->find();
-	if($authority_info['is_init']!=1)
-		$flagInitYxbz=0;
-	$control_model=new Model("Control");
-	$control_info=$control_model->where("year=$year and month=$month")->find();
-	if(empty($control_info['id']))
-		$flagInitYxbz=0;	
-	else
-	{
-		if($control_info['is_yxbz']!=0 || $control_info['is_over']!=0)
-		{
-			$flagInitYxbz=0;
-		}
-	}
-	$control_info=$control_model->where("is_over=0||is_yxbz=0")->select();
-	if(count($control_info)>1)
-		$flagInitYxbz=0;	
-	if($flagInitYxbz==0)
-	{
-		echo "优秀部长评定初始化不满足开启条件</br>";
-		return;
-	}
-	echo "即将进行各项初始化工作，耐心等待</br>";
+ 
 	$this->funcinityxbz();
   }
   //绩效考核初始化第一阶段，包括：干事自评表，部长自评表，干事考核表，部长考核表，部门考核表
@@ -1150,26 +1248,24 @@ class InitAction extends Action
 	//找到所有人力干事
 	$person_model=new Model("Person");
 	$bmwg_model=new Model("Bmwg");
-	$person_info=$person_model->where("apartment=2 and type=2")->select();
-	$i=1;
-	foreach($person_info as $v)
-	{
+	$bmwgfzr_model=new Model("Bmwgfzr");
 	for($j=1;$j<7;$j++)
 	{
 		unset($data);
 		$data['year']=$year;
 		$data['month']=$month;
-		$data['account']=$v['account'];
-		$data['apartment']=$i;
-		$data['wgkf']=0;
+		$bmwgfzr_info=$bmwgfzr_model->where("type=$j")->find();
+		$data['account']=$bmwgfzr_info['account'];
 		$data['type']=$j;
-		$data['text']="空";
-		$bmwg_info=$bmwg_model->add($data);
-		if(false==$bmwg_info)
-			 echo "部门违规初始化失败</br>";
-		
-	}
-	$i++;
+		for($i=1;$i<12;$i++)
+		{
+			$data['apartment']=$i;
+			$data['wgkf']=0;
+			$data['text']="空";
+			$bmwg_info=$bmwg_model->add($data);
+			if(false==$bmwg_info)
+				echo "部门违规初始化失败</br>";
+		}
 	}
 	echo "部门违规初始化结束</br>";
   }
@@ -1226,38 +1322,7 @@ class InitAction extends Action
 	}
 	echo "优秀部长限定初始化结束</br>";
   }
- //绩效考核初始化第二阶段，该月的优秀部长评定表
-  private function funcinityxbz()
-  {
-	$arr=$this->funcsettime();
-	$year=$arr['year'];
-	$month=$arr['month'];
-    //找到所有主席
-	echo "优秀部长评定表初始化开始</br>";
-	$person_model=new Model("Person");
-	$yxbz_model=new Model("Yxbz");
-	$president_model=new Model("President");
-	$yxbzhx_model=new Model("Yxbzhx");
-	$yxbzhx_info=$yxbzhx_model->where("year=$year and month=$month")->select();
-    //从优秀部长候选中选
-	$person_model=$person_model->where("type=4")->select();
-	foreach($person_model as $v)
-	{
-	  //必须投四个部长
-	  foreach($yxbzhx_info as $v_hx)
-	  {
-	    unset($data);
-	    $data['year']=$year;
-	    $data['month']=$month;
-	    $data['waccount']=$v['account'];
-		$data['raccount']=$v_hx['HX'];
-		$yxbz_info=$yxbz_model->add($data);
-		if(!$yxbz_info)
-		  echo $data['waccount']."优秀部长评定初始化失败";
-     }
-   }
-   echo "优秀部长评定表初始化完成</br>";
-  }  
+ 
   //函数，获取上月考核月份
   private function funcgettime()
   {
