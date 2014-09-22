@@ -468,6 +468,7 @@ function ShowPersonalData()
     });
 	$("#passworld_change").click(function(){
         $("#personal_data").html("");
+        ChangePassWord();
     });
 	$("#personal_data").slideDown();
 		
@@ -904,29 +905,7 @@ function ChangePersonalData(objPersonalData)
 			$("#modf_error").html(strError);
 		}
     });
-	$("#per_info_modf_submit").click(function(){
-		strError= strUDE + strULE + strUSE + strUQE + strMUDE + strUEE;
-		if("" == strError)
-		{	
-			console.log("发送数据:");
-            console.log(objPersonalData);
-            $("#modf_error").html("");
-			if(PostPersonalDataToServer(objPersonalData))
-			{
-				ShowPersonalData();
-				$("#change_personal_data").html("");
-				return true;
-			}
-			else
-			{
-				$("#modf_error").html("*保存失败，请再次保存");
-			}
-		}
-		else
-		{
-			$("#modf_error").html(strError);
-		}
-	});
+	
 }
 
 
