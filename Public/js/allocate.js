@@ -223,85 +223,7 @@ function postAllocQueInfo(objQI)
                     "total_alloc_time":"5",//总的外调次数
                     "recently_alloc_time":"2",//最近一个月
                 },
-                {
-                    "conformity":"0.2",//符合度用来排序
-                    "userID":"2012052202",//用户账号
-                    "userName":"邓作恒2",//用户姓名
-                    "freeTime":"0.2",//查询时间附近的空课时间
-                    "depart":"2",//部门
-                    "userType":"3",//用户类型
-                    "gender":"1",//性别
-                    "longPhoneNumber":"13726247196",
-                    "shortPhoneNumber":"617196",
-                    "total_alloc_time":"5",//总的外调次数
-                    "recently_alloc_time":"2",//最近一个月
-                },
-                {
-                    "conformity":"0.2",//符合度用来排序
-                    "userID":"2012052203",//用户账号
-                    "userName":"邓作恒3",//用户姓名
-                    "freeTime":"0.2",//查询时间附近的空课时间
-                    "depart":"2",//部门
-                    "userType":"1",//用户类型
-                    "gender":"1",//性别
-                    "longPhoneNumber":"13726247196",
-                    "shortPhoneNumber":"617196",
-                    "total_alloc_time":"5",//总的外调次数
-                    "recently_alloc_time":"2",//最近一个月
-                },
-                {
-                    "conformity":"0.2",//符合度用来排序
-                    "userID":"2012052204",//用户账号
-                    "userName":"邓作恒4",//用户姓名
-                    "freeTime":"0.2",//查询时间附近的空课时间
-                    "depart":"2",//部门
-                    "userType":"1",//用户类型
-                    "gender":"1",//性别
-                    "longPhoneNumber":"13726247196",
-                    "shortPhoneNumber":"617196",
-                    "total_alloc_time":"4",//总的外调次数
-                    "recently_alloc_time":"2",//最近一个月
-                },
-                {
-                    "conformity":"0.2",//符合度用来排序
-                    "userID":"2012052205",//用户账号
-                    "userName":"邓作恒5",//用户姓名
-                    "freeTime":"0.2",//查询时间附近的空课时间
-                    "depart":"2",//部门
-                    "userType":"1",//用户类型
-                    "gender":"1",//性别
-                    "longPhoneNumber":"13726247196",
-                    "shortPhoneNumber":"617196",
-                    "total_alloc_time":"4",//总的外调次数
-                    "recently_alloc_time":"1",//最近一个月
-                },
-                {
-                    "conformity":"0.1",//符合度用来排序
-                    "userID":"2012052206",//用户账号
-                    "userName":"邓作恒6",//用户姓名
-                    "freeTime":"0.1",//查询时间附近的空课时间
-                    "depart":"2",//部门
-                    "userType":"1",//用户类型
-                    "gender":"0",//性别
-                    "longPhoneNumber":"13726247196",
-                    "shortPhoneNumber":"617196",
-                    "total_alloc_time":"4",//总的外调次数
-                    "recently_alloc_time":"1",//最近一个月
-                },
-                {
-                    "conformity":"0.1",//符合度用来排序
-                    "userID":"2012052207",//用户账号
-                    "userName":"邓作恒7",//用户姓名
-                    "freeTime":"0.1",//查询时间附近的空课时间
-                    "depart":"2",//部门
-                    "userType":"1",//用户类型
-                    "gender":"1",//性别
-                    "longPhoneNumber":"13726247196",
-                    "shortPhoneNumber":"617196",
-                    "total_alloc_time":"4",//总的外调次数
-                    "recently_alloc_time":"1",//最近一个月
-                },
-                
+   
                 
             ],
         }; 
@@ -469,21 +391,6 @@ function postAllocCode(strCode)
                     "name":"邓作恒1",//姓名
                     "allocResult":"1",//这个全部是3
                 },
-                {
-                    "ID":"2012052208",//学号
-                    "name":"邓作恒2",//姓名
-                    "allocResult":"2",//这个全部是3
-                },
-                {
-                    "ID":"2012052209",//学号
-                    "name":"邓作恒3",//姓名
-                    "allocResult":"3",//这个全部是3
-                },
-                {
-                    "ID":"2012052210",//学号
-                    "name":"邓作恒4",//姓名
-                    "allocResult":"4",//这个全部是3
-                },
             ],
         }; 
         errmsg();
@@ -628,9 +535,9 @@ function showChaXunKeBiao()
 		{
 			strAllocQ += "selected=\"selected\"";
 		}
-		strAllocQ += ">"+arrDepartName[iCount]+"</opyion>\n";
+		strAllocQ += ">"+arrDepartName[iCount]+"</option>\n";
 	}
-	strAllocQ +="</select>\n"	
+	strAllocQ +="</select><span id='tips_depart'></span>\n"	
 				+"<h2>查询条件</h2>\n"
 				+"<p>\n"
 				+"工作日期：\n"
@@ -657,7 +564,8 @@ function showChaXunKeBiao()
 	}
 	strAllocQ +="</select>\n"
 			+"日\n"
-			+"</p>\n"
+            +"<span id='tips_work_day'></span>"
+			+"</p>\n"           
 			+"<p>\n"
 			+"工作时间：\n"
 			+"<select class=\"alloc_select\" name=\"shijian_kaishi_h\" id=\"shijian_kaishi_h\">\n";
@@ -688,7 +596,7 @@ function showChaXunKeBiao()
 	{
 		strAllocQ +=  "<option value=\""+iCount+"0"+"\">"+iCount+"0"+"</option>\n";
 	}
-	strAllocQ += "</select><a href=\"#\" id=\"help\">帮助</a>\n"
+	strAllocQ += "</select><span id='tips_work_time'></span><a href=\"#\" id=\"help\">帮助</a>\n"
 				+"</p>\n"
 				+"<p>\n"
 				+"	性别要求：\n"
@@ -710,6 +618,76 @@ function showChaXunKeBiao()
 				+"<div id=\"q_result\"></div>"
 				+"<div id=\"alloc_succeed\"></div>";
 	$("#alloc_work_f_inner").hide().html(strAllocQ).slideDown();
+    //提示申请部门的人员不会再结果中显示
+    $("#shengqingbumen").change(function(){
+        $("#tips_depart").html("&emsp;搜索结果中不会显示"+arrDepartName[$(this).val()]+"的人员");
+    });
+    //提示所选日期是单双周,星期几
+    $("#shijian_nian,#shijian_yue,#shijian_ri").change(function(){
+        tips_qYear=parseInt($("#shijian_nian").val());
+		tips_qMonth=parseInt($("#shijian_yue").val());
+		tips_qDay=parseInt($("#shijian_ri").val());
+        var str_tips=new String();
+        //计算单周还是双周
+        Date.prototype.getWeekOfYear = function(weekStart){ 
+        // weekStart：每周开始于周几：周日：0，周一：1，周二：2 ...，默认为周日  
+            weekStart = (weekStart || 0) - 0;  
+            if(isNaN(weekStart) || weekStart > 6)  
+                weekStart = 0;
+            var year = this.getFullYear();  
+            var firstDay = new Date(year, 0, 1);  
+            var firstWeekDays = 7 - firstDay.getDay() + weekStart;  
+            var dayOfYear = (((new Date(year, this.getMonth(), this.getDate())) - firstDay) / (24 * 3600 * 1000)) + 1;  
+            return Math.ceil((dayOfYear - firstWeekDays) / 7) + 1;  
+        }  
+        var d0=new Date(2014,9,8,1,1,1,1);
+        var d1=new Date(tips_qYear,tips_qMonth,tips_qDay);
+        var isDanzou=(d1.getWeekOfYear(1)-d0.getWeekOfYear(1))%2;
+        if(isDanzou==0)
+        {
+            str_tips+="第"+(d1.getWeekOfYear(1)-d0.getWeekOfYear(1)+1)+"周,单周";
+        }
+        else
+        {
+            str_tips+="第"+(d1.getWeekOfYear(1)-d0.getWeekOfYear(1)+1)+"周,双周";
+        }
+        //计算是星期几
+        var arrAloMonth=[-1,11,12,1,2,3,4,5,6,7,8,9,10];
+        tips_qMonth=arrAloMonth[tips_qMonth];
+        w=(tips_qDay+parseInt(2.6*tips_qMonth-0.2)+5*(tips_qYear%4)+3*tips_qYear+5*(21%4))%7;
+        
+        var weekDays=["一","二","三","四","五","六","日"];
+        str_tips+="星期"+weekDays[w];
+        $("#tips_work_day").html(str_tips);
+    });
+    //提示所选日期要求第几节课空
+    $("#shijian_kaishi_h,#shijian_kaishi_fen,#shijian_jieshu_h,#shijian_jieshu_fen").change(function(){
+        console.log("计算时间");
+        var bh=parseInt($("#shijian_kaishi_h").val());
+        var eh=parseInt($("#shijian_jieshu_h").val());
+        var em=parseInt($("#shijian_jieshu_fen").val());
+        var bm=parseInt($("#shijian_kaishi_fen").val());
+        
+        if( (bh*60+bm)-(eh*60+em)>0 )
+        {
+           $("#tips_work_time").html("*开始时间晚于结束时间，这不科学");
+           return;
+        }
+        var ret=GetReqKongKeLst(bh,bm,eh,em);
+        if(ret.length>0)
+        {
+            var str=new String("需要第");
+            for(var i=0;i<ret.length;i++)
+            {
+                str+=ret[i]+1;
+                str+=","
+            }
+            str+="节课没课&emsp;&emsp;";
+            $("#tips_work_time").html(str);
+        }
+        
+    });
+        
 	$("#help").click(function(){
         alert("此处工作时间用于查询空课表\n"+
             "系统先用此时间判断那节课需要为空才能符合工作时间\n"+
@@ -729,9 +707,9 @@ function showChaXunKeBiao()
 			strError += "*2月没有"+ $("#shijian_ri").val();
 		}
 		var bh=parseInt($("#shijian_kaishi_h").val());
-        var eh=parseInt($("shijian_jieshu_h").val());
-        var em=parseInt($("shijian_jieshu_fen").val());
-        var bm=parseInt($("shijian_kaishi_fen").val());
+        var eh=parseInt($("#shijian_jieshu_h").val());
+        var em=parseInt($("#shijian_jieshu_fen").val());
+        var bm=parseInt($("#shijian_kaishi_fen").val());
         
         if( (bh*60+bm)-(eh*60+em)>0 )
         {

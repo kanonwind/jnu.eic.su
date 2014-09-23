@@ -616,7 +616,7 @@ function SelectTime(iCurShowFunction)
 			case "干事考核表":			
 			case "部长考核表":
 			case "部门考核表":
-			case "优秀部长评定表":			
+            case "优秀评定限制表":						
 			case "其他情况加减分":
             case "秘书处制度违纪登记表":
             case "人力资源部制度违纪登记表":
@@ -636,7 +636,7 @@ function SelectTime(iCurShowFunction)
             case "查看未完成情况":
 				return "control";
 
-			case "优秀评定限制表":
+			case "优秀部长评定表":
 				return "excellent";
 		}
 	}
@@ -3057,6 +3057,7 @@ function Get_BMKH()
             type:"POST",
             success:function(result){obj=result;}
 		});		
+        console.log(obj);
         var json_BMKH = obj;
     }
     catch(err)
@@ -6006,7 +6007,8 @@ function Show_BMKH()
 			//+ "				<td>沟通合作能力</td>"
 			//+ "				<td>部门成员表现</td>"
 			//+ "			</tr>";
-		
+    console.log("部门考核表测试");
+	console.log(obj_BMKH.arrBM);	
 	for(var i = 0; i < obj_BMKH.arrBM.length; ++i)
 	{
 		strHTML +=" <tr>"							
@@ -6258,7 +6260,7 @@ function Show_BMKH()
 				obj_BMKH.hadSubmit=1;
 				if (Post_BMKH(obj_BMKH)) 
 				{
-					alert("保存成功！");
+					alert("提交成功！");
 					GetObjById("show_more").innerHTML = "";
 				}
 				else
