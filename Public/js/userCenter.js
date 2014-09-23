@@ -132,6 +132,8 @@ function PostPersonalDataToServer(objPersonalData)
 function PostPassWordToServer(strAffirmPW)
 {
 	//alert(strAffirmPW);
+    strAffirmPW=hex_md5(strAffirmPW);
+    console.log(strAffirmPW);
 	var person_info=
 	{
 		"password":hex_md5(strAffirmPW),
@@ -920,7 +922,7 @@ function ChangePassWord()
 					+ "<div class=\"main_per_info\">\n"
 						+ "<div class=\"account\" id=\"changepw\">\n"
 							+ "<div class=\"pwtitleimg\">\n"
-								+ "<img src=\"warnningpw.png\" width=\"32px\" height=\"32px\" alt=\"警告\" />\n"
+								+ "<img src=\"http://jnueicsu-upload.stor.sinaapp.com/image/warnningpw.png\" width=\"32px\" height=\"32px\" alt=\"警告\" />\n"
 							+ "</div>\n"
 							+ "<div class=\"pwtitleh2\">\n"
 								+ "<h2>修改密码</h2>\n"
