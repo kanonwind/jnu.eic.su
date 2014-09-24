@@ -295,7 +295,7 @@ function GetTable()
 	
 	var arrYBGS = new Array("干事自评表","干事考核反馈表");
 	var arrRLGS = new Array("干事自评表","跟进部门出勤统计表","其他情况加减分","调研意见采纳表","干事考核反馈表","整体考核结果反馈表");
-	var arrRLBZ = new Array("优秀评定限制表","部长自评表","干事考核表","整体考核结果反馈表","部长反馈表","考核进程控制表");
+	var arrRLBZ = new Array("查看未完成情况","优秀评定限制表","部长自评表","干事考核表","整体考核结果反馈表","部长反馈表","考核进程控制表");
 	var arrBZJ = new Array("部长自评表","干事考核表","部长反馈表","整体考核结果反馈表");
 	var arrZXT = new Array("部长考核表","部门考核表","优秀部长评定表","整体考核结果反馈表","主席团反馈表");
 	//alert(arr.type);
@@ -3764,6 +3764,17 @@ function Get_CKWWCQK()
         if(debug())
             throw("ajax");
         //ajax代码
+		//ajax请求
+		var obj;
+	    $.ajax({
+		url:URL+"/funcUnfinished",
+		data:{'year':year,'month':month,},
+		async:false,
+		dataType:"json",
+		type:"POST",
+		success:function(result){obj=result;}
+		});	
+		json_Get_CKWWCQK=obj;
     }
     catch(err)
     {

@@ -1078,11 +1078,117 @@ class PerformAction extends Action
 	echo $this->_encode($arr);
 	//echo json_encode($arr,JSON_UNESCAPED_UNICODE); 
   }
-  
-  //函数，判断只读状态还是读写状态
+  //查看未完成情况表
+  public function funcUnfinished()
+  {
+ 	//拒绝未登录访问
+	session_name('LOGIN');
+    session_start();
+    if(!$this->judgelog())
+      $this->redirect('Login/index');
+    //获取授权状态 status	  
+	$status=$this->getStatus();	  
+	//账号，时间
+	$account=$_SESSION['account'];
+	$arrTime=$this->getTime();
+	$year=$arrTime['year'];
+	$month=$arrTime['month'];
+	$person_model=new Model("Person");
+	$gszp_model=new Model("Gszp");
+	$bzzp_model=new Model("Bzzp");
+	$gskh_model=new Model("Gskh");
+	$bzkh_model=new Model("Bzkh");
+	$bmkh_model=new Model("Bmkh");
+	$control_model=new Model("Control");
+	//状态，普通考核表能否填
+	$statusGSZP=$this->getStatus();
+	//状态，现在优秀部长评定表能否提交
+	$statusYXBZPD=1;
+	$control_info=$control_model->where("year=$year and month=$month")->find();
+	if($control_info['is_yxbz']==1 && $control_info['is_over']==0)
+	{
+		$statusYXBZPD=0;
+	}
+	//干事自评表
+	$gszp_info=$gszp_model->where("total=0")->select();
+	foreach($gszp_info as $v)
+	{
+		$account=$v['account'];
+		$person_info=$person_model->where("account=$account")->find();
+		$arrGSZP[]=Array(
+			'name'=>$person_info['name'],
+			'depart'=>$person_info['apartment'],
+			'hadSubmit'=>$v['hadSubmit'],
+		);
+	}
+	//部长自评表
+	$bzzp_info=$bzzp_model->where("total=0")->select();
+	foreach($bzzp_info as $v)
+	{
+		$account=$v['waccount'];
+		$person_info=$person_model->where("account=$account")->find();
+		$arrBZZP[]=Array(
+			'name'=>$person_info['name'],
+			'depart'=>$person_info['apartment'],
+			'hadSubmit'=>$v['hadSubmit'],
+		);
+	}
+	//干事考核
+	$gskh_info=$gskh_model->where("total=0")->select();
+	foreach($gskh_info as $v)
+	{
+		$account=$v['waccount'];
+		$person_info=$person_model->where("account=$account")->find();
+		$arrGSKH[]=Array(
+			'name'=>$person_info['name'],
+			'depart'=>$person_info['apartment'],
+			'hadSubmit'=>$v['hadSubmit'],
+		);
+	}
+	//部长考核表
+	$person_info=$person_model->where("type=4")->select();
+	foreach($person_info as $v)
+	{
+		$account=$v['account'];
+		$bzkh_info=$bzkh_model->where("waccount=$account and total=0")->select();
+		if(!empty($bzkh_info))
+		{
+			$arrBZKH[]=Array(
+				'name'=>$v['name'],
+				'hadSubmit'=>$bzkh_info[0]['hadSubmit'],
+			);
+		}
+	}
+	//部门考核表
+	$person_info=$person_model->where("type=4")->select();
+	foreach($person_info as $v)
+	{
+		$account=$v['account'];
+		$bmkh_info=$bmkh_model->where("waccount=$account and total=0")->select();
+		if(!empty($bmkh_info))
+		{
+			$arrBMKH[]=Array(
+				'name'=>$v['name'],
+				'hadSubmit'=>$bmkh_info[0]['hadSubmit'],
+			);
+		}
+	}
+	//生成将要返回的json数组
+	$arr=Array(
+	  'status'=>$status,
+	  'statusYXBZPD'=>$statusYXBZPD,
+	  'arrGSZP'=>$arrGSZP,
+	  'arrBZZP'=>$arrBZZP,
+	  'arrGSKH'=>$arrGSKH,
+	  'arrBZKH'=>$arrBZKH,
+	  'arrBMKH'=>$arrBMKH,
+	);
+	echo $this->_encode($arr);
+  }
+  //函数，判断只读状态还是读写状态,针对优秀部长评定表之前的所有考核表
   private function getStatus()
   {
-	//可编辑性：直接从tbl_authority中获取，判断是否active为y
+	//可编辑性：
 	$status=0;//默认为0，表示可以编辑
 	//获取时间
 	$arrTime=$this->getTime();
@@ -1099,10 +1205,13 @@ class PerformAction extends Action
 	{
 		if($control_info['is_over']==1)
 			$status=1;
+		if($control_info['is_yxbz']==1)
+			$status=1;
 	}
 	  	
 	return $status;
   }
+
   //在部长考核表中，需要根据主席团的 account,主管的部门 apartment,来生成arrBZ,
   private function getarrBZ($account,$apartment)
   {
@@ -1317,7 +1426,7 @@ class PerformAction extends Action
 		$flagInitYxbz=0;	
 	if($flagInitYxbz==0)
 	{
-		echo "优秀部长评定初始化不满足开启条件</br>";
+		echo "优秀部长评定不满足开启条件</br>";
 		return;
 	}
 	$this->funcfkthree();
@@ -1575,7 +1684,7 @@ class PerformAction extends Action
 	    $data['waccount']=$v['account'];
 		$data['raccount']=$v_hx['HX'];
 		//被投部长默认为空，方便使用是用empty()判断
-	    $data['checked']=0;
+	    $data['checked']=1;
 		$yxbz_info=$yxbz_model->add($data);
 		if(!$yxbz_info)
 		  echo $data['waccount']."优秀部长评定初始化失败";
@@ -1722,30 +1831,7 @@ class PerformAction extends Action
    //$total=0;
    //$rank=1;
   //判断是否被限制,这次暂且不加限制了
-  /*
-   while($flag)
-   {
-     $bmfk_info=$bmfk_model->where("rank=$rank")->select();
-	 
-	 foreach($bmfk_info as $v)
-	 {
-	   $apartment=$v['apartment'];
-	   $yxchxz_info=$yxchxz_model->where("account=$apartment")->find();
-	   if(empty($yxchxz_info))
-	   {
-	     $total++;
-	     $data['yxbm']=1;
-	     $bmfk_model->where("apartment=$apartment")->data($data)->save();
-		 break;
-	   }
-	 }
-	 $rank++;
-	 if($total>=2)
-	 {
-	   $flag=0;
-	 }
-   }
-*/
+
   //找到排名第一的
   $bmfk_info=$bmfk_model->where("(year=$year and month=$month) and rank=1")->find();
   $apartment=$bmfk_info['apartment'];
@@ -2182,9 +2268,7 @@ class PerformAction extends Action
 	 
 
  }
- //整体考核结果反馈
- public function getztfk()
- {}
+
 //下面j":"无"},{"pj":"无"},{"pj":"无"},{"pj":"无"},{"pj":"无"},{"pj":"无"},{"pj":"无"},{"pj":"无"},{"pj":"无"},{"pj":"无"}],"bzpj":[{"bzpj":"空"},{"bzpj"是与前端通讯的各种反馈表
 //向前端发送干事考核反馈表json数据
  public function jsgskh()
@@ -2515,8 +2599,9 @@ class PerformAction extends Action
     $bzfk_model=new Model("Bzfk");
     $bmfk_model=new Model("Bmfk");
 	$resource_model=new Model("Resource");
-	$year=$_POST['year'];
-	$month=$_POST['month'];
+	$arrTime=$this->getTime();
+	$year=$arrTime['year'];
+	$month=$arrTime['month'];
     //获取优秀部门
     $bmfk_info=$bmfk_model->where("(year=$year and month=$month) and yxbm=1")->select();
     foreach($bmfk_info as $v)
@@ -3164,6 +3249,7 @@ class PerformAction extends Action
 	    $raccount=$_POST['BMBZ']['arrBM'][$i]['arrBZ'][$j]['account'];
 	    //得分细则
 		unset($data);
+		
 		$data['DF1']=$_POST['BMBZ']['arrBM'][$i]['arrBZ'][$j]['df0'];
 		$data['DF2']=$_POST['BMBZ']['arrBM'][$i]['arrBZ'][$j]['df1'];
 		$data['DF3']=$_POST['BMBZ']['arrBM'][$i]['arrBZ'][$j]['df2'];
@@ -3173,6 +3259,9 @@ class PerformAction extends Action
 		$data['DF7']=$_POST['BMBZ']['arrBM'][$i]['arrBZ'][$j]['df6'];
 		$data['DF8']=$_POST['BMBZ']['arrBM'][$i]['arrBZ'][$j]['df7'];
 		$data['DF9']=$_POST['BMBZ']['arrBM'][$i]['arrBZ'][$j]['df8'];
+		$data['total']=$data['DF1']+$data['DF2']+$data['DF3']+$data['DF4']
+					+$data['DF5']+$data['DF6']+$data['DF7']+$data['DF8']
+					+$data['DF9'];
 		$data['hadSubmit']=$_POST['hadSubmit'];
 		$bzkh_info=$bzkh_model->where("(year=$year and month=$month) and waccount=$waccount and raccount=$raccount")->data($data)->save();	
 		if(!$bzkh_info)
