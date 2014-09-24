@@ -1013,7 +1013,7 @@ function showCancleAlloc()
 							+	"<p>外调序列号："+objAllocData.code+"</p>"
 							+	"<p>外调生成时间:"+objAllocData.applyTime+"</p>"
 							+	"<p>操作员："+objAllocData.operator+"</p>"
-							+	"<p>外调申请部门："+objAllocData.applyDepart+"</p>"
+							+	"<p>外调申请部门："+arrDepartName[objAllocData.applyDepart-1]+"</p>"
 							+	"<p>外调工作时间："+objAllocData.workTime+"</p>"
 							+	"</div>"
 							+	"<button type=\"button\" id=\"decide_cancel_alloc_sub\" name=\"decide_cancel_alloc_sub\" class=\"alloc_sub_bu\" title=\"确定取消此次外调\">"
