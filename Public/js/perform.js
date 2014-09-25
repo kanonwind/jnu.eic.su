@@ -758,6 +758,7 @@ function ArrShowTable()
 			break;	
 			case "查看未完成情况":
 			arrShowFunction.push(Show_CKWWCQK);
+			break;
             case "秘书处制度违纪登记表":
             arrShowFunction.push((function(){Show_WJDJ(0);}));
 			break;
@@ -2936,6 +2937,7 @@ function Post_BZKH(obj_BZKH)//obj_BZKH为Get_BZKH()定义的对象
 	//服务器成功接收信息，则返回true，否则返回false
 	try
     {
+		
         if(debug())
             return true;
 		//ajax请求
@@ -3467,12 +3469,25 @@ function Post_YXBZPD(arrIDlist)
 //获取考核进程控制表的数据
 function Get_KHJCKZ()
 {
-	var json_Get_KHJCKZ = 
+		//ajax请求
+		
+		var obj;
+            $.ajax({
+            url:URL+"/funcControl",
+            data:{"year":year,"month":month},
+            async:false,
+            dataType:"json",
+            type:"POST",
+            success:function(result){obj=result;}
+		});	
+		json_Get_KHJCKZ=obj;
+		//alert(obj.KSKH+obj.KSPD+obj.FBJG);
+/* 	var json_Get_KHJCKZ = 
 	{
-		"KSKH":1,//开始本月考核
+		"KSKH":0,//开始本月考核
 		"KSPD":0,//开始优秀部长评定
 		"FBJG":0,//发布结果
-	};
+	}; */
 	
 	return json_Get_KHJCKZ;
 }
@@ -3481,10 +3496,20 @@ function Get_KHJCKZ()
 //发送考核进程控制表的数据回数据库
 function Post_KHJCKZ(obj_KHJCKZ)
 {
+	//alert("aaa");
 	var json_Post_KHJCKZ = obj_KHJCKZ;
-	
-	//alert(json_Post_KHJCKZ.KSKH);
-	if(1)
+		var obj;
+            $.ajax({
+            url:URL+"/funcGetControl",
+            data:{"year":year,"month":month,"KHJCKZ":obj_KHJCKZ},
+            async:false,
+            dataType:"json",
+            type:"POST",
+            success:function(result){obj=result;}
+		});	
+	//alert(obj.textBack);
+	//alert(json_Post_KHJCKZ.KSKH+json_Post_KHJCKZ.KSPD+json_Post_KHJCKZ.FBJG);
+	if(obj.textBack)
 		return true;
 	else
 		return false;

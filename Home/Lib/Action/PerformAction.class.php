@@ -130,8 +130,10 @@ class PerformAction extends Action
   //获取时间
   private function getTime()
   {
-	$year=2014;
-	$month=9;
+	$year=$_POST['year'];
+	$month=$_POST['month'];
+/* 	$year=2014;
+	$month=10; */
 	$arr=Array(
 		'month'=>$month,
 	    'year'=>$year,
@@ -191,6 +193,8 @@ class PerformAction extends Action
 		}
 		else
 		{
+		  for($k=0;$k<5;$k++)
+		  {
 			if($month==12)
 			{
 				$year++;
@@ -203,6 +207,7 @@ class PerformAction extends Action
 				'year'=>$year,
 				'month'=>$month,
 			);
+		  }
 		}
 	}
 
@@ -682,10 +687,10 @@ class PerformAction extends Action
 	  $apartment1=$president_info['apartment1'];
 	  $apartment2=$president_info['apartment2'];
 	  $sum=2;
-	  $arrBM[]=$this->getarrBM($account,$apartment1);
-	  
-	  //echo json_encode($arrBM,JSON_UNESCAPED_UNICODE);
-	  $arrBM[]=$this->getarrBM($account,$apartment2);
+	  if($apartment1>0 && $apartment1<12)
+		$arrBM[]=$this->getarrBM($account,$apartment1);
+	  if($apartment2>0 && $apartment2<12)
+		$arrBM[]=$this->getarrBM($account,$apartment2);
 
 	}
 	else{
@@ -1071,7 +1076,7 @@ class PerformAction extends Action
 
 	//生成将要返回的json数组
 	$arr=Array(
-	  'status'=>$status,
+	  'status'=>1,
 	  'arrYXBZPDlist'=>$arrYXBZPDlist2,
 	
 	);
@@ -1185,7 +1190,122 @@ class PerformAction extends Action
 	);
 	echo $this->_encode($arr);
   }
-  //函数，判断只读状态还是读写状态,针对优秀部长评定表之前的所有考核表
+  //考核进程控制表
+  public function funcControl()
+  {
+ 	//拒绝未登录访问
+	session_name('LOGIN');
+    session_start();
+    if(!$this->judgelog())
+      $this->redirect('Login/index');	
+	$year=$_POST['year'];
+	$month=$_POST['month'];
+	$control_model=new Model("Control");
+	$control_info=$control_model->where("year=$year and month=$month")->find();
+	$KSKH=0;
+	$KSPD=0;
+	$FBJG=0;
+	if(!empty($control_info))
+	{
+		$KSKH=1;
+		if($control_info['is_yxbz']==1)
+			$KSPD=1;
+		if($control_info['is_over']==1)
+			$FBJG=1;
+	}
+	//生成将要返回的json数组
+	$arr=Array(
+	  'KSKH'=>$KSKH,
+	  'KSPD'=>$KSPD,
+	  'FBJG'=>$FBJG,
+	);
+	echo $this->_encode($arr);
+  }
+  //接收考核进程控制表的数据
+  public function funcGetControl()
+  {
+  $authority_model=new Model("Authority");
+  $control_model=new Model("Control");
+	$arr=$this->funcsettime();
+	$year=$arr['year'];
+	$month=$arr['month'];
+	$KSKH=$_POST['KHJCKZ']['KSKH'];
+	$KSPD=$_POST['KHJCKZ']['KSPD'];
+	$FBJG=$_POST['KHJCKZ']['FBJG'];
+/* 	$year=2014;
+	$month=10;
+	$KSKH=1;
+	$KSPD=0;
+	$FBJG=0; */
+	//开始一次考核
+	if($KSKH==1 && $KSPD==0 && $FBJG==0)
+	{
+		//开启这次考核
+		$back=$this->initPerform();
+		if(false==$back)
+		{
+			//生成将要返回的json数组
+			$arr=Array(
+				"textBack"=>0,
+			);
+			echo $this->_encode($arr);
+			return;
+		}else{
+				//生成将要返回的json数组
+				$arr=Array(
+					"textBack"=>1,
+				);
+				echo $this->_encode($arr);
+				return;
+		}
+	}
+	//停止考核，进行优秀部长评定
+	if($KSKH==1 && $KSPD==1 && $FBJG==0)
+	{
+		$back=$this->funcGetRank();
+		if(false==$back)
+		{
+			//生成将要返回的json数组
+			$arr=Array(
+				"textBack"=>0,
+			);
+			echo $this->_encode($arr);
+			return;	
+		}else{
+			//生成将要返回的json数组
+			$arr=Array(
+				"textBack"=>1,
+			);
+			echo $this->_encode($arr);
+			return;
+		}
+	}
+	//停止优秀部长评定，发布考核结果
+	if($KSKH==1 && $KSPD==1&& $FBJG==1)
+	{
+		$back=$this->funcGetAll();
+		
+		if(false==$back)
+		{
+			//生成将要返回的json数组
+			$arr=Array(
+				"textBack"=>0,
+			);
+			echo $this->_encode($arr);
+			return;	
+		}else{
+			//生成将要返回的json数组
+			$arr=Array(
+				"textBack"=>1,
+			);
+			echo $this->_encode($arr);
+			return;
+		}
+	}
+
+	
+  }
+ //函数，判断只读状态还是读写状态,针对优秀部长评定表之前的所有考核表
   private function getStatus()
   {
 	//可编辑性：
@@ -1386,16 +1506,17 @@ class PerformAction extends Action
 		$flagInitYxbz=0;	
 	if($flagInitYxbz==0)
 	{
-		echo "优秀部长评定初始化不满足开启条件</br>";
-		return;
+		//echo "优秀部长评定初始化不满足开启条件</br>";
+		return false;
 	}
-	echo "即将进行各项初始化工作，耐心等待</br>";
+	//echo "即将进行各项初始化工作，耐心等待</br>";
 	$this->funcfkonegs();
 	$this->funcfkonebz();
 	$this->funcfktwo();
 	unset($data);
 	$data['is_yxbz']=1;
 	$control_info=$control_model->where("(year=$year and month=$month)")->save($data);
+	return true;
  }
  
  //绩效考核第三阶段，根据主席团的评优结果，生成最终的优秀部长
@@ -1426,8 +1547,8 @@ class PerformAction extends Action
 		$flagInitYxbz=0;	
 	if($flagInitYxbz==0)
 	{
-		echo "优秀部长评定不满足开启条件</br>";
-		return;
+		//echo "优秀部长评定不满足开启条件</br>";
+		return false;
 	}
 	$this->funcfkthree();
 	$this->funcfkfour();
@@ -1435,6 +1556,7 @@ class PerformAction extends Action
 	unset($data);
 	$data['is_over']=1;
 	$control_info=$control_model->where("(year=$year and month=$month)")->save($data);
+	return true;
  }
  //干事反馈处理
  private function funcfkonegs()
@@ -1531,7 +1653,7 @@ class PerformAction extends Action
 	   if($j>count($person_info))
 	     $flag=0;
 	 }
-	 echo "部门".$i."的优秀干事是：".$gs_account."</br>";
+	 //echo "部门".$i."的优秀干事是：".$gs_account."</br>";
     
    }
 
@@ -1585,7 +1707,7 @@ class PerformAction extends Action
 	    }
 	     //echo $account1.":".$total1."比较".$account2.":".$total2."</br>";
 	   }
-	   echo $account1."总分：".$total1."排名:".$rank."</br>";
+	   //echo $account1."总分：".$total1."排名:".$rank."</br>";
 	   $data['rank']=$rank;
 	   $bzfk_model->where("(year=$year and month=$month) and account=$account1")->data($data)->save();
 	 }	  
@@ -1631,12 +1753,12 @@ class PerformAction extends Action
 	   $yxchxz_info=$yxchxz_model->where("account=$bz_account")->find();
 	   if(empty($yxchxz_info))
 	   {
-	     echo $bz_account."没被限制</br>";
+	     //echo $bz_account."没被限制</br>";
 	     $candidate=$bz_account;
 		 $flag=0;
 	   }
 	   else 
-	     echo $bz_account."被限制了</br>";
+	     //echo $bz_account."被限制了</br>";
 	   $rank++;
 	   if($rank>$bz_sum)
 	     $flag=0;
@@ -1647,22 +1769,22 @@ class PerformAction extends Action
 
 	 if(!empty($candidate))
 	 {
-	    echo "部门".$i."的优秀部长候选人是：".$candidate."</br>";
+	    //echo "部门".$i."的优秀部长候选人是：".$candidate."</br>";
 		unset($data);
 		$data['year']=$year;
 		$data['month']=$month;
 		$data['HX']=$candidate;
 		$yxbzhx_info=$yxbzhx_model->add($data);
-		if($yxbzhx_info)
-		  echo $candidate."添加成功</br>";
+		//if($yxbzhx_info)
+		  //echo $candidate."添加成功</br>";
 	 }
-	 else
-		echo "部门".$i."没有优秀部长候选人</br>";
+	 //else
+		//echo "部门".$i."没有优秀部长候选人</br>";
    }
    //候选人找到之后，就是给每个主席团匹配候选人
   
    //找到所有主席
-	echo "优秀部长评定表初始化开始</br>";
+	//echo "优秀部长评定表初始化开始</br>";
 	$person_model=new Model("Person");
 	$yxbz_model=new Model("Yxbz");
 	$president_model=new Model("President");
@@ -1686,14 +1808,14 @@ class PerformAction extends Action
 		//被投部长默认为空，方便使用是用empty()判断
 	    $data['checked']=1;
 		$yxbz_info=$yxbz_model->add($data);
-		if(!$yxbz_info)
-		  echo $data['waccount']."优秀部长评定初始化失败";
+		//if(!$yxbz_info)
+		  //echo $data['waccount']."优秀部长评定初始化失败";
 		if($i>3)
 			break;
 		$i++;
      }
    }
-   echo "优秀部长评定表初始化完成</br>";
+   //echo "优秀部长评定表初始化完成</br>";
 
  }
  //优秀部长处理
@@ -1711,7 +1833,7 @@ class PerformAction extends Action
    {
      $bz_account=$v_hx['HX'];
 	 $yxbz_info=$yxbz_model->where("(year=$year and month=$month) and raccount=$bz_account and checked=1")->select();
-	 echo $bz_account."被评优了：".count($yxbz_info)."次</br>";
+	// echo $bz_account."被评优了：".count($yxbz_info)."次</br>";
 	 //将各个候选人的得票存起来
      //$arr=Array(
 	   $arr[$bz_account]=count($yxbz_info);
@@ -1756,11 +1878,11 @@ class PerformAction extends Action
 	 }
 	 $info[$i]['rank']=$rank;
    }
-   //检测输出
+/*    //检测输出
    for($k=0;$k<count($info);$k++)
    {
      echo $info[$k]['account']."	".$info[$k]['ps']."	".$info[$k]['total']."	".$info[$k]['rank']."</br>";
-   }
+   } */
    //从$info中取出前三名
    for($k=0;$k<count($info);$k++)
    {
@@ -1771,7 +1893,7 @@ class PerformAction extends Action
 	 if($info[$k]['rank']==3)
 	   $account3=$info[$k]['account'];
    }
-  echo "三名优秀部长分别是：".$account1."	".$account2."	".$account3;
+  //echo "三名优秀部长分别是：".$account1."	".$account2."	".$account3;
   //将三名优秀部长存入tbl_bzfk中
   $data['yxbz']=1;
   $bzfk_model->where("(year=$year and month=$month) and account=$account1")->data($data)->save();
@@ -1813,11 +1935,12 @@ class PerformAction extends Action
 	   }
 	 }
 	 //一个部门跑完，将排名存起来
-	 echo "部门".$i."的总分是".$total."排名是：".$rank."</br>";
+	 //echo "部门".$i."的总分是".$total."排名是：".$rank."</br>";
 	 unset($data);
 	 $data['rank']=$rank;
-	 if($bmfk_model->where("(year=$year and month=$month) and apartment=$i")->data($data)->save())
-	   echo "排名添加成功";
+	 $bmfk_model->where("(year=$year and month=$month) and apartment=$i")->data($data)->save();
+	 //if()
+	   //echo "排名添加成功";
    }
 
    //找到两个优秀部门，从排名高的开始
@@ -1893,7 +2016,7 @@ class PerformAction extends Action
              $rank++;	
 		 }
 	   }
-	   echo $gs_account."被外调".$wdcs."次，部门内排".$rank."</br>";
+	   //echo $gs_account."被外调".$wdcs."次，部门内排".$rank."</br>";
 	   unset($data);
 	   $data['rank']=$rank;
 	   $wdcs_model->where("(year=$year and month=$month) and account=$gs_account")->data($data)->save();
@@ -1996,7 +2119,7 @@ class PerformAction extends Action
    //计算总分：
   
    $total=$zpdf+$bzpjdf+$cqdf+$wdjf+$tyjf+$dycnjf+$qt;
-    echo $waccount."的总分是：".$total."</br>";
+    //echo $waccount."的总分是：".$total."</br>";
    //将所有这些信息存入数据库表 tbl_gsfk中
    //排名和优秀干事先留着
    $gsfk_model=new Model("Gsfk");
@@ -2127,7 +2250,7 @@ class PerformAction extends Action
    //echo "其他得分是：".$qtdf."</br>";
    //计算总分：
    $total=$zpdf+$zxpjdf+$gspjdf+$bzpjdf+$cqdf+$wddf+$fkdf+$qtdf;
-   echo $waccount."的总分是".$total."</br>";
+   //echo $waccount."的总分是".$total."</br>";
    //将所有这些信息存入数据库表 tbl_gsfk中
    //排名和优秀部长先留着	
    $data=Array(
@@ -2145,8 +2268,9 @@ class PerformAction extends Action
 	 'qtdf'=>$qtdf,
    );
    $bzfk_model=new Model("Bzfk");
-   if($bzfk_model->where("(year=$year and month=$month) and account=$waccount")->save($data))
-     echo "添加成功</br>";
+   $bzfk_model->where("(year=$year and month=$month) and account=$waccount")->save($data);
+   //if()
+    // echo "添加成功</br>";
  }
  //在主席团反馈表，根据传过来的部门apartment，year和month进行操作
  public function getbmfk($apartment,$year,$month)
@@ -2171,17 +2295,17 @@ class PerformAction extends Action
 		+$bmkh_info['DF6']+$bmkh_info['DF7'];
    $total=($total/(7*10))*5;
    $zxpjdf=$total;
-   echo "部门：".$apartment."的主席给分是：".$total."</br>";
+   //echo "部门：".$apartment."的主席给分是：".$total."</br>";
    //主管副主席评价得分
    $president_info=$president_model->where("apartment1=$apartment or apartment2=$apartment")->find();
-   echo "部门：".$apartment."的主管副主席account是：".$president_info['account']."</br>";
+   //echo "部门：".$apartment."的主管副主席account是：".$president_info['account']."</br>";
    $fzx_account=$president_info['account'];
    $bmkh_info=$bmkh_model->where("(year=$year and month=$month) and (waccount=$fzx_account and rapartment=$apartment)")->find();
    $total=$bmkh_info['DF1']+$bmkh_info['DF2']+$bmkh_info['DF3']+$bmkh_info['DF4']+$bmkh_info['DF5']
 		+$bmkh_info['DF6']+$bmkh_info['DF7'];
    $total=($total/(7*10))*3;
    $zgpjdf=$total;
-   echo "部门：".$apartment."的主管副主席给分是：".$total."</br>";
+   //echo "部门：".$apartment."的主管副主席给分是：".$total."</br>";
    //出勤扣分
  //获取出勤情况
    $chuqin_info=$chuqin_model->where("(year=$year and month=$month) and (rapartment=$apartment)")->find();
@@ -2197,14 +2321,15 @@ class PerformAction extends Action
    }
    //出勤得分
    $cqdf=2+$qj+$ct+$qx;
-   echo "出勤得分：".$cqdf."</br>";
+   //echo "出勤得分：".$cqdf."</br>";
    if($cqdf<0)
      $cqdf=0;
    //主席团推优得分
-   $bmty_info=$bmty_model->where("(year=$year and month=$month) and rapartment=$apartment")->select();
-   $tydf=count($bmty_info);
+   $tuiyou_model=new Model("Tuiyou");
+   $tuiyou_info=$tuiyou_model->where("(year=$year and month=$month) and raccount=$apartment")->select();
+   $tydf=count($tuiyou_info);
    $tydf=$tydf*0.3;
-   echo $apartment."的主席团推优得分是：".$tydf."</br>";
+   //echo $apartment."的主席团推优得分是：".$tydf."</br>";
    //$tydf=0;
    //优秀部长加分
    //找出本部门部长
@@ -2213,14 +2338,15 @@ class PerformAction extends Action
    foreach($person_info as $v)
    {
      $bz_account=$v['account'];
-	 echo "部长：".$bz_account."</br>";
+	 //echo "部长：".$bz_account."</br>";
 	 $bzfk_info=$bzfk_model->where("(year=$year and month=$month) and account=$bz_account")->find();
 	 //echo "该部长是否为优秀：".$bzfk_info['yxbz']."</br>";
 	 //var_dump($bzfk_info);
 	 if($bzfk_info['yxbz']==1)
 	 {
-	   echo "优秀部长：".$bz_account."</br>";
+	   //echo "优秀部长：".$bz_account."</br>";
 	   $yxbz=0.2;
+	   break;
 	 }
    }
    //获取反馈加分，包括部长和干事
@@ -2234,16 +2360,20 @@ class PerformAction extends Action
    }
    $fkdf=$fkdf*0.1;
    //违规扣分
-   $bmwg_info=$bmwg_model->where("(year=$year and month=$month) and apartment=$apartment")->find();
-   if(!empty($bmwg_info)){
-     $wgkf=-$bmwg_info['wgkf'];}
+   $bmwg_info=$bmwg_model->where("(year=$year and month=$month) and apartment=$apartment")->select();
+   if(count($bmwg_info)>0){
+     foreach($bmwg_info as $v)
+	 {
+		$wgkf=$wgkf+$v['wgkf'];
+	 }
+     //$wgkf=-$bmwg_info['wgkf'];
+	}
    else{
      $wgkf=0;}
    //其他
    $qt_info=$qt_model->where("(year=$year and month=$month) and account=$apartment")->find();
-   
     $qt=$qt_info['qt'];
-    echo $apartment."的其他得分是：".$qt."</br>";
+    //echo $apartment."的其他得分是：".$qt."</br>";
  
    //将所有这些信息存入数据库表
    $total=$zxpjdf+$zgpjdf+$cqdf+$tydf+$wgkf+$fkdf+$qt+$yxbz;
@@ -2263,8 +2393,9 @@ class PerformAction extends Action
    );
    
    $bmfk_model=new Model("Bmfk");
-   if($bmfk_model->where("(year=$year and month=$month) and apartment=$apartment")->data($data)->save())
-     echo $apartment."添加成功</br>";
+   $bmfk_model->where("(year=$year and month=$month) and apartment=$apartment")->data($data)->save();
+   //if()
+     //echo $apartment."添加成功</br>";
 	 
 
  }
@@ -3020,7 +3151,7 @@ class PerformAction extends Action
 	$data['total']=$_POST['zongfen'];
 	$data['hadSubmit']=$_POST['hadSubmit'];
 	$bzzp_model=new Model("Bzzp");
-	$bzzp_info=$bzzp_model->where("(year=$year and month=$month) and waccount=$account")->data($data)->save();
+	$bzzp_info=$bzzp_model->where("(year=$year and month=$month) and waccount=$account")->save($data);
     if(!$bzzp_info)
 	  $flagCrud=0;
 	
@@ -3568,25 +3699,870 @@ class PerformAction extends Action
   }
 
 
-  //外调加分函数
-  public function funcwdjf($year,$month,$account,$assess,$count)
+
+//初始化工作
+  //时间获取函数
+  private function funcsettime()
   {
-    $resource_model=new Model("Resource");
-	for($i=0;$i<$count;$i++)
+/*     $year=2014;//$_POST['year'];
+	$month=10;//$_POST['month']; */
+	$year=$_POST['year'];
+	$month=$_POST['month'];
+	$arr=Array(
+	  'year'=>$year,
+	  'month'=>$month,
+	);
+	return $arr;
+  }
+  //删除某年某月绩效考核
+  public function unsetPerform()
+  {
+	$arr=$this->funcsettime();
+	/* $year=$arr['year'];
+	$month=$arr['month'];	 */
+	$year=2014;
+	$month=10;
+	$control_model=new Model("Control");
+	$gszp_model=new Model("Gszp");
+	$interact_model=new Model("Interact");
+	$tuiyou_model=new Model("Tuiyou");
+	$evaluate_model=new Model("Evaluate");	
+	$bzzp_model=new Model("Bzzp");
+	$gskh_model=new Model("Gskh");
+	$bzkh_model=new Model("Bzkh");
+	$bmkh_model=new Model("Bmkh");
+	$wdcs_model=new Model("Wdcs");
+	$chuqin_model=new Model("Chuqin");
+	$diaoyan_model=new Model("Diaoyan");
+	$qt_model=new Model("Qt");
+	$gsfk_model=new Model("Gsfk");
+	$bzfk_model=new Model("Bzfk");
+	$bmfk_model=new Model("Bmfk");
+	$yxchxz_model=new Model("Yxchxz");
+	$bmwg_model=new Model("Bmwg");
+	$yxbzhx_model=new Model("Yxbzhx");
+	$yxbz_model=new Model("Yxbz");
+	//干事部分
+	$gszp_model->where("year=$year and month=$month")->delete();
+	$interact_model->where("year=$year and month=$month")->delete();
+	$tuiyou_model->where("year=$year and month=$month")->delete();
+	$evaluate_model->where("year=$year and month=$month")->delete();
+	$control_model->where("year=$year and month=$month")->delete();
+	//部长部分
+	$bzzp_model->where("year=$year and month=$month")->delete();
+	$gskh_model->where("year=$year and month=$month")->delete();
+	//主席部分
+	$bzkh_model->where("year=$year and month=$month")->delete();
+	$bmkh_model->where("year=$year and month=$month")->delete();
+	//外调次数
+	$wdcs_model->where("year=$year and month=$month")->delete();
+	//出勤统计
+	$chuqin_model->where("year=$year and month=$month")->delete();
+	//调研采纳
+	$diaoyan_model->where("year=$year and month=$month")->delete();
+	//其他情况
+	$qt_model->where("year=$year and month=$month")->delete();
+	//反馈
+	$gsfk_model->where("year=$year and month=$month")->delete();
+	$bzfk_model->where("year=$year and month=$month")->delete();
+	$bmfk_model->where("year=$year and month=$month")->delete();
+	//优秀称号限制
+	$yxchxz_model->where("year=$year and month=$month")->delete();
+	//部门违规
+	$bmwg_model->where("year=$year and month=$month")->delete();
+	//候选，优秀部长
+	$yxbzhx_model->where("year=$year and month=$month")->delete();
+	$yxbz_model->where("year=$year and month=$month")->delete();
+	echo $year."年".$month."月的绩效考核数据删除完毕，可以重新启动该月份的绩效考核</br>";
+  }
+  //考核系统初始化阶段一
+  public function initPerform()
+  {
+ 	//拒绝未登录访问
+	session_name('LOGIN');
+    session_start();
+    if(!$this->judgelog())
+      $this->redirect('Login/index');
+	$arr=$this->funcsettime();
+	$year=$arr['year'];
+	$month=$arr['month'];	  
+	$control_model=new Model("Control");
+	$control_info=$control_model->where("year=$year and month=$month")->find();
+	//根据tbl_authority判断，若时间已经存在拒绝访问
+	//干事自评表，部长自评表，干事自评表，部长考核表，部门考核表
+	//开始一次绩效考核需要满足下面的条件：基本成员信息要求、该时间未考核过、系统不存在未结束的考核
+	$authority_model=new Model("Authority");
+	$flagInitPerform=1;
+	$authority_info=$authority_model->find();
+	if($authority_info['is_init']!=1)
+		$flagInitPerform=0;
+	$control_model=new Model("Control");
+	$control_info=$control_model->where("year=$year and month=$month")->find();
+	if(!empty($control_info['id']))
+		$flagInitPerform=0;
+	$control_info=$control_model->where("is_over=0||is_yxbz=0")->select();
+	if(count($control_info)>0)
+		$flagInitPerform=0;
+	if($flagInitPerform==0)
+	{
+		//echo "本次考核不满足开启条件</br>";
+		return false;
+	}
+	//echo "即将进行各项初始化工作，耐心等待</br>";
+	unset($data);
+	$data['year']=$year;
+	$data['month']=$month;
+	$control_info=$control_model->add($data);
+	$this->funcyjjh();
+ 	$this->funcinitbmty();
+	$this->funcinitwdcs();
+	$this->funcinitchuqin();
+	$this->funcinitdiaoyan();
+	$this->funcinitqtqk();
+	$this->funcinitgsfk();
+	$this->funcinitbzfk();
+	$this->funcinitbmfk();
+	$this->funcinityxchxz(); 
+	$this->funcinitbmwg();
+	return true;
+	//echo "完毕</br>";
+  } 
+  //绩效考核初始化第一阶段，包括：干事自评表，部长自评表，干事考核表，部长考核表，部门考核表
+  private function funcyjjh()
+  {
+    //设置年月
+	$arr=$this->funcsettime();
+	$year=$arr['year'];
+	$month=$arr['month'];
+    //一键激活数据库表，包括：
+	$person_model=new Model("Person");
+	$gszp_model=new Model("Gszp");
+	$interact_model=new Model("Interact");
+	$tuiyou_model=new Model("Tuiyou");
+	$evaluate_model=new Model("Evaluate");
+	$bzzp_model=new Model("Bzzp");
+	$gskh_model=new Model("Gskh");
+	$president_model=new Model("President");
+	$bzkh_model=new Model("Bzkh");
+	$bmkh_model=new Model("Bmkh");
+	$oneway_model=new Model("Oneway");
+	$bmty_model=new Model("Bmty");
+	//echo "干事初始化开始</br>";
+	//找出所有干事
+	$person_info=$person_model->where("type=1 or type=2")->select();
+	foreach($person_info as $v)
+	{
+	  $account=$v['account'];
+	  //基本信息
+	  $apartment=$v['apartment'];
+	  unset($data);
+	  $data['account']=$account;
+	  $data['apartment']=$v['apartment'];
+	  $data['year']=$year;
+	  $data['month']=$month;
+	  $data['zptext']="空";
+	  //干事自评表，每个部门的干事都要初始化
+	  $gszp_info=$gszp_model->add($data);
+	  //if(!$gszp_info)
+	    //echo $account."干事自评表初始化出错</br>";
+	  //干事推优干事
+	  unset($data);
+	  $data['year']=$year;
+	  $data['month']=$month;
+	  $data['waccount']=$account;
+	  $data['wapartment']=$v['apartment'];
+	  $data['wtype']=$v['type'];
+	  $data['rapartment']=$v['apartment'];
+	  $data['rtype']=$v['type'];
+	  $data['text']="空";
+	  $tuiyou_info=$tuiyou_model->add($data);
+	 // if(!$tuiyou_info)
+	   // echo $account."干事推优干事初始化出错</br>";
+	  //对本部门的留言
+	  unset($data);
+	  $data['year']=$year;
+	  $data['month']=$month;
+	  $data['waccount']=$account;
+	  $data['wapartment']=$v['apartment'];
+	  $data['wtype']=$v['type'];
+	  $data['raccount']=$v['apartment'];
+	  $data['text']="空";
+	  $interact_info=$interact_model->add($data);
+	  //if(!$interact_info)
+	   // echo $account."干事对部门留言初始化出错</br>";
+	  //干事对部长的评分
+	  //找出所有部长
+	  $person_info_bz=$person_model->where("apartment=$apartment and type=3")->select();
+	  foreach($person_info_bz as $v_bz)
+	  {
+        unset($data);
+	    $data['year']=$year;
+	    $data['month']=$month;
+	    $data['waccount']=$account;
+	    $data['wapartment']=$v['apartment'];
+	    $data['wtype']=$v['type'];
+		$data['raccount']=$v_bz['account'];
+	    $data['rapartment']=$v['apartment'];
+	    $data['rtype']=3;
+		$data['text']="空";
+		$data['nm']=1;
+		$evaluate_info=$evaluate_model->add($data);
+		//判断是否添加成功
+		//if(!$evaluate_info)
+		  //echo $account."干事对部长的评价初始化失败"."</br>";
+	  }
+	  
+	}
+	//echo "干事初始化完成</br>";
+	//干事初始化完成
+ 	//找出所有部长
+	//echo "部长初始化开始</br>";
+	$person_info=$person_model->where("type=3")->select();
+	foreach($person_info as $v)
+	{
+	  //基本信息
+	  $apartment=$v['apartment'];
+	  $account=$v['account'];
+	  //部长自评表
+	  unset($data);
+	  $data['year']=$year;
+	  $data['month']=$month;
+	  $data['waccount']=$account;
+	  $data['wapartment']=$apartment;
+	  $data['zptext']="空";
+	  $bzzp_info=$bzzp_model->add($data);
+	  //if(!$bzzp_info)
+	    //echo $account."的部长自评初始化失败";
+	  //该部长对本部门其他部长的评价
+	  $person_info_bz=$person_model->where("apartment=$apartment and type=3")->select();
+	  foreach($person_info_bz as $v_bz)
+	  {
+	    if($v_bz['account']==$v['account'])
+		  continue;
+		unset($data);
+	    $data['year']=$year;
+	    $data['month']=$month;
+	    $data['waccount']=$account;
+	    $data['wapartment']=$apartment;
+	    $data['wtype']=3;
+		$data['raccount']=$v_bz['account'];
+	    $data['rapartment']=$apartment;
+	    $data['rtype']=3;
+		$data['nm']=1;
+		$data['text']="空";
+		$evaluate_info=$evaluate_model->add($data);
+		//if(!$evaluate_info)
+		  //echo $account."部长对本部门其他部长的评价失败";
+	  }
+
+	  //该部长对其主管副主席的评价
+	  //找出主管副主席
+	  $person_info_zg=$president_model->where("apartment1=$apartment or apartment2=$apartment")->find();
+	  $zg_account=$person_info_zg['account'];
+      unset($data);
+	  $data['year']=$year;
+	  $data['month']=$month;
+	  $data['waccount']=$account;
+	  $data['wapartment']=$apartment;
+	  $data['wtype']=3;
+      $data['raccount']=$zg_account;
+	  $data['rapartment']=12;
+	  $data['rtype']=4;
+	  $data['text']="空";
+      $interact_info=$interact_model->add($data);	
+	  //if(!$interact_info)
+	    //echo $account."对主管副主席评价初始化失败</br>";
+	  //对所有主席团的匿名留言
+	  $person_info_zxt=$person_model->where("type=4")->select();
+	  foreach($person_info_zxt as $v_zxt)
+	  {
+	    $zxt_account=$v_zxt['account'];
+      unset($data);
+	  $data['year']=$year;
+	  $data['month']=$month;
+	  $data['waccount']=$account;
+	  $data['wapartment']=$apartment;
+	  $data['wtype']=3;
+      $data['raccount']=$zxt_account;
+	  $data['rapartment']=12;
+	  $data['rtype']=4;
+	  $data['text']="空";
+	  $data['nm']=1;
+	  $interact_info=$interact_model->add($data);	
+	  //if(!$interact_info)
+	    //echo $account."主席团成员匿名评价初始化失败</br>";
+	  }
+      //干事考核表，对部门所有干事的给分
+      //找出该部长所有的干事
+      $person_info_gs=$person_model->where("apartment=$apartment and (type=1 or type=2)")->select();
+      foreach($person_info_gs as $v_gs)
+      {
+	    //给干事打分
+	    unset($data);
+	    $data['year']=$year;
+	    $data['month']=$month;	
+	    $data['waccount']=$account;	
+	    $data['wapartment']=$apartment;
+        $data['raccount']=$v_gs['account'];				
+		$gskh_info=$gskh_model->add($data);
+		//if(!$gskh_info)
+		  //echo $account."对干事考核初始化失败</br>";
+		//对干事评价
+		unset($data);
+	    $data['year']=$year;
+	    $data['month']=$month;
+	    $data['waccount']=$account;
+	    $data['wapartment']=$apartment;
+	    $data['wtype']=3;
+		$data['raccount']=$v_gs['account'];
+	    $data['rapartment']=$apartment;
+	    $data['rtype']=$v_gs['type'];
+		$data['text']="空";
+		$interact_info=$interact_model->add($data);
+		//if(!$interact_info)
+		  //echo $account."对干事评价初始化失败</br>";
+	  }	  
+	}
+	//echo "部长初始化完成</br>";
+	//部长初始化完成 
+ 	//找出所有主席团成员
+	//echo "主席团初始化开始</br>";
+	$person_info=$person_model->where("type=4")->select();
+	//var_dump($person_info);
+	foreach($person_info as $v)
+	{
+	  //每个主席团成员都要对其主管的部门的部长进行考核
+	  //基本信息
+	  $account=$v['account'];
+	  $president_info=$president_model->where("account=$account")->find();
+
+
+	    if($president_info['is_sub']=='y')//一般主管副主席
+		{
+		  $apartment_zxt_1=$president_info['apartment1'];
+		  //根据第一个部门，对部长、部门进行考核
+		  if($apartment_zxt_1!=0)
+		  {
+		    $person_info_bz=$person_model->where("apartment=$apartment_zxt_1 and type=3")->select();
+			foreach($person_info_bz as $v_bz)
+			{
+			  //对部长进行评分
+			  unset($data);
+			  $data['waccount']=$account;
+			  $data['wapartment']=12;
+			  $data['raccount']=$v_bz['account'];
+			  $data['rapartment']=$apartment_zxt_1;
+			  $data['year']=$year;
+			  $data['month']=$month;
+			  $bzkh_info=$bzkh_model->add($data);
+			 // if(!$bzkh_info)
+			    //echo $account."对部长评分初始化失败</br>";
+			  //进行对部长进行评价
+			  unset($data);
+	          $data['year']=$year;
+	          $data['month']=$month;
+	          $data['waccount']=$account;
+	          $data['wapartment']=12;
+	          $data['wtype']=4;
+		      $data['raccount']=$v_bz['account'];
+	          $data['rapartment']=$apartment_zxt_1;
+	          $data['rtype']=3;
+			  $data['text']="空";
+		      $interact_info=$interact_model->add($data);
+			 // if(!$interact_info)
+			    //echo $account."对部长评价初始化失败</br>";
+			}
+			//对部门1进行考核
+			unset($data);
+			$data['waccount']=$account;
+			$data['wapartment']=12;
+			$data['rapartment']=$apartment_zxt_1;
+			$data['year']=$year;
+			$data['month']=$month;
+			$data['text']="空";
+			$bmkh_info=$bmkh_model->add($data);
+			//if(!$bmkh_info)
+			  //echo $account."对部门考核初始化失败</br>";
+		  }
+		  $apartment_zxt_2=$president_info['apartment2'];
+		  //根据第二个部门，对部长进行考核
+		  if($apartment_zxt_2!=0)
+		  {
+		    $person_info_bz=$person_model->where("apartment=$apartment_zxt_2 and type=3")->select();
+			foreach($person_info_bz as $v_bz)
+			{
+			  //对部长进行评分
+			  unset($data);
+			  $data['waccount']=$account;
+			  $data['wapartment']=12;
+			  $data['raccount']=$v_bz['account'];
+			  $data['rapartment']=$apartment_zxt_2;
+			  $data['year']=$year;
+			  $data['month']=$month;
+			  $bzkh_info=$bzkh_model->add($data);
+			 // if(!$bzkh_info)
+			    //echo $account."对部长评分初始化失败</br>";
+			  //进行对部长进行评价
+			  unset($data);
+	          $data['year']=$year;
+	          $data['month']=$month;
+	          $data['waccount']=$account;
+	          $data['wapartment']=12;
+	          $data['wtype']=4;
+		      $data['raccount']=$v_bz['account'];
+	          $data['rapartment']=$apartment_zxt_2;
+	          $data['rtype']=3;
+			  $data['text']="空";
+		      $interact_info=$interact_model->add($data);
+			  //if(!$interact_info)
+			    //echo $account."对部长评价初始化失败</br>";
+			}
+			//对部门1进行考核
+			unset($data);
+			$data['waccount']=$account;
+			$data['wapartment']=12;
+			$data['rapartment']=$apartment_zxt_2;
+			$data['year']=$year;
+			$data['month']=$month;
+			$data['text']="空";
+			$bmkh_info=$bmkh_model->add($data);
+			//if(!$bmkh_info)
+			  //echo $account."对部门考核初始化失败</br>";
+		  }
+		}
+		else//主席
+		{
+		  //对管辖内的部长进行评分评价
+		  $apartment_zxt_1=$president_info['apartment1'];
+		  //根据第一个部门，对部长、部门进行考核
+		  if($apartment_zxt_1!=0)
+		  {
+		    $person_info_bz=$person_model->where("apartment=$apartment_zxt_1 and type=3")->select();
+			foreach($person_info_bz as $v_bz)
+			{
+			  //进行评分
+			  unset($data);
+			  $data['waccount']=$account;
+			  $data['wapartment']=12;
+			  $data['raccount']=$v_bz['account'];
+			  $data['rapartment']=$apartment_zxt_1;
+			  $data['year']=$year;
+			  $data['month']=$month;
+			  $bzkh_info=$bzkh_model->add($data);
+			 // if(!$bzkh_info)
+			    //echo $account."对部长考核初始化失败</br>";
+			  //进行评价
+			  unset($data);
+	          $data['year']=$year;
+	          $data['month']=$month;
+	          $data['waccount']=$account;
+	          $data['wapartment']=12;
+	          $data['wtype']=4;
+		      $data['raccount']=$v_bz['account'];
+	          $data['rapartment']=$apartment_zxt_1;
+	          $data['rtype']=3;
+			  $data['text']="空";
+		      $interact_info=$interact_model->add($data);
+			  //if(!$interact_info)
+			    //echo $account."对部长的评价初始化失败</br>";
+			}
+		  }
+		  $apartment_zxt_2=$president_info['apartment2'];
+		  //根据第二个部门，对部长进行考核
+		  if($apartment_zxt_2!=0)
+		  {
+		    $person_info_bz=$person_model->where("apartment=$apartment_zxt_2 and type=3")->select();
+			foreach($person_info_bz as $v_bz)
+			{
+			  //进行评分
+			  unset($data);
+			  $data['waccount']=$account;
+			  $data['wapartment']=12;
+			  $data['raccount']=$v_bz['account'];
+			  $data['rapartment']=$apartment_zxt_2;
+			  $data['year']=$year;
+			  $data['month']=$month;
+			  $bzkh_info=$bzkh_model->add($data);
+			  //if(!$bzkh_info)
+			    //echo $account."对部长考核初始化失败</br>";
+			  //进行评价
+			  unset($data);
+	          $data['year']=$year;
+	          $data['month']=$month;
+	          $data['waccount']=$account;
+	          $data['wapartment']=12;
+	          $data['wtype']=4;
+		      $data['raccount']=$v_bz['account'];
+	          $data['rapartment']=$apartment_zxt_2;
+	          $data['rtype']=3;
+			  $data['text']="空";
+		      $interact_info=$interact_model->add($data);
+			 // if(!$interact_info)
+			    //echo $account."对部长的评价初始化失败</br>";
+			}
+		  }
+		  //对11个部门进行考核
+		  //echo $account."</br>";
+		  for($i=1;$i<=11;$i++)
+		  {
+			//对部门$i进行考核
+			unset($data);
+			$data['waccount']=$account;
+			$data['wapartment']=12;
+			$data['rapartment']=$i;
+			$data['year']=$year;
+			$data['month']=$month;		
+			$data['text']="空";
+			$bmkh_info=$bmkh_model->add($data);
+			//if(!$bmkh_info)
+			  //echo $account."对部门考核初始化失败</br>";
+		  }
+	  }
+	
+    }
+    //echo "主席团初始化完成</br>";   
+  } 
+  //绩效考核初始化第一阶段，主席团的部门推优
+  private function funcinitbmty()
+  {
+	$arr=$this->funcsettime();
+	$year=$arr['year'];
+	$month=$arr['month'];
+	//echo "主席团的部门推优初始化开始</br>";
+	//找出所有主席团成员
+	$person_model=new Model("Person");
+	$tuiyou_model=new Model("Tuiyou");
+	$person_info=$person_model->where("type=4")->select();
+	//var_dump($person_info);
+	foreach($person_info as $v)
+	{
+	  //每个主席团成员都要对其主管的部门的部长进行考核
+	  //基本信息
+	  $account=$v['account'];
+	  //不管是不是主席，都得对非主管部门推优
+	  unset($data);
+	  $data['year']=$year;
+	  $data['month']=$month;
+	  $data['waccount']=$account;
+	  $data['wapartment']=12;
+	  $data['wtype']=4;
+	  $data['text']="空";
+	  $tuiyou_info=$tuiyou_model->add($data);
+	  //if(!$tuiyou_info)
+	    //echo $account."对非主管部门推优初始化失败</br>";
+	}
+	//echo "主席团的部门推优初始化完成</br>";
+  }
+  //绩效考核初始化第一阶段，成该月份的干事反馈表
+  private function funcinitgsfk()
+  {
+	$arr=$this->funcsettime();
+	$year=$arr['year'];
+	$month=$arr['month'];
+    $person_model=new Model("Person");
+    $gsfk_model=new Model("Gsfk");
+    //找到所有的干事
+    //echo "干事反馈表初始化开始</br>";
+    $person_info=$person_model->where("type=1 or type=2")->select();
+    foreach($person_info as $v)
+    {
+      unset($data);
+	  $data['year']=$year;
+	  $data['month']=$month;
+	  $data['account']=$v['account'];
+	  $gsfk_info=$gsfk_model->add($data);
+	  //if(!$gsfk_info) 
+	   //echo $v['account']."干事反馈初始化失败</br>";
+    }
+   // echo "干事反馈表初始化结束</br>";
+  }
+ //绩效考核初始化第一阶段，该月份的部长反馈表
+  private function funcinitbzfk()
+  {
+    //echo "部长反馈表初始化开始</br>";
+    //找出所有的部长
+	$arr=$this->funcsettime();
+	$year=$arr['year'];
+	$month=$arr['month'];
+	$person_model=new Model("Person");
+	$bzfk_model=new Model("Bzfk");
+	$person_info=$person_model->where("type=3")->select();
+	foreach($person_info as $v)
+	{
+	  $bz_account=$v['account'];
+	  unset($data);
+	  $data['year']=$year;
+	  $data['month']=$month;
+	  $data['account']=$bz_account;
+	  $bzfk_info=$bzfk_model->add($data);
+	 // if(!$bzfk_info)
+	    //echo $data['account']."部长反馈表初始化失败</br>";
+	}
+	//echo "部长反馈表初始化完成</br>";
+  }
+  //绩效考核初始化第一阶段，该月份的部门反馈表
+  private function funcinitbmfk()
+  {
+	//echo "部门反馈表初始化开始";
+   $arr=$this->funcsettime();
+	$year=$arr['year'];	
+	$month=$arr['month'];
+   //echo "部门反馈表初始化开始</br>";
+   $bmfk_model=new Model("Bmfk");
+   //找出11个部门
+   for($i=1;$i<=11;$i++)
+   {
+     unset($data);
+	 $data['year']=$year;
+	 $data['month']=$month;
+	 $data['apartment']=$i;
+	 $bmfk_info=$bmfk_model->add($data);
+	// if(!$bmfk_info)
+	   //echo $i."部门反馈表初始化失败</br>";
+   }
+  // echo "部门反馈表初始化结束</br>";
+  }
+
+  //绩效考核初始化第一阶段，该月的外调次数表
+  private function funcinitwdcs()
+  {
+	$arr=$this->funcsettime();
+	$year=$arr['year'];
+	$month=$arr['month'];
+   $wdcs_model=new Model("Wdcs");
+   $person_model=new Model("Person");
+   //echo "外调次数初始化开始</br>";
+   //每个部门的干事、部长初始化
+   for($i=1;$i<=12;$i++)
+   {
+     $person_info=$person_model->where("apartment=$i")->select();
+	 foreach($person_info as $v)
+	 {
+	   unset($data);
+	   $data['year']=$year;
+	   $data['month']=$month;
+	   $data['account']=$v['account'];
+	   $wdcs_info=$wdcs_model->add($data);
+	  // if(!$wdcs_info)
+	     //echo $data['account']."外调次数初始化失败</br>";
+	 }
+   }
+   //echo "外调次数初始化结束</br>";
+  }
+  //绩效考核初始化第一阶段，该月的出勤统计
+  private function funcinitchuqin()
+  {
+	$arr=$this->funcsettime();
+	$year=$arr['year'];
+	$month=$arr['month'];
+	$person_model=new Model("Person");
+	$chuqin_model=new Model("Chuqin");
+	$rlgj_model=new Model("Rlgj");
+	//echo "出勤统计初始化开始</br>";
+	//共11个部门，根据跟进干事记录各部门的出勤情况
+    for($i=1;$i<=11;$i++)
+	{
+	  $rlgj_info=$rlgj_model->where("apartment=$i")->find();
+	  $rlgs_account=$rlgj_info['account'];
+	  $person_info=$person_model->where("apartment=$i")->select();
+	  foreach($person_info as $v)
+	  {
+	    unset($data);
+		$data['year']=$year;
+		$data['month']=$month;
+		$data['waccount']=$rlgs_account;
+		$data['raccount']=$v['account'];
+		$data['rapartment']=$i;
+		$chuqin_info=$chuqin_model->add($data);
+		//if(!$chuqin_info)
+		  //echo "出勤表初始化失败</br>";
+	  }
+	}
+	//echo "出勤统计初始化结束</br>";
+  }
+  //绩效考核初始化第一阶段，该月的调研采纳统计
+  private function funcinitdiaoyan()
+  {
+	$arr=$this->funcsettime();
+	$year=$arr['year'];
+	$month=$arr['month'];
+    $person_model=new Model("Person");
+	$diaoyan_model=new Model("Diaoyan");
+	$rlgj_model=new Model("Rlgj");
+	//echo "调研采纳初始化开始</br>";
+	//找出11个部门的干事和部长
+	for($i=1;$i<=11;$i++)
+	{
+	  //找到跟进的干事
+	  $rlgj_info=$rlgj_model->where("apartment=$i")->find();
+	  $rlgs_account=$rlgj_info['account'];
+	  $person_info=$person_model->where("apartment=$i")->select();
+	  foreach($person_info as $v)
+	  {
+	    unset($data);
+		$data['year']=$year;
+		$data['month']=$month;
+		$data['waccount']=$rlgs_account;
+		$data['raccount']=$v['account'];
+		$data['rapartment']=$i;
+		$diaoyan_info=$diaoyan_model->add($data);
+		//if(!$diaoyan_info)
+		  //echo "调研采纳初始化失败</br>";
+	  }
+	}
+	//echo "调研采纳初始化结束</br>";
+  }
+  //绩效考核初始化第一阶段，其他情况加分表
+  private function funcinitqtqk()
+  {
+	$arr=$this->funcsettime();
+	$year=$arr['year'];
+	$month=$arr['month'];
+    $person_model=new Model("Person");
+	$qt_model=new Model("Qt");
+	//echo "其他情况加减分初始化开始</br>";
+	//找到所有的干事、部长
+	$person_info=$person_model->where("(type=1 or type=2) or type=3")->select();
+	foreach($person_info as $v)
+	{
+	  $gs_account=$v['account'];
+	  unset($data);
+	  $data['year']=$year;
+	  $data['month']=$month;
+	  $data['account']=$gs_account;
+	  $data['text']="空";
+	  $qt_info=$qt_model->add($data);
+	 // if(!$qt_info)
+	    //echo "其他情况加分表初始化失败</br>";
+	}
+	//找到所有部门
+	for($i=1;$i<=11;$i++)
+	{
+	  unset($data);
+	  $data['year']=$year;
+	  $data['month']=$month;
+	  $data['account']=$i;
+	  $data['text']="空";
+	  $qt_info=$qt_model->add($data);
+	 // if(!$qt_info)
+	    //echo "其他情况加分表初始化失败</br>";
+	}
+	//echo "其他情况加减分初始化结束</br>";
+  }
+  //绩效考核初始化第一阶段，部门违规扣分表
+  private function funcinitbmwg()
+  {
+	//echo "部门违规初始化开始</br>";
+	$arr=$this->funcsettime();
+	$year=$arr['year'];
+	$month=$arr['month'];
+	//找到所有人力干事
+	$person_model=new Model("Person");
+	$bmwg_model=new Model("Bmwg");
+	$bmwgfzr_model=new Model("Bmwgfzr");
+	for($j=1;$j<7;$j++)
 	{
 		unset($data);
 		$data['year']=$year;
 		$data['month']=$month;
-		$data['account']=$account;
-		$data['assess']=$assess;
-		$resource_info=$resource_model->add($data);
-		if($resource_info)
-		  echo "Add data from".$account."successfully</br>";
-		else
-		  echo "Fail to add data </br>";
+		$bmwgfzr_info=$bmwgfzr_model->where("type=$j")->find();
+		$data['account']=$bmwgfzr_info['account'];
+		$data['type']=$j;
+		for($i=1;$i<12;$i++)
+		{
+			$data['apartment']=$i;
+			$data['wgkf']=0;
+			$data['text']="空";
+			$bmwg_info=$bmwg_model->add($data);
+			//if(false==$bmwg_info)
+				//echo "部门违规初始化失败</br>";
+		}
 	}
+	//echo "部门违规初始化结束</br>";
   }
-
-
+  //绩效考核初始化第一阶段，上月的优秀某某限定表
+  private function funcinityxchxz()
+  {
+    //获取上次考核的时间
+	$arr=$this->funcgettime();
+	if(false==$arr)
+	{
+		return;
+	}
+	$lastyear=$arr['year'];
+	$lastmonth=$arr['month'];
+	$person_model=new Model("Person");
+	$gsfk_model=new Model("Gsfk");
+	$bzfk_model=new Model("Bzfk");
+	$bmfk_model=new Model("Bmfk");
+	$yxchxz_model=new Model("Yxchxz");
+	//echo "限定表初始化开始</br>";
+	//先删除
+	$yxchxz_model->where("id>0")->delete();
+    //获取上次考核的优秀干事
+	$gsfk_info=$gsfk_model->where("(year=$lastyear and month=$lastmonth) and yxgs=1")->select();
+	foreach($gsfk_info as $v)
+	{
+	  $gs_account=$v['account'];
+	  unset($data);
+	  $data['account']=$gs_account;
+	  $yxchxz_info=$yxchxz_model->add($data);
+	 // if(!$yxchxz_info)
+	    //echo "优秀干事限定初始化失败</br>";
+	}
+	//获取上次考核的优秀部长
+	$bzfk_info=$bzfk_model->where("(year=$lastyear and month=$lastmonth) and yxbz=1")->select();
+    foreach($bzfk_info as $v)
+	{
+	  $bz_account=$v['account'];
+	  unset($data);
+	  $data['account']=$bz_account;
+	  $yxchxz_info=$yxchxz_model->add($data);
+	  //if(!$yxchxz_info)
+	     //echo "优秀部长限定初始化失败</br>";
+	}
+	//获取上次考核的优秀部门
+	$bmfk_info=$bmfk_model->where("(year=$lastyear and month=$lastmonth) and yxbm=1")->select();
+    foreach($bmfk_info as $v)
+	{
+	  unset($data);
+	  $data['account']=$v['apartment'];
+	  $yxchxz_info=$yxchxz_model->add($data);
+	  //if(!$yxchxz_info)
+        //echo "优秀部门限定初始化失败</br>";
+	}
+	//echo "优秀部长限定初始化结束</br>";
+  }
+ 
+  //函数，获取上月考核月份
+  private function funcgettime()
+  {
+	$control_model=new Model("Control");
+	$control_info=$control_model->find();
+	if(empty($control_info['month'])||empty($control_info['year']))
+	{
+		//echo "没有任何关于绩效考核的数据</br>";
+		return false;
+	}
+	$month=$control_info['month'];
+	$year=$control_info['year'];
+	$timeBase=mktime(0,0,0,$month,15,$year);
+	$control_info=$control_model->where("year!=$year and month!=$month")->select();
+	foreach($control_info as $v)
+	{
+		$month=$v['month'];
+		$year=$v['year'];
+		$time=mktime(0,0,0,$month,15,$year);
+		if($time>$timeBase)
+			$timeBase=$time;
+	}
+	$date=getdate($timeBase);
+	$arr=Array(
+		'year'=>$date['year'],
+		'month'=>$date['mon'],
+	);
+	return $arr;
+  }
+ 
   }
 ?>

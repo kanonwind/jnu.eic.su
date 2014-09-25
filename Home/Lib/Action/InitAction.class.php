@@ -501,18 +501,20 @@ class InitAction extends Action
 		}
 	}
   }
-  //时间获取函数
+   //时间获取函数
   private function funcsettime()
   {
-    $year=2014;//$_POST['year'];
-	$month=9;//$_POST['month'];
+    //$year=2014;//$_POST['year'];
+	//$month=9;//$_POST['month'];
+	$_POST['year'];
+	$_POST['month'];
 	$arr=Array(
 	  'year'=>$year,
 	  'month'=>$month,
 	);
 	return $arr;
   }
-  //删除某年某月绩效考核
+/*  //删除某年某月绩效考核
   public function unsetPerform()
   {
 	$arr=$this->funcsettime();
@@ -567,16 +569,28 @@ class InitAction extends Action
 	echo $year."年".$month."月的绩效考核数据删除完毕，可以重新启动该月份的绩效考核</br>";
   }
   //考核系统初始化阶段一
-  public function initPerform()
+  public function initPerform($year,$month)
   {
+ 	//拒绝未登录访问
+	session_name('LOGIN');
+    session_start();
+    if(!$this->judgelog())
+      $this->redirect('Login/index');	
+	$arr=$this->funcsettime();
+	if(empty($year)||empty($month))
+	{
+		echo "卡不开";return;
+	}
+	$control_model=new Model("Control");
+	$control_info=$control_model->where("year=$year and month=$month")->find();
+	$obj="阿里巴巴";
+	var_dump($obj);
+	return $obj;
 	//根据tbl_authority判断，若时间已经存在拒绝访问
 	//干事自评表，部长自评表，干事自评表，部长考核表，部门考核表
 	//开始一次绩效考核需要满足下面的条件：基本成员信息要求、该时间未考核过、系统不存在未结束的考核
 	$authority_model=new Model("Authority");
 	$flagInitPerform=1;
-	$arr=$this->funcsettime();
-	$year=$arr['year'];
-	$month=$arr['month'];
 	$authority_info=$authority_model->find();
 	if($authority_info['is_init']!=1)
 		$flagInitPerform=0;
@@ -610,12 +624,6 @@ class InitAction extends Action
 	$this->funcinitbmwg();
 	echo "完毕</br>";
   } 
-  //某年某月考核系统初始化阶段二
-  public function initYxbz()
-  {
- 
-	$this->funcinityxbz();
-  }
   //绩效考核初始化第一阶段，包括：干事自评表，部长自评表，干事考核表，部长考核表，部门考核表
   private function funcyjjh()
   {
@@ -1352,7 +1360,7 @@ class InitAction extends Action
 	);
 	return $arr;
   }
- //调用—_encode()函数，将数组进行编码转哈
+  *///调用—_encode()函数，将数组进行编码转哈
    private  function _encode($arr)
   {
     $na = array();
@@ -1372,12 +1380,7 @@ class InitAction extends Action
   }
   return urlencode($elem);
   }
-  //判断是否为管理员身份
-  private function judgeAdmin()
-  {
-	$admin_model=new Model("Admin");
-	
-  }
+
 }
 
 ?>
