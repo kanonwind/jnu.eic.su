@@ -6527,7 +6527,10 @@ function Show_KHJCKZ()
 			{
 				obj_KHJCKZ.KSKH = 1;//确定
 				if(Post_KHJCKZ(obj_KHJCKZ))
+				{
 					GetObjById("show_more").innerHTML = "";
+					afxTimeInfo=Get_Time();
+				}
 				else
 					alert("确定开始本月考核失败，请重试");
 			}
@@ -6545,7 +6548,10 @@ function Show_KHJCKZ()
 			{
 				obj_KHJCKZ.KSPD = 1;//确定
 				if(Post_KHJCKZ(obj_KHJCKZ))
+				{
 					GetObjById("show_more").innerHTML = "";
+					afxTimeInfo=Get_Time();
+				}
 				else
 					alert("开始优秀部长评定失败，请重试");
 			}
@@ -6567,7 +6573,10 @@ function Show_KHJCKZ()
 			{
 				obj_KHJCKZ.FBJG = 1;//确定
 				if(Post_KHJCKZ(obj_KHJCKZ))
+				{
 					GetObjById("show_more").innerHTML = "";
+					afxTimeInfo=Get_Time();
+				}
 				else
 					alert("发布结果失败，请重试");
 			}
