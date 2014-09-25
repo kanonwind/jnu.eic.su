@@ -2,7 +2,7 @@ window.onload=allocateSystemInit;
 
 var exChangedButton="cha_xun_ke_biao";
 var arrDepartName=new Array("秘书处","人力资源部","宣传部","信息编辑部","学术部",
-"体育部","KSC联盟","组织部","文娱部","公关部","心理服务部","主席团");
+"体育部","JDC","组织部","文娱部","公关部","心理服务部","主席团");
 var arrTypeName=new Array("干事","人力干事","部长级","主席团");
 var arrGenderName=new Array("不确定","女","男");
 //上课时间

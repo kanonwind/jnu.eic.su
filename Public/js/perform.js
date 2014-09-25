@@ -4,7 +4,7 @@ var year;//年份
 var month;//月份
 
 var arrDepartName=new Array("秘书处","人力资源部","宣传部","信息编辑部","学术部",
-"体育部","KSC联盟","组织部","文娱部","公关部","心理服务部","主席团");
+"体育部","JDC","组织部","文娱部","公关部","心理服务部","主席团");
 var arrTypeName=new Array("干事","人力干事","部长级","主席团");
 var arrWeiJiBiao=new Array("秘书处制度违纪登记表","人力资源部制度违纪登记表","宣传部制度违纪登记表","信息编辑部制度违纪登记表","公关部制度违纪登记表","司仪礼仪队违纪登记表");
 var afxTimeInfo;  
@@ -1219,6 +1219,7 @@ function Get_GSKHFK()
                     {"liuyan":"我喜欢你"},
                     {"liuyan":"烧死异性恋"},
                 ],
+                "qitaliyou":"其他情况加减分表,如果该干事的加减分的理由",
             };
             errmsg();
         }
@@ -1246,6 +1247,7 @@ function Get_GSKHFK()
 			this.bzpj.push(str);
 		}
 		this.liuyan=json_Get_GSKHFK.liuyan;
+        this.qitaliyou=json_Get_GSKHFK.qitaliyou;
 	}
 	
 	var obj = new obj_GSKHFK();
@@ -2516,7 +2518,9 @@ function Get_BZFK()
                 {"liuyan":"这个部门还是撤了吧- -"},
                 {"liuyan":"我上次活动的前还没报销呢"},
             ],
-            
+            "bzqitaliyou":"该部长,其他情况加减分的理由",
+            "weijiliyou":"该部门,各种违纪登记表扣分的理由,拼接成一个字符串,|隔开",
+            "bmqitaliyou":"该部门,其他情况加减分表的理由",
         };
         errmsg();
     }	
@@ -2590,7 +2594,17 @@ function Get_BZFK()
 		//这是部门得分细则数组，共八项，具体参看表格
 		this.ZhuGuanFuZhuXiBuMenPinJia = TranStr_Get(json_BZFK.ZhuGuanFuZhuXiBuMenPinJia);//主管副主席的部门评价
 		this.ZhuXiDeBuMenPinJia = TranStr_Get(json_BZFK.ZhuXiDeBuMenPinJia);//主席的部门评价
-	}
+        //其他情况加减分表,理由,部长自己的
+        if(json_BZKH.bzqitaliyou==""||json_BZKH.bzqitaliyou==" "||json_BZKH.bzqitaliyou=="无")
+        {
+            json_BZKH.bzqitaliyou="";
+        }
+        this.bzqitaliyou=json_BZFK.bzqitaliyou;
+        //其他情况加减分表,理由,部门的
+        this.bmqitaliyou=json_BZFK.bmqitaliyou;
+        //违纪理由
+        this.weijiliyou=json_BZFK.weijiliyou;
+    }
 	var objBZFK = new classBZFK();
 	return objBZFK;
 }
@@ -4435,7 +4449,7 @@ function Show_GSKHFK()
 	+"					<td>反馈加分</td><td><p>0.1/次</p><p>在外调反馈表或活动调研问卷中写的意见被活动部门采纳</p></td><td>" + objGSKHFK.arrDFXZ[5] + "</td><td></td>\n"
 	+"				</tr>\n"
 	+"				<tr>\n"
-	+"					<td>其他</td><td></td><td>" + objGSKHFK.arrDFXZ[6] + "</td><td></td>\n"
+	+"					<td>其他</td><td></td><td>" + objGSKHFK.arrDFXZ[6] + "</td><td>"+objGSKHFK.qitaliyou+"</td>\n"
 	+"				</tr>\n"
 	+"			</table>\n";
 
@@ -5577,7 +5591,7 @@ function Show_BZFK()
 				+"		<td>反馈加分</td><td><p>0.1/次</p><p>在外调反馈表或活动调研问卷中写的意见被活动部门采纳</p></td><td>"+obj_BZFK.arrDeFenXiZhe[6]+"</td><td></td>\n"
 				+"	</tr>\n"
 				+"	<tr>\n"
-				+"		<td>其他</td><td></td><td>"+obj_BZFK.arrDeFenXiZhe[7]+"</td><td></td>\n"
+				+"		<td>其他</td><td></td><td>"+obj_BZFK.arrDeFenXiZhe[7]+"</td><td>"+obj_BZFK.bzqitaliyou+"</td>\n"
 				+"	</tr>\n"
 				+"</table>\n"
 				
@@ -5659,7 +5673,8 @@ function Show_BZFK()
 					+"		<td>部门出勤</td><td><p>基本得分2分</p><p>A例会 大会 拓展（请假-0.1/人次，迟到-0.2/人次，缺席-0.3/人次）</p></td><td>"+obj_BZFK.arrBuMenDeFenXiZhe[2]+"</td><td><p>此统计还包括部长级例会的出勤情况（扣分情况与平时例会相同），外调缺席不扣部门出勤分<p></td>"
 					+"	</tr>"
 					+"	<tr>"
-					+"		<td>违反违规惩戒制度</td><td><p>包括秘书、人力、公关、信编和宣传的违规惩戒制度，具体扣分细则请看总群群共享上的《违规惩戒制度》</p></td><td>"+obj_BZFK.arrBuMenDeFenXiZhe[3]+"</td><td><p>此外调统计包括人力平时外调各部门干事，司仪、礼仪队的外调，信编拍照外调和人力观察员外调</p></td>"
+					+"		<td>违反违规惩戒制度</td><td><p>包括秘书、人力、公关、信编和宣传的违规惩戒制度，具体扣分细则请看总群群共享上的《违规惩戒制度》</p></td><td>"+obj_BZFK.arrBuMenDeFenXiZhe[3]
+                    +"</td><td><p>"+obj_BZFK.weijiliyou+"</p></td>"
 					+"	</tr>"
 					+"	<tr>"
 					+"		<td>反馈加分</td><td><p>0.1/人次</p><p>在外调反馈表或活动调研问卷中写的意见被活动部门采纳</p></td><td>"+obj_BZFK.arrBuMenDeFenXiZhe[4]+"</td><td></td>"
@@ -5670,7 +5685,7 @@ function Show_BZFK()
 					+"	<tr>"
 					+"		<td>优秀部长加分</td><td><p>0.2</p></td><td>"+obj_BZFK.arrBuMenDeFenXiZhe[6]+"</td><td></td>"
 					+"	</tr>"
-					+"		<td>其他</td><td></td><td>"+obj_BZFK.arrBuMenDeFenXiZhe[7]+"</td><td></td>"
+					+"		<td>其他</td><td></td><td>"+obj_BZFK.arrBuMenDeFenXiZhe[7]+"</td><td>"+obj_BZFK.bmqitaliyou+"</td>"
 					+"	</tr>"
 					+"</table>"
 					
