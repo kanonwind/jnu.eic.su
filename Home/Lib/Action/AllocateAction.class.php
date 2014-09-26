@@ -187,6 +187,8 @@ class AllocateAction extends Action
 			Array('qKongKe'=>3),
 		); */
 		//echo $this->_encode($arrKK);
+		$beginstamp=mktime($beginHour,$beginMin,0,$month,$day,$year);
+		$endstamp=mktime($endHour,$endMin,0,$month,$day,$year);
 		$timestamp=mktime(0,0,0,$month,$day,$year);
 		//星期几
 		$week=$arrWeek[date("w",$timestamp)];
@@ -219,6 +221,7 @@ class AllocateAction extends Action
 			foreach($timetable_info as $v)
 			{
 				$account=$v['account'];
+
 				$str=$v[$week];//找到要求的星期X的序列,长度为13，即一整天的课
 				//echo $account."的星期序列是：".$str."参与匹配的单双周是：".$arrParity[$parity]."</br>";
 				$num=0;//记录匹配中的次数
@@ -227,8 +230,17 @@ class AllocateAction extends Action
 					//echo $account."第".$i."节课的值是：".$str[$arrKK[$i]['qKongKe']]."</br>";
 					//匹配是否没课，匹配单双周情况
 					if($str[$arrKK[$i]['qKongKe']]==0 || $str[$arrKK[$i]['qKongKe']]==$arrParity[$parity])
-					{			
+					{
 						$num++;
+					}
+				}
+				$resource_info=$resource_model->where("account=$account and (year=$year and month=$month and day=$day)")->select();
+				foreach($resource_info as $v)
+				{
+					if($v['beginstamp']<$endstamp || $v['endstamp']>$beginstamp)
+					{
+						$num=0;
+						break;
 					}
 				}
 				//对符合度大于0的进行添加
@@ -269,6 +281,13 @@ class AllocateAction extends Action
 				'worktime'=>$year."-".$month."-".$day." ".$beginHour.":".$beginMin."--".$endHour.":".$endMin,
 				'apartment'=>$apartment,
 			),
+			"arrTime"=>Array(
+				"year"=>$year,
+				"month"=>$month,
+				"day"=>$day,
+				"beginstamp"=>$beginstamp,
+				"endstamp"=>$endstamp,
+			),
 		);
 
 		//返回JSON数据
@@ -287,6 +306,7 @@ class AllocateAction extends Action
 		$waccount=$_SESSION['account'];
 		$arrChar=Array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
 		$list=$_POST['jsonITList'];
+		$arrTime=$_POST['arrTime'];
 		$arrAllocRequire=$_POST['arrAllocRequire'];
 		if(!empty($list)&&!empty($arrAllocRequire))
 		{
@@ -304,13 +324,16 @@ class AllocateAction extends Action
 			{
 				$account=$list[$i]['strID'];
 				unset($data);
-				$data['year']=$year;
-				$data['month']=$month;
+				$data['year']=$arrTime['year'];
+				$data['month']=$arrTime['month'];
+				$data['day']=$arrTime['day'];
 				$data['account']=$account;
 				$data['waccount']=$waccount;
 				$data['code']=$code;
 				$data['create_time']=time();
 				$data['worktime']=$arrAllocRequire['worktime'];
+				$data['beginstamp']=$arrTime['beginstamp'];
+				$data['endstamp']=$arrTime['endstamp'];
 				$data['apartment']=$arrAllocRequire['apartment'];
 				$data['assess']=3;
 				$resource_model->data($data)->add();

@@ -13,6 +13,8 @@ var arrSKSJ=new Array({"b":480,"e":525},{"b":535,"e":580},{"b":600,"e":645},{"b"
 {"b":1140,"e":1185},{"b":1195,"e":1240},{"b":1250,"e":1295});
 //返回要求查询的条件worktime apartment，勾选并确定外调人员的时候再次发送
 var arrAllocRequire;
+//返回开始结束时间戳，并再次发送到服务器端
+var arrTime;
     
 function debug()
 {
@@ -195,7 +197,10 @@ function postAllocQueInfo(objQI)
             dataType:"json",
             type:"POST",
             success:function(result){jsonReturn=result;}
-        });		
+        });	
+		arrTime=jsonReturn.arrTime;
+		
+		//alert(jsonReturn.beginstamp+"baba"+jsonReturn.endstamp);
         //alert(jsonReturn.back);
         //alert("时间是："+jsonReturn.time+"星期"+jsonReturn.week);
         
@@ -281,6 +286,7 @@ function postAllocFormArr(arrIDList)
 	{
 		"jsonITList":jsonArr,
 		"arrAllocRequire":arrAllocRequire,
+		"arrTime":arrTime,
 	}
     console.log(jsonPOST);
 	//请求数据

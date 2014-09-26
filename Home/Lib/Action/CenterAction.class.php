@@ -305,34 +305,22 @@ class CenterAction extends Action
         session_start();
         if(!$this->judgelog())
             $this->redirect('Login/index');
-		/*
-		//不是js请求拒绝访问
-		if(empty($_GET['account']))
-			$this->redirect('Center/index');
-*/
 		//接收index脚本传过来的json数据,并将数据存入数据库中
 		$account=$_SESSION['account'];
-		/*
-		$date=Array
-		(
-			"account"=>$account,
-			"password"=>$_GET['password'],
-		);
-		*/
 		$person_model=M('Person');
 		$person_info=$person_model->where("account=$account")->find();
-		if($person_info['password']==$_GET['password'])
+		$password_base=$person_info['password'];
+		//判断是否密码==学号
+		if($password_base==$account)
+			$password_base=md5($password_base);		
+		if($password_base==$_POST['password'])
 			$flag=1;
 		else
 			$flag=0;
-		//var_dump($_POST['data']);
 		//flag为1表示正常
-		//$data=$_GET['name'];
-		$arr=Array('status'=>$flag,'password'=>$_GET['password'],'account'=>$_SESSION['account']);
-		//$arr=Array('status'=>$flag.$_GET['birthmonth']);
+		$status="JS传过来的是：".$_POST['password']."数据库里的是".$password_base;
+		$arr=Array('flag'=>$flag,"status"=>$status,);
 		echo $this->_encode($arr);
-		//echo json_encode($arr,JSON_UNESCAPED_UNICODE);
-
 	}
 	//修改密码
 	public function change()
@@ -342,24 +330,20 @@ class CenterAction extends Action
         session_start();
         if(!$this->judgelog())
             $this->redirect('Login/index');
-		/*
-		//不是js请求拒绝访问
-		if(empty($_GET['account']))
-			$this->redirect('Center/index');
-*/
-		//接收index脚本传过来的json数据,并将数据存入数据库中
 		$account=$_SESSION['account'];
-		$data['account']=$account;
-		$data['password']=$_GET['password'];//"2012052308";
+		$data['password']=$_POST['password'];//"2012052308";
 		$person_model=M('Person');
-		if($person_model->save($data))
+		$person_info=$person_model->where("account=$account")->save($data);
+		$person_info2=$person_model->where("account=$account")->find();
+		$password_base=$person_info2['password'];
+		$status="JS传过来的是：".$_POST['password']."数据库里的是".$password_base;
+		if(false==$person_info)
 			$flag=1;
 		else
 			$flag=0;
-		$arr=Array('account'=>$account,'status'=>$flag);
-		//$arr=Array('status'=>$flag.$_GET['birthmonth']);
+		$arr=Array('status'=>$status,'flag'=>$flag);
 		echo $this->_encode($arr);
-		//echo json_encode($arr,JSON_UNESCAPED_UNICODE);
+
 	}
 
 

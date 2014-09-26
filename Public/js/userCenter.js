@@ -132,20 +132,22 @@ function PostPersonalDataToServer(objPersonalData)
 function PostPassWordToServer(strAffirmPW)
 {
 	//alert(strAffirmPW);
-    strAffirmPW=hex_md5(strAffirmPW);
+    strAffirmPW=hex_md5(String(strAffirmPW));
     console.log(strAffirmPW);
 	var person_info=
 	{
-		"password":hex_md5(strAffirmPW),
+		"password":strAffirmPW,
 	};
 		var response;
 	    $.ajax({
 		url:URL+"/change",
 		data:person_info,
 		async:false,
+		type:"post",
 		dataType:"json",
 		success:function(result){response=result;}
 		});
+		
 		alert(response.status);
 	//判断新密码是否传递成功
 	if(1)
@@ -159,7 +161,7 @@ function PostPassWordToServer(strAffirmPW)
 function CheckPassWord(passWord)
 {
 	//写了才能触发
-    passWord=hex_md5(passWord);
+    passWord=hex_md5(String(passWord));
     console.log(passWord);
 	var person_info=
 	{
@@ -169,13 +171,14 @@ function CheckPassWord(passWord)
 	    $.ajax({
 		url:URL+"/check",
 		data:person_info,
+	    type:"post",
 		async:false,
 		dataType:"json",
 		success:function(result){response=result;}
 		});
 	////把密码发回服务器验证
-	//alert(response.status);
-	if(response.status){
+	alert(response.status);
+	if(1==response.flag){
 		alert("正确");
 		return true;}
 	else{
