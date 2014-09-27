@@ -34,7 +34,6 @@ class PerformAction extends Action
     session_start();
     if(!$this->judgelog())
       $this->redirect('Login/index'); 
-	
   $arr1=Array("秘书处","人力资源部","宣传部","信息编辑部","学术部","体育部","KSC联盟","组织部","文娱部","公关部","心理服务部","主席团");
   $arr2=Array("干事","人力干事","部长级","主席团");
 	//账号，时间

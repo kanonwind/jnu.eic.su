@@ -12,7 +12,24 @@ class AllocateAction extends Action
         session_start();
         if(!$this->judgelog())
             $this->redirect('Login/index');
-
+		if(!$this->judgelog())
+		{
+			//尚未登录
+			$link="<a class=\"user_info\" id=\"login_info_user_log_in\" href=\"".__APP__."/Login/index\">登录</a>";
+			$this->assign('link',$link);
+		}
+		else{
+			//个人信息
+			$account=$_SESSION['account'];
+			$person_model=new Model("Person");
+			$person_info=$person_model->where("account=$account")->find();
+			$name=$person_info['name'];
+			$link="<a class=\"user_info\" id=\"login_info_user_name\" href=\"#\">".$name."</a>";
+			$link.="<a class=\"user_info\" id=\"login_info_user_id\" href=\"#\">".$account."</a>";
+			$link.="<a class=\"user_info\" id=\"login_info_user_center\" href=\"".__APP__."/Center/index\">个人中心</a>";
+			$link.="<a class=\"user_info\" id=\"login_info_log_out\" href=\"".__APP__."/Login/logout\">注销</a>";
+			$this->assign('link',$link);
+		}
 		$account=$_SESSION['account'];
 		$person_model=new Model("Person");
 		$resource_model=new Model("Resource");
