@@ -152,96 +152,101 @@ function get_news()
 function NewsInit()
 {
     get_news();//获取新闻
-    
-    strInnerHTML=new String();
-    strInnerHTML+="<div id=\"main_news_div\">"    
-			+"		<img src=\""+newsImgURL+arrNewsText[0].newsPic+"\" id=\"midPic\" alt=\"newsPic\"/>"
-			+"		<img src=\""+newsImgURL+arrNewsText[1].newsPic+"\"\" id=\"leftPic\" alt=\"newsPic\"/>"
-			+"		<img src=\""+newsImgURL+arrNewsText[arrNewsText.length-1].newsPic+"\"\" id=\"rightPic\" alt=\"newsPic\"/>"							
-			+"		<div id=\"news_slide_button\">"
-			+"			<a id=\"pre_news\" href=\"javascript:\" style><img id=\"btn_pre\" src=\"http://jnueicsu-upload.stor.sinaapp.com/image/btn-carousel-prev.png\" /></a>"
-			+"			<a id=\"next_news\" href=\"javascript:\"><img id=\"btn_next\" src=\"http://jnueicsu-upload.stor.sinaapp.com/image/btn-carousel-next.png\" /></a>"
-			+"		</div>"
-			+"		<div id=\"mid_news_title\"><p id=\"mid_news_text\"></p></div>"
-			+"		<div id=\"left_news_title\"><p id=\"left_news_text\"></p></div>"
-			+"		<div id=\"right_news_title\"><p id=\"right_news_text\"></p></div>"	
-			+"		<div id=\"news\">"
-			+"			<p id=\"news_text\"></p>"
-			+"		</div>"
-			+"</div>";
-    
-    //return;
-    document.getElementById("slide_news").innerHTML=strInnerHTML;      
-	search();
-	objLeftPic = document.getElementById("leftPic");
-	objMidPic = document.getElementById("midPic");
-	objRightPic = document.getElementById("rightPic");
-	objLeftPic.style.left = "-550px";
-	objRightPic.style.left = "550px";
-	
-	
-	
-	objLeftNewsTitle = document.getElementById("left_news_title");
-	objMidNewsTitle = document.getElementById("mid_news_title");
-	objRightNewsTitle = document.getElementById("right_news_title");
-	objLeftNewsTitle.style.left = "-550px";	
-	objRightNewsTitle.style.left = "550px";
-	document.getElementById("left_news_text").innerHTML = arrNewsTitle[iPicSum-1];
-	document.getElementById("mid_news_text").innerHTML = arrNewsTitle[0];
-	document.getElementById("right_news_text").innerHTML = arrNewsTitle[1];
-	
-	window.onfocus = function(){boolIsFocus=true; RotateNews();}
-	window.onblur= function(){boolIsFocus=false;}
-	if (navigator.userAgent.indexOf("Chrome")>=0) //判断是否为Chrome浏览器
-	{
-		RotateNews();
-	}
-	
-	IsOnNewPic();//判断鼠标是否位于新闻div块上，如果是则不自动滑动
-	
-	document.getElementById("btn_pre").onclick = function(){PreNewsPicture();}
-	document.getElementById("btn_next").onclick = function(){NextNewsPicture();}
-	
-	document.getElementById("pre_news").onmouseover = function(){boolIsOnBtn_pre = true;this.style.background="black";}
-	document.getElementById("next_news").onmouseover = function(){boolIsOnBtn_next = true;this.style.background="black";}
-	document.getElementById("pre_news").onmouseout = function()
-	{
-		boolIsOnBtn_pre = false;
-		this.style.background=arrColor[iIndexPic];
-	}
-	document.getElementById("next_news").onmouseout = function()
-	{
-		boolIsOnBtn_next = false;
-		this.style.background=arrColor[iIndexPic];
-	}	
-	
-	//显示新闻
-	document.getElementById("mid_news_title").onmouseover = function()
-	{
-		var strTop = getCSSValue(document.getElementById("news"), "top")
-		if(strTop == "342px")
+    try{
+		strInnerHTML=new String();
+		strInnerHTML+="<div id=\"main_news_div\">"    
+				+"		<img src=\""+newsImgURL+arrNewsText[0].newsPic+"\" id=\"midPic\" alt=\"newsPic\"/>"
+				+"		<img src=\""+newsImgURL+arrNewsText[1].newsPic+"\"\" id=\"leftPic\" alt=\"newsPic\"/>"
+				+"		<img src=\""+newsImgURL+arrNewsText[arrNewsText.length-1].newsPic+"\"\" id=\"rightPic\" alt=\"newsPic\"/>"							
+				+"		<div id=\"news_slide_button\">"
+				+"			<a id=\"pre_news\" href=\"javascript:\" style><img id=\"btn_pre\" src=\"http://jnueicsu-upload.stor.sinaapp.com/image/btn-carousel-prev.png\" /></a>"
+				+"			<a id=\"next_news\" href=\"javascript:\"><img id=\"btn_next\" src=\"http://jnueicsu-upload.stor.sinaapp.com/image/btn-carousel-next.png\" /></a>"
+				+"		</div>"
+				+"		<div id=\"mid_news_title\"><p id=\"mid_news_text\"></p></div>"
+				+"		<div id=\"left_news_title\"><p id=\"left_news_text\"></p></div>"
+				+"		<div id=\"right_news_title\"><p id=\"right_news_text\"></p></div>"	
+				+"		<div id=\"news\">"
+				+"			<p id=\"news_text\"></p>"
+				+"		</div>"
+				+"</div>";
+		
+		//return;
+		document.getElementById("slide_news").innerHTML=strInnerHTML;      
+		search();
+		objLeftPic = document.getElementById("leftPic");
+		objMidPic = document.getElementById("midPic");
+		objRightPic = document.getElementById("rightPic");
+		objLeftPic.style.left = "-550px";
+		objRightPic.style.left = "550px";
+		
+		
+		
+		objLeftNewsTitle = document.getElementById("left_news_title");
+		objMidNewsTitle = document.getElementById("mid_news_title");
+		objRightNewsTitle = document.getElementById("right_news_title");
+		objLeftNewsTitle.style.left = "-550px";	
+		objRightNewsTitle.style.left = "550px";
+		document.getElementById("left_news_text").innerHTML = arrNewsTitle[iPicSum-1];
+		document.getElementById("mid_news_text").innerHTML = arrNewsTitle[0];
+		document.getElementById("right_news_text").innerHTML = arrNewsTitle[1];
+		
+		window.onfocus = function(){boolIsFocus=true; RotateNews();}
+		window.onblur= function(){boolIsFocus=false;}
+		if (navigator.userAgent.indexOf("Chrome")>=0) //判断是否为Chrome浏览器
 		{
-			ShowNews(document.getElementById("news"));
-			booIsNewsShow = true;
-		}
-	}
-	//隐藏新闻
-	document.getElementById("news").onmouseout = function(e)
-	{
-		var strTop = getCSSValue(this, "top")		
-		if(strTop == "0px")
-		{
-			var yPos = GetOffset(e);
-			if(yPos >= 342)
-			{
-				HideNews(this);
-			}
-			if(e.clientX < 213 || e.clientX > 765)
-			{	
-				HideNews(this);
-			}
+			RotateNews();
 		}
 		
+		IsOnNewPic();//判断鼠标是否位于新闻div块上，如果是则不自动滑动
+		
+		document.getElementById("btn_pre").onclick = function(){PreNewsPicture();}
+		document.getElementById("btn_next").onclick = function(){NextNewsPicture();}
+		
+		document.getElementById("pre_news").onmouseover = function(){boolIsOnBtn_pre = true;this.style.background="black";}
+		document.getElementById("next_news").onmouseover = function(){boolIsOnBtn_next = true;this.style.background="black";}
+		document.getElementById("pre_news").onmouseout = function()
+		{
+			boolIsOnBtn_pre = false;
+			this.style.background=arrColor[iIndexPic];
+		}
+		document.getElementById("next_news").onmouseout = function()
+		{
+			boolIsOnBtn_next = false;
+			this.style.background=arrColor[iIndexPic];
+		}	
+		
+		//显示新闻
+		document.getElementById("mid_news_title").onmouseover = function()
+		{
+			var strTop = getCSSValue(document.getElementById("news"), "top")
+			if(strTop == "342px")
+			{
+				ShowNews(document.getElementById("news"));
+				booIsNewsShow = true;
+			}
+		}
+		//隐藏新闻
+		document.getElementById("news").onmouseout = function(e)
+		{
+			var strTop = getCSSValue(this, "top")		
+			if(strTop == "0px")
+			{
+				var yPos = GetOffset(e);
+				if(yPos >= 342)
+				{
+					HideNews(this);
+				}
+				if(e.clientX < 213 || e.clientX > 765)
+				{	
+					HideNews(this);
+				}
+			}
+			
+		}
+	}catch(err)
+	{
+		console.log(err);
+		console.log("新闻加载失败");
 	}
 }
 
