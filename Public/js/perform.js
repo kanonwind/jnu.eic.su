@@ -1062,7 +1062,7 @@ function Get_GSZP()
 		this.arrDBZPJ = new Array();
 		for(var i = 0; i < json_Get_GSZP.DBZPJ.length; ++i)
 		{
-			this.arrDBZPJ.push(new DBZPJ(json_Get_GSZP.DBZPJ[i].name,json_Get_GSZP.DBZPJ[i].account, json_Get_GSZP.DBZPJ[i].fs, json_Get_GSZP.DBZPJ[i].pj));
+			this.arrDBZPJ.push(new DBZPJ(json_Get_GSZP.DBZPJ[i].name,json_Get_GSZP.DBZPJ[i].account, json_Get_GSZP.DBZPJ[i].fs, TranStr_Get(json_Get_GSZP.DBZPJ[i].pj)));
 		}
 	}
 	
@@ -1232,22 +1232,22 @@ function Get_GSKHFK()
 		//得分细节
 		this.arrDFXZ = new Array(json_Get_GSKHFK.DFXJ[0].a, json_Get_GSKHFK.DFXJ[0].b, json_Get_GSKHFK.DFXJ[0].c, json_Get_GSKHFK.DFXJ[0].d, json_Get_GSKHFK.DFXJ[0].e, json_Get_GSKHFK.DFXJ[0].f, json_Get_GSKHFK.DFXJ[0].g);
 		
-		this.zwpj = TranStr_Post(json_Get_GSKHFK.zwpj); //自我评价
+		this.zwpj = TranStr_Get(json_Get_GSKHFK.zwpj); //自我评价
 		this.qtgspj = new Array();
 		for(var i = 0; i < json_Get_GSKHFK.qtgspj.length; ++i)
 		{
-			var str = TranStr_Post(json_Get_GSKHFK.qtgspj[i].pj);
+			var str = TranStr_Get(json_Get_GSKHFK.qtgspj[i].pj);
 			this.qtgspj.push(str);		
 		}
 		
 		this.bzpj = new Array();
 		for(var i = 0; i < json_Get_GSKHFK.bzpj.length; ++i)
 		{
-			var str = TranStr_Post(json_Get_GSKHFK.bzpj[i].bzpj);
+			var str = TranStr_Get(json_Get_GSKHFK.bzpj[i].bzpj);
 			this.bzpj.push(str);
 		}
-		this.liuyan=json_Get_GSKHFK.liuyan;
-        this.qitaliyou=json_Get_GSKHFK.qitaliyou;
+		this.liuyan=TranStr_Get(json_Get_GSKHFK.liuyan);
+        this.qitaliyou=TranStr_Get(json_Get_GSKHFK.qitaliyou);
 	}
 	
 	var obj = new obj_GSKHFK();
