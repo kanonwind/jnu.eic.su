@@ -2595,9 +2595,9 @@ function Get_BZFK()
 		this.ZhuGuanFuZhuXiBuMenPinJia = TranStr_Get(json_BZFK.ZhuGuanFuZhuXiBuMenPinJia);//主管副主席的部门评价
 		this.ZhuXiDeBuMenPinJia = TranStr_Get(json_BZFK.ZhuXiDeBuMenPinJia);//主席的部门评价
         //其他情况加减分表,理由,部长自己的
-        if(json_BZKH.bzqitaliyou==""||json_BZKH.bzqitaliyou==" "||json_BZKH.bzqitaliyou=="无")
+        if(json_BZFK.bzqitaliyou==""||json_BZFK.bzqitaliyou==" "||json_BZFK.bzqitaliyou=="无")
         {
-            json_BZKH.bzqitaliyou="";
+            json_BZFK.bzqitaliyou="";
         }
         this.bzqitaliyou=json_BZFK.bzqitaliyou;
         //其他情况加减分表,理由,部门的
@@ -3163,7 +3163,7 @@ function Get_BMKH()
 		
 		function obj_BM(BM)
 		{
-			this.bm = TranDigToText(BM.bm); //部门名字
+			this.bm = arrDepartName[BM.bm-1]; //部门名字
 			this.pj = TranStr_Get(BM.pj);
 			this.df0 = BM.df0; //工作量/工作难度
 			this.df1 = BM.df1; //工作完成效果
@@ -6990,7 +6990,7 @@ function Show_CKWWCQK()
 			strHtml+="否";
 		}
 		strHtml+="</td><td>";
-		if(obj_CKWWCQK.statusBZZP==0)
+		if(obj_CKWWCQK.statusGSZP==0)
 		{
 			strHtml+="是";
 		}
@@ -7026,7 +7026,7 @@ function Show_CKWWCQK()
 			strHtml+="否";
 		}
 		strHtml+="</td><td>";
-		if(obj_CKWWCQK.statusGSKH==0)
+		if(obj_CKWWCQK.statusGSZP==0)
 		{
 			strHtml+="是";
 		}
@@ -7062,7 +7062,7 @@ function Show_CKWWCQK()
 			strHtml+="否";
 		}
 		strHtml+="</td><td>";
-		if(obj_CKWWCQK.statusBZKH==0)
+		if(obj_CKWWCQK.statusGSZP==0)
 		{
 			strHtml+="是";
 		}
@@ -7097,7 +7097,7 @@ function Show_CKWWCQK()
 			strHtml+="否";
 		}
 		strHtml+="</td><td>";
-		if(obj_CKWWCQK.statusBMKH==0)
+		if(obj_CKWWCQK.statusGSZP==0)
 		{
 			strHtml+="是";
 		}

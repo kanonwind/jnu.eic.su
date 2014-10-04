@@ -180,7 +180,7 @@ window.onload=function()
                 //不允许主管超过两个部门
                 for(var i=0;i<arrChecked.length;++i)
                 {
-                    if(arrChecked[i].arrZGBM.length>2||arrChecked[i].arrZGBM.length<1)
+                    if(arrChecked[i].arrZGBM.length>3||arrChecked[i].arrZGBM.length<1)
                     {
                         alert("主席团第"+(i+1)+"个成员的主管部门数目不科学");
                         return false;
@@ -271,7 +271,7 @@ window.onload=function()
             console.log(arrChecked);
             console.log(arrGJBM);
             console.log(jsonWJDJ);
-			if(true==PostBindInfo(chmId, arrChecked,arrGJBM,jsonWJDJ))
+			if(0==PostBindInfo(chmId, arrChecked,arrGJBM,jsonWJDJ))
 			{
 				alert("提交成功!");
 			}

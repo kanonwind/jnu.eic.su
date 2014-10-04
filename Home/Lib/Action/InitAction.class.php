@@ -120,17 +120,12 @@ class InitAction extends Action
 		$account=$v['account'];
 		$name=$v['name'];
 		$president_info=$president_model->where("account=$account")->find();
-		if($president_info['apartment1']!=0)
+		$presidentArr=explode("|",$president_info['apartment']);
+		for($i=0;$i<count($presidentArr);$i++)
 		{
-			$department[]=Array(
-				'num'=>$president_info['apartment1'],
-			);
-		}
-		if($president_info['apartment2']!=0)
-		{
-			$department[]=Array(
-				'num'=>$president_info['apartment2'],
-			);
+				$department[]=Array(
+					'num'=>$presidentArr[$i],
+				);
 		}
 		$arrZXT[]=Array(
 			'account'=>$account,
@@ -233,22 +228,15 @@ class InitAction extends Action
 	{
 		unset($data);
 		$zxt_account=$arrZXT[$i]['account'];
-		if(count($arrZXT[$i]['arrZGBM'])==1)
+		for($k=0;$k<count($arrZXT[$i]['arrZGBM']);$k++)
 		{
-			$data['apartment1']=$arrZXT[$i]['arrZGBM'][0]['num'];
-			$data['apartment2']=0;
-			$president_info=$president_model->where("account=$zxt_account")->save($data);
-			if(false==$president_info)
-				$flagCrud=0;
+			$apartmentArr.="|".$arrZXT[$i]['arrZGBM'][$k]['num'];
 		}
-		else
-		{
-			$data['apartment1']=$arrZXT[$i]['arrZGBM'][0]['num'];
-			$data['apartment2']=$arrZXT[$i]['arrZGBM'][1]['num'];
-			$president_info=$president_model->where("account=$zxt_account")->save($data);
-			if(false==$president_info)
+		$data['apartment']=$apartmentArr;
+		$president_info=$president_model->where("account=$zxt_account")->save($data);
+		if(false==$president_info)
 				$flagCrud=0;
-		}
+		unset($apartmentArr);
 	}
 	//人力跟进部门,
 	$arrRLGS=$_POST['arrRLGS'];
@@ -281,8 +269,81 @@ class InitAction extends Action
 	);
 	echo $this->_encode($arr);
   }  
- //人员信息初始化
-  private function initPerson()
+  //人员信息初始化：一般干事
+  public function initPersonSecond()
+  {
+	$person_model=new Model("Person");
+	$authority_model=new Model("Authority");
+	echo "一般干事信息初始化开始</br>";
+	$flagInitPerson=1;
+	$person_info=$person_model->where("apartment!=2 and type=1")->select();
+	if(count($person_info)>0)
+	{
+		$flagInitPerson=2;
+		echo "数据库表tbl_person已有数据，成员添加失败</br>";
+		return;
+	}
+	//添加秘书处干事
+	$this->initPersonCrud("2013053193","韦长杰",1,1,$flagInitPerson);
+	$this->initPersonCrud("2013053073","张春梅",1,1,$flagInitPerson);
+	$this->initPersonCrud("2013053089","黄芷然",1,1,$flagInitPerson);	
+	//添加宣传部成员
+	$this->initPersonCrud("2013053101","陈焕杰",1,3,$flagInitPerson);
+	$this->initPersonCrud("2013052974","崔良梁",1,3,$flagInitPerson);
+	$this->initPersonCrud("2013053004","郭雪瑶",1,3,$flagInitPerson);
+	//添加信息编辑部成员
+	$this->initPersonCrud("2013052952","薛梦钰",1,4,$flagInitPerson);
+	$this->initPersonCrud("2013053166","李露",1,4,$flagInitPerson);
+	$this->initPersonCrud("2013053149","罗婕",1,4,$flagInitPerson);
+	//添加学术部成员
+	$this->initPersonCrud("2013053167","张丹",1,5,$flagInitPerson);
+	$this->initPersonCrud("2013053145","伍书怡",1,5,$flagInitPerson);
+	$this->initPersonCrud("2013053202","方力",1,5,$flagInitPerson);
+	//添加体育部成员
+	$this->initPersonCrud("2013053123","李佳",1,6,$flagInitPerson);
+	$this->initPersonCrud("2013053037","陈高敏",1,6,$flagInitPerson);
+	$this->initPersonCrud("2013053213","古博珊",1,6,$flagInitPerson);
+	//添加KSC联盟
+	$this->initPersonCrud("2013052990","蓝梓蓉",1,7,$flagInitPerson);
+	$this->initPersonCrud("2013052449","李耀猛",1,7,$flagInitPerson);
+	$this->initPersonCrud("2013053220","莫敏华",1,7,$flagInitPerson);
+	//添加组织部成员
+	$this->initPersonCrud("2013053017","李荣荣",1,8,$flagInitPerson);
+	$this->initPersonCrud("2013053228","张锴翰",1,8,$flagInitPerson);
+	$this->initPersonCrud("2013053107","王俊淞",1,8,$flagInitPerson);
+	//添加文娱部成员
+	$this->initPersonCrud("2013053028","吴梦宇",1,9,$flagInitPerson);
+	$this->initPersonCrud("2013053110","周开泰",1,9,$flagInitPerson);
+	$this->initPersonCrud("2013053232","吴国山",1,9,$flagInitPerson);
+	//添加公关部成员
+	$this->initPersonCrud("2013053117","李雁婷",1,10,$flagInitPerson);
+	$this->initPersonCrud("2013053111","王冕",1,10,$flagInitPerson);
+	$this->initPersonCrud("2013053057","李澳",1,10,$flagInitPerson);
+	//添加心理服务部成员
+	$this->initPersonCrud("2013053174","谢思维",1,11,$flagInitPerson);
+	$this->initPersonCrud("2013052297","陈昱栋",1,11,$flagInitPerson);
+	$this->initPersonCrud("2013053008","梁茗皓",1,11,$flagInitPerson);
+	echo "一般干事信息初始化完成</br>";
+	if($flagInitPerson==1)
+	{
+		echo "本次成员信息初始化成功</br>";
+		unset($data);
+		$data['is_init']=1;
+		$authority_model->where("id>0")->data($data)->save();
+		$this->initTable();
+	}
+	else if($flagInitPerson==0)
+	{
+		$person_model->where("account!=0")->delete();
+		$timetable_model->where("account!=0")->delete();
+		$rlgj_model->where("account!=0")->delete();
+		$president_model->where("account!=0")->delete();
+		$bmwgfzr_model->where("account!=0")->delete();
+		echo "本次一般干事信息初始化失败</br>";
+	}
+  }
+ //人员信息初始化：主席团，部长级，人力干事
+  public function initPerson()
   {
     //按照格式添加数据,参数分别为：账号，名字，类型，标志参数
 	//类型1代表非人力干事,2代表人力干事,3代表部长级,4代表主席团
@@ -314,9 +375,7 @@ class InitAction extends Action
 	//添加秘书处成员
 	$this->initPersonCrud("2012052297","田聪聪",3,1,$flagInitPerson);
 	$this->initPersonCrud("2012052345","吴英文",3,1,$flagInitPerson);
-	$this->initPersonCrud("2013053193","韦长杰",1,1,$flagInitPerson);
-	$this->initPersonCrud("2013053073","张春梅",1,1,$flagInitPerson);
-	$this->initPersonCrud("2013053089","黄芷然",1,1,$flagInitPerson);
+
 	//添加人力资源部成员
 	$this->initPersonCrud("2012052180","卢思翰",3,2,$flagInitPerson);
 	$this->initPersonCrud("2012052195","陈蔚",3,2,$flagInitPerson);
@@ -334,57 +393,29 @@ class InitAction extends Action
 	//添加宣传部成员
 	$this->initPersonCrud("2012052201","陈杰东",3,3,$flagInitPerson);
 	$this->initPersonCrud("2012052331","周敏妹",3,3,$flagInitPerson);
-	$this->initPersonCrud("2013053101","陈焕杰",1,3,$flagInitPerson);
-	$this->initPersonCrud("2013052974","崔良梁",1,3,$flagInitPerson);
-	$this->initPersonCrud("2013053004","郭雪瑶",1,3,$flagInitPerson);
 	//添加信息编辑部成员
 	$this->initPersonCrud("2012052358","周嘉林",3,4,$flagInitPerson);
 	$this->initPersonCrud("2012052306","彭冬毡",3,4,$flagInitPerson);
-	$this->initPersonCrud("2013052952","薛梦钰",1,4,$flagInitPerson);
-	$this->initPersonCrud("2013053166","李露",1,4,$flagInitPerson);
-	$this->initPersonCrud("2013053149","罗婕",1,4,$flagInitPerson);
 	//添加学术部成员
 	$this->initPersonCrud("2012052254","冯永钊",3,5,$flagInitPerson);
 	$this->initPersonCrud("2012052377","余枚佳",3,5,$flagInitPerson);
-	$this->initPersonCrud("2013053167","张丹",1,5,$flagInitPerson);
-	$this->initPersonCrud("2013053145","伍书怡",1,5,$flagInitPerson);
-	$this->initPersonCrud("2013053202","方力",1,5,$flagInitPerson);
 	//添加体育部成员
 	$this->initPersonCrud("2013053160","伍亚星",3,6,$flagInitPerson);
-	$this->initPersonCrud("2012052281","袁月明",3,6,$flagInitPerson);
-	$this->initPersonCrud("2013053123","李佳",1,6,$flagInitPerson);
-	$this->initPersonCrud("2013053037","陈高敏",1,6,$flagInitPerson);
-	$this->initPersonCrud("2013053213","古博珊",1,6,$flagInitPerson);
 	//添加KSC联盟
 	$this->initPersonCrud("2012053245","苗效毅",3,7,$flagInitPerson);
 	$this->initPersonCrud("2012052275","庄双玲",3,7,$flagInitPerson);
-	$this->initPersonCrud("2013052990","蓝梓蓉",1,7,$flagInitPerson);
-	$this->initPersonCrud("2013052449","李耀猛",1,7,$flagInitPerson);
-	$this->initPersonCrud("2013053220","莫敏华",1,7,$flagInitPerson);
 	//添加组织部成员
 	$this->initPersonCrud("2012052194","陈慧莹",3,8,$flagInitPerson);
 	$this->initPersonCrud("2012052206","叶伟珊",3,8,$flagInitPerson);
-	$this->initPersonCrud("2013053017","李荣荣",1,8,$flagInitPerson);
-	$this->initPersonCrud("2013053228","张锴翰",1,8,$flagInitPerson);
-	$this->initPersonCrud("2013053107","王俊淞",1,8,$flagInitPerson);
 	//添加文娱部成员
 	$this->initPersonCrud("2012052364","陈敏慧",3,9,$flagInitPerson);
 	$this->initPersonCrud("2012052321","李慈",3,9,$flagInitPerson);
-	$this->initPersonCrud("2013053028","吴梦宇",1,9,$flagInitPerson);
-	$this->initPersonCrud("2013053110","周开泰",1,9,$flagInitPerson);
-	$this->initPersonCrud("2013053232","吴国山",1,9,$flagInitPerson);
 	//添加公关部成员
 	$this->initPersonCrud("2012052296","苏迪",3,10,$flagInitPerson);
 	$this->initPersonCrud("2012052348","曾炜瑶",3,10,$flagInitPerson);
-	$this->initPersonCrud("2013053117","李雁婷",1,10,$flagInitPerson);
-	$this->initPersonCrud("2013053111","王冕",1,10,$flagInitPerson);
-	$this->initPersonCrud("2013053057","李澳",1,10,$flagInitPerson);
 	//添加心理服务部成员
 	$this->initPersonCrud("2012053239","杨帅",3,11,$flagInitPerson);
 	$this->initPersonCrud("2012052294","田淼蕾",3,11,$flagInitPerson);
-	$this->initPersonCrud("2013053174","谢思维",1,11,$flagInitPerson);
-	$this->initPersonCrud("2013052297","陈昱栋",1,11,$flagInitPerson);
-	$this->initPersonCrud("2013053008","梁茗皓",1,11,$flagInitPerson);
 	echo "成员信息初始化完成</br>";
 	if($flagInitPerson==1)
 	{
@@ -422,7 +453,7 @@ class InitAction extends Action
 		if(false==$person_info)
 		{
 			$flagInitPerson=0;	
-			echo "成员添加出错：".$account."</br>"."检查程序并清空数据库表tbl_person</br>";
+			echo "成员添加出错：".$name."</br>"."检查程序并清空数据库表tbl_person</br>";
 		
 		}
 	}
@@ -439,7 +470,9 @@ class InitAction extends Action
 		$add_account=$v['account'];
 		unset($data);
 		$data['account']=$add_account;
-		$timetable_model->data($data)->add();
+		$timetable_info=$timetable_model->where("account=$add_account")->find();
+		if(false==$timetable_info)
+			$timetable_model->data($data)->add();
 	}
   }
   //人力干事跟进部门初始化
@@ -471,8 +504,7 @@ class InitAction extends Action
 	{
 	  unset($data);
 	  $data['account']=$v['account'];
-	  $data['apartment1']=1;
-	  $data['apartment2']=2;
+	  $data['apartment']="|1";
 	  $data['is_sub']='y';
 	  $president_info=$president_model->add($data);
 	  if(!$president_info)

@@ -657,6 +657,12 @@ function showChaXunKeBiao()
         {
             str_tips+="第"+(d1.getWeekOfYear(1)-d0.getWeekOfYear(1)+1)+"周,双周";
         }
+		today=new Date();
+		if( (today.getMonth()>tips_qMonth)||
+			(today.getMonth()=tips_qMonth&&today.getDate()>tips_qDay) )
+		{
+			str_tips+="日期早于今天，不科学";
+		}
         //计算是星期几
         var arrAloMonth=[-1,11,12,1,2,3,4,5,6,7,8,9,10];
         tips_qMonth=arrAloMonth[tips_qMonth];
@@ -743,6 +749,13 @@ function showChaXunKeBiao()
 				this.qGender=parseInt($("#teshu_sex").val());
 			}
 			var objQI=new objQueInfo();
+			today = new Date();
+			qday=new Date(objQI.qYear,ObjQI.qMonth,ObjQI.qDay,objQI.qEndHour,objQI.qEndMin);
+			if(today.parse()>=qday.parse())
+			{
+				alert("查询时间早于当前!");
+				return false;
+			}
 			var arrResponse = postAllocQueInfo(objQI);
 			if(arrResponse.length!=0)
 			{
