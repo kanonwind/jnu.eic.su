@@ -183,8 +183,7 @@ KSC联盟：7
 tbl_president
 {
 account pk//学号，
-apartment1//部门1
-apartment2//部门2
+apartment//12表示部门1和部门2,159表示部门1，部门5和部门9。必须主管一个部门，数量不限。
 is_sub//是不是小boss,y表示主管两个部门，n表示主管所有部门
 }
 不止是主席团要后台指定，人力干事的跟进也要后台指定

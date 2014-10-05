@@ -9,6 +9,7 @@ var arrTypeName=new Array("干事","人力干事","部长级","主席团");
 var arrWeiJiBiao=new Array("秘书处制度违纪登记表","人力资源部制度违纪登记表","宣传部制度违纪登记表","信息编辑部制度违纪登记表","公关部制度违纪登记表","司仪礼仪队违纪登记表");
 var afxTimeInfo;  
 var afxUserTableLst;
+var afxCurTableIdx=0;
 
 function debug()
 {
@@ -466,7 +467,7 @@ function AutoHideHead()
 	}
 }
 
-//左边按钮去响应
+//左边按钮区响应
 function ActiveTableButton()
 {
 	var arrTable = afxUserTableLst;
@@ -499,7 +500,7 @@ function ActiveTableButton()
 			iCurTable = parseInt(arr[1]);
 			
 			ChangStyle(iPreTable, iCurTable);//改变当前激活的按钮的样式
-			
+			afxCurTableIdx=iCurTable;
 			SelectTime(iCurTable);//处理当前被激活的按钮对应的信息
 			begin = new Date();
 			GetObjById("show_more").innerHTML = "";
@@ -593,7 +594,7 @@ function SelectTime(iCurShowFunction)
 	}
 	var timeType = TimeType(btnText);
     var time=afxTimeInfo[timeType];
-	
+	console.log(time);
 	$("#year").html("");
 	$("#month").html("");
 	
@@ -625,6 +626,8 @@ function SelectTime(iCurShowFunction)
 	
     $("#year").change(function(){
         $("#month").html("");
+		btnx=afxUserTableLst[afxCurTableIdx];
+		time=afxTimeInfo[TimeType(btnx)];
         var index=$(this).prop("selectedIndex");
         for(var i=0;i<time[index].arrMonth.length;i++)
         {
@@ -3607,27 +3610,6 @@ function Get_YXPDXZ()
 		//alert(obj.str);
 		var json_Get_YXPDXZ = obj;
 		
-		for(var i  = 0; i < json_Get_YXPDXZ.arrDepart.length; ++i)
-		{
-			json_Get_YXPDXZ.arrDepart[i].depart = TranDigToText(json_Get_YXPDXZ.arrDepart[i].depart);
-			//alert(json_Get_YXPDXZ.arrDepart[i].depart);
-			for(var j = 0; j < json_Get_YXPDXZ.arrDepart[i].arrPersons.length; ++j)
-			{
-				if(json_Get_YXPDXZ.arrDepart[i].arrPersons[j].check == 1)
-					json_Get_YXPDXZ.arrDepart[i].arrPersons[j].check = true;
-				else	
-					json_Get_YXPDXZ.arrDepart[i].arrPersons[j].check = false;
-			}
-		}
-		for(var k = 0; k < json_Get_YXPDXZ.arrBMPD.length; ++k)
-		{
-			json_Get_YXPDXZ.arrBMPD[k].depart = TranDigToText(json_Get_YXPDXZ.arrBMPD[k].depart);
-			if(json_Get_YXPDXZ.arrBMPD[k].check == 1)
-				json_Get_YXPDXZ.arrBMPD[k].check = true;
-			else
-				json_Get_YXPDXZ.arrBMPD[k].check = false;
-		}
-		
 	}
     catch(err)
     {
@@ -3640,7 +3622,7 @@ function Get_YXPDXZ()
             "arrDepart"://部门数组
             [
                 {
-                    "depart":"部门",//部门名字
+                    "depart":"1",//部门名字
                     "arrPersons"://一个部门中的人的数组
                     [
                         {"name":"部长", "account":2013042212, "check":true},
@@ -3653,8 +3635,8 @@ function Get_YXPDXZ()
             
             "arrBMPD"://部门评定限制
             [
-                {"depart":"部门", "check":true},//部门名字，是否选中
-                {"depart":"部门", "check":true},//部门名字，是否选中
+                {"depart":"1", "check":true},//部门名字，是否选中
+                {"depart":"2", "check":true},//部门名字，是否选中
                 
             ],
         };
@@ -3669,57 +3651,12 @@ function Post_YXPDXZ(obj_YXPDXZ)
 {
 	//应该可以直接传obj_YXPDXZ对象回去，因为这个就是json对象格式的，可以不用进行下面的转换
 	
-	/*var _arrDepart = new Array();
-	for(var i = 0; i < obj_YXPDXZ.arrDepart.length; ++i)
-	{
-		_arrPersons = new Array();
-		for(var j = 0; j < obj_YXPDXZ.arrDepart[i].arrPersons.length; ++j)
-		{
-			_arrPersons.push({"name":obj_YXPDXZ.arrDepart[i].arrPersons[j].name,
-							  "account":obj_YXPDXZ.arrDepart[i].arrPersons[j].account,
-							  "check":obj_YXPDXZ.arrDepart[i].arrPersons[j].check});
-		}
-		_arrDepart.push({"depart":obj_YXPDXZ.arrDepart[i].depart, 
-						 "arrPersons":_arrPersons});
-	}
-	
-	var _arrBMPD = new Array();//部门评定限制
-	for(var i = 0; i < obj_YXPDXZ.arrBMPD.length; ++i)
-	{
-		_arrBMPD.push({"depart":obj_YXPDXZ.arrBMPD[i].depart, "check":obj_YXPDXZ.arrBMPD[i].check});
-	}
-	
-	var json_Post_YXPDXZ = 
-	{
-		"status":obj_YXPDXZ.status,//是否可填写状态
-		"arrDepart":_arrDepart,//部门数组
-		"arrBMPD":_arrBMPD,//部门评定限制
-	};*/
-	
-	for(var i  = 0; i < obj_YXPDXZ.arrDepart.length; ++i)
-	{
-		json_Get_YXPDXZ.arrDepart[i].depart = TranTextToDig(json_Get_YXPDXZ.arrDepart[i].depart);
-		for(var j = 0; j < obj_YXPDXZ.arrDepart[i].arrPersons.length; ++j)
-		{
-			if(obj_YXPDXZ.arrDepart[i].arrPersons[j].check == 1)
-				obj_YXPDXZ.arrDepart[i].arrPersons[j].check = true;
-			else	
-				obj_YXPDXZ.arrDepart[i].arrPersons[j].check = false;
-		}
-	}
-	for(var k = 0; k < obj_YXPDXZ.arrBMPD.length; ++k)
-	{
-		json_Get_YXPDXZ.arrBMPD[k].depart = TranTextToDig(json_Get_YXPDXZ.arrBMPD[k].depart);
-		if(obj_YXPDXZ.arrBMPD[k].check == 1)
-			obj_YXPDXZ.arrBMPD[k].check = true;
-		else
-			obj_YXPDXZ.arrBMPD[k].check = false;
-	}
-	
 	obj_YXPDXZ.year = year;
 	obj_YXPDXZ.month = month;
 	
 	var json_Post_YXPDXZ = obj_YXPDXZ;
+	console.log("优秀评定限制");
+	console.log(obj_YXPDXZ);
 	try
     {
         if(debug())
@@ -3734,6 +3671,7 @@ function Post_YXPDXZ(obj_YXPDXZ)
             type:"POST",
             success:function(result){obj=result;}
 		});
+		alert(obj.status);
         if(1)//发送成功返回true，否则返回false
             return true;
         else
@@ -6689,12 +6627,12 @@ function Show_QTQKJJF()
 function Show_YXPDXZ()
 {
 	var obj_YXPDXZ = Get_YXPDXZ();
-
+	console.log(obj_YXPDXZ);
 	var strHTML = "<br /><h2>各部门部长和干事优秀评定限制</h2>";
 	
 	for(var i = 0; i < obj_YXPDXZ.arrDepart.length; ++i)
 	{//alert(obj_YXPDXZ.arrDepart[i].depart);
-		strHTML += "<h3>" + obj_YXPDXZ.arrDepart[i].depart + "</h3>"
+		strHTML += "<h3>" + arrDepartName[obj_YXPDXZ.arrDepart[i].depart-1] + "</h3>"
 				+  "<label><input type=\"checkbox\" id=\"" + ("quanxuan_"+i) + "\" />全选</label><br />"; 
 		
 		for(var j = 0; j < obj_YXPDXZ.arrDepart[i].arrPersons.length; ++j)
@@ -6715,7 +6653,7 @@ function Show_YXPDXZ()
 		if(i%5 == 0)
 			strHTML += "<br />";
 		strHTML += "<label>"
-				+  "<input type=\"checkbox\" id=\"" + ("xuanze_"+i) + "\" />" + obj_YXPDXZ.arrBMPD[i].depart;
+				+  "<input type=\"checkbox\" id=\"" + ("xuanze_"+i) + "\" />" + arrDepartName[obj_YXPDXZ.arrBMPD[i].depart-1]
 				+  "</label>"; 
 		strHTML += "<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>";
 	}
@@ -6735,7 +6673,9 @@ function Show_YXPDXZ()
 			for (var j = 0; j < obj_YXPDXZ.arrDepart[i].arrPersons.length; ++j) 
 			{
 				var xuanzeId = "xuanze_" + i + "_" + j;
-				GetObjById(xuanzeId).checked = obj_YXPDXZ.arrDepart[i].arrPersons[j].check;
+				//GetObjById(xuanzeId).checked = obj_YXPDXZ.arrDepart[i].arrPersons[j].check;
+				GetObjById(xuanzeId).checked=parseInt(obj_YXPDXZ.arrDepart[i].arrPersons[j].check);
+				
 				if (GetObjById(xuanzeId).checked == false)
 					isAllChoose = false;
 				else
@@ -6745,7 +6685,7 @@ function Show_YXPDXZ()
 				{
 					xuanzeId = GetId(e);
 					var arr = xuanzeId.split("_");
-					obj_YXPDXZ.arrDepart[arr[1]].arrPersons[arr[2]].check = this.checked;
+					obj_YXPDXZ.arrDepart[arr[1]].arrPersons[arr[2]].check = this.checked? 1:0;
 					if(this.checked == false)
 					{
 						GetObjById("quanxuan_"+arr[1]).checked = false;
@@ -6771,8 +6711,17 @@ function Show_YXPDXZ()
 				var arr = quanxuanId.split("_");
 				for (var k = 0; k < obj_YXPDXZ.arrDepart[arr[1]].arrPersons.length; ++k) 
 				{
-					obj_YXPDXZ.arrDepart[arr[1]].arrPersons[k].check = this.checked;
-					GetObjById(("xuanze_" + arr[1] + "_" + k)).checked = this.checked;
+					if(this.checked)
+					{
+						obj_YXPDXZ.arrDepart[arr[1]].arrPersons[k].check = 1;
+						GetObjById(("xuanze_" + arr[1] + "_" + k)).checked = this.checked;
+					}
+					else
+					{
+						obj_YXPDXZ.arrDepart[arr[1]].arrPersons[k].check = 0;
+						GetObjById(("xuanze_" + arr[1] + "_" + k)).checked = this.checked;
+					}
+					
 				}
 			}
 		}
@@ -6780,18 +6729,22 @@ function Show_YXPDXZ()
 		var iChooseDepart = 0;//记录选择的部门的个数
 		for(var i = 0; i < obj_YXPDXZ.arrBMPD.length; ++i)
 		{
-			if(obj_YXPDXZ.arrBMPD[i].check == true)
+			if(obj_YXPDXZ.arrBMPD[i].check == 1)
 				iChooseDepart++;
 			var xuanzeId = "xuanze_"+i;
-			GetObjById(xuanzeId).checked = obj_YXPDXZ.arrBMPD[i].check;
+			if(obj_YXPDXZ.arrBMPD[i].check == 1)
+				GetObjById(xuanzeId).checked = true;
+			else
+				GetObjById(xuanzeId).checked = false;
+			
 			GetObjById(xuanzeId).onclick = function(e)
 			{
-				xuanzeId = GetId(e);
+				var xuanzeId = GetId(e);
 				var arr = xuanzeId.split("_");
 				if(this.checked == true)
 				{
 					iChooseDepart++;
-					obj_YXPDXZ.arrBMPD[arr[1]].check = true;
+					obj_YXPDXZ.arrBMPD[arr[1]].check = 1;
 					if(iChooseDepart == obj_YXPDXZ.arrBMPD.length)
 						GetObjById("quanxuan").checked = true;
 				}
@@ -6799,7 +6752,7 @@ function Show_YXPDXZ()
 				{
 					iChooseDepart--;
 					GetObjById("quanxuan").checked = false;
-					obj_YXPDXZ.arrBMPD[arr[1]].check = false;
+					obj_YXPDXZ.arrBMPD[arr[1]].check = 0;
 				}
 				
 			}
@@ -6808,13 +6761,14 @@ function Show_YXPDXZ()
 		if(iChooseDepart == obj_YXPDXZ.arrBMPD.length)
 			GetObjById("quanxuan").checked = true;
 		
-		GetObjById("quanxuan").onclick = function()
+		GetObjById("quanxuan").onclick = function(e)
 		{
 		
 			for(var i = 0; i < obj_YXPDXZ.arrBMPD.length; ++i)
 			{
 				GetObjById(("xuanze_"+i)).checked = this.checked;
-				obj_YXPDXZ.arrBMPD[i].check = this.checkde;
+				
+				obj_YXPDXZ.arrBMPD[i].check = this.checked? 1:0;
 			}
 		}
 		
@@ -6839,7 +6793,7 @@ function Show_YXPDXZ()
 			for (var j = 0; j < obj_YXPDXZ.arrDepart[i].arrPersons.length; ++j) 
 			{
 				var xuanzeId = "xuanze_" + i + "_" + j;
-				GetObjById(xuanzeId).checked = obj_YXPDXZ.arrDepart[i].arrPersons[j].check;
+				GetObjById(xuanzeId).checked = parseInt(obj_YXPDXZ.arrDepart[i].arrPersons[j].check);
 				GetObjById(xuanzeId).disabled = "disabled";
 				
 				if (GetObjById(xuanzeId).checked == false)

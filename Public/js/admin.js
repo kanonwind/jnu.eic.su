@@ -357,8 +357,11 @@ function PostBindInfo(chmId, arrChecked,arrGJBM,jsonWJDJ)
        
 	};
 	*/	
-	
-	return obj.flagCrud;//发送成功返回true
+	if(obj.flagCrud==1)
+		return true;
+	else
+		return false;
+	//发送成功返回true
 }
 				
 		

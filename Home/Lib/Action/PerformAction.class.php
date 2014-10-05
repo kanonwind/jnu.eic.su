@@ -54,11 +54,22 @@ class PerformAction extends Action
 	$apartment=$person_info['apartment'];
 	$type=$person_info['type'];
 	$position=$person_info['position'];
+	//获取系统阶段
+	$control_model=new Model("Control");
+	$control_info=$control_model->where("is_over=0")->find();
+	if(empty($control_info))
+	{
+		$stage="系统阶段：暂无考核";
+	}
+	else{
+		$stage="系统阶段：".$control_info['month']."月考核进行中";
+	}
 	$this->assign('account',$account);
 	$this->assign('name',$name);
 	$this->assign('apartment',$arr1[$apartment-1]);
 	$this->assign('type',$arr2[$type-1]);
 	$this->assign('position',$position);
+	$this->assign('stage',$stage);
     $this->display();
   }
   
@@ -219,20 +230,28 @@ class PerformAction extends Action
 	$control_info=$control_model->select();
 	$tempyear=$control_info[0]['year'];
 	$tempmonth=$control_info[0]['month'];
+	$tempstamp=mktime(1, 1, 1, $tempmonth, 1, $tempyear);
+	//echo "asdf".$tempmonth;
 	for($i=0;$i<count($control_info);$i++)
 	{
-		if($tempyear.$tempmonth>$control_info[0]['year'].$control_info[0]['month'])
+		if($tempstamp>mktime(1, 1, 1, $control_info[$i]['month'],1,$control_info[$i]['year']))
 			continue;
 		else
 		{
-			$tempyear=$control_info[0]['year'];
-			$tempmonth=$control_info[0]['month'];
+			$tempyear=$control_info[$i]['year'];
+			$tempmonth=$control_info[$i]['month'];
+			$tempstamp=mktime(1, 1, 1, $tempmonth, 1, $tempyear);
 		}
 	}
 	$year=$tempyear;
 	$month=$tempmonth;
+	//echo "asdf".$tempmonth;
+
+	$control_info=$control_model->where("is_over=0")->select();
 	  for($k=0;$k<5;$k++)
 	 {
+		if(count($control_info)!=0)
+			break;
 		if($month==12)
 			{
 				$year++;
@@ -1163,9 +1182,11 @@ class PerformAction extends Action
 	foreach($gskh_info as $v)
 	{
 		$account=$v['waccount'];
+		$gs_account=$v['raccount'];
 		$person_info=$person_model->where("account=$account")->find();
+		$person_info2=$person_model->where("account=$gs_account")->find();
 		$arrGSKH[]=Array(
-			'name'=>$person_info['name'],
+			'name'=>$person_info['name']." - ".$person_info2['name'],
 			'depart'=>$person_info['apartment'],
 			'hadSubmit'=>$v['hadSubmit'],
 		);
@@ -1573,6 +1594,8 @@ class PerformAction extends Action
     $TIME=$this->getTime();
 	$year=$TIME['year'];
 	$month=$TIME['month'];
+/* 	$year=2014;
+	$month=9; */
    //获取所有干事
     $yxchxz_model=new Model("Yxchxz");
    $person_model=new Model("Person");
@@ -1645,7 +1668,7 @@ class PerformAction extends Action
 	   }
 	   //echo "部门".$i."的排名第".$j."的干事是：".$gs_account."</br>";
 	   //$gs_account=$gsfk_info['account'];
-	   $yxchxz_info=$yxchxz_model->where("(year=$year and month=$month) and account=$gs_account")->find();
+	   $yxchxz_info=$yxchxz_model->where("account=$gs_account")->find();
 	   if(empty($yxchxz_info))
 	   {
 	     //echo $gs_account."没有被限制了</br>";
@@ -1653,16 +1676,17 @@ class PerformAction extends Action
 		 $data['yxgs']=1;
 		 $gsfk_model->where("(year=$year and month=$month) and account=$gs_account")->data($data)->save();
 	     $flag=0;
+		  //echo "部门".$i."的优秀干事是：".$gs_account."</br>";
 	   }
 	   else{
-	     //echo $gs_account."被限制了"; 
+	     //echo $gs_account."被限制了</br>"; 
 	   }
 	   $j++;
 	   $person_info=$person_model->where("apartment=$i and (type=1 or type=2)")->select();
 	   if($j>count($person_info))
 	     $flag=0;
 	 }
-	 //echo "部门".$i."的优秀干事是：".$gs_account."</br>";
+	
     
    }
 
@@ -1766,7 +1790,7 @@ class PerformAction extends Action
 	     $candidate=$bz_account;
 		 $flag=0;
 	   }
-	   else 
+	   
 	     //echo $bz_account."被限制了</br>";
 	   $rank++;
 	   if($rank>$bz_sum)
@@ -1908,6 +1932,7 @@ class PerformAction extends Action
   $bzfk_model->where("(year=$year and month=$month) and account=$account1")->data($data)->save();
   $bzfk_model->where("(year=$year and month=$month) and account=$account2")->data($data)->save();
   $bzfk_model->where("(year=$year and month=$month) and account=$account3")->data($data)->save();
+
  }
 
  //优秀部门处理
@@ -1923,6 +1948,7 @@ class PerformAction extends Action
      $this->getbmfk($i,$year,$month);
    }
    $bmfk_model=new Model("Bmfk");
+   $yxchxz_model=new Model("Yxchxz");
    //给部门进行排名
    for($i=1;$i<=11;$i++)
    {
@@ -1948,8 +1974,7 @@ class PerformAction extends Action
 	 unset($data);
 	 $data['rank']=$rank;
 	 $bmfk_model->where("(year=$year and month=$month) and apartment=$i")->data($data)->save();
-	 //if()
-	   //echo "排名添加成功";
+
    }
 
    //找到两个优秀部门，从排名高的开始
@@ -1959,23 +1984,20 @@ class PerformAction extends Action
    unset($data);
    $data['yxbm']=0;
    $bmfk_model->where("year=$year and month=$month")->data($data)->save();
-   //$flag=1;
-   //$total=0;
-   //$rank=1;
-  //判断是否被限制,这次暂且不加限制了
 
-  //找到排名第一的
-  $bmfk_info=$bmfk_model->where("(year=$year and month=$month) and rank=1")->find();
-  $apartment=$bmfk_info['apartment'];
-  unset($data);
-  $data['yxbm']=1;
-  $bmfk_model->where("(year=$year and month=$month) and apartment=$apartment")->data($data)->save();
-  $bmfk_info=$bmfk_model->where("(year=$year and month=$month) and rank=2")->find();
-  $apartment=$bmfk_info['apartment'];
-  unset($data);
-  $data['yxbm']=1;
-  $bmfk_model->where("(year=$year and month=$month) and apartment=$apartment")->data($data)->save();
-
+  for($k=1;$k<=11;$k++)
+  {
+	//判断是否在限制表里面
+	$yxchxz_info=$yxchxz_model->where("account=$k")->find();
+	if(!empty($yxchxz_info))
+		continue;
+	//找到排名第一的
+	$bmfk_info=$bmfk_model->where("(year=$year and month=$month) and rank=$k")->find();
+	$apartment=$bmfk_info['apartment'];
+	unset($data);
+	$data['yxbm']=1;
+	$bmfk_model->where("(year=$year and month=$month) and apartment=$apartment")->data($data)->save();
+	}
  }
  //外调次数及其排名处理
  private function funcfkfive()
@@ -2566,6 +2588,8 @@ class PerformAction extends Action
 	$bmfk_model=new Model("Bmfk");
 	$oneway_model=new Model("Oneway");
 	$gsfk_model=new Model("Gsfk");
+	$qt_model=new Model("Qt");
+	$bmwg_model=new Model("Bmwg");
 	//$oneway
 	//基本信息
 	$person_info=$person_model->where("account=$account")->find();
@@ -2728,6 +2752,23 @@ class PerformAction extends Action
 			'liuyan'=>$v['text'],
 		);
 	}
+	//该部长其他情况加减分的理由
+	$qt_info=$qt_model->where("(year=$year and month=$month) and account=$account")->find();
+	$bzqitaliyou=$qt_info['text'];
+	//该部门，各种违纪登记表扣分的理由，拼接成一个字符
+	$bmwg_info=$bmwg_model->where("(year=$year and month=$month) and apartment=$apartment")->select();
+	$weijiliyou=" ";
+	foreach($bmwg_info as $v)
+	{
+		if($v['wgkf']==0)
+			continue;
+		else{
+			$weijiliyou.=$v['text'];
+		}
+	}
+	//该部门其他情况加减分表的理由
+	$qt_info=$qt_model->where("(year=$year and month=$month) and account=$apartment")->find();
+	$bmqitaliyou=$qt_info['text'];
 	//向前端发送json数据
 	$arr=Array(
 	  'ZongFen'=>$ZongFen,
@@ -2746,6 +2787,9 @@ class PerformAction extends Action
 	  'ZhuXiDeBuMenPinJia'=>$ZhuXiDeBuMenPinJia,
 	  'LiuYan'=>$LiuYan,
 	  'BuMenLiuYan'=>$BuMenLiuYan,
+	  'bzqitaliyou'=>$bzqitaliyou,
+	  'weijiliyou'=>$weijiliyou,
+	  'bmqitaliyou'=>$bmqitaliyou,
 	);
 	echo $this->_encode($arr);
 	//echo json_encode($arr,JSON_UNESCAPED_UNICODE);
@@ -3654,17 +3698,17 @@ class PerformAction extends Action
 	    $x_account=$_POST['arrDepart'][$i]['arrPersons'][$j]['account'];
 	    $check=$_POST['arrDepart'][$i]['arrPersons'][$j]['check'];
         $yxchxz_info=$yxchxz_model->where("account=$x_account")->find();
-		if(empty($yxchxz_info) && $check==true)
+		if(empty($yxchxz_info) && $check==1)
 		{
 		  //勾选了但原来没有则添加到限制里面
 		  unset($data);
 		  $data['account']=$x_account;
-		  $yxchxz_info=$yxchxz_model->add($data);
+		  $yxchxz_model->add($data);
 		}
-		if(!empty($yxchxz_info) && $check==false)
+		if(!empty($yxchxz_info) && $check==0)
 		{
 		  //原来有的但取消了勾选则从限制表里面删除
-		  $yxchxz_info=$yxchxz_model->where("account=$x_account")->delete();
+		  $yxchxz_model->where("account=$x_account")->delete();
 		}
 	   }
 	}
@@ -3674,21 +3718,24 @@ class PerformAction extends Action
 	  $apartment=$_POST['arrBMPD'][$i]['depart'];
 	  $check=$_POST['arrBMPD'][$i]['check'];
 	  $yxchxz_info=$yxchxz_model->where("account=$apartment")->find();
+	  $status.="部门".$apartment."为".$check;
 	  if(empty($yxchxz_info) && $check==1)
 	  {
 	    //勾选了但原来没有则添加到限制里面
+		//$status.="部门".$apartment."勾选".$check;
 		unset($data);
 		$data['account']=$apartment;
-		$yxchxz_info=$yxchxz_model->add($data);
+		$yxchxz_model->add($data);
 	  }
 	  if(!empty($yxchxz_info) && $check==0)
 	  {
 	    //原来有的但取消了勾选则从限制表里面删除
-		$yxchxz_info=$yxchxz_model->where("account=$apartment")->delete();
+		//$status.="部门".$apartment."取消勾选".$check;
+		$yxchxz_model->where("account=$apartment")->delete();
 	  }
 	}
 	$arr=Array(
-	  'status'=>$_POST['arrBMPD'][0]['check'],
+	  'status'=>$status.$_POST['arrBMPD'][0]['check'],
 	);
 	echo $this->_encode($arr);
   }
