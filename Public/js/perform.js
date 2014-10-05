@@ -8,6 +8,8 @@ var arrDepartName=new Array("秘书处","人力资源部","宣传部","信息编
 var arrTypeName=new Array("干事","人力干事","部长级","主席团");
 var arrWeiJiBiao=new Array("秘书处制度违纪登记表","人力资源部制度违纪登记表","宣传部制度违纪登记表","信息编辑部制度违纪登记表","公关部制度违纪登记表","司仪礼仪队违纪登记表");
 var afxTimeInfo;  
+var afxUserTableLst;
+
 function debug()
 {
     return false;
@@ -89,6 +91,7 @@ function Get_Time()
             });
 			json_Get_Times=obj;
 			console.log("获取时间");
+            console.log(obj);
     }
     catch(err){
         var json_Get_Times = 
@@ -233,10 +236,8 @@ function TranTextToDig(text)
 //对应的数字转成相应的部门
 function TranDigToText(iBuMen)
 {
-	var arrBuMen = new Array("秘书处", "人力资源部", "宣传部", "信息编辑部",
-							"学术部", "体育部", "KSC联盟", "组织部",
-							"文娱部", "公关部", "心理服务部", "主席团");
-	var text = arrBuMen[iBuMen-1];
+	
+	var text = arrDepartName[iBuMen-1];
 	return text;
 }
 
@@ -311,80 +312,27 @@ function GetTable()
     {
         switch(arr.type)
         {
-          case "BZJ": return arrBZJ.concat(arrWeiJi);
-          case "YBGS": return arrYBGS.concat(arrWeiJi);
-          case "RLGS": return arrRLGS.concat(arrWeiJi);
-          case "ZXT": return arrZXT.concat(arrWeiJi);
-          case "RLBZ":return arrRLBZ.concat(arrWeiJi);
+            case "BZJ": 
+                afxUserTableLst=arrBZJ.concat(arrWeiJi);
+                return afxUserTableLst;
+            case "YBGS": 
+                afxUserTableLst=arrYBGS.concat(arrWeiJi);
+                return afxUserTableLst;
+            case "RLGS": 
+                afxUserTableLst=arrRLGS.concat(arrWeiJi);
+                return afxUserTableLst;
+            case "ZXT": 
+                afxUserTableLst=arrZXT.concat(arrWeiJi);
+                return afxUserTableLst;
+            case "RLBZ":
+                afxUserTableLst=arrRLBZ.concat(arrWeiJi);
+                return afxUserTableLst;
         };
     }
 	
 }
 
-
-//把获得的时间传回服务器
-/*function PostTimeToServer(year, month, buttonText)
-{
-	var iCurButton = PostTable(buttonText);
-	json_Time = 
-	{
-		"year":2014,
-		"month":4,
-		"button":iCurButton,
-	};
-	if(1)
-		return true;
-	else
-		return false;
-}
-//把点击的表传给服务器
-function PostTable(buttonText)
-{
-	var iCurButton = 1;
-	switch(buttonText)
-	{
-		case "干事自评表":
-			iCurButton = 1;
-			break;
-		case "干事考核表":
-			iCurButton = 2;
-			break;
-		case "部长自评表":
-			iCurButton = 3;
-			break;
-		case "部长考核表":
-			iCurButton = 4;
-			break;
-		case "部门考核表":
-			iCurButton = 5;
-			break;
-		case "干事考核反馈表":
-			iCurButton = 6;
-			break;
-		case "跟进部门出勤统计表":
-			iCurButton = 7;
-			break;
-		case "调研意见采纳表":
-			iCurButton = 8;
-			break;
-		case "整体考核结果反馈表":
-			iCurButton = 9;
-			break;
-		case "部长反馈表":
-			iCurButton = 10;
-			break;
-		case "优秀部长评定表":
-			iCurButton = 11;
-			break;
-		case "主席团反馈表":
-			iCurButton = 12;
-			break;
-	}
-	return iCurButton;
-}*/
-
-
-
+//初始化绩效考核系统
 function PerformInit()
 {
     ajaxcheck();
@@ -518,10 +466,10 @@ function AutoHideHead()
 	}
 }
 
-
+//左边按钮去响应
 function ActiveTableButton()
 {
-	var arrTable = GetTable();
+	var arrTable = afxUserTableLst;
 
 	var strHTML = "";
 	for(var i=0; i<arrTable.length; ++i)
@@ -570,7 +518,7 @@ function ChangStyle(iPreTable, iCurTable)
 	ZhiBiaoHuaDong(iPreTable, iCurTable);//滑动指标指向当前别激活的按钮
 	GetObjById("button_"+iCurTable).style.background = "#018f89";
 	
-	var arrTable = GetTable();
+	var arrTable = afxUserTableLst;
 	GetObjById("table_name").innerHTML = arrTable[iCurTable];//打印当前被激活的按钮的内容的名字
 }
 
@@ -605,9 +553,8 @@ function ZhiBiaoHuaDong(iPreTable, iCurTable)
 //根据选择时间显示内容
 function SelectTime(iCurShowFunction)
 {
-	var arrTable = GetTable();
 	
-	var btnText = arrTable[iCurShowFunction];
+	var btnText = afxUserTableLst[iCurShowFunction];
 	
 	function TimeType(btnText)
 	{
@@ -707,7 +654,7 @@ function SelectTime(iCurShowFunction)
 
 function ArrShowTable()
 {
-	var arrTable = GetTable();
+	var arrTable = afxUserTableLst;
 	var arrShowFunction = new Array();//存放显示各种表格函数的数组
 	
 	for(var i=0; i<arrTable.length; ++i)
