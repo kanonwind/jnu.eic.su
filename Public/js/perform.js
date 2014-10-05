@@ -88,7 +88,7 @@ function Get_Time()
                 success:function(result){obj=result;}
             });
 			json_Get_Times=obj;
-			console.log(json_Get_Times);
+			console.log("获取时间");
     }
     catch(err){
         var json_Get_Times = 
@@ -134,7 +134,6 @@ function Get_Time()
         };
         errmsg();
     }//catch
-	console.log(json_Get_Times);
 	//排序谓词
 	function ymcmp(lhs,rhs)
     {
@@ -202,7 +201,6 @@ function Get_Time()
 		],*/
 		
 	};
-	console.log(Times);
 	return Times;
 }
 
@@ -545,15 +543,21 @@ function ActiveTableButton()
 	{
 		var strId = "button_" + iCount;
 		document.getElementById(strId).onclick=function(e)
-		{		
+		{	
+			
 			strId=GetId(e);
 			var arr = strId.split("_");
 			iPreTable = iCurTable;
 			iCurTable = parseInt(arr[1]);
+			
 			ChangStyle(iPreTable, iCurTable);//改变当前激活的按钮的样式
+			
 			SelectTime(iCurTable);//处理当前被激活的按钮对应的信息
+			begin = new Date();
 			GetObjById("show_more").innerHTML = "";
-			//PostTable(this.value);//把点击的表传给服务器			
+			//PostTable(this.value);//把点击的表传给服务器	
+			end=new Date();
+			console.log(end.getTime()-begin.getTime());
 		}
 	}
 }
@@ -624,6 +628,7 @@ function SelectTime(iCurShowFunction)
             case "信息编辑部制度违纪登记表":
             case "公关部制度违纪登记表":
             case "司仪礼仪队违纪登记表":
+			case "查看未完成情况":
 				return "evaluation";
 			
 			case "主席团反馈表":	
@@ -632,15 +637,13 @@ function SelectTime(iCurShowFunction)
 			case "干事考核反馈表":
 				return "feedback"
 			
-			case "考核进程控制表":
-            case "查看未完成情况":
+			case "考核进程控制表":           
 				return "control";
 
 			case "优秀部长评定表":
 				return "excellent";
 		}
 	}
-	
 	var timeType = TimeType(btnText);
     var time=afxTimeInfo[timeType];
 	
