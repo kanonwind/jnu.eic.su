@@ -184,6 +184,9 @@ class AllocateAction extends Action
 	//查询可调人员：接收查询条件
 	public function getAllocInfo()
 	{		
+		$timetable_model=new Model("Timetable");
+		$person_model=new Model("Person");
+		$resource_model=new Model("Resource");
 		$arrWeek=Array("sun","mon","tue","wed","thu","fri","sat");
 		$arrParity=Array(2,1);//1表示双周有课,如果这周是单周，则参加匹配
 		$apartment=$_POST['qDepart'];
@@ -227,14 +230,55 @@ class AllocateAction extends Action
 		if(empty($arrKK))
 		{
 			$back="空课时间为空";
+			$timetable_info=$timetable_model->select();	
+			foreach($timetable_info as $v)
+			{
+				$account=$v['account'];
+				$num=1;//记录是否能够外调次数
+				$resource_info=$resource_model->where("account=$account and (year=$year and month=$month and day=$day)")->select();
+				foreach($resource_info as $v)
+				{
+					if($v['beginstamp']<$endstamp && $v['endstamp']>$beginstamp)
+					{
+						$num=0;
+						break;
+					}
+				}
+				//对符合度大于0的进行添加
+				if($num>0)
+				{
+					unset($data);
+					$person_info=$person_model->where("account=$account")->find();
+					//对性别进行筛选，对部门进行筛选
+					if($person_info['sex']==$sex && $person_info['apartment']!=$apartment)
+					{
+						//今年本月
+						$monthNow=date("n");
+						$yearNow=date("Y");
+						$recently_alloc_time=$resource_model->where("account=$account and year=$yearNow and month=$monthNow")->select();
+						$total_alloc_time=$resource_model->where("account=$account")->select();
+						$data['conformity']=$num/count($arrKK);
+						$data['userID']=$account;
+						$data['userName']=$person_info['name'];
+						$data['freeTime']=$num/count($arrKK);
+						$data['depart']=$person_info['apartment'];
+						$data['userType']=$person_info['type'];
+						$data['gender']=$person_info['sex'];
+						$data['longPhoneNumber']=empty($person_info['phone'])?" ":$person_info['phone'];
+						$data['shortPhoneNumber']=empty($person_info['short'])?" ":$person_info['short'];
+						$data['recently_alloc_time']=count($recently_alloc_time);
+						$data['total_alloc_time']=count($total_alloc_time);
+						//echo $this->_encode($data);
+						$arrAnsPerInfo[]=$data;
+					}
+					
+				}
+				//echo "今天是".$week.$account."成功匹配了".$num."次</br>";
+			}
 		}
 		else{
 			$back="空课时间不为空";
-			$timetable_model=new Model("Timetable");
-			$person_model=new Model("Person");
-			$resource_model=new Model("Resource");
-			$timetable_info=$timetable_model->select();
-			
+			$timetable_info=$timetable_model->select();	
 			foreach($timetable_info as $v)
 			{
 				$account=$v['account'];
@@ -254,7 +298,7 @@ class AllocateAction extends Action
 				$resource_info=$resource_model->where("account=$account and (year=$year and month=$month and day=$day)")->select();
 				foreach($resource_info as $v)
 				{
-					if($v['beginstamp']<$endstamp || $v['endstamp']>$beginstamp)
+					if($v['beginstamp']<$endstamp && $v['endstamp']>$beginstamp)
 					{
 						$num=0;
 						break;

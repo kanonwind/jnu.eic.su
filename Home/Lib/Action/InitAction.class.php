@@ -348,7 +348,7 @@ class InitAction extends Action
 	}
   }
  //人员信息初始化：主席团，部长级，人力干事
-  private function initPerson()
+  public function initPerson()
   {
     //按照格式添加数据,参数分别为：账号，名字，类型，标志参数
 	//类型1代表非人力干事,2代表人力干事,3代表部长级,4代表主席团

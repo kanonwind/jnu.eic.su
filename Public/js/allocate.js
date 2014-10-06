@@ -659,7 +659,7 @@ function showChaXunKeBiao()
         }
 		today=new Date();
 		if( (today.getMonth()>tips_qMonth)||
-			(today.getMonth()=tips_qMonth&&today.getDate()>tips_qDay) )
+			(today.getMonth()==tips_qMonth&&today.getDate()>tips_qDay) )
 		{
 			str_tips+="日期早于今天，不科学";
 		}
@@ -750,8 +750,10 @@ function showChaXunKeBiao()
 			}
 			var objQI=new objQueInfo();
 			today = new Date();
-			qday=new Date(objQI.qYear,ObjQI.qMonth,ObjQI.qDay,objQI.qEndHour,objQI.qEndMin);
-			if(today.parse()>=qday.parse())
+			qday=new Date(objQI.qYear,objQI.qMonth-1,objQI.qDay,objQI.qEndHour,objQI.qEndMin);
+			console.log(today.getMonth());
+			console.log(qday.getMonth());
+			if(today.getTime()>=qday.getTime())
 			{
 				alert("查询时间早于当前!");
 				return false;

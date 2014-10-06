@@ -14,6 +14,7 @@ tbl_control
   id
   year 
   month
+  beginstamp//这次考核开始的时间戳，帮助解决人力外调问题
   is_yxbz
   is_over
 //个人中心

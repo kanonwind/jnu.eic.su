@@ -147,18 +147,45 @@ class PerformAction extends Action
   }
   return urlencode($elem);
   }
-  //获取时间
+  //获取前端发送的时间
   private function getTime()
   {
 	$year=$_POST['year'];
 	$month=$_POST['month'];
 /* 	$year=2014;
-	$month=9; */
+	$month=10; */
 	$arr=Array(
 		'month'=>$month,
 	    'year'=>$year,
 	);
 	return $arr;
+  }
+	//获取上月考核时间
+  public  function getLastTime()
+  {
+	//获取最后一次考核的时间
+	$control_model=new Model("Control");
+	$control_info=$control_model->where("is_over=1")->select();
+	$tempyear=$control_info[0]['year'];
+	$tempmonth=$control_info[0]['month'];
+	$tempstamp=mktime(1, 1, 1, $tempmonth, 1, $tempyear);
+	//echo "asdf".$tempmonth;
+	for($i=0;$i<count($control_info);$i++)
+	{
+		if($tempstamp>mktime(1, 1, 1, $control_info[$i]['month'],1,$control_info[$i]['year']))
+			continue;
+		else
+		{
+			$tempyear=$control_info[$i]['year'];
+			$tempmonth=$control_info[$i]['month'];
+			$tempstamp=mktime(1, 1, 1, $tempmonth, 1, $tempyear);
+		}
+	}
+	$arrLastTime=Array(
+		'year'=>$tempyear,
+		'month'=>$tempmonth,
+	);
+	return $arrLastTime;
   }
   //向前端发送时间
   public function sendTime()
@@ -1273,11 +1300,11 @@ class PerformAction extends Action
 	$KSKH=$_POST['KHJCKZ']['KSKH'];
 	$KSPD=$_POST['KHJCKZ']['KSPD'];
 	$FBJG=$_POST['KHJCKZ']['FBJG'];
-/* 	$year=2014;
-	$month=10;
+/*  	$year=2014;
+	$month=9;
 	$KSKH=1;
-	$KSPD=0;
-	$FBJG=0; */
+	$KSPD=1;
+	$FBJG=1; */ 
 	//开始一次考核
 	if($KSKH==1 && $KSPD==0 && $FBJG==0)
 	{
@@ -2005,6 +2032,7 @@ class PerformAction extends Action
    $resource_model=new Model("Resource");
    $person_model=new Model("Person");
    $wdcs_model=new Model("Wdcs");
+   $control_model=new Model("Control");
    $TIME=$this->getTime();
 	$year=$TIME['year'];
 	$month=$TIME['month'];
@@ -2015,7 +2043,23 @@ class PerformAction extends Action
 	 foreach($person_info as $v)
 	 {
 	   $gs_account=$v['account'];
-	   $resource_info=$resource_model->where("(year=$year and month=$month) and account=$gs_account")->select();
+	      //获取上次外调时间
+		$arrLastTime=$this->getLastTime();
+		$yearLast=$arrLastTime['year'];
+		$monthLast=$arrLastTime['month'];
+		$control_info=$control_model->where("is_over=1")->select();
+		if(count($control_info)==0)
+		{
+			$resource_info=$resource_model->where("account=$gs_account")->select();
+		}
+		else{
+			$control_info=$control_model->where("year=$yearLast and month=$monthLast")->find();
+			$laststamp=$control_info['beginstamp'];
+			$control_info=$control_model->where("is_over=0")->find();
+			$thisstamp=$control_info['beginstamp'];
+			$resource_info=$resource_model->where("$laststamp<create_time and $thisstamp>create_time and account=$gs_account")->select();
+		}
+	   //$resource_info=$resource_model->where("(year=$year and month=$month) and account=$gs_account")->select();
 	   $wdcs=count($resource_info);
 	   //echo $gs_account."本月被外调了".$wdcs."次</br>";
 	   $data['wdcs']=$wdcs;
@@ -2067,6 +2111,7 @@ class PerformAction extends Action
    $tuiyou_model=new Model("Tuiyou");
    $diaoyan_model=new Model("Diaoyan");
    $qt_model=new Model("Qt");
+   $control_model=new Model("Control");
 
    $gszp_info=$gszp_model->where("(year=$year and month=$month) and account=$waccount")->find();
    
@@ -2096,8 +2141,25 @@ class PerformAction extends Action
    $qj=$chuqin_info['qj']*(-0.1);
    $ct=$chuqin_info['ct']*(-0.2);
    $qx=$chuqin_info['qx']*(-0.3);
+   //获取上次外调时间
+   $arrLastTime=$this->getLastTime();
+   $yearLast=$arrLastTime['year'];
+   $monthLast=$arrLastTime['month'];
+   $control_info=$control_model->where("is_over=1")->select();
+   if(count($control_info)==0)
+   {
+	$resource_info=$resource_model->select();
+   }
+   else{
+	$control_info=$control_model->where("year=$yearLast and month=$monthLast")->find();
+	$laststamp=$control_info['beginstamp'];
+	$control_info=$control_model->where("is_over=0")->find();
+	$thisstamp=$control_info['beginstamp'];
+	$resource_info=$resource_model->where("$laststamp<create_time and $thisstamp>create_time")->select();
+	}
    //获取外调无辜缺席情况
-   $resource_info=$resource_model->where("(year=$year and month=$month) and account=$waccount")->select();
+  // echo $waccount."外调次数为".count($resource_info)."</br>";
+   //$resource_info=$resource_model->where("(year=$year and month=$month) and account=$waccount")->select();
    $wgqx=0;//外调无辜缺席次数
    $yb=0;//外调表现一般次数
    $tc=0;//外调表现突出次数
@@ -2188,6 +2250,7 @@ class PerformAction extends Action
    $resource_model=new Model("Resource");
    $diaoyan_model=new Model("Diaoyan");
    $qt_model=new Model("Qt");
+   $control_model=new Model("Control");
    //echo $waccount."的反馈：</br>";
    $bzzp_info=$bzzp_model->where("(year=$year and month=$month) and waccount=$waccount")->find();
    $total=$bzzp_info['total'];
@@ -2254,7 +2317,24 @@ class PerformAction extends Action
    $ct=$chuqin_info['ct']*(-0.2);
    $qx=$chuqin_info['qx']*(-0.3);
    //获取外调无辜缺席情况
-   $resource_info=$resource_model->where("(year=$year and month=$month) and account=$waccount")->select();
+     //获取上次外调时间
+   $arrLastTime=$this->getLastTime();
+   $yearLast=$arrLastTime['year'];
+   $monthLast=$arrLastTime['month'];
+   $control_info=$control_model->where("is_over=1")->select();
+   if(count($control_info)==0)
+   {
+	$resource_info=$resource_model->select();
+   }
+   else{
+	$control_info=$control_model->where("year=$yearLast and month=$monthLast")->find();
+	$laststamp=$control_info['beginstamp'];
+	$control_info=$control_model->where("is_over=0")->find();
+	$thisstamp=$control_info['beginstamp'];
+	$resource_info=$resource_model->where("$laststamp<create_time and $thisstamp>create_time")->select();
+	}
+	//echo $waccount."被外调了".count($resource_info)."次</br>";
+   //$resource_info=$resource_model->where("(year=$year and month=$month) and account=$waccount")->select();
    $wgqx=0;//外调无辜缺席次数
    $yb=0;//外调表现一般次数
    $tc=0;//外调表现突出次数
@@ -3801,11 +3881,13 @@ class PerformAction extends Action
 	return $arr;
   }
   //删除某年某月绩效考核
-  public function unsetPerform()
+  private function unsetPerform()
   {
 	$arr=$this->funcsettime();
-	$year=$arr['year'];
-	$month=$arr['month'];	
+/* 	$year=$arr['year'];
+	$month=$arr['month'];	 */
+	$year=2014;
+	$month=10;
 	$control_model=new Model("Control");
 	$gszp_model=new Model("Gszp");
 	$interact_model=new Model("Interact");
@@ -3896,6 +3978,7 @@ class PerformAction extends Action
 	unset($data);
 	$data['year']=$year;
 	$data['month']=$month;
+	$data['beginstamp']=time();
 	$control_info=$control_model->add($data);
 	$this->funcyjjh();
  	$this->funcinitbmty();
@@ -3912,7 +3995,7 @@ class PerformAction extends Action
 	//echo "完毕</br>";
   } 
   //绩效考核初始化第一阶段，包括：干事自评表，部长自评表，干事考核表，部长考核表，部门考核表
-  public function funcyjjh()
+  private function funcyjjh()
   {
     //设置年月
 	$arr=$this->funcsettime();
