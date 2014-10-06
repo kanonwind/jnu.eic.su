@@ -22,9 +22,8 @@ class IndexAction extends Action
 		$person_model=new Model("Person");
 		$person_info=$person_model->where("account=$account")->find();
 		$name=$person_info['name'];
-		$link="<a class=\"user_info\" id=\"login_info_user_name\" href=\"#\">".$name."</a>";
-		$link.="<a class=\"user_info\" id=\"login_info_user_id\" href=\"#\">".$account."</a>";
-		$link.="<a class=\"user_info\" id=\"login_info_user_center\" href=\"".__APP__."/Center/index\">个人中心</a>";
+		$link="<a class=\"user_info\" id=\"login_info_user_name\" href=\"#\">".$name."</a>&nbsp;";
+		$link.="<a class=\"user_info\" id=\"login_info_user_center\" href=\"".__APP__."/Center/index\">个人中心</a>&nbsp;";
 		$link.="<a class=\"user_info\" id=\"login_info_log_out\" href=\"".__APP__."/Login/logout\">注销</a>";
 		$this->assign('link',$link);
 	}

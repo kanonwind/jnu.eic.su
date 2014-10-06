@@ -231,7 +231,7 @@ class NewsAction extends Action{
 			$announcement_info=$announcement_model->where("create_time=$create_time")->find();
 			$id=$announcement_info['id'];
 			$this->rankLatest($id,5,1);
-			//$this->Success("添加成功，正在返回......",__APP__."/News/create");
+			$this->Success("添加成功，正在返回......",__APP__."/News/create");
 		}
 	}
 	//即将举办的活动	执行添加
