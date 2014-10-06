@@ -240,32 +240,33 @@ function postAllocQueInfo(objQI)
         {
             if(lhs.conformity==rhs.conformity)//符合度最优先
             {
-                if(lhs.userType==rhs.userType)
+                if(lhs.userType==rhs.userType)//用户类型第二
                 {
-                    if(lhs.total_alloc_time==rhs.total_alloc_time)
+                    if(lhs.total_alloc_time==rhs.total_alloc_time)//外调次数第三
                     {
-                        if(lhs.recently_alloc_time==rhs.recently_alloc_time)
+                        if(lhs.recently_alloc_time==rhs.recently_alloc_time)//最近外调次数第四
                         {
-                            return lhs.gender<rhs.gender;//男生排前面
+                            //性别第五
+                            return parseInt(rhs.gender)-parseInt(lhs.gender);//男生排前面
                         }
                         else
                         {
-                            lhs.recently_alloc_time>rhs.recently_alloc_time;//最近外调数少的排前面
+                            parseInt(lhs.recently_alloc_time)-parseInt(rhs.recently_alloc_time);//最近外调数少的排前面
                         }
                     }
                     else
                     {
-                        return lhs.total_alloc_time>rhs.total_alloc_time;//累计外调数少的排前面
+                        return parseInt(lhs.total_alloc_time)-parseInt(rhs.total_alloc_time);//累计外调数少的排前面
                     }
                 }
                 else
                 {
-                    return (lhs.userType-rhs.userType)>0;//干事排前面
+                    return parseInt(lhs.userType)-parseInt(rhs.userType);//干事排前面
                 }
             }
             else
             {
-                return (lhs.conformity-rhs.conformity)<0;//符合度高的排前面
+                return parseInt(rhs.conformity)-parseInt(lhs.conformity);//符合度高的排前面
             }
         });
 	}
@@ -575,7 +576,7 @@ function showChaXunKeBiao()
 			+"<p>\n"
 			+"工作时间：\n"
 			+"<select class=\"alloc_select\" name=\"shijian_kaishi_h\" id=\"shijian_kaishi_h\">\n";
-	for(var iCount=5;iCount<19;iCount++)
+	for(var iCount=5;iCount<23;iCount++)
 	{
 		strAllocQ += "<option value=\""+iCount+"\">"+iCount+"</option>\n";
 	}
@@ -591,7 +592,7 @@ function showChaXunKeBiao()
 	strAllocQ += "</select>\n"
 				+"	— —\n"			
 				+"	<select class=\"alloc_select\" name=\"shijian_jieshu_h\" id=\"shijian_jieshu_h\">\n";
-	for(var iCount=5;iCount<19;iCount++)
+	for(var iCount=5;iCount<23;iCount++)
 	{
 		strAllocQ += "<option value=\""+iCount+"\">"+iCount+"</option>\n";
 	}

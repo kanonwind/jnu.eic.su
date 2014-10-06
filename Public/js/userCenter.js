@@ -15,7 +15,7 @@ var arrDepartName=new Array("秘书处","人力资源部","宣传部","信息编
 "体育部","JDC","组织部","文娱部","公关部","心理服务部","主席团");
 
 var arrUserType = new Array("干事","人力干事","部长级","主席团");
-var arrGender = new Array("女","男","不确定");
+var arrGender = new Array("不确定","女","男");
 
 var arrMajorName = new Array("包装工程","软件工程","电气工程及其自动化","自动化","电子信息科学与技术","信息安全","物联网工程");
 
@@ -570,9 +570,9 @@ function PrintToHTML(objPersonalData, curYear)
 							+ "<div class=\"info_item\" id=\"personal_info_detail\">\n"
 								+ "<p>\n"
 									+ "<select id=\"modf_user_sex\">\n"
-										+ "<option value=\"0\">女</option>\n"
-										+ "<option value=\"1\">男</option>\n"
-										+ "<option value=\"2\">不确定</option>\n"
+										+ "<option value=\"0\">不确定</option>\n"
+										+ "<option value=\"1\">女</option>\n"
+										+ "<option value=\"2\">男</option>\n"
 									+ "</select>\n"
 								+ "</p>\n"
 								+ "<p>\n"
@@ -848,6 +848,7 @@ function ChangePersonalData(objPersonalData)
 	CheckQQ();
 	document.getElementById("modf_user_qq").onchange = function() 
 	{
+        console.log("qq change");
 		objPersonalData.qq = this.value;
 		CheckQQ();
 	}
@@ -855,15 +856,29 @@ function ChangePersonalData(objPersonalData)
 	var strMUDE = "";
 	function CheckDorm()
 	{
+        console.log(parseInt(objPersonalData.dorm));
+        if(parseInt(objPersonalData.dorm)>=1000&&parseInt(objPersonalData.dorm)<=9999)
+        {
+            strMUDE = "";
+        }
+        else
+        {
+            strMUDE = "*请正确填写宿舍号" + "<br />";
+        }
+        /*正则总是误判
 		var re = /^[0-9]{4}$/;
 		var bool = re.test(objPersonalData.dorm);
 		if(!bool)
 			strMUDE = "*请正确填写宿舍号" + "<br />";
 		else
 			strMUDE = "";
+        */
 	}
 	CheckDorm();
-    $("#modf_user_dorm").change(function(){CheckDorm();objPersonalData.dorm=$(this).val();});
+    $("#modf_user_dorm").change(function(){
+        objPersonalData.dorm=$(this).val();
+        CheckDorm();
+    });
 	
 	//修改常用邮箱
 	var strUEE = "";
