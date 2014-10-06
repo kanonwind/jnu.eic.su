@@ -264,7 +264,7 @@ function GetTable()
             success:function(result){obj=result;}
 		});		
 		var arr=obj;
-		//alert(obj.type);
+		
 	}
     catch(err){
 	
@@ -298,7 +298,7 @@ function GetTable()
 	var arrRLBZ = new Array("查看未完成情况","优秀评定限制表","部长自评表","干事考核表","整体考核结果反馈表","部长反馈表","考核进程控制表");
 	var arrBZJ = new Array("部长自评表","干事考核表","部长反馈表","整体考核结果反馈表");
 	var arrZXT = new Array("部长考核表","部门考核表","优秀部长评定表","整体考核结果反馈表","主席团反馈表");
-	//alert(arr.type);
+	
     var arrWeiJi=new Array();
     for(var i=0;i<arr.weiji.length;++i)
     {
@@ -1027,7 +1027,7 @@ function Get_GSZP()
 //把干事自评表的填写的内容传给服务器
 function Post_GSZP(obj_GSZP)//obj_GSZP为Get_GSZP()定义的对象
 {
-    //alert(obj_GSZP.tygs);
+    
 	//传数据会数据库，注意：JS这边和数据库那边的各对象和变量命名尽量保持一致，不然可能会出错
 	var arrDFTemp = new Array();
 	for (var i = 0; i < obj_GSZP.objGSZP_BZ.arrObj_GSZP.length; ++i) 
@@ -1078,7 +1078,6 @@ function Post_GSZP(obj_GSZP)//obj_GSZP为Get_GSZP()定义的对象
 	};
 	console.log(json_Post_GSZP);
 	
-	//alert(json_Post_GSZP.TYGS.account);
 	try
     {
         if(debug())
@@ -1093,7 +1092,6 @@ function Post_GSZP(obj_GSZP)//obj_GSZP为Get_GSZP()定义的对象
             type:"POST",
             success:function(result){obj=result;}
 		});	
-	//alert(obj.status);
         
         //服务器成功接收信息，则返回true，否则返回false
         if(obj.flagCrud)
@@ -1235,7 +1233,6 @@ function Get_GJBMCQTJ()
         }   
 		catch(err)
         {
-			alert("hehehheeeeeeeee");
             var json_Get_GJBMCQTJ = 
             {
                 "gjbm":2,
@@ -1253,10 +1250,10 @@ function Get_GJBMCQTJ()
 		this.renshu = json_Get_GJBMCQTJ.renshu;//人数
 		this.status = json_Get_GJBMCQTJ.status;//是否可以提交状态，“0”表示可以提交可以进行填写，“1”表示已提交不能再进行填写
 		//出勤
-		this.chuqin = new Array();//alert(json_Get_GJBMCQTJ.renshu);
+		this.chuqin = new Array();
 		for(var i=0; i < json_Get_GJBMCQTJ.chuqin.length; ++i)
 		{
-			this.chuqin[i] = new Array();//alert(json_Get_GJBMCQTJ.chuqin[i].name);
+			this.chuqin[i] = new Array();
 			this.chuqin[i][0] = json_Get_GJBMCQTJ.chuqin[i].name;//干事名字
 			this.chuqin[i][1] = json_Get_GJBMCQTJ.chuqin[i].qj;//请假次数
 			this.chuqin[i][2] = json_Get_GJBMCQTJ.chuqin[i].ct;//迟到或早退次数
@@ -1288,7 +1285,7 @@ function Post_GJBMCQTJ(obj_GJBMCQTJ)//obj_GJBMCQTJ为Get_GJBMCQTJ()定义的对�
 		"status":obj_GJBMCQTJ.status,
 		"chuqin":arrChuQinTemp,
 	};
-	//alert(json_Post_GJBMCQTJ.chuqin[2].account);
+	
 	//服务器成功接收信息，则返回true，否则返回false
 	try
     {
@@ -1306,7 +1303,7 @@ function Post_GJBMCQTJ(obj_GJBMCQTJ)//obj_GJBMCQTJ为Get_GJBMCQTJ()定义的对�
             type:"POST",
             success:function(result){obj=result;}
 		});
-		alert(obj.flagCrud+"adsfadsfa");
+		
 		return obj.flagCrud;
     }
     catch(err)
@@ -1338,7 +1335,7 @@ function Get_DYYJCN()
             type:"POST",
             success:function(result){obj=result;}
             });	
-            //alert("asdf"+obj.str+obj.arrBM[0].arrCNJF[0].jiafen);
+            
             var json_obj_DYYJCN = obj;
         }
         catch(err)
@@ -1834,7 +1831,6 @@ function Get_BZZP()
 			
 	function obj_BZZP() 
 	{
-		//alert(json_Get_BZZP.zongfen);
 		this.zongfen = json_Get_BZZP.zongfen;//总分
 		this.status = json_Get_BZZP.status;//是否为可提交状态
 		this.arrDF = new Array(); //得分数组
@@ -2180,7 +2176,6 @@ function Get_GSKH()
             type:"POST",
             success:function(result){obj=result;}
 		});		
-		//alert(obj.status);
         var json_Get_GSKH = obj;	
 	}
     catch(err)
@@ -2803,7 +2798,7 @@ function Get_BZKH()
 	
 	
 	function obj_BZKH()
-	{//alert("jjj"+json_BZKH.BMBZ.arrBM[0].bm);
+	{
 		this.status = json_BZKH.status;//是否为可提交状态
 		
 		this.BZKH_BZ = new BZKH_BZ();
@@ -2885,7 +2880,7 @@ function Post_BZKH(obj_BZKH)//obj_BZKH为Get_BZKH()定义的对象
 		}
 		_arrBM.push({"bm" : TranTextToDig(obj_BZKH.arrBMBZ[i].bm), "bzrs" : obj_BZKH.arrBMBZ[i].arrBZ.length, "arrBZ" :_arrBZ});
 	}
-	//alert(_arrBM[0].arrBZ[0].pj+"   kkk");
+	
 	var json_Post_BZKH = 
 	{
 	    "year" : year,
@@ -2899,7 +2894,7 @@ function Post_BZKH(obj_BZKH)//obj_BZKH为Get_BZKH()定义的对象
 		}			
 	};
 
-	//alert(json_Post_BZKH.BMBZ.arrBM[3].arrBZ[2].account);
+	
 	
 	//服务器成功接收信息，则返回true，否则返回false
 	try
@@ -3126,7 +3121,7 @@ function Get_BMKH()
 			this.df5 = BM.df5; //沟通合作能力
 			this.df6 = BM.df6; //部门成员表现
 		}
-		this.arrBM = new Array();//alert(json_BMKH.BM.arrBM.length);
+		this.arrBM = new Array();
 		for(var i = 0; i < json_BMKH.BM.arrBM.length; ++i)
 		{
 			this.arrBM.push(new obj_BM(json_BMKH.BM.arrBM[i]));
@@ -3206,7 +3201,7 @@ function Post_BMKH(obj_BMKH)//obj_BMKH为Get_BMKH()定义的对象
             success:function(result){obj=result;}
 		});
 			
-        alert(obj.status);
+        
         if(obj.flagCrud)
             return true;
         else
@@ -3235,7 +3230,7 @@ function Get_YXBZPD()
             success:function(result){obj=result;}
 		});	
 		var json_YXBZPD = obj;
-		//alert(obj.status);
+		
 	}
     catch(err)
     {
@@ -3359,7 +3354,7 @@ function Get_ZXTFK()
 	}
 	
 	var objZXTFK=new classZXTFK;
-	//alert(json_ZXTFK.classSortDepart.sum);
+	
 	objZXTFK.arrSorted=json_ZXTFK.classSortDepart.arrSorted;
 	objZXTFK.arrExcMin =json_ZXTFK.ExcMinster;
 	objZXTFK.arrMinFeedBack=json_ZXTFK.classSituation.arrMinFeedBack;
@@ -3420,10 +3415,9 @@ function Post_YXBZPD(arrIDlist)
             async:false,
             dataType:"json",
             type:"POST",
-            success:function(result){obj=result;alert(111);}
+            success:function(result){obj=result;}
 		});
 		
-        alert(obj.status);
         if(obj.flagCrud)
             return true;
         else
@@ -3448,7 +3442,7 @@ function Get_KHJCKZ()
             success:function(result){obj=result;}
 		});	
 		json_Get_KHJCKZ=obj;
-		//alert(obj.KSKH+obj.KSPD+obj.FBJG);
+		
 /* 	var json_Get_KHJCKZ = 
 	{
 		"KSKH":0,//开始本月考核
@@ -3463,7 +3457,6 @@ function Get_KHJCKZ()
 //发送考核进程控制表的数据回数据库
 function Post_KHJCKZ(obj_KHJCKZ)
 {
-	//alert("aaa");
 	var json_Post_KHJCKZ = obj_KHJCKZ;
 		var obj;
             $.ajax({
@@ -3474,8 +3467,6 @@ function Post_KHJCKZ(obj_KHJCKZ)
             type:"POST",
             success:function(result){obj=result;}
 		});	
-	//alert(obj.textBack);
-	//alert(json_Post_KHJCKZ.KSKH+json_Post_KHJCKZ.KSPD+json_Post_KHJCKZ.FBJG);
 	if(obj.textBack)
 		return true;
 	else
@@ -3576,7 +3567,7 @@ function POST_QTQKJJF(obj_QTQKJJF)
             type:"POST",
             success:function(result){obj=result;}
         });
-        //alert(obj.flagCrud);
+       
         if(obj.flagCrud)//发送成功返回true，否则返回false
             return true;
         else
@@ -3607,7 +3598,7 @@ function Get_YXPDXZ()
 		type:"POST",
 		success:function(result){obj=result;}
 		});	
-		//alert(obj.str);
+		
 		var json_Get_YXPDXZ = obj;
 		
 	}
@@ -3671,7 +3662,7 @@ function Post_YXPDXZ(obj_YXPDXZ)
             type:"POST",
             success:function(result){obj=result;}
 		});
-		alert(obj.status);
+		
         if(1)//发送成功返回true，否则返回false
             return true;
         else
@@ -3747,7 +3738,7 @@ function Get_CKWWCQK()
 //获取违纪登记表数据
 function Get_WJDJ(iType)
 {
-	//alert(iType+1);
+	
     //iType是指表的种类,比如0表示秘书处制度违纪登记表
     try
     {
@@ -3764,7 +3755,7 @@ function Get_WJDJ(iType)
             type:"POST",
             success:function(result){obj=result;}
 		});	
-		alert(obj.type);
+		
 		json_Get_WJDJ=obj;
     }
     catch(err)
@@ -3791,7 +3782,6 @@ function Post_WJDJ(obj,iType)
         if(debug())
             return true;
         //ajax代码,obj是获取的时候一样的格式
-		//alert(iType);
 		var back;
 	    $.ajax({
             url:URL+"/post_bmwg",
@@ -3912,10 +3902,10 @@ function Show_GSZP()
 	
 	function delete_a_word()
 	{
-		//alert("dddd");
+		
 		strID=this.id;
 		strIndex=strID.replace("delete_liuyan_","");
-		//alert(strIndex);
+		
 		obj_GSZP.arrTongshiliuyan.splice(strIndex,1);
 		reRender();
 		
@@ -3930,7 +3920,7 @@ function Show_GSZP()
 		}
 		for(var i=0;i<obj_GSZP.arrTongshiliuyan.length;i++)
 		{
-			//alert("jjj");
+
 			GetObjById("delete_liuyan_"+i).onclick=delete_a_word;
 			GetObjById("liuyanban_"+i).onchange=function()
 			{
@@ -4764,10 +4754,10 @@ function Show_BZZP()
 	/*留言板部分*/
 	function delete_a_word()
 	{
-		//alert("dddd");
+		
 		strID=this.id;
 		strIndex=strID.replace("delete_liuyan_","");
-		//alert(strIndex);
+		
 		obj_BZZP.arrTSLY.splice(strIndex,1);
 		reRender();
 		
@@ -4782,7 +4772,7 @@ function Show_BZZP()
 		}
 		for(var i=0;i<obj_BZZP.arrTSLY.length;i++)
 		{
-			//alert("jjj");
+			
 			GetObjById("delete_liuyan_"+i).onclick=delete_a_word;
 			GetObjById("liuyanban_"+i).onchange=function()
 			{
@@ -5051,7 +5041,7 @@ function Show_BZZP()
 				return false;
 			}
 			//检查评分有没写完
-			//alert("检查评分");
+			
 			for (var i = 0; i < obj_BZZP.arrDF.length; ++i) 
 			{
 				for (var j = 0; j <  obj_BZZP.arrDF[i].length; ++j) 
@@ -5064,7 +5054,7 @@ function Show_BZZP()
 				}
 			}
 			//检查自我评价有没写
-			//alert("检查自我评价");
+			
 			if(obj_BZZP.zwpj==""||obj_BZZP.zwpj==" "||obj_BZZP.zwpj=="无"||obj_BZZP.zwpj=="请填写.....")
 			{
 				if(!confirm("您的自我评价还没写，你确定要提交？"))
@@ -5073,7 +5063,7 @@ function Show_BZZP()
 				}
 			}
 			//检查对本部门其他部长评价有没有写
-			//alert("检查部长评价");
+			
 			for(var i=0;i<obj_BZZP.arrDQTBZPJ.length;++i)
 			{
 				if(obj_BZZP.arrDQTBZPJ[i].fs==0)
@@ -5091,7 +5081,7 @@ function Show_BZZP()
 					}
 				}
 			}
-			//alert("检查完了");
+			
 			return true;
 			
 			
@@ -5102,7 +5092,7 @@ function Show_BZZP()
 			if(AllConfirm())
 			{
 				obj_BZZP.hadSubmit=1;
-				//alert("提交");
+				
 				if(Post_BZZP(obj_BZZP))
 				{
 					alert("提交成功");
@@ -6285,7 +6275,7 @@ function Show_YXBZPD()
 		document.getElementById("show_more").innerHTML=strCheckForm;
 		document.getElementById("youxiubuzhan").onclick = function()
 		{
-			alert("hehehhehehhe");
+			
 			var objYXBZNameList = document.forms["yxbzpdb"];
 			var arrIDList = new Array();
 			for(var i=0;i<objYXBZPD.arrYXBZPDlist.length;i++)
@@ -6631,7 +6621,7 @@ function Show_YXPDXZ()
 	var strHTML = "<br /><h2>各部门部长和干事优秀评定限制</h2>";
 	
 	for(var i = 0; i < obj_YXPDXZ.arrDepart.length; ++i)
-	{//alert(obj_YXPDXZ.arrDepart[i].depart);
+	{
 		strHTML += "<h3>" + arrDepartName[obj_YXPDXZ.arrDepart[i].depart-1] + "</h3>"
 				+  "<label><input type=\"checkbox\" id=\"" + ("quanxuan_"+i) + "\" />全选</label><br />"; 
 		
@@ -7027,7 +7017,7 @@ function Show_CKWWCQK()
 //各种违纪表
 function Show_WJDJ(iType)
 {
-	alert("show违纪登记"+iType);
+	
     objWJDJ=Get_WJDJ(iType);
     var strHTML=new String();
     for(var i=0;i<objWJDJ.arrWJDJB.length;i++)

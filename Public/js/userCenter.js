@@ -120,7 +120,7 @@ function PostPersonalDataToServer(objPersonalData)
     dataType:"json",
     success:function(result){response=result;}
     });
-    //alert(response.status);
+    
 
 	//判断数据是否传递成功
 	if(1)
@@ -131,7 +131,7 @@ function PostPersonalDataToServer(objPersonalData)
 //向服务器传递新密码
 function PostPassWordToServer(strAffirmPW)
 {
-	//alert(strAffirmPW);
+	
     strAffirmPW=hex_md5(String(strAffirmPW));
     console.log(strAffirmPW);
 	var person_info=
@@ -148,7 +148,7 @@ function PostPassWordToServer(strAffirmPW)
 		success:function(result){response=result;}
 		});
 		
-		alert(response.status);
+		
 	//判断新密码是否传递成功
 	if(1)
 	{
@@ -177,13 +177,15 @@ function CheckPassWord(passWord)
 		success:function(result){response=result;}
 		});
 	////把密码发回服务器验证
-	alert(response.status);
-	if(1==response.flag){
-		alert("正确");
-		return true;}
-	else{
-		alert("错误");
-		return false;}
+	
+	if(1==response.flag)
+    {	
+		return true;
+    }
+	else
+    {
+		return false;
+    }
 }
 //获取空课表
 function GetEmptySchedule()
@@ -270,7 +272,7 @@ function GetContactsBooks()
 		type:"post",
 		success:function(result){obj=result;}
 	});
-	//alert(obj[0].name);
+	
 	var arr={
 		"num":obj.length,
 		"person":obj
@@ -285,7 +287,7 @@ function GetContactsBooks()
 		{"depart":"公关部","post":"部长级","name":"邓大神","QQNum":"2546606474","longPhoneNum":"13726247287","shortPhoneNum":"627287","dormNO":"3321","birType":"公历","month":"9","day":"18","grade":"12","major":"信息安全"}
 	  ]
 	}; */
-	//alert(arr.person[0].name);
+	
 	
 	for(var iCount = 0; iCount < arr.num; ++iCount)
 	{
@@ -326,7 +328,7 @@ function GetContactsBooks()
 		
 		
 		
-		var iIndex = Math.floor((Math.random()*arrDepart.length));//alert(iIndex);
+		var iIndex = Math.floor((Math.random()*arrDepart.length));
 		objPD.depart = arrDepart[iIndex];
 		var iIndex1 = Math.floor((Math.random()*arrPost.length));
 		objPD.post = arrPost[iIndex1];*/
@@ -354,7 +356,7 @@ function PostESToServer(arrES)
 		'fri':arrES[5],
 		'sat':arrES[6],
 	};
-	//alert(arrES[0][12]+arrES[1][1]);
+	
 	//ajax请求
 	var obj;
 	$.ajax({
@@ -365,7 +367,7 @@ function PostESToServer(arrES)
 		dataType:"json",
 		success:function(result){obj=result;}
 	});
-	//alert(obj.back);
+	
 	if(obj.back)
 		return true;
 	else
@@ -955,7 +957,7 @@ function ChangePassWord()
 							+ "<div class=\"info_item\" id=\"changepw\">\n"
 								+ "<p>\n"
 									+ "<input type=\"password\" id=\"currentpw\" name=\"currentpw\" />\n"
-								+ "</p>\n"
+								+ "</p><p id='checking'></p>\n"
 								+ "<p>\n"
 									+ "<input type=\"password\" id=\"newpw\" name=\"newpw\" />\n"
 								+ "</p>\n"
@@ -990,10 +992,12 @@ function ChangePassWord()
 	objCurPW.onchange = function()
 	{
 		strCurPW = objCurPW.value;
+        $("#checking").html("检查中");
 		if(!CheckPassWord(strCurPW))
 			error1 = "*密码错误，请重新输入";
 		else
 			error1 = "";
+        $("#checking").html("");
 	}
 	
 	objNewPW.onchange = function()
@@ -1213,8 +1217,7 @@ function ChangeEmptySchedule(arrES)
 			{
 				e=e||event;
 				var tag=e.srcElement||e.target;
-				/*if(tag.id)	
-					alert(tag.id);*/
+				
 				strId = tag.id;
 											
 				var obj = document.getElementById(strId);
@@ -1415,7 +1418,7 @@ function ShowContactsBooks()
 	var strST = "";//指导老师
 	for(var iCount = 0; iCount < iSTSum; ++ iCount)
 	{
-		str += arrObjSortPD[12][iCount].name + " " + arrObjSortPD[12][iCount].longPhoneNum + "  ";alert("KKK");
+		str += arrObjSortPD[12][iCount].name + " " + arrObjSortPD[12][iCount].longPhoneNum + "  ";
 	}
 	
 	strHTML += "<tfoot>\n"

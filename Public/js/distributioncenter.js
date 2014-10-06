@@ -32,7 +32,7 @@ function initDistri()
 
 function initcallback()
 {
-    alert("tinymce");
+    
 }
 
 function initArticles()

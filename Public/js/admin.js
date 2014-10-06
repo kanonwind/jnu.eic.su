@@ -326,7 +326,7 @@ function PostBindInfo(chmId, arrChecked,arrGJBM,jsonWJDJ)
             dataType:"json",
             success:function(result){obj=result;}
         });
-		alert(obj.flagCrud);
+		
 	/*json示例	
 	var jsonPost={
 		"chairman":"2012052207",
