@@ -24,9 +24,8 @@ class AllocateAction extends Action
 			$person_model=new Model("Person");
 			$person_info=$person_model->where("account=$account")->find();
 			$name=$person_info['name'];
-			$link="<a class=\"user_info\" id=\"login_info_user_name\" href=\"#\">".$name."</a>";
-			$link.="<a class=\"user_info\" id=\"login_info_user_id\" href=\"#\">".$account."</a>";
-			$link.="<a class=\"user_info\" id=\"login_info_user_center\" href=\"".__APP__."/Center/index\">个人中心</a>";
+			$link="<a class=\"user_info\" id=\"login_info_user_name\" href=\"#\">".$name."</a>&nbsp;";
+			$link.="<a class=\"user_info\" id=\"login_info_user_center\" href=\"".__APP__."/Center/index\">个人中心</a>&nbsp;";
 			$link.="<a class=\"user_info\" id=\"login_info_log_out\" href=\"".__APP__."/Login/logout\">注销</a>";
 			$this->assign('link',$link);
 		}
@@ -250,7 +249,8 @@ class AllocateAction extends Action
 					unset($data);
 					$person_info=$person_model->where("account=$account")->find();
 					//对性别进行筛选，对部门进行筛选
-					if($person_info['sex']==$sex && $person_info['apartment']!=$apartment)
+					if(($person_info['sex']==$sex || $sex==0)){
+					if($person_info['apartment']!=$apartment)
 					{
 						//今年本月
 						$monthNow=date("n");
@@ -270,6 +270,7 @@ class AllocateAction extends Action
 						$data['total_alloc_time']=count($total_alloc_time);
 						//echo $this->_encode($data);
 						$arrAnsPerInfo[]=$data;
+					}
 					}
 					
 				}
@@ -310,7 +311,8 @@ class AllocateAction extends Action
 					unset($data);
 					$person_info=$person_model->where("account=$account")->find();
 					//对性别进行筛选，对部门进行筛选
-					if($person_info['sex']==$sex && $person_info['apartment']!=$apartment)
+					if(($person_info['sex']==$sex || $sex==0)){
+					if($person_info['apartment']!=$apartment)
 					{
 						//今年本月
 						$monthNow=date("n");
@@ -331,7 +333,7 @@ class AllocateAction extends Action
 						//echo $this->_encode($data);
 						$arrAnsPerInfo[]=$data;
 					}
-					
+					}
 				}
 				//echo "今天是".$week.$account."成功匹配了".$num."次</br>";
 			}
