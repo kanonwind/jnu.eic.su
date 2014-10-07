@@ -5978,7 +5978,7 @@ function Show_BMKH()
 	
 	strHTML += "<h3>推优部分</h3>\n"
 			 + "<p class=\"fill_in_tips\">\n"
-			 + "	<span class=\"fill_part\">填写指引：</span>请推选一个本月表现突出的非本人主管部门，并说明理由，理由会反馈给该部长\n"
+			 + "	<span class=\"fill_part\">填写指引：</span>请推选一个本月表现突出的非本人主管部门。\n"
 			 + "</p>\n"
 			 + "<p>\n"
 			 + "	部门：\n"
