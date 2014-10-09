@@ -270,7 +270,7 @@ class InitAction extends Action
 	echo $this->_encode($arr);
   }  
   //人员信息初始化：一般干事
-  private function initPersonSecond()
+  public function initPersonSecond()
   {
 	$person_model=new Model("Person");
 	$authority_model=new Model("Authority");
@@ -335,15 +335,15 @@ class InitAction extends Action
 	}
 	else if($flagInitPerson==0)
 	{
-		$person_model->where("type=1")->delete();
-		$person_info=$person_model->where("type=1")->select();
+		
+		$person_info=$person_model->where("type=1 and apartment!=2")->select();
 		foreach($person_info as $v)
 		{
 			$gs_account=$v['account'];
 			$timetable_model->where("account=$gs_account")->delete();
 			
 		}
-		$person_model->where("type=1")->delete();
+		$person_model->where("type=1 and apartment!=2")->delete();
 		echo "本次一般干事信息初始化失败</br>";
 	}
   }
