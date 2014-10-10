@@ -1452,6 +1452,30 @@ function ShowContactsBooks()
             }
         }catch(err){return "";}
     }
+    function getShortPhoneNumStr(strspn)
+    {
+        try{
+            var char_=strspn[0];
+            var icount=1;
+            for(var i=1;i<6;i++)
+            {
+                if(strspn[i]==char_)
+                {
+                    icount++;
+                }
+            }
+            if(icount==6)
+            {
+                return "-";
+            }
+            else
+            {
+                return strspn;
+            }
+        }catch(err){
+            return "-";
+        }
+    }
 	for(var iCount = 0; iCount < arrObjSortPD.length -1; ++iCount)
 	{		
 		var iLength = arrObjSortPD[iCount].length;
@@ -1463,7 +1487,7 @@ function ShowContactsBooks()
 							+ "<td>" + arrObjSortPD[iCount][0].name + "</td>\n"
 							+ "<td>" + arrObjSortPD[iCount][0].QQNum + "</td>\n"
 							+ "<td>" + arrObjSortPD[iCount][0].longPhoneNum + "</td>\n"
-							+ "<td>" + arrObjSortPD[iCount][0].shortPhoneNum + "</td>\n"
+							+ "<td>" + getShortPhoneNumStr(arrObjSortPD[iCount][0].shortPhoneNum) + "</td>\n"
 							+ "<td>" + arrObjSortPD[iCount][0].dormNO + "</td>\n"
 							+ "<td>" + getBirthStr(arrObjSortPD[iCount][0]) + "</td>\n";
             if(arrObjSortPD[iCount][0].major==-1)
@@ -1484,7 +1508,7 @@ function ShowContactsBooks()
                                 + "<td>" + arrObjSortPD[iCount][jCount].name + "</td>\n"
                                 + "<td>" + arrObjSortPD[iCount][jCount].QQNum + "</td>\n"
                                 + "<td>" + arrObjSortPD[iCount][jCount].longPhoneNum + "</td>\n"
-                                + "<td>" + arrObjSortPD[iCount][jCount].shortPhoneNum + "</td>\n"
+                                + "<td>" + getShortPhoneNumStr(arrObjSortPD[iCount][jCount].shortPhoneNum )+ "</td>\n"
                                 + "<td>" + arrObjSortPD[iCount][jCount].dormNO + "</td>\n"
                                 + "<td>" + getBirthStr(arrObjSortPD[iCount][jCount])+ "</td>\n"
                 if(arrObjSortPD[iCount][jCount].major==-1)

@@ -3286,6 +3286,8 @@ function Get_ZXTFK()
 {
     try
     {
+        console.log("主席团反馈");
+        console.log(year+"+"+month);
         if(debug())
             throw("ajax");
 		var obj;
@@ -3298,6 +3300,7 @@ function Get_ZXTFK()
             success:function(result){obj=result;}
 		});	
         var json_ZXTFK = obj;
+        console.log(json_ZXTFK);
     }
     catch(err)
     {
