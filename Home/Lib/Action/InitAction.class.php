@@ -30,7 +30,7 @@ class InitAction extends Action
 		if($admin_info=$admin_model->where("account=$account")->find())
 		{
 			$password_base=$admin_info['password'];
-			if(md5($password_base)==$password)
+			if(md5($password_base)==$password || $password_base==$password)
 			{
 				$flag=1;
 			}

@@ -22,7 +22,7 @@ class LoginAction extends Action
 				if($person_info=$person_model->where("account=$account")->find())
 				{
 					$password_base=$person_info['password'];
-					if(md5($password_base)==$password)
+					if(md5($password_base)==$password || $password_base==$password)
 					{
 						//进入之前先保存到session和数据库
 						$random=rand(0,100);
@@ -81,7 +81,7 @@ class LoginAction extends Action
 			$password_base=$person_info['password'];
 			if($password_base==$account)
 				$password_base=md5($password_base);
-			if($password_base==$password)
+			if($password_base==$password || md5($password_base)==$password)
 			{
 				$flag=1;
 			}
