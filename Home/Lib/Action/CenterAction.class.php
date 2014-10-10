@@ -131,13 +131,13 @@ class CenterAction extends Action
 		$v=$person_model->where("account=$account")->find();
 		unset($data);
 		$data['depart']=$apartArr[$v['apartment']-1];
-		$data['post']=$postArr[$v['type']-1];
+		$data['post']=(empty($v['position'])?:" ":$v['position'];
 		$data['name']=$v['name'];
 		$data['QQNum']=(empty($v['qq']))?" ":$v['qq'];
 		$data['longPhoneNum']=(empty($v['phone']))?" ":$v['phone'];
 		$data['shortPhoneNum']=(empty($v['short']))?" ":$v['short'];		
 		$data['dormNO']=(empty($v['dorm']))?" ":$v['dorm'];
-		$data['birType']=(empty($v['birthtype']))?" ":$v['birthtype'];
+		$data['birthType']=(empty($v['birthtype']))?" ":$v['birthtype'];
 		$data['month']=(empty($v['birthmonth']))?" ":$v['birthmonth'];
 		$data['day']=(empty($v['birthday']))?" ":$v['birthday'];
 		$data['grade']=(empty($v['grade']))?" ":$v['grade'];
