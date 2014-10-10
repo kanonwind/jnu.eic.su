@@ -1534,7 +1534,7 @@ class PerformAction extends Action
 
 
  //绩效考核第二阶段：生成基本反馈,生成总分和排名
- public function funcGetRank()
+ private function funcGetRank()
  {
    //设置年月
 	$authority_model=new Model("Authority");
@@ -1576,7 +1576,7 @@ class PerformAction extends Action
  }
  
  //绩效考核第三阶段，根据主席团的评优结果，生成最终的优秀部长
- public function funcGetAll()
+ private function funcGetAll()
  {
 	$arr=$this->getTime();
 	$year=$arr['year'];
@@ -2010,7 +2010,7 @@ class PerformAction extends Action
    unset($data);
    $data['yxbm']=0;
    $bmfk_model->where("year=$year and month=$month")->data($data)->save();
-
+  $j=0;
   for($k=1;$k<=11;$k++)
   {
 	//判断是否在限制表里面
@@ -2023,7 +2023,10 @@ class PerformAction extends Action
 	unset($data);
 	$data['yxbm']=1;
 	$bmfk_model->where("(year=$year and month=$month) and apartment=$apartment")->data($data)->save();
-	}
+	$j++;
+	if($j>1)
+		break;
+ }
  }
  //外调次数及其排名处理
  private function funcfkfive()
