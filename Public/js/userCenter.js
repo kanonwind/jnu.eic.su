@@ -632,7 +632,7 @@ function ChangePersonalData(objPersonalData)
 {
 	//var objPersonalData = GetPersonalData();   
 	flagUserData=0;
-    falgTXL=0;
+    flagTXL=0;
 	////确定当前大一入学的年份
 	var curYear;
 	var myDate = new Date();
@@ -1458,7 +1458,7 @@ function ShowContactsBooks()
 		if(arrObjSortPD[iCount].length > 0)
 		{
             var strDepart = "<tr class=\"first_line\">\n"
-						+ "<th rowspan=" + iLength + " scope=\"row\">" + arrDepartName[arrObjSortPD[iCount][0].depart] + "</th>\n"
+						+ "<th rowspan=" + iLength + " scope=\"row\">" + arrDepartName[arrObjSortPD[iCount][0].depart-1] + "</th>\n"
 						+ "<td>" + arrObjSortPD[iCount][0].post + "</td>\n"
 							+ "<td>" + arrObjSortPD[iCount][0].name + "</td>\n"
 							+ "<td>" + arrObjSortPD[iCount][0].QQNum + "</td>\n"
