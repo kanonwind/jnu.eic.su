@@ -1432,13 +1432,12 @@ function ShowContactsBooks()
 			+ "</tfoot>\n";
 	
 	var strTBody = "";
-	var arrDepart = new Array("主席团","秘书处","人力资源部","KSC联盟","信息编辑部",
-			"组织部","宣传部","学术部","公关部","体育部","文娱部","心理服务部");
+	var arrDepart = arrDepartName;
             
     function getBirthStr(pObj)
     {
         try{
-            if(pObj.birType=="")
+            if(pObj.birType==""||pObj.birType=="-1")
             {
                 return "";
             }
@@ -1465,25 +1464,41 @@ function ShowContactsBooks()
 							+ "<td>" + arrObjSortPD[iCount][0].longPhoneNum + "</td>\n"
 							+ "<td>" + arrObjSortPD[iCount][0].shortPhoneNum + "</td>\n"
 							+ "<td>" + arrObjSortPD[iCount][0].dormNO + "</td>\n"
-							+ "<td>" + getBirthStr(arrObjSortPD[iCount][0]) + "</td>\n"
-							+ "<td>" + arrMajorName[arrObjSortPD[iCount][0].major] + "</td>\n"
+							+ "<td>" + getBirthStr(arrObjSortPD[iCount][0]) + "</td>\n";
+            if(arrObjSortPD[iCount][0].major==-1)
+            {
+                strDepart+="<td>-</td></tr>";
+            }
+            else
+            {
+				 strDepart+="<td>" + arrMajorName[arrObjSortPD[iCount][0].major] + "</td>\n"
 						+ "</tr>\n";
-		var strPersons = "";
-		for(var jCount = 1; jCount < iLength; ++jCount)
-		{
-			strPersons += "<tr>\n"
-							+ "<td>" + arrObjSortPD[iCount][jCount].post + "</td>\n"
-							+ "<td>" + arrObjSortPD[iCount][jCount].name + "</td>\n"
-							+ "<td>" + arrObjSortPD[iCount][jCount].QQNum + "</td>\n"
-							+ "<td>" + arrObjSortPD[iCount][jCount].longPhoneNum + "</td>\n"
-							+ "<td>" + arrObjSortPD[iCount][jCount].shortPhoneNum + "</td>\n"
-							+ "<td>" + arrObjSortPD[iCount][jCount].dormNO + "</td>\n"
-							+ "<td>" + getBirthStr(arrObjSortPD[iCount][jCount])+ "</td>\n"
-							+ "<td>" + arrMajorName[arrObjSortPD[iCount][jCount].major] + "</td>\n"
-						+ "</tr>\n";
-		}
-		strDepart += strPersons;
-		strTBody += strDepart;}
+            }
+        
+            var strPersons = "";
+            for(var jCount = 1; jCount < iLength; ++jCount)
+            {
+                strPersons += "<tr>\n"
+                                + "<td>" + arrObjSortPD[iCount][jCount].post + "</td>\n"
+                                + "<td>" + arrObjSortPD[iCount][jCount].name + "</td>\n"
+                                + "<td>" + arrObjSortPD[iCount][jCount].QQNum + "</td>\n"
+                                + "<td>" + arrObjSortPD[iCount][jCount].longPhoneNum + "</td>\n"
+                                + "<td>" + arrObjSortPD[iCount][jCount].shortPhoneNum + "</td>\n"
+                                + "<td>" + arrObjSortPD[iCount][jCount].dormNO + "</td>\n"
+                                + "<td>" + getBirthStr(arrObjSortPD[iCount][jCount])+ "</td>\n"
+                if(arrObjSortPD[iCount][jCount].major==-1)
+                {
+                    strPersons +="<td>-</td></tr>";
+                }
+                else
+                {
+                    strPersons +="<td>" + arrMajorName[arrObjSortPD[iCount][jCount].major] + "</td>\n"
+                                + "</tr>\n";
+                }
+            }
+            strDepart += strPersons;
+            strTBody += strDepart;
+        }
 	}
 	strHTML +=strTBody;
 	strHTML += "</tbody>\n"
