@@ -1268,7 +1268,7 @@ function SortPersonalDataObj()
 	for(var iCount = 0; iCount < arrObjPersonalData.length; ++iCount)
 	{
 		var objTemp = arrObjPersonalData[iCount];
-		switch(objTemp.depart)
+		switch(arrDepartName[objTemp.depart-1])
 		{
 			case "主席团":
 				arrObjPR.push(objTemp);
@@ -1279,7 +1279,7 @@ function SortPersonalDataObj()
 			case "人力资源部":
 				arrObjHR.push(objTemp);
 				break;
-			case "KSC联盟":
+			case "JDC":
 				arrObjKSC.push(objTemp);
 				break;
 			case "信息编辑部":
@@ -1433,6 +1433,7 @@ function ShowContactsBooks()
 	
 	var strTBody = "";
 	var arrDepart = arrDepartName;
+
             
     function getBirthStr(pObj)
     {
@@ -1457,7 +1458,7 @@ function ShowContactsBooks()
 		if(arrObjSortPD[iCount].length > 0)
 		{
             var strDepart = "<tr class=\"first_line\">\n"
-						+ "<th rowspan=" + iLength + " scope=\"row\">" + arrObjSortPD[iCount][0].depart + "</th>\n"
+						+ "<th rowspan=" + iLength + " scope=\"row\">" + arrDepartName[arrObjSortPD[iCount][0].depart] + "</th>\n"
 						+ "<td>" + arrObjSortPD[iCount][0].post + "</td>\n"
 							+ "<td>" + arrObjSortPD[iCount][0].name + "</td>\n"
 							+ "<td>" + arrObjSortPD[iCount][0].QQNum + "</td>\n"
