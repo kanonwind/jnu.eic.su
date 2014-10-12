@@ -1128,6 +1128,7 @@ function Get_GSKHFK()
                 success:function(result){obj=result;}
             });
             var json_Get_GSKHFK = obj;
+            console.log(json_Get_GSKHFK);
 		}
         catch(err)
         {
@@ -4318,10 +4319,10 @@ function Show_GSKHFK()
 	+"					<td>干事考核表得分</td><td>满分5分</td><td>" + objGSKHFK.arrDFXZ[1] + "</td><td></td>\n"
 	+"				</tr>\n"
 	+"				<tr>\n"
-	+"					<td>出勤得分</td><td><p>基本得分1分</p><p>A.例会 大会 拓展（请假-0.1/次，迟到-0.2/次，缺席-0.3/次）</p><p>B.外调（缺席-0.1/次）</p></td><td>" + objGSKHFK.arrDFXZ[2] + "</td><td></td>\n"
+	+"					<td>出勤得分</td><td><p>基本得分1分</p><p>A.例会 大会 拓展（请假-0.1/次，迟到-0.2/次，缺席-0.3/次）</p><p>B.外调（缺席-0.3/次,迟到或早退-0.2/次,请假-0.1/次）</p></td><td>" + objGSKHFK.arrDFXZ[2] + "</td><td></td>\n"
 	+"				</tr>\n"
 	+"				<tr>\n"
-	+"					<td>外调加分</td><td><p>基本分0分</p><p>A.例会 大会 拓展（请假-0.1/次，迟到-0.2/次，缺席-0.3/次）</p><p>B.外调（缺席-0.1/次）</p></td><td>" + objGSKHFK.arrDFXZ[3] + "</td><td><p>此外调统计包括人力平时外调各部门干事，司仪、礼仪队的外调，信编拍照外调和人力观察员外调</p></td>\n"
+	+"					<td>外调加分</td><td><p>基本分0分</p><p>正常参加+0.1/次,推优+0.1/次</p></td><td>" + objGSKHFK.arrDFXZ[3] + "</td><td><p>此外调统计包括人力平时外调各部门干事，司仪、礼仪队的外调，信编拍照外调和人力观察员外调</p></td>\n"
 	+"				</tr>\n"
 	+"				<tr>\n"
 	+"					<td>推优加分</td><td>0.1/票</td><td>" + objGSKHFK.arrDFXZ[4] + "</td><td></td>\n"
@@ -5463,10 +5464,15 @@ function Show_BZFK()
 				+"		<td>其他部长级评分</td><td><p>满分2分，部长打分为10分制，由部长打分*0.2/部门除该部长外部长人数）</p></td><td>"+obj_BZFK.arrDeFenXiZhe[3]+"</td><td></td>\n"
 				+"	</tr>\n"
 				+"	<tr>\n"
-				+"		<td>出勤得分</td><td><p>基本得分1分</p><p>A.例会 大会 拓展（请假-0.1/次，迟到-0.2/次，缺席-0.3/次）</p><p>B.外调（缺席-0.1/次）</p></td><td>"+obj_BZFK.arrDeFenXiZhe[4]+"</td><td></td>\n"
+				+"		<td>出勤得分</td>"
+                +"          <td>"
+                +"              <p>基本得分1分</p>"
+                +"              <p>A.例会 大会 拓展（请假-0.1/次，迟到-0.2/次，缺席-0.3/次）</p><p>B.外调（缺席-0.3/次,迟到或早退-0.2/次,请假-0.1/次）</p>"
+                +"          </td>"
+                +"          <td>"+obj_BZFK.arrDeFenXiZhe[4]+"</td><td></td>\n"
 				+"	</tr>\n"
 				+"	<tr>\n"
-				+"		<td>外调加分</td><td><p>基本分0分</p><p>A.例会 大会 拓展（请假-0.1/次，迟到-0.2/次，缺席-0.3/次）</p><p>B.外调（缺席-0.1/次）</p></td><td>"+obj_BZFK.arrDeFenXiZhe[5]+"</td><td><p>此外调统计包括人力平时外调各部门干事，司仪、礼仪队的外调，信编拍照外调和人力观察员外调</p></td>\n"
+				+"		<td>外调加分</td><td><p>基本分0分</p><p>正常参加+0.1/次,推优+0.1/次</p></td><td>"+obj_BZFK.arrDeFenXiZhe[5]+"</td><td><p>此外调统计包括人力平时外调各部门干事，司仪、礼仪队的外调，信编拍照外调和人力观察员外调</p></td>\n"
 				+"	</tr>\n"
 				+"	<tr>\n"
 				+"		<td>反馈加分</td><td><p>0.1/次</p><p>在外调反馈表或活动调研问卷中写的意见被活动部门采纳</p></td><td>"+obj_BZFK.arrDeFenXiZhe[6]+"</td><td></td>\n"
@@ -5534,7 +5540,8 @@ function Show_BZFK()
 					+"<table>";
 	for(var i=0;i<obj_BZFK.arrBuMenPaiMing.length;i++)
 	{
-		strInnerHtml+="<tr><td>"+(i+1)+". </td><td>&emsp;&emsp;"+arrDepartName[obj_BZFK.arrBuMenPaiMing[i].bm-1]+"</td><td><span>得分:</span>"+obj_BZFK.arrBuMenPaiMing[i].df+"</td></tr>";
+		strInnerHtml+="<tr><td>"+(i+1)+". </td><td>&emsp;&emsp;"+arrDepartName[obj_BZFK.arrBuMenPaiMing[i].bm-1]+"</td>"
+            +"<td><span>得分:</span>"+obj_BZFK.arrBuMenPaiMing[i].df+"</td></tr>";
 	}
 	strInnerHtml+="</table>"
 					+"<p class=\"fill_in_tips\">"
@@ -5551,10 +5558,12 @@ function Show_BZFK()
 					+"		<td>主管副主席评分</td><td><p>满分3分<p></td><td>"+obj_BZFK.arrBuMenDeFenXiZhe[1]+"</td><td></td>"
 					+"	</tr>"
 					+"	<tr>"
-					+"		<td>部门出勤</td><td><p>基本得分2分</p><p>A例会 大会 拓展（请假-0.1/人次，迟到-0.2/人次，缺席-0.3/人次）</p></td><td>"+obj_BZFK.arrBuMenDeFenXiZhe[2]+"</td><td><p>此统计还包括部长级例会的出勤情况（扣分情况与平时例会相同），外调缺席不扣部门出勤分<p></td>"
+					+"		<td>部门出勤</td><td><p>基本得分2分</p><p>A例会 大会 拓展（请假-0.1/人次，迟到-0.2/人次，缺席-0.3/人次）</p></td>"
+                    +"      <td>"+obj_BZFK.arrBuMenDeFenXiZhe[2]+"</td><td><p>此统计还包括部长级例会的出勤情况（扣分情况与平时例会相同），外调缺席不扣部门出勤分<p></td>"
 					+"	</tr>"
 					+"	<tr>"
-					+"		<td>违反违规惩戒制度</td><td><p>包括秘书、人力、公关、信编和宣传的违规惩戒制度，具体扣分细则请看总群群共享上的《违规惩戒制度》</p></td><td>"+obj_BZFK.arrBuMenDeFenXiZhe[3]
+					+"		<td>违反违规惩戒制度</td><td><p>包括秘书、人力、公关、信编和宣传的违规惩戒制度，具体扣分细则请看总群群共享上的《违规惩戒制度》</p></td>"
+                    +"      <td>"+obj_BZFK.arrBuMenDeFenXiZhe[3]
                     +"</td><td><p>"+obj_BZFK.weijiliyou+"</p></td>"
 					+"	</tr>"
 					+"	<tr>"

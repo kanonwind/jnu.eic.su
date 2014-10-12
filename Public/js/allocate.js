@@ -901,13 +901,13 @@ function showQianDaoQianLi(currentUser)
 								+"			</tr>\n"
 								+"		</thead>\n"
 								+"		<tbody>\n";
-				var arrResultName=new Array("缺席","迟到或早退","一般","表项突出");
+				var arrResultName=new Array("缺席","迟到或早退","正常出席","表项突出","请假");
 				for(var i=0;i<arrAllocedStudents.length;i++)
 				{
 					strAllocPerf+="<tr><td>"
 								+arrAllocedStudents[i].name
 								+"</td><td class=\"width_400\">";
-                    for(var j=0;j<4;j++)
+                    for(var j=0;j<arrResultName.length;j++)
                     {
                         strAllocPerf+="<label for=\""+(arrAllocedStudents[i].ID+"_p"+j)+"\">"+arrResultName[j]+"</label>"
 								+"<input type=\"radio\" name=\""
