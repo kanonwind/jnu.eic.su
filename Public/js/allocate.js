@@ -901,7 +901,7 @@ function showQianDaoQianLi(currentUser)
 								+"			</tr>\n"
 								+"		</thead>\n"
 								+"		<tbody>\n";
-				var arrResultName=new Array("缺席","迟到或早退","正常出席","表项突出","请假");
+				var arrResultName=new Array("缺席","取消外调","正常出席","推优");
 				for(var i=0;i<arrAllocedStudents.length;i++)
 				{
 					strAllocPerf+="<tr><td>"
