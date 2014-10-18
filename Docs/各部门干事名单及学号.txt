@@ -1,0 +1,141 @@
+//【秘书处】
+    $this->initPersonCrud("2014050567","陈晴",1,1,$flagInitPerson);
+    $this->initPersonCrud("2014052414","陈恬",1,1,$flagInitPerson);
+    $this->initPersonCrud("2014052564","万林鸿",1,1,$flagInitPerson);
+    $this->initPersonCrud("2014052512","许晋嘉",1,1,$flagInitPerson);
+    $this->initPersonCrud("2014052548","方紫雯",1,1,$flagInitPerson);
+    $this->initPersonCrud("2014050560","吴雨桐",1,1,$flagInitPerson);
+    $this->initPersonCrud("2014052992","章琬苓",1,1,$flagInitPerson);
+    $this->initPersonCrud("2014053727","焦子健",1,1,$flagInitPerson);
+    $this->initPersonCrud("2014054099","杨静",1,1,$flagInitPerson);
+    $this->initPersonCrud("2014052472","张子翰",1,1,$flagInitPerson);
+
+    //【公关部】
+    $this->initPersonCrud("2014052853","常晓莹",1,10,$flagInitPerson);
+    $this->initPersonCrud("2014052519","温俊贤",1,10,$flagInitPerson);
+    $this->initPersonCrud("2014052517","李政龙",1,10,$flagInitPerson);
+    $this->initPersonCrud("2014052556","林丽敏",1,10,$flagInitPerson);
+    $this->initPersonCrud("2014052553","陈少峰",1,10,$flagInitPerson);
+    $this->initPersonCrud("2014050241","杨晟",1,10,$flagInitPerson);
+    $this->initPersonCrud("2014050235","苏健",1,10,$flagInitPerson);
+    $this->initPersonCrud("2013050549","何玲",1,10,$flagInitPerson);
+    $this->initPersonCrud("2014053675","秦晋",1,10,$flagInitPerson);
+    $this->initPersonCrud("2014050229","王雅",1,10,$flagInitPerson);
+    $this->initPersonCrud("2014053752","蔡微",1,10,$flagInitPerson);
+
+    //【宣传部】
+    $this->initPersonCrud("2014053677","赵宸",1,3,$flagInitPerson);
+    $this->initPersonCrud("2014053686","杨蕙君",1,3,$flagInitPerson);
+    $this->initPersonCrud("2014053750","谷典",1,3,$flagInitPerson);
+    $this->initPersonCrud("2014052439","郑奕嘉",1,3,$flagInitPerson);
+    $this->initPersonCrud("2014052986","熊珊珊",1,3,$flagInitPerson);
+    $this->initPersonCrud("2014054110","廖芮",1,3,$flagInitPerson);
+    $this->initPersonCrud("2014054107","丁一凡",1,3,$flagInitPerson);
+    $this->initPersonCrud("2014052481","苏志聪",1,3,$flagInitPerson);
+    $this->initPersonCrud("2014053753","周思静",1,3,$flagInitPerson);
+    $this->initPersonCrud("2014053732","卢美子",1,3,$flagInitPerson);
+    $this->initPersonCrud("2014052546","邓盛",1,3,$flagInitPerson);
+    $this->initPersonCrud("2014053756","李天琪",1,3,$flagInitPerson);
+    $this->initPersonCrud("2014052506","蔡信扬",1,3,$flagInitPerson);
+    $this->initPersonCrud("2014050546","邱昌良",1,3,$flagInitPerson);
+    $this->initPersonCrud("2014052478","郑诗文",1,3,$flagInitPerson);
+    $this->initPersonCrud("2014052573","李浩涛",1,3,$flagInitPerson);
+
+    //【学术部】
+    $this->initPersonCrud("2014053680","龚曹鸽",1,5,$flagInitPerson);
+    $this->initPersonCrud("2014050565","申嫒婷",1,5,$flagInitPerson);
+    $this->initPersonCrud("2014052404","潘键欣",1,5,$flagInitPerson);
+    $this->initPersonCrud("2014052485","赖金阳",1,5,$flagInitPerson);
+    $this->initPersonCrud("2014052994","郭青",1,5,$flagInitPerson);
+    $this->initPersonCrud("2014053733","龚娜",1,5,$flagInitPerson);
+    $this->initPersonCrud("2014052480","曾仙法",1,5,$flagInitPerson);
+    $this->initPersonCrud("2014052488","胡秦源",1,5,$flagInitPerson);
+    $this->initPersonCrud("2014052401","梁志敏",1,5,$flagInitPerson);
+    $this->initPersonCrud("2014050239","李松峻",1,5,$flagInitPerson);
+    $this->initPersonCrud("2014053946","李佳临",1,5,$flagInitPerson);
+    $this->initPersonCrud("2014054101","黄陈璞",1,5,$flagInitPerson);
+
+    //【信息编辑部】
+    $this->initPersonCrud("2014052417","陈育全",1,4,$flagInitPerson);
+    $this->initPersonCrud("2014052535","温世展",1,4,$flagInitPerson);
+    $this->initPersonCrud("2014050553","袁鑫",1,4,$flagInitPerson);
+    $this->initPersonCrud("2014053728","李卫云",1,4,$flagInitPerson);
+    $this->initPersonCrud("2014052558","邓圣豪",1,4,$flagInitPerson);
+    $this->initPersonCrud("2014052995","卓洁",1,4,$flagInitPerson);
+    $this->initPersonCrud("2014052540","曾文谦",1,4,$flagInitPerson);
+    $this->initPersonCrud("2014052463","林桐梓",1,4,$flagInitPerson);
+    $this->initPersonCrud("2014050563","王雪蒙",1,4,$flagInitPerson);
+    $this->initPersonCrud("2014052531","董永杰",1,4,$flagInitPerson);
+    $this->initPersonCrud("2014053731","袁悦",1,4,$flagInitPerson);
+
+    //【体育部】
+    $this->initPersonCrud("2014050573","魏瞳",1,6,$flagInitPerson);
+    $this->initPersonCrud("2014052465","赵树坚",1,6,$flagInitPerson);
+    $this->initPersonCrud("2014053737","刘畅",1,6,$flagInitPerson);
+    $this->initPersonCrud("2014050242","王昊爽",1,6,$flagInitPerson);
+    $this->initPersonCrud("2014052461","陈壮深",1,6,$flagInitPerson);
+    $this->initPersonCrud("2014052462","刘庆楷",1,6,$flagInitPerson);
+    $this->initPersonCrud("2014052516","陈家珍",1,6,$flagInitPerson);
+    $this->initPersonCrud("2014054088","饶洋波",1,6,$flagInitPerson);
+    $this->initPersonCrud("2014052536","罗炜烨",1,6,$flagInitPerson);
+    $this->initPersonCrud("2014053678","高洋",1,6,$flagInitPerson);
+    $this->initPersonCrud("2014050232","张晓桐",1,6,$flagInitPerson);
+    $this->initPersonCrud("2014052409","罗宝敏",1,6,$flagInitPerson);
+    $this->initPersonCrud("2014052508","彭宁光",1,6,$flagInitPerson);
+    $this->initPersonCrud("2014050379","杨子明",1,6,$flagInitPerson);
+    $this->initPersonCrud("2014052530","杜雅婷",1,6,$flagInitPerson);
+    $this->initPersonCrud("2014053714","史鑫",1,6,$flagInitPerson);
+    $this->initPersonCrud("2014052442","刘宇滨",1,6,$flagInitPerson);
+
+
+    //【组织部】
+    $this->initPersonCrud("2014053715","陈万鹏",1,8,$flagInitPerson);
+    $this->initPersonCrud("2014054090","邓栩",1,8,$flagInitPerson);
+    $this->initPersonCrud("2014053683","罗九天",1,8,$flagInitPerson);
+    $this->initPersonCrud("2014050247","杨璐",1,8,$flagInitPerson);
+    $this->initPersonCrud("2014053742","杨茂森",1,8,$flagInitPerson);
+    $this->initPersonCrud("2014052587","杨雅静",1,8,$flagInitPerson);
+    $this->initPersonCrud("2014052984","俞静",1,8,$flagInitPerson);
+    $this->initPersonCrud("2014054102","张卓然",1,8,$flagInitPerson);
+    $this->initPersonCrud("2014052494","郑鋆睿",1,8,$flagInitPerson);
+
+
+    //【JDC】
+    $this->initPersonCrud("2014053723","覃磊",1,7,$flagInitPerson);
+    $this->initPersonCrud("2014054095","杨霖霏",1,7,$flagInitPerson);
+    $this->initPersonCrud("2014053949","刘亚聪",1,7,$flagInitPerson);
+    $this->initPersonCrud("2014053687","卢星宇",1,7,$flagInitPerson);
+    $this->initPersonCrud("2014050378","周杉杉",1,7,$flagInitPerson);
+    $this->initPersonCrud("2014052415","欧振羽",1,7,$flagInitPerson);
+    $this->initPersonCrud("2014052440","黄嘉欣",1,7,$flagInitPerson);
+    $this->initPersonCrud("2014052991","潘琦",1,7,$flagInitPerson);
+    $this->initPersonCrud("2014052993","林佩祯",1,7,$flagInitPerson);
+    $this->initPersonCrud("2014052575","杨立舜",1,7,$flagInitPerson);
+    $this->initPersonCrud("2014050381","程永晴",1,7,$flagInitPerson);
+
+
+    //【心理服务部】
+    $this->initPersonCrud("2014050564","郑媛媛",1,11,$flagInitPerson);
+    $this->initPersonCrud("2014053002","方远明",1,11,$flagInitPerson);
+    $this->initPersonCrud("2014052560","徐孟菲",1,11,$flagInitPerson);
+    $this->initPersonCrud("2014053735","蒋子云",1,11,$flagInitPerson);
+    $this->initPersonCrud("2014053725","胡传涛",1,11,$flagInitPerson);
+    $this->initPersonCrud("2014052982","洪伟强",1,11,$flagInitPerson);
+    $this->initPersonCrud("2014052856","袁嘉瑶",1,11,$flagInitPerson);
+    $this->initPersonCrud("2014052432","陈柏宏",1,11,$flagInitPerson);
+    $this->initPersonCrud("2014052457","孔智生",1,11,$flagInitPerson);
+
+
+    //【文娱部】
+    $this->initPersonCrud("2014054093","李钐瑜",1,9,$flagInitPerson);
+    $this->initPersonCrud("2014050559","王喆",1,9,$flagInitPerson);
+    $this->initPersonCrud("2014052562","麦智鹏",1,9,$flagInitPerson);
+    $this->initPersonCrud("2014052990","许丽芳",1,9,$flagInitPerson);
+    $this->initPersonCrud("2014052988","朱键楠",1,9,$flagInitPerson);
+    $this->initPersonCrud("2014053739","沈壮",1,9,$flagInitPerson);
+    $this->initPersonCrud("2014052411","王曼",1,9,$flagInitPerson);
+    $this->initPersonCrud("2014053681","袁亚丽",1,9,$flagInitPerson);
+    $this->initPersonCrud("2014053751","姜涵璐",1,9,$flagInitPerson);
+    $this->initPersonCrud("2014052395","郭子茜",1,9,$flagInitPerson);
+    $this->initPersonCrud("2014053747","马士伟",1,9,$flagInitPerson);
+    $this->initPersonCrud("2014053116","陈欢欢",1,9,$flagInitPerson);
