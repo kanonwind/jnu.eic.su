@@ -3134,7 +3134,7 @@ function Get_BMKH()
 			this.arrBuMen.push({"name":TranDigToText(json_BMKH.BuMen[i].name)});
 		}
 
-		this.TYBM = json_BMKH.TYBM;
+		this.TYBM = arrDepartName[json_BMKH.TYBM-1];
 		this.hadSubmit=json_BMKH.hadSubmit;
 	}
 	
