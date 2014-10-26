@@ -4319,7 +4319,7 @@ function Show_GSKHFK()
 	+"					<td>干事考核表得分</td><td>满分5分</td><td>" + objGSKHFK.arrDFXZ[1] + "</td><td></td>\n"
 	+"				</tr>\n"
 	+"				<tr>\n"
-	+"					<td>出勤得分</td><td><p>基本得分1分</p><p>A.例会 大会 拓展（请假-0.1/次，迟到-0.2/次，缺席-0.3/次）</p><p>B.外调（缺席-0.3/次,迟到或早退-0.2/次,请假-0.1/次）</p></td><td>" + objGSKHFK.arrDFXZ[2] + "</td><td></td>\n"
+	+"					<td>出勤得分</td><td><p>基本得分1分</p><p>A.例会 大会 拓展（请假-0.1/次，迟到-0.2/次，缺席-0.3/次）</p><p>B.外调（缺席-0.3/次）</p></td><td>" + objGSKHFK.arrDFXZ[2] + "</td><td></td>\n"
 	+"				</tr>\n"
 	+"				<tr>\n"
 	+"					<td>外调加分</td><td><p>基本分0分</p><p>正常参加+0.1/次,推优+0.1/次</p></td><td>" + objGSKHFK.arrDFXZ[3] + "</td><td><p>此外调统计包括人力平时外调各部门干事，司仪、礼仪队的外调，信编拍照外调和人力观察员外调</p></td>\n"
@@ -6519,7 +6519,7 @@ function Show_QTQKJJF()
 			+ "		<tr><td>姓名</td><td>职位</td><td>加减分</td><td>理由</td>";
 	for(var i = 0; i < obj_QTQKJJF.persons.length; ++i)
 	{
-		strHTML += "<tr><td>" + obj_QTQKJJF.persons[i].name + "</td><td>" + obj_QTQKJJF.persons[i].depart + "</td>"
+		strHTML += "<tr><td>" + obj_QTQKJJF.persons[i].name + "</td><td>" + arrTypeName[obj_QTQKJJF.persons[i].depart-1] + "</td>"
 				+  "<td class=\"normal_input\"><input id=\"" + ("jiajianfen_"+i) + "\" type=\"text\" size=\"5\" class=\"perf_textarea\" value=\"" + obj_QTQKJJF.persons[i].jiajianfen + "\" /></td>"
 				+  "<td class=\"normal_input\"><input id=\"" + ("liyou_"+i) + "\" type=\"texteara\" size=\"80\" class=\"perf_textarea\" value=\"" + obj_QTQKJJF.persons[i].liyou + "\" /></td></tr>\n";
 	}
