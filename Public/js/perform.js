@@ -4388,7 +4388,7 @@ function Show_GJBMCQTJ()
 +"				<h3>人数：" +  obj_GJBMCQTJ.renshu + "</h3>\n"
 +"				<form method=\"post\" action=\"#\">\n"
 +"					<table class=\"erjibiao\">\n"
-+"						<tr><td>姓名</td><td>请假次数</td><td>迟到或早退次数</td><td>无辜缺席次数</td>\n";
++"						<tr><td>姓名</td><td>请假次数</td><td>迟到或早退次数</td><td>无故缺席次数</td>\n";
 	
 	for(var i = 0; i <  obj_GJBMCQTJ.renshu; ++i)
 	{
