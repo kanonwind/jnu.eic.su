@@ -5259,7 +5259,7 @@ function Show_GSKH()
 			strId = "bzId_" + i + "_" + j;
 			GetObjById(strId).onfocus = function(e)
 			{
-				var xSite = new Array(400, 550, 700, 800, 400, 550, 700);
+				var xSite = new Array(620, 750, 900, 250, 400);
 				
 				strId = GetId(e);
 				var arrI = strId.split("_");
@@ -5729,7 +5729,7 @@ function Show_BZKH()
 				var strId = "df_" + i + "_" + j + "_" + k;
 				GetObjById(strId).onfocus = function (e) 
 				{
-					var xSite = new Array(450, 600, 750, 300, 450, 600);
+					var xSite = new Array(700, 800, 200, 350, 500, 600);
 
 					strId = GetId(e);
 					var arr = strId.split("_");
