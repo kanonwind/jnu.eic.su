@@ -72,6 +72,7 @@ function get_news()
 		success:function(result){newsData=result;}
 		});	
 		json_Get=newsData;
+        console.log(json_Get);
 /*
 	json_Get={
         "arrNewsInfo":
