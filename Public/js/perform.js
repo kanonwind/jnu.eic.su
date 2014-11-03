@@ -1186,6 +1186,7 @@ function Get_GSKHFK()
 		
 		this.zwpj = TranStr_Get(json_Get_GSKHFK.zwpj); //自我评价
 		this.qtgspj = new Array();
+
 		for(var i = 0; i < json_Get_GSKHFK.qtgspj.length; ++i)
 		{
 			var str = TranStr_Get(json_Get_GSKHFK.qtgspj[i].pj);
@@ -1198,7 +1199,11 @@ function Get_GSKHFK()
 			var str = TranStr_Get(json_Get_GSKHFK.bzpj[i].bzpj);
 			this.bzpj.push(str);
 		}
-		this.liuyan=TranStr_Get(json_Get_GSKHFK.liuyan);
+        this.liuyan=new Array();
+        for(var i=0;i<json_Get_GSKHFK.liuyan.length;++i)
+        {
+            this.liuyan[i]={"liuyan":TranStr_Get(json_Get_GSKHFK.liuyan[i].liuyan)};
+        }
         this.qitaliyou=TranStr_Get(json_Get_GSKHFK.qitaliyou);
 	}
 	
@@ -4364,7 +4369,7 @@ function Show_GSKHFK()
 			+"<ul>";
 	for(var i=0;i<objGSKHFK.liuyan.length;i++)
 	{
-		strHTML+="<li>"+TranStr_Get(objGSKHFK.liuyan[i].liuyan)+"</li>";
+		strHTML+="<li>"+objGSKHFK.liuyan[i].liuyan+"</li>";
 	}
 	strHTML += "</ul><input type=\"button\" value=\"确定\" id=\"submit\"  class=\"perf_button\" />\n"
 	
@@ -6830,7 +6835,7 @@ function Show_YXPDXZ()
 			if(obj_YXPDXZ.arrBMPD[i].check == true)
 				iChooseDepart++;
 			var xuanzeId = "xuanze_"+i;
-			GetObjById(xuanzeId).checked = obj_YXPDXZ.arrBMPD[i].check;
+			GetObjById(xuanzeId).checked = parseInt(obj_YXPDXZ.arrBMPD[i].check);
 			GetObjById(xuanzeId).disabled = "disabled";
 		}
 		if(iChooseDepart == obj_YXPDXZ.arrBMPD.length)
