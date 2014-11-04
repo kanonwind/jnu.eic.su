@@ -1186,6 +1186,7 @@ function Get_GSKHFK()
 		
 		this.zwpj = TranStr_Get(json_Get_GSKHFK.zwpj); //自我评价
 		this.qtgspj = new Array();
+
 		for(var i = 0; i < json_Get_GSKHFK.qtgspj.length; ++i)
 		{
 			var str = TranStr_Get(json_Get_GSKHFK.qtgspj[i].pj);
@@ -1198,7 +1199,11 @@ function Get_GSKHFK()
 			var str = TranStr_Get(json_Get_GSKHFK.bzpj[i].bzpj);
 			this.bzpj.push(str);
 		}
-		this.liuyan=TranStr_Get(json_Get_GSKHFK.liuyan);
+        this.liuyan=new Array();
+        for(var i=0;i<json_Get_GSKHFK.liuyan.length;++i)
+        {
+            this.liuyan[i]={"liuyan":TranStr_Get(json_Get_GSKHFK.liuyan[i].liuyan)};
+        }
         this.qitaliyou=TranStr_Get(json_Get_GSKHFK.qitaliyou);
 	}
 	
@@ -3134,7 +3139,7 @@ function Get_BMKH()
 			this.arrBuMen.push({"name":TranDigToText(json_BMKH.BuMen[i].name)});
 		}
 
-		this.TYBM = arrDepartName[json_BMKH.TYBM-1];
+		this.TYBM = json_BMKH.TYBM;
 		this.hadSubmit=json_BMKH.hadSubmit;
 	}
 	
@@ -4364,7 +4369,7 @@ function Show_GSKHFK()
 			+"<ul>";
 	for(var i=0;i<objGSKHFK.liuyan.length;i++)
 	{
-		strHTML+="<li>"+TranStr_Get(objGSKHFK.liuyan[i].liuyan)+"</li>";
+		strHTML+="<li>"+objGSKHFK.liuyan[i].liuyan+"</li>";
 	}
 	strHTML += "</ul><input type=\"button\" value=\"确定\" id=\"submit\"  class=\"perf_button\" />\n"
 	
@@ -4388,7 +4393,7 @@ function Show_GJBMCQTJ()
 +"				<h3>人数：" +  obj_GJBMCQTJ.renshu + "</h3>\n"
 +"				<form method=\"post\" action=\"#\">\n"
 +"					<table class=\"erjibiao\">\n"
-+"						<tr><td>姓名</td><td>请假次数</td><td>迟到或早退次数</td><td>无辜缺席次数</td>\n";
++"						<tr><td>姓名</td><td>请假次数</td><td>迟到或早退次数</td><td>无故缺席次数</td>\n";
 	
 	for(var i = 0; i <  obj_GJBMCQTJ.renshu; ++i)
 	{
@@ -5215,7 +5220,7 @@ function Show_GSKH()
 		{
 			strHTML += "<td class=\"normal_input\"><input class=\"perf_textarea\" name=\"#\" type=\"text\" value=\"" + obj_GSKH.arrGSDF[i][("df"+j)] + "\" id =" + ("bzId_"+i+"_"+j) + " size=\"16\"/></td>";
 		}
-		strHTML+="<td id=\"zdf_"+i+"\">"+jisuanzongfen(i)+"</td>";
+		strHTML+="<td id=\"zdf_"+i+"\">"+jisuanzongfen(i).toFixed(3)+"</td>";
 		strHTML += "</tr>";
 	}
 	function jisuanzongfen(i)
@@ -5259,7 +5264,7 @@ function Show_GSKH()
 			strId = "bzId_" + i + "_" + j;
 			GetObjById(strId).onfocus = function(e)
 			{
-				var xSite = new Array(400, 550, 700, 800, 400, 550, 700);
+				var xSite = new Array(620, 750, 900, 250, 400);
 				
 				strId = GetId(e);
 				var arrI = strId.split("_");
@@ -5299,7 +5304,7 @@ function Show_GSKH()
 						strId = GetId(e);
 						var arrI = strId.split("_");
 						obj_GSKH.arrGSDF[arrI[1]][("df" + arrI[2])] = parseFloat(this.value);
-						GetObjById("zdf_"+arrI[1]).innerHTML=jisuanzongfen(arrI[1]);
+						GetObjById("zdf_"+arrI[1]).innerHTML=jisuanzongfen(arrI[1]).toFixed(3);
 					} 
 					else 
 					{
@@ -5675,7 +5680,7 @@ function Show_BZKH()
 			{
 				strHTML += "<td class=\"normal_input\"><input id=" + ("df_"+i+"_"+j+"_"+k) + " class=\"perf_textarea\" name=\"#\" type=\"text\" value=\"" + obj_BZKH.arrBMBZ[i].arrBZ[j][("df"+k)] + "\" size=\"16\"/></td>";
 			}
-			strHTML+="<td id=\"zdf_"+i+"_"+j+"\">"+jisuanzongdefen(i,j)+"</td>";
+			strHTML+="<td id=\"zdf_"+i+"_"+j+"\">"+jisuanzongdefen(i,j).toFixed(3)+"</td>";
 				
 		}
 		strHTML += "</tr>";
@@ -5729,7 +5734,7 @@ function Show_BZKH()
 				var strId = "df_" + i + "_" + j + "_" + k;
 				GetObjById(strId).onfocus = function (e) 
 				{
-					var xSite = new Array(450, 600, 750, 300, 450, 600);
+					var xSite = new Array(700, 800, 200, 350, 500, 600);
 
 					strId = GetId(e);
 					var arr = strId.split("_");
@@ -5764,7 +5769,7 @@ function Show_BZKH()
 							strId = GetId(e);
 							var arr = strId.split("_");
 							obj_BZKH.arrBMBZ[arr[1]].arrBZ[arr[2]][("df"+arr[3])] = this.value;
-							GetObjById("zdf_"+arr[1]+"_"+arr[2]).innerHTML=jisuanzongdefen(arr[1],arr[2]);
+							GetObjById("zdf_"+arr[1]+"_"+arr[2]).innerHTML=jisuanzongdefen(arr[1],arr[2]).toFixed(3);
 						}
 						else 
 						{
@@ -5934,7 +5939,7 @@ function Show_BMKH()
 	var strHTML = "<div id=\"pjbz\"></div>";
 	strHTML +=" <h3>部门评分部分</h3>"
 			+ "	<p class=\"fill_in_tips\">"
-			+ "		<span class=\"till_part\">部门评分部分：</span>满分10分，A项对应9-10分，B项对应7-8分，C项对应5-6分，D项对应3-4分，请为部长评分"
+			+ "		<span class=\"till_part\">部门评分部分：</span>满分10分，A项对应9-10分，B项对应7-8分，C项对应5-6分，D项对应3-4分，请为部门评分"
 			+ "	</p>"
 			+ "	<form method=\"post\" action=\"#\">"
 			+ "		<table class=\"erjibiao ganshikaohebiao\">"
@@ -5966,6 +5971,7 @@ function Show_BMKH()
         +"<td>部门凝聚力</td>"
         +"<td>沟通合作能力</td>"
         +"<td>部门成员表现</td>"
+        +"<td>总分(满分3分)</td>"
         +"</tr>";
     for(var i=0;i<obj_BMKH.arrBM.length;++i)
     {
@@ -5976,7 +5982,7 @@ function Show_BMKH()
             strHTML +=" <td class=\"normal_input\"><input id=" + ("df_"+i+"_"+j) + " value=\"" 
             + obj_BMKH.arrBM[i][("df"+j)] + "\" class=\"perf_textarea\" name=\"#\" type=\"text\" value=\"0\" size=\"16\"/></td>";
         }
-        strHTML+="</tr>"
+        strHTML+="<td id='sum_"+i+"'>"+sum(i).toFixed(3)+"</td></tr>"
     }
 	strHTML += "</table>";
 	
@@ -6011,6 +6017,17 @@ function Show_BMKH()
 	strHTML += "</form>";
 	
 	GetObjById("show_more").innerHTML = strHTML;
+    
+    function sum(i)
+    {
+        ret=0;
+        //7项得分
+        for(var j=0;j<7;j++)
+        {
+            ret+=parseInt(obj_BMKH.arrBM[i][("df"+j)]);
+        }
+        return (ret*3)/70;
+    }
 	
 	for (var i = 0; i < obj_BMKH.arrBM.length; ++i) 
 	{
@@ -6049,6 +6066,7 @@ function Show_BMKH()
 						strId = GetId(e);
 						var arr = strId.split("_");
 						obj_BMKH.arrBM[arr[1]][("df" + arr[2])] = this.value;
+                        $("#sum_"+arr[1]).html(sum(arr[1]).toFixed(3));
 					} 
 					else 
 					{
@@ -6094,6 +6112,7 @@ function Show_BMKH()
 		}
 		
 		$("#tuiyou").val(obj_BMKH.TYBM);
+        console.log(obj_BMKH.TYBM);
 		//GetObjById("tuiyou").selectedIndex = iIndex;
 		//GetObjById("tuiyouliyou").value = obj_BMKH.TYBZ.tyly;
 		
@@ -6816,7 +6835,7 @@ function Show_YXPDXZ()
 			if(obj_YXPDXZ.arrBMPD[i].check == true)
 				iChooseDepart++;
 			var xuanzeId = "xuanze_"+i;
-			GetObjById(xuanzeId).checked = obj_YXPDXZ.arrBMPD[i].check;
+			GetObjById(xuanzeId).checked = parseInt(obj_YXPDXZ.arrBMPD[i].check);
 			GetObjById(xuanzeId).disabled = "disabled";
 		}
 		if(iChooseDepart == obj_YXPDXZ.arrBMPD.length)
