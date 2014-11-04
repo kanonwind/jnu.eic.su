@@ -11,7 +11,24 @@ class NewsAction extends Action{
 	//编辑页面
 	public function create()
 	{
+		//拒绝未登录访问
+		session_name('LOGIN');
+        session_start();
+        if(!$this->judgelog())
+            $this->redirect('Login/index');
+		else{
+			//个人信息
+			$account=$_SESSION['account'];
+			$person_model=new Model("Person");
+			$person_info=$person_model->where("account=$account")->find();
+			$name=$person_info['name'];
+			$link="<a class=\"user_info\" id=\"login_info_user_name\" href=\"#\">".$name."</a>&nbsp;";
+			$link.="<a class=\"user_info\" id=\"login_info_user_center\" href=\"".__APP__."/Center/index\">个人中心</a>&nbsp;";
+			$link.="<a class=\"user_info\" id=\"login_info_log_out\" href=\"".__APP__."/Login/logout\">注销</a>";
+			$this->assign('link',$link);
 			$this->display();
+		}
+		
 	}
 	//上传图片
 	public function uploadpic()
@@ -44,7 +61,7 @@ class NewsAction extends Action{
 		if($flag==1)
 		{
 			//获取临时文件
-			$destFileName=md5($time.$name).$pic_type;
+			$destFileName=md5_file($tmp_name).$pic_type;
 			//将文件搬运到storage存储
 			$sto=new SaeStorage();
 			$domain="news";
@@ -104,14 +121,14 @@ class NewsAction extends Action{
 			$text=$_POST['article_text'];
 		}
 		//获取正文$text中的第一个图片链接的SRC，即url值,并且抽取出图片文件名，与路径无关
-		if($startPosition=strpos($text,"<img src="))
+		if($startPosition=stripos($text,"<img src="))
 		{
 			//截取整个<img/>
-			$endPosition=strpos($text,"/>",$startPosition);
+			$endPosition=stripos($text,"/>",$startPosition);
 			$target=substr($text,$startPosition,$endPosition-$startPosition);
 			//var_dump($target);
 			//截取src属性
-			$startPosition=strpos($target,"src=\"");
+			$startPosition=stripos($target,"src=\"");
 			$endPosition=strripos($target,"alt=\"");	
 			$target=substr($target,$startPosition,$endPosition-$startPosition);
 			//var_dump($target);
@@ -137,7 +154,7 @@ class NewsAction extends Action{
 		$data['url']=$url;
 		$data['text']=$text;
 		//var_dump($data);
-		if(false==$news_model->data($data)->add())
+		if(false==$news_model->add($data))
 		{
 			$this->error("添加出错，正在返回......");
 		}
@@ -149,26 +166,31 @@ class NewsAction extends Action{
 			//echo "根据创建时间".$create_time."获取id";
 			//var_dump($news_info);
 			$id=$news_info['id'];
+			$create_time=$news_info['create_time'];
 			//最新新闻上限是8篇，活动等其他的最新就只有一篇
 			if($type==1)
 			{
-				if($url!='#')
-					$this->rankLatest($id,$type,8);
+				if($url!="#")
+				{
+					$this->rankLatest($id,$type,8,$create_time);
+				}
 			}
 			else
 			{
-				$this->rankLatest($id,$type,1);
+				$this->rankLatest($id,$type,1,$create_time);
 			}
 			$this->Success("添加成功，正在返回......",__APP__."/News/create");
 		} 
 		
 	}
-	private function rankLatest($id,$type,$numLimited)
+	private function rankLatest($id,$type,$numLimited,$create_time)
 	{
 			$data['id']=$id;
 			$data['type']=$type;
+			$data['create_time']=$create_time;
 			//添加成功，整理到tbl_latest
 			$latest_model=new Model("Latest");
+			$news_model=new Model("News");
 			//最新要求大于一个，比如三个，或者8个
 			if($numLimited>1)
 			{
@@ -176,23 +198,57 @@ class NewsAction extends Action{
 				if(count($latest_info)<$numLimited)
 				{
 					//1~($numLimited-1)篇，则直接添加
-					$data['rank']=count($latest_info)+1;
-					//echo "8篇以内，直接添加";
-					//var_dump($data);
-					$latest_model->data($data)->add();
-				}
-				//比如要求是三篇，删掉第一篇,2和3向上替换，新增第三篇
-				else{
-					$latest_model->where("rank=1 and type=$type")->delete();
-					for($i=2;$i<$numLimited+1;$i++)
+					//echo "1~($numLimited-1)篇，则直接添加";
+					$latest_model->add($data);
+					//再进行排序rank
+					$latest_info1=$latest_model->where("type=$type")->select();
+					$latest_info2=$latest_model->where("type=$type")->select();
+					for($i=0;$i<count($latest_info1);$i++)
 					{
-						$data_update['rank']=$i-1;
-						$latest_model->where("rank=$i and type=$type")->save($data_update);
+						$temp=$latest_info1[$i]['create_time'];
+						$table_id=$latest_info1[$i]['table_id'];
+						$rank=1;
+						for($j=0;$j<count($latest_info2);$j++)
+						{
+							if($temp<$latest_info2[$j]['create_time'])
+							{
+								$rank++;
+							}
+						}
+						unset($data);
+						$data['rank']=$rank;
+						$latest_model->where("table_id=$table_id")->save($data);
 					}
-					$data['rank']=$numLimited;
-					//echo "8篇以上，替换增加";
-					//var_dump($data);
-					$latest_model->data($data)->add();
+					$latest_info3=$latest_model->where("type=$type")->select();
+					var_dump($latest_info3);
+				}
+				//达到($numLimited-1)篇，跟第八篇比较
+				else{
+				//echo "达到($numLimited-1)篇，跟第八篇比较";
+					if($latest_info[$numLimited-1]['create_time']<$create_time)
+					{
+						$latest_model->where("type=$type and rank=$numLimited")->delete();
+						$latest_model->add($data);
+						//再次进行排序
+						$latest_info1=$latest_model->where("type=$type")->select();
+						$latest_info2=$latest_model->where("type=$type")->select();
+						for($i=0;$i<count($latest_info1);$i++)
+						{
+							$temp=$latest_info1[$i]['create_time'];
+							$table_id=$latest_info1[$i]['table_id'];
+							$rank=1;
+							for($j=0;$j<count($latest_info2);$j++)
+							{
+								if($temp<$latest_info2[$j]['create_time'])
+								{
+									$rank++;
+								}
+							}
+							unset($data);
+							$data['rank']=$rank;
+							$latest_model->where("table_id=$table_id")->save($data);
+						}
+					}
 				}	
 			}
 			//最新只要求一个，直接删除再添加
@@ -203,7 +259,7 @@ class NewsAction extends Action{
 				$latest_model->where("rank=1 and type=$type")->delete();
 				$data['rank']=1;
 				//var_dump($data);
-				$latest_model->data($data)->add();
+				$latest_model->add($data);
 			}
 	}
 	//公告	执行添加
@@ -220,7 +276,7 @@ class NewsAction extends Action{
 		$data['create_time']=$create_time;
 		$data['update_time']=$create_time;
 		$data['text']=$text;
-		if(false==$announcement_model->data($data)->add())
+		if(false==$announcement_model->add($data))
 		{
 			$this->error("添加出错，正在返回......");
 		}
@@ -253,7 +309,7 @@ class NewsAction extends Action{
 		$data['act_bigposter']=$_POST['act_bigposter'];
 		$data['act_smallposter']=$_POST['act_smallposter'];
 		$activity_model=new Model("Activity");
-		if(false==$activity_model->data($data)->add())
+		if(false==$activity_model->add($data))
 		{
 			$this->error("添加出错，正在返回......");
 		}
@@ -331,6 +387,31 @@ class NewsAction extends Action{
 			$this->Success("修改成功，正在返回......",__APP__."/Index/show?id=".$id);
 
 		}
+	}
+ //每个需要用到判断用户是否登录的地方，都要调用这个方法，每个控制器都有相同的一个
+  public function judgelog()
+  {
+		$judgelog=1;
+		session_name('LOGIN');
+		session_start();
+		if(empty($_SESSION['account'])||empty($_SESSION['random']))
+		{
+			$judgelog=0;
+		}
+		else
+		{
+			$account=$_SESSION['account'];
+			$random=$_SESSION['random'];
+			$login_model=new Model("Login");
+			$login_info=$login_model->where("account=$account and random=$random")->find();
+			if(!$login_info)
+			{
+				//随机数不一样，覆盖掉			
+				$judgelog=0;		
+			}
+
+		}
+		return $judgelog;
 	}
 }
 ?>

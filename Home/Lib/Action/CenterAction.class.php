@@ -40,41 +40,22 @@ class CenterAction extends Action
         session_start();
         if(!$this->judgelog())
             $this->redirect('Login/index');
-			/*
-		//拒绝非js请求数据
-		if(empty($_GET['account']))
-			$this->redirect('Center/index');
-	*/		
+		
 		//查找数据
 		$account=$_SESSION['account'];
 		$person_model=new Model("Person");
 		$person_info=$person_model->where("account=$account")->find();
 		//$this->ajaxReturn("$person_info","查找成功",1);
-/*       
-	   switch($person_info['type'])
-		{
-			case 'a':$type="干事";break;
-			case 'b':$type="部长级";break;
-			case 'c':$type="主席团";break;
-		}
-		*/
-		/*
-		switch($person_info['apartment'])
-		{
-			case '1':$apartment="秘书处";break;
-			case '2':$apartment="人力资源部";break;
-			case '3':$apartment="宣传部";break;
-			case '4':$apartment="信编部";break;
-			case '5':$apartment="学术部";break;
-			case '6':$apartment="体育部";break;
-			case '7':$apartment="KSC联盟";break;
-			case '8':$apartment="组织部";break;
-			case '9':$apartment="文娱部";break;
-			case '10':$apartment="公关部";break;
-			case '11':$apartment="心理服务部";break;
-			case '12':$apartment="主席团";break;
-		}
-		*/
+		if(($person_info['major'])=='')
+			$person_info['major']=-1;
+		if(($person_info['birthtype'])=='')
+			$person_info['birthtype']=-1;
+		if(($person_info['birthmonth'])=='')
+			$person_info['birthmonth']=-1;
+		if(($person_info['birthday'])=='')
+			$person_info['birthday']=-1;
+		if(($person_info['grade'])=='')
+			$person_info['grade']=-1;
         $arr=Array(
 			//账户信息
 			'account'=>$person_info['account'],
@@ -129,19 +110,39 @@ class CenterAction extends Action
 		$postArr=Array("干事","人力干事","部长级","主席团");
 		$person_model=new Model("Person");
 		$v=$person_model->where("account=$account")->find();
+		if(($v['position'])=='')
+			$v['position']=" ";
+		if(($v['qq'])=='')
+			$v['qq']=" ";
+		if(($v['phone'])=='')
+			$v['phone']=" ";
+		if(($v['short'])=='')
+			$v['short']=" ";
+		if(($v['dorm'])=='')
+			$v['dorm']=" ";
+		if(($v['birthtype'])=='')
+			$v['birthtype']=-1;
+		if(($v['birthmonth'])=='')
+			$v['birthmonth']=-1;
+		if(($v['birthday'])=='')
+			$v['birthday']=-1;
+		if(($v['grade'])=='')
+			$v['grade']=-1;
+		if(($v['major'])=='')
+			$v['major']=-1;
 		unset($data);
-		$data['depart']=$apartArr[$v['apartment']-1];
-		$data['post']=(empty($v['position'])?:" ":$v['position'];
+		$data['depart']=$v['apartment'];
+		$data['post']=$v['position'];
 		$data['name']=$v['name'];
-		$data['QQNum']=(empty($v['qq']))?" ":$v['qq'];
-		$data['longPhoneNum']=(empty($v['phone']))?" ":$v['phone'];
-		$data['shortPhoneNum']=(empty($v['short']))?" ":$v['short'];		
-		$data['dormNO']=(empty($v['dorm']))?" ":$v['dorm'];
-		$data['birthType']=(empty($v['birthtype']))?" ":$v['birthtype'];
-		$data['month']=(empty($v['birthmonth']))?" ":$v['birthmonth'];
-		$data['day']=(empty($v['birthday']))?" ":$v['birthday'];
-		$data['grade']=(empty($v['grade']))?" ":$v['grade'];
-		$data['major']=(empty($v['major']))?" ":$v['major'];
+		$data['QQNum']=$v['qq'];
+		$data['longPhoneNum']=$v['phone'];
+		$data['shortPhoneNum']=$v['short'];		
+		$data['dormNO']=$v['dorm'];
+		$data['birType']=$v['birthtype'];
+		$data['month']=$v['birthmonth'];
+		$data['day']=$v['birthday'];
+		$data['grade']=$v['grade'];
+		$data['major']=$v['major'];
 		return $data;
 	}
 	//index的js脚本请求空课表信息，table找到数据整理后返回json数据
@@ -345,7 +346,34 @@ class CenterAction extends Action
 		echo $this->_encode($arr);
 
 	}
-
+	//发送课表情况
+	public function getarrKkb()
+	{
+		$person_model=new Model("Person");
+		$timetable_model=new Model("Timetable");
+		$person_info=$person_model->where("type=1 or type=2")->select();
+		foreach($person_info as $v)
+		{
+			$gs_account=$v['account'];
+			$timetable_info=$timetable_model->where("account=$gs_account")->find();
+			$arrKkb[]=Array(
+				"account"=>$gs_account,
+				"name"=>$v['name'],
+				"apart"=>$v['apartment'],
+				"major"=>$v['major'],
+				"arrKkb"=>Array(
+					Array('str'=>$timetable_info['mon']),
+					Array('str'=>$timetable_info['tue']),
+					Array('str'=>$timetable_info['wed']),
+					Array('str'=>$timetable_info['thu']),
+					Array('str'=>$timetable_info['fri']),
+					Array('str'=>$timetable_info['sat']),
+					Array('str'=>$timetable_info['sun']),
+					)
+			);
+		}
+		echo $this->_encode($arrKkb);
+	}
 
   //调用—_encode()函数，将数组进行编码转哈
    public  function _encode($arr)

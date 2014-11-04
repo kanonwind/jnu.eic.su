@@ -79,8 +79,6 @@ class LoginAction extends Action
 		if($person_info=$person_model->where("account=$account")->find())
 		{
 			$password_base=$person_info['password'];
-			if($password_base==$account)
-				$password_base=md5($password_base);
 			if($password_base==$password || md5($password_base)==$password)
 			{
 				$flag=1;

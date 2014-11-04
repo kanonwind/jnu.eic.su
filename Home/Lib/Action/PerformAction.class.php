@@ -43,7 +43,7 @@ class PerformAction extends Action
 		$link.="<a class=\"user_info\" id=\"login_info_user_center\" href=\"".__APP__."/Center/index\">个人中心</a>&nbsp;";
 		$link.="<a class=\"user_info\" id=\"login_info_log_out\" href=\"".__APP__."/Login/logout\">注销</a>";
 		$this->assign('link',$link);
-  $arr1=Array("秘书处","人力资源部","宣传部","信息编辑部","学术部","体育部","KSC联盟","组织部","文娱部","公关部","心理服务部","主席团");
+  $arr1=Array("秘书处","人力资源部","宣传部","信息编辑部","学术部","体育部","JDC","组织部","文娱部","公关部","心理服务部","主席团");
   $arr2=Array("干事","人力干事","部长级","主席团");
 	//账号，时间
 	$account=$_SESSION['account'];
@@ -159,7 +159,7 @@ class PerformAction extends Action
 	);
 	return $arr;
   }
-	//获取上月考核时间
+	//获取上次考核时间
   public  function getLastTime()
   {
 	//获取最后一次考核的时间
@@ -1005,7 +1005,7 @@ class PerformAction extends Action
 	}
 	//获取跟进部门信息
 	
-	  $qt_info=$qt_model->where("account=$apartment")->find();
+	  $qt_info=$qt_model->where("(year=$year and month=$month) and account=$apartment")->find();
 	  $bmjjf=Array(
 	    'name'=>$apartment,
 		'jiajianfen'=>$qt_info['qt'],
@@ -1014,8 +1014,6 @@ class PerformAction extends Action
 	
 	//向前端发送json数据
 	$arr=Array(
-	  'year'=>0,
-	  'month'=>0,
 	  'status'=>$status,
 	  'gjbm'=>$apartment,
 	  'persons'=>$persons,
@@ -1180,7 +1178,7 @@ class PerformAction extends Action
 		$statusYXBZPD=0;
 	}
 	//干事自评表
-	$gszp_info=$gszp_model->where("total=0")->select();
+	$gszp_info=$gszp_model->where("total=0 and (year=$year and month=$month)")->select();
 	foreach($gszp_info as $v)
 	{
 		$account=$v['account'];
@@ -1192,7 +1190,7 @@ class PerformAction extends Action
 		);
 	}
 	//部长自评表
-	$bzzp_info=$bzzp_model->where("total=0")->select();
+	$bzzp_info=$bzzp_model->where("total=0 and (year=$year and month=$month)")->select();
 	foreach($bzzp_info as $v)
 	{
 		$account=$v['waccount'];
@@ -1204,7 +1202,7 @@ class PerformAction extends Action
 		);
 	}
 	//干事考核
-	$gskh_info=$gskh_model->where("total=0")->select();
+	$gskh_info=$gskh_model->where("total=0 and (year=$year and month=$month)")->select();
 	foreach($gskh_info as $v)
 	{
 		$account=$v['waccount'];
@@ -1222,7 +1220,7 @@ class PerformAction extends Action
 	foreach($person_info as $v)
 	{
 		$account=$v['account'];
-		$bzkh_info=$bzkh_model->where("waccount=$account and total=0")->select();
+		$bzkh_info=$bzkh_model->where("waccount=$account and total=0 and (year=$year and month=$month)")->select();
 		if(!empty($bzkh_info))
 		{
 			$arrBZKH[]=Array(
@@ -1236,7 +1234,7 @@ class PerformAction extends Action
 	foreach($person_info as $v)
 	{
 		$account=$v['account'];
-		$bmkh_info=$bmkh_model->where("waccount=$account and total=0")->select();
+		$bmkh_info=$bmkh_model->where("waccount=$account and total=0 and (year=$year and month=$month)")->select();
 		if(!empty($bmkh_info))
 		{
 			$arrBMKH[]=Array(
@@ -1620,8 +1618,8 @@ class PerformAction extends Action
     $TIME=$this->getTime();
 	$year=$TIME['year'];
 	$month=$TIME['month'];
-/* 	$year=2014;
-	$month=9; */
+ 	//$year=2014;
+	//$month=9; 
    //获取所有干事
     $yxchxz_model=new Model("Yxchxz");
    $person_model=new Model("Person");
@@ -2013,13 +2011,14 @@ class PerformAction extends Action
   $j=0;
   for($k=1;$k<=11;$k++)
   {
-	//判断是否在限制表里面
-	$yxchxz_info=$yxchxz_model->where("account=$k")->find();
-	if(!empty($yxchxz_info))
-		continue;
 	//找到排名第一的
 	$bmfk_info=$bmfk_model->where("(year=$year and month=$month) and rank=$k")->find();
 	$apartment=$bmfk_info['apartment'];
+	//判断是否在限制表里面
+	$yxchxz_info=$yxchxz_model->where("account=$apartment")->find();
+	if(!empty($yxchxz_info))
+		continue;
+
 	unset($data);
 	$data['yxbm']=1;
 	$bmfk_model->where("(year=$year and month=$month) and apartment=$apartment")->data($data)->save();
@@ -2150,22 +2149,22 @@ class PerformAction extends Action
    $control_info=$control_model->where("is_over=1")->select();
    if(count($control_info)==0)
    {
-	$resource_info=$resource_model->select();
+	$resource_info=$resource_model->where("account=$waccount")->select();
    }
    else{
 	$control_info=$control_model->where("year=$yearLast and month=$monthLast")->find();
 	$laststamp=$control_info['beginstamp'];
 	$control_info=$control_model->where("is_over=0")->find();
 	$thisstamp=$control_info['beginstamp'];
-	$resource_info=$resource_model->where("$laststamp<create_time and $thisstamp>create_time")->select();
+	$resource_info=$resource_model->where("($laststamp<create_time and $thisstamp>create_time)and account=$waccount")->select();
 	}
    //获取外调无辜缺席情况
   // echo $waccount."外调次数为".count($resource_info)."</br>";
    //$resource_info=$resource_model->where("(year=$year and month=$month) and account=$waccount")->select();
    $wgqx=0;//外调无辜缺席次数
-   $yb=0;//外调表现一般次数
-   $tc=0;//外调表现突出次数
-   if(!empty($resource_info)){
+   $yb=0;//外调表现一般次数（也就是正常出席）
+   $tc=0;//外调表现突出次数（也就是推优）
+
    foreach($resource_info as $v)
    {
      if($v['assess']==1)
@@ -2175,9 +2174,9 @@ class PerformAction extends Action
 	 if($v['assess']==4)
 	   $tc++;
    }
-   }
+
    //出勤扣分
-   $cqdf=1+$qj+$ct+$qx+$wgqx*(-0.1);
+   $cqdf=1+$qj+$ct+$qx+$wgqx*(-0.3);
   // echo "出勤扣分".$cqdf;
    if($cqdf<0)
      $cqdf=0;
@@ -2326,14 +2325,14 @@ class PerformAction extends Action
    $control_info=$control_model->where("is_over=1")->select();
    if(count($control_info)==0)
    {
-	$resource_info=$resource_model->select();
+	$resource_info=$resource_model->where("account=$waccount")->select();
    }
    else{
 	$control_info=$control_model->where("year=$yearLast and month=$monthLast")->find();
 	$laststamp=$control_info['beginstamp'];
 	$control_info=$control_model->where("is_over=0")->find();
 	$thisstamp=$control_info['beginstamp'];
-	$resource_info=$resource_model->where("$laststamp<create_time and $thisstamp>create_time")->select();
+	$resource_info=$resource_model->where("($laststamp<create_time and $thisstamp>create_time) and account=$waccount")->select();
 	}
 	//echo $waccount."被外调了".count($resource_info)."次</br>";
    //$resource_info=$resource_model->where("(year=$year and month=$month) and account=$waccount")->select();
@@ -2350,7 +2349,7 @@ class PerformAction extends Action
 	   $tc++;
    }
    //出勤得分
-   $cqdf=1+$qj+$ct+$qx-$wgqx*(-0.1);
+   $cqdf=1+$qj+$ct+$qx-$wgqx*(-0.3);
    if($cqdf<0)
      $cqdf=0;
    //echo "出勤得分：".$cqdf."</br>";
@@ -2395,7 +2394,12 @@ class PerformAction extends Action
     // echo "添加成功</br>";
  }
  //在主席团反馈表，根据传过来的部门apartment，year和month进行操作
- public function getbmfk($apartment,$year,$month)
+ private function test()
+ {
+	for($i=1;$i<12;$i++)
+		$this->getbmfk($i,2014,10);
+ }
+ private function getbmfk($apartment,$year,$month)
  {
   
    $person_model=new Model("Person");
@@ -2408,6 +2412,8 @@ class PerformAction extends Action
    $bmty_model=new Model("Bmty");
    $bmwg_model=new Model("Bmwg");
    $qt_model=new Model("Qt");
+   $control_model=new Model("Control");
+   $resource_model=new Model("Resource");
    //主席评价
    $president_info=$president_model->where("is_sub='n'")->find();
    $zx_account=$president_info['account'];
@@ -2430,14 +2436,54 @@ class PerformAction extends Action
 		break;
 	}
    }
-   $fzx_account=$president_info['account'];
+   //$fzx_account=$president_info['account'];
    $bmkh_info=$bmkh_model->where("(year=$year and month=$month) and (waccount=$fzx_account and rapartment=$apartment)")->find();
    $total=$bmkh_info['DF1']+$bmkh_info['DF2']+$bmkh_info['DF3']+$bmkh_info['DF4']+$bmkh_info['DF5']
 		+$bmkh_info['DF6']+$bmkh_info['DF7'];
    $total=($total/(7*10))*3;
    $zgpjdf=$total;
    //echo "部门：".$apartment."的主管副主席给分是：".$total."</br>";
-   //出勤扣分
+   //出勤扣分,包括基本的出勤情况和外调无故缺席。
+ //获取上次外调时间
+   $wgqx=0;//外调无辜缺席次数
+   $arrLastTime=$this->getLastTime();
+   $yearLast=$arrLastTime['year'];
+   $monthLast=$arrLastTime['month'];
+   $control_info=$control_model->where("is_over=1")->select();
+   $person_info=$person_model->where("apartment=$apartment")->select();
+   if(count($control_info)==0)
+   {
+	foreach($person_info as $person_v)
+	{
+		$account=$person_v['account'];
+		$resource_info=$resource_model->where("account=$account")->select();
+		foreach($resource_info as $v)
+		{
+			if($v['assess']==1)
+			$wgqx++;
+		}
+	}
+   }
+   else{
+	$control_info=$control_model->where("year=$yearLast and month=$monthLast")->find();
+	$laststamp=$control_info['beginstamp'];
+	$control_info=$control_model->where("is_over=0")->find();
+	$thisstamp=$control_info['beginstamp'];
+	foreach($person_info as $person_v)
+	{
+		$account=$person_v['account'];
+		$resource_info=$resource_model->where("($laststamp<create_time and $thisstamp>create_time)and account=$account")->select();
+		foreach($resource_info as $v)
+		{
+			if($v['assess']==1)
+			$wgqx++;
+		}		
+	}
+	}
+   //获取外调无辜缺席情况
+  // echo $waccount."外调次数为".count($resource_info)."</br>";
+   //$resource_info=$resource_model->where("(year=$year and month=$month) and account=$waccount")->select();
+
  //获取出勤情况
    $chuqin_info=$chuqin_model->where("(year=$year and month=$month) and (rapartment=$apartment)")->find();
    if(!empty($chuqin_info)){
@@ -2451,7 +2497,7 @@ class PerformAction extends Action
 	 $qx=0;
    }
    //出勤得分
-   $cqdf=2+$qj+$ct+$qx;
+   $cqdf=2+$qj+$ct+$qx+$wgqx*(-0.1);
    //echo "出勤得分：".$cqdf."</br>";
    if($cqdf<0)
      $cqdf=0;
@@ -2477,7 +2523,6 @@ class PerformAction extends Action
 	 {
 	   //echo "优秀部长：".$bz_account."</br>";
 	   $yxbz=0.2;
-	   break;
 	 }
    }
    //获取反馈加分，包括部长和干事
@@ -2503,30 +2548,36 @@ class PerformAction extends Action
      $wgkf=0;}
    //其他
    $qt_info=$qt_model->where("(year=$year and month=$month) and account=$apartment")->find();
-    $qt=$qt_info['qt'];
+    $qt=(float)$qt_info['qt'];
     //echo $apartment."的其他得分是：".$qt."</br>";
  
    //将所有这些信息存入数据库表
    $total=$zxpjdf+$zgpjdf+$cqdf+$tydf+$wgkf+$fkdf+$qt+$yxbz;
-   $data=Array(
-     'year'=>$year,
-	 'month'=>$month,
-	 'total'=>$total,
-	 'apartment'=>$apartment,
-	 'zxpjdf'=>$zxpjdf,
-	 'zgpjdf'=>$zgpjdf,
-	 'cqdf'=>$cqdf,
-	 'wgkf'=>$wgkf,
-	 'fkdf'=>$fkdf,
-	 'tydf'=>$tydf,
-	 'qtdf'=>$qt,
-	 'yxbz'=>$yxbz,
-   );
-   
    $bmfk_model=new Model("Bmfk");
-   $bmfk_model->where("(year=$year and month=$month) and apartment=$apartment")->data($data)->save();
-   //if()
-     //echo $apartment."添加成功</br>";
+   $bmfk_info=$bmfk_model->where("(year=$year and month=$month) and apartment=$apartment")->find();
+   $id=(int)$bmfk_info['id'];
+   unset($data);
+     $data['id']=$id;
+     $data['year']=$year;
+	 $data['month']=$month;
+	 $data['total']=$total;
+	 $data['apartment']=$apartment;
+	 $data['zxpjdf']=$zxpjdf;
+	 $data['zgpjdf']=$zgpjdf;
+	 $data['cqdf']=$cqdf;
+	 $data['wgkf']=(float)$wgkf;
+	 $data['fkdf']=$fkdf;
+	 $data['tydf']=$tydf;
+	 $data['qtdf']=$qt;
+	 $data['yxbz']=(float)$yxbz;
+ 
+   //echo $apartment."的优秀部长是：".$data['yxbz']."</br>";
+
+
+	//var_dump($data);
+   $bmfk_info=$bmfk_model->save($data);
+
+
 	 
 
  }
@@ -2546,6 +2597,8 @@ class PerformAction extends Action
 	$arrTime=$this->getTime();
 	$year=$arrTime['year'];
 	$month=$arrTime['month'];
+	//$year=2014;
+	//$month=9;
 	//判断时间是否合理
 	$gsfk_model=new Model("Gsfk");
     $tuiyou_model=new Model("Tuiyou");
@@ -2635,6 +2688,10 @@ class PerformAction extends Action
 			'liuyan'=>$v['text'],
 		);
 	}
+	//该干事的请他情况加减分表
+	$qt_model=new Model("Qt");
+	$qt_info=$qt_model->where("year=$year and month=$month and account=$account")->find();
+	$qitaliyou=$qt_info['text'];
 	//生成将要返回的json数组
 	$arr=Array(
 	  'zongfen'=>$zongfen,
@@ -2647,6 +2704,7 @@ class PerformAction extends Action
 	  'qtgspj'=>$qtgspj,
 	  'bzpj'=>$bzpj,
 	  'liuyan'=>$liuyan,
+	  'qitaliyou'=>$qitaliyou,
 	);
 	echo $this->_encode($arr);
 	//echo json_encode($arr,JSON_UNESCAPED_UNICODE);
@@ -2665,10 +2723,12 @@ class PerformAction extends Action
     $person_model=new Model("Person");
 	$bzzp_model=new Model("Bzzp");
 	$interact_model=new Model("Interact");
+	$evaluate_model=new Model("Evaluate");
 	$president_model=new Model("President");
 	$gszp_model=new Model("Gszp");
 	$bmfk_model=new Model("Bmfk");
-	$oneway_model=new Model("Oneway");
+	//$oneway_model=new Model("Oneway");
+	$bmkh_model=new Model("Bmkh");
 	$gsfk_model=new Model("Gsfk");
 	$qt_model=new Model("Qt");
 	$bmwg_model=new Model("Bmwg");
@@ -2681,6 +2741,8 @@ class PerformAction extends Action
 	$arrTime=$this->getTime();
 	$year=$arrTime['year'];
 	$month=$arrTime['month'];
+	//$year=2014;
+	//$month=9;
 	$bzfk_info=$bzfk_model->where("(year=$year and month=$month) and account=$account")->find();
     $ZongFen=$bzfk_info['total'];
     //获取得分细则
@@ -2705,8 +2767,8 @@ class PerformAction extends Action
 	  $bz_account=$v['account'];
 	  if($bz_account==$account)
 	    continue;
-	  $interact_info=$interact_model->where("(year=$year and month=$month) and waccount=$bz_account and raccount=$account")->find();
-	  $pj=$interact_info['text'];
+	  $evaluate_info=$evaluate_model->where("(year=$year and month=$month) and waccount=$bz_account and raccount=$account")->find();
+	  $pj=$evaluate_info['text'];
       $arrQiTaBuZhanPinJia[]=Array(
 	    'pj'=>$pj,
 	  );	  
@@ -2738,9 +2800,9 @@ class PerformAction extends Action
 	  $gs_account=$v['account'];
 	  $person_info=$person_model->where("account=$gs_account")->find();
 	  //$gs_name=$person_info['name'];
-	  $interact_info=$interact_model->where("(year=$year and month=$month) and waccount=$gs_account and raccount=$account")->find();
+	  $evaluate_info=$evaluate_model->where("(year=$year and month=$month) and waccount=$gs_account and raccount=$account")->find();
 	  $arrGanShiPingJia[]=Array(
-		'gspj'=>$interact_info['text'],
+		'gspj'=>$evaluate_info['text'],
 	  );
 	}
     $GanShiPingJia=Array(
@@ -2767,7 +2829,7 @@ class PerformAction extends Action
 	);
 	//echo json_encode($GSZP,JSON_UNESCAPED_UNICODE);
 	//部门得分和部门排名
-	$bmfk_info=$bmfk_model->where("(year=$year and month=$month) and apartment=$apartment")->select();
+	$bmfk_info=$bmfk_model->where("(year=$year and month=$month) and apartment=$apartment")->find();
 	$BuMenDeFeng=$bmfk_info['total'];
 	for($k=1;$k<=11;$k++)
 	{
@@ -2791,14 +2853,14 @@ class PerformAction extends Action
 	  'h'=>$bmfk_info['qtdf'],
 	);
 	//主管副主席的部门评价
-	$oneway_info=$oneway_model->where("(year=$year and month=$month) and waccount=$fzx_account and rapartment=$apartment")->find();
-	$ZhuGuanFuZhuXiBuMenPinJia=$oneway_info['text'];
+	$bmkh_info=$bmkh_model->where("(year=$year and month=$month) and waccount=$fzx_account and rapartment=$apartment")->find();
+	$ZhuGuanFuZhuXiBuMenPinJia=$bmkh_info['text'];
 	//主席的部门评价
 	$president_info=$president_model->where("is_sub='n'")->find();
 	$zx_account=$president_info['account'];
-	$oneway_info=$oneway_model->where("(year=$year and month=$month) and waccount=$zx_account and rapartment=$apartment")->find();
+	$bmkh_info=$bmkh_model->where("(year=$year and month=$month) and waccount=$zx_account and rapartment=$apartment")->find();
     //var_dump($oneway_info);
-	$ZhuXiDeBuMenPinJia=$oneway_info['text'];
+	$ZhuXiDeBuMenPinJia=$bmkh_info['text'];
 	//每个部门所有干事的得分情况，按得分高低排
 	$person_info=$person_model->where("apartment=$apartment and (type=1 or type=2)")->select();
 	for($i=1;$i<=count($person_info);$i++)
@@ -3033,9 +3095,13 @@ class PerformAction extends Action
 
 	$account=$_SESSION['account'];
    $bmfk_model=new Model("Bmfk");
+   $bzfk_model=new Model("Bzfk");
+   $person_model=new Model("Person");
 	$arrTime=$this->getTime();
 	$year=$arrTime['year'];
 	$month=$arrTime['month'];
+
+	//var_dump($arrTime);
    //获取部门排名
    for($i=1;$i<=11;$i++)
    {
@@ -3055,8 +3121,7 @@ class PerformAction extends Action
    );
    //echo json_encode($arrSorted,JSON_UNESCAPED_UNICODE);
    //获取优秀部长
-   $bzfk_model=new Model("Bzfk");
-   $person_model=new Model("Person");
+
    $bzfk_info=$bzfk_model->where("(year=$year and month=$month) and yxbz=1")->select();
    //var_dump($bzfk_info);
    foreach($bzfk_info as $v)
@@ -3066,7 +3131,7 @@ class PerformAction extends Action
 	 $bz_name=$person_info['name'];
 	 $apartment=$person_info['apartment'];
 	 $score=$v['total'];
-	 $arrExcMin[]=Array(
+	 $ExcMinster[]=Array(
 	   'name'=>$bz_name,
 	   'account'=>$bz_account,
 	   'depart'=>$apartment,
@@ -3074,10 +3139,7 @@ class PerformAction extends Action
 	 );
    }
    //echo json_encode($arrExcMin,JSON_UNESCAPED_UNICODE);
-   $ExcMinster=Array(
-     'sum'=>3,
-	 'arrExcMin'=>$arrExcMin,
-   );
+
    //echo json_encode($ExcMinster,JSON_UNESCAPED_UNICODE);
    //获取部长对主管副主席评价
    $interact_model=new Model("Interact");
@@ -3092,7 +3154,7 @@ class PerformAction extends Action
 	if($apartmentArr[$k]=='')
 		continue;
 	else{
-		$apartment_tar=$apartmentArr[$K];
+		$apartment_tar=$apartmentArr[$k];
 		 if($apartment_tar!=0)
 		{
 			$person_info=$person_model->where("type=3 and apartment=$apartment_tar")->select();  
@@ -3147,7 +3209,7 @@ class PerformAction extends Action
 	  //生成将要返回的json数组
 	  $arr=Array(
         'classSortDepart'=>$classSortDepart,
-		'ExcMinster'=>$arrExcMin,
+		'ExcMinster'=>$ExcMinster,
 		'classSituation'=>$classSituation,
 		'_arrAnonymity'=>$arrAnonymity,
 	  );
@@ -3191,7 +3253,7 @@ class PerformAction extends Action
 	$data['DF7']=$_POST['arrDF'][6]['df'];
 	$data['DF8']=$_POST['arrDF'][7]['df'];
 	$data['DF9']=$_POST['arrDF'][8]['df'];
-	$data['total']=$_POST['zongfen'];
+	$data['total']=$data['DF1']+$data['DF2']+$data['DF3']+$data['DF4']+$data['DF5']+$data['DF6']+$data['DF7']+$data['DF8']+$data['DF9'];
 	$data['hadSubmit']=$_POST['hadSubmit'];
 	//总分
 	//推优自评数据库操作
@@ -3303,7 +3365,7 @@ class PerformAction extends Action
 	$data['DF11']=$_POST['arrDF'][10]['df'];
 	$data['DF12']=$_POST['arrDF'][11]['df'];
 	//计算总分
-	$data['total']=$_POST['zongfen'];
+	$data['total']=$data['DF1']+$data['DF2']+$data['DF3']+$data['DF4']+$data['DF5']+$data['DF6']+$data['DF7']+$data['DF8']+$data['DF9']+$data['DF10']+$data['DF11']+$data['DF12'];
 	$data['hadSubmit']=$_POST['hadSubmit'];
 	$bzzp_model=new Model("Bzzp");
 	$bzzp_info=$bzzp_model->where("(year=$year and month=$month) and waccount=$account")->save($data);

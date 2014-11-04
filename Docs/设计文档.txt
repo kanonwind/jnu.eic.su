@@ -74,7 +74,9 @@ tbl_resource
  year//
  month//
  code//外调的序列号
- assess//外调的评价，1到4分别表示：缺席，迟到早退，一般，表现突出
+ assess//外调的评价，1到4分别原来表示：缺席，迟到早退，一般，表现突出，计算：-0.1（在tbl_chuqin），0，+0.1，+0.2
+
+	//现在表示缺席，取消外调，正常出席，推优，在绩效中计算：-0.3，0，+0.1，+0.2
 }
 
 //人力管理表（专用于外调）
@@ -82,10 +84,18 @@ tbl_resource
 {
 year
 month
-account//对应的
+account//被外调的
+waccount//执行外调的人员
+create_time//外调起始时间
+worktime//工作时间
+beginstamp//外调起始时间
+endstamp//外调结束时间
+apartment//申请外调的部门
+code//序列号
+assess//评价
 id //生成时间 自增
 code//序列号
-assess//评估
+assess//评估，1缺席，2取消外调，3正常出席，4推优
 }
 //记录外调次数
 tbl_wdcs
@@ -481,12 +491,20 @@ tbl_fine
 被外调的人员会直接跟绩效考核挂钩
 tbl_resource
 {
- id//pk
- account//被外调的账号
- year//
- month//
- code//外调的序列号
- assess//外调的评价，1到4分别表示：缺席，迟到早退，一般，表现突出
+year
+month
+account//被外调的
+waccount//执行外调的人员
+create_time//外调起始时间
+worktime//工作时间
+beginstamp//外调起始时间
+endstamp//外调结束时间
+apartment//申请外调的部门
+code//序列号
+assess//评价
+id //生成时间 自增
+code//序列号
+assess//评估，1缺席，2取消外调，3正常出席，4推优
 }
 
 最后一张是绩效权限表
@@ -608,7 +626,6 @@ checked//1表示被选中，0表示没有
 
 一键激活的时候，需要将所有部门的所有部长弄进去
 
-最后攻坚：考核反馈
 干事篇：这里存的时候不能再是int型了
 tbl_gsfk
 {
@@ -1007,30 +1024,70 @@ act_smallposter	活动小海报
 tbl_latest
 {
 id
+create_time
 type	新闻1，学生工作2，活动3，现行制度4，公告5，即将举办的活动6
 rank	//排序	6种类型会保留最新的三篇内容，如果数量少于三，则直接添加，三表示最新
 table_id	//主键
 }
 
 
+将200多条新闻了导入数据库
+./pyspider4twxsh/twxsh/newstext/165/165.txt
+./pyspider4twxsh/twxsh/newstext/166/166.txt
+./pyspider4twxsh/twxsh/newstext/1073/1073.txt
+
+./pyspider4twxsh/twxsh/newstext/165/165.txt
+
+./pyspider4twxsh/twxsh/newstext/571/571.txt
+./pyspider4twxsh/twxsh/newstext/607/607.txt
 
 
+jpeg:
+./pyspider4twxsh/twxsh/newstext/1083/1083.txt
+./pyspider4twxsh/twxsh/newstext/1153/1153.txt
+./pyspider4twxsh/twxsh/newstext/1158/1158.txt
+./pyspider4twxsh/twxsh/newstext/1181/1181.txt
+
+第三次：
+./pyspider4twxsh/twxsh/newstext/1153/1153.txt
+./pyspider4twxsh/twxsh/newstext/1196/1196.txt
+./pyspider4twxsh/twxsh/newstext/1223/1223.txt
+./pyspider4twxsh/twxsh/newstext/165/165.txt（没图片）
+./pyspider4twxsh/twxsh/newstext/275/275.txt
+./pyspider4twxsh/twxsh/newstext/607/607.txt（没图片）
+./pyspider4twxsh/twxsh/newstext/624/624.txt
+第四次：
+
+./pyspider4twxsh/twxsh/newstext/165/165.txt（没图片）
+./pyspider4twxsh/twxsh/newstext/275/275.txt（没图片）
+./pyspider4twxsh/twxsh/newstext/607/607.txt（没图片）
 
 
+活动：
+第一次，
+非jpg格式
+./pyspider4twxsh/twxsh/activitiestext/111/111.txt
+./pyspider4twxsh/twxsh/activitiestext/112/112.txt
+./pyspider4twxsh/twxsh/activitiestext/170/170.txt
 
+没图片
+./pyspider4twxsh/twxsh/activitiestext/111/111.txt
+./pyspider4twxsh/twxsh/activitiestext/115/115.txt
+第二次
+非jpg格式
 
+没图片
+./pyspider4twxsh/twxsh/activitiestext/112/112.txt
+./pyspider4twxsh/twxsh/activitiestext/115/115.txt
 
-
-
-
-
-
-
-
-
-
-
-
+学生工作
+非格式
+./pyspider4twxsh/twxsh/workstext/1237/1237.txt
+./pyspider4twxsh/twxsh/workstext/1239/1239.txt
+./pyspider4twxsh/twxsh/workstext/167/167.txt
+./pyspider4twxsh/twxsh/workstext/172/172.txt
+没图片
+./pyspider4twxsh/twxsh/workstext/665/665.txt（这条新闻很诡异，居然录不进去）
 
 
 

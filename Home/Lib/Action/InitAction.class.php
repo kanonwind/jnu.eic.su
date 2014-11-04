@@ -12,25 +12,26 @@ class InitAction extends Action
 	$this->display();
   }
   //管理员登录检查
+	//check为登录验证界面
 	public function check()
 	{
 	    //先判断session
 		session_name('LOGIN');
         session_start();
-		$admin_model=new Model("Admin");
+		$person_model=new Model("Person");
         if($this->judgelog())		
 		{
 			//如果当前有已经登录，直接跳转到新闻首页，只能通过注销或者关闭浏览器来退出	  
-            $this->redirect("Init/index");		
+            $this->redirect();		
 		}
 	    $account=$_POST['user_login_name'];
 	    $password=$_POST['user_login_pw'];
-		
+		$person_model=new Model("Person");
 		$flag=0;//验证不通过即为0
-		if($admin_info=$admin_model->where("account=$account")->find())
+		if($person_info=$person_model->where("account=$account")->find())
 		{
-			$password_base=$admin_info['password'];
-			if(md5($password_base)==$password || $password_base==$password)
+			$password_base=$person_info['password'];
+			if($password_base==$password || md5($password_base)==$password)
 			{
 				$flag=1;
 			}
@@ -56,10 +57,23 @@ class InitAction extends Action
 				//不存在则增加
 				$login_model->data($data)->add();
 		   }
-		   $this->redirect("Init/index");
+
+			//判断是否保持登录状态
+			if($_POST['keep_login']=="keep")
+			{
+		   		setcookie("account",$account,time()+7*24*3600);//cookie时间设置为7天，一周时间
+				setcookie("password",$password,time()+7*24*3600);			
+				
+			}
+			else{	
+				setcookie("account","",0);
+				setcookie("password","",0);
+				
+			}
+			$this->redirect("Init/index");
 	    }
 		else
-		  $this->redirect("Init/index");
+		  $this->redirect("Init/login");
 	}
  	//每个需要用到判断用户是否登录的地方，都要调用这个方法，每个控制器都有相同的一个
 	public function judgelog()
@@ -94,8 +108,13 @@ class InitAction extends Action
   //管理界面
   public function index()
   {
-    if(0==$this->judgelog())
-		$this->redirect("login");
+    if(!$this->judgelog())
+		$this->redirect("Init/login");
+	$person_model=new Model("Person");
+	$bz_account=$_SESSION['account'];
+	$person_info=$person_model->where("account=$bz_account")->find();
+	if($person_info['apartment']!=2 || $person_info['type']!=3)
+		$this->redirect("Index/index");
 	//如果没有满足最基本的人员要求，拒绝访问
 	$authority_model=new Model("Authority");
 	$authority_info=$authority_model->find();
@@ -491,7 +510,169 @@ class InitAction extends Action
 			$timetable_model->data($data)->add();
 	}
   }
-  //人力干事跟进部门初始化
+  //人事变动
+  public function personCRUD()
+  {
+	//主要有两种，一种是退出，一种是新增（针对干事）。一种是修改账号（普遍使用）
+	//tbl_person,tbl_timetable这两张表示以account为主键的，要小心
+	//修改学号
+	//$this->personUpdate("2012052308","2012052309");//原来的学号+更新后的学号
+	//删除一般干事
+	//$this->personDelete("");
+  }
+ //删除一般干事 
+  private function personDelete()
+  {
+    //判断是否满足删除条件：非人力干事，不是部门违规负责人（如果是，得先去修改部门违规负责人）
+	//tbl_person,tbl_timetable,
+	$account=" 2014052395";
+	$person_model=new Model("Person");
+	$person_info=$person_model->where("account=$account")->find();
+	if(false==$person_info)
+		return -1;
+	if($person_info['type']==2)
+		return -1;
+	$bmwgfzr_model=new Model();
+	$bmwgfzr_info=$bmwgfzr_model->where("account=$account")->find();
+	if(!empty($bmwgfzr_info))
+		return -1;
+	echo "开始删除";
+	$person_model->where("account=$account")->delete();
+	$timetable_model=new Model("Timetable");
+	$timetable_model->where("account=$account")->delete();
+	$bzkh_model=new Model("Bzkh");//raccount
+	$bzkh_model->where("raccount=$account")->delete();
+	$chuqin_model=new Model("Chuqin");//raccount
+	$chuqin_model->where("raccount=$account")->delete();
+	$diaoyan_model=new Model("Diaoyan");//raccount
+	$diaoyan_model->where("raccount=$account")->delete();
+	$evaluate_model=new Model("Evaluate");//waccount,raccount
+	$evaluate_model->where("account=$account")->delete();
+	$evaluate_model->where("raccount=$account")->delete();
+    $gsfk_model=new Model("Gsfk");//account
+	$gsfk_model->where("account=$account")->delete();
+	$gskh_model=new Model("Gskh");//raccount
+	$gskh_model->where("raccount=$account")->delete();
+	$gszp_model=new Model("Gszp");//account
+	$gszp_model->where("account=$account")->delete();
+	$interact_model=new Model("Interact");//waccount,raccount
+	$interact_model->where("waccount=$account")->delete();
+	$interact_model->where("raccount=$account")->delete();
+	$login_model=new Model("Login");
+	$login_model->where("account=$account")->delete();
+	$qt_model=new Model("Qt");
+	$qt_model->where("account=$account")->delete();
+	$resource_model=new Model("Resource");
+	$resource_model->where("account=$account")->delete();
+	$tuiyou_model=new Model("Tuiyou");//waccount,raccount
+	$tuiyou_model->where("waccount=$account")->delete();
+	$tuiyou_model->where("raccount=$account")->delete();
+	$wdcs_model=new Model("Wdcs");
+	$wdcs_model->where("account=$account")->delete();
+	$yxchxz_model=new Model("Yxchxz");
+	$yxchxz_model->where("account=$account")->delete();
+	return 0;
+  }
+ //新增一般干事 
+ public function personCreate()
+  {
+	$person_model=new Model("Person");
+	$timetable_model=new Model("Timetable");
+	echo "新增干事信息初始化开始</br>";
+	$flagInitPerson=1;
+	//添加非人力干事
+	$this->initPersonCrud("2014052858","刘馨月",1,4,$flagInitPerson);
+/* 	$this->initPersonCrud("2014050551","聂梦桥",1,9,$flagInitPerson);
+	$this->initPersonCrud("2014052590"," 郭锐",1,9,$flagInitPerson);	
+	$this->initPersonCrud("2014053006","蒋元青",1,7,$flagInitPerson);
+	$this->initPersonCrud("2014050245"," 肖倩倩	",1,7,$flagInitPerson); */
+	echo "新增干事信息初始化完成</br>";
+	if($flagInitPerson==1)
+	{
+		echo "本次新增干事成员信息初始化成功</br>";
+		$this->initTable();
+	}
+	else if($flagInitPerson==0)
+	{
+		echo "本次新增干事信息初始化失败</br>";
+	}
+  }
+ //学号修改
+ public function personUpdate()
+ {
+	$account="2013050549";//原来的学号
+	$accountNew="2014050549";//更新后的学号
+	$person_model=new Model();
+	$data['account']=$accountNew;
+	$datar['raccount']=$accountNew;
+	$dataw['waccount']=$accountNew;
+	$dataHX['HX']=$accountNew;
+	$person_info=$person_model->where("account=$account")->save($data);
+	$admin_model=new Model("Admin");
+	$bmkh_model=new Model("Bmkh");
+	$bmwg_model=new Model("Bmwg");
+	$bmwgfzr_model=new Model("Bmwgfzr");
+	$bzfk_model=new Model("Bzfk");
+	$bzkh_model=new Model("Bzkh");
+	$bzzp_model=new Model("Bzzp");
+	$chuqin_model=new Model("Chuqin");
+	$diaoyan_model=new Model("Diaoyan");
+	$evaluate_model=new Model("Evaluate");
+	$gsfk_model=new Model("Gsfk");
+	$gskh_model=new Model("Gskh");
+	$gszp_model=new Model("Gszp");
+	$interact_model=new Model("Interact");
+	$login_model=new Model("Login");
+	$person_model=new Model("Person");
+	$president_model=new Model("President");
+	$qt_model=new Model("Qt");
+	$resource_model=new Model("Resource");
+	$rlgj_model=new Model("Rlgj");
+	$timetable_model=new Model("Timetable");
+	$tuiyou_model=new Model("Tuiyou");
+	$wdcs_model=new Model("Wdcs");
+	$yxbz_model=new Model("Yxbz");
+	$yxbzhx_model=new Model("Yxbzhx");
+	$yxchxz_model=new Model("Yxchxz");
+	$admin_model->where("account=$account")->save($data);
+	$bmkh_model->where("waccount=$account")->save($dataw);
+	$bmwg_model->where("account=$account")->save($data);
+	$bmwgfzr_model->where("account=$account")->save($data);
+	$bzfk_model->where("account=$account")->save($data);
+	$bzkh_model->where("waccount=$account")->save($dataw);
+	$bzkh_model->where("raccount=$account")->save($datar);
+	$bzzp_model->where("waccount=$account")->save($dataw);
+	$chuqin_model->where("waccount=$account")->save($dataw);
+	$chuqin_model->where("raccount=$account")->save($datar);
+	$diaoyan_model->where("waccount=$account")->save($dataw);
+	$diaoyan_model->where("raccount=$account")->save($datar);
+	$evaluate_model->where("waccount=$account")->save($dataw);
+	$evaluate_model->where("raccount=$account")->save($datar);
+	$gsfk_model->where("account=$account")->save($data);
+	$gskh_model->where("waccount=$account")->save($dataw);
+	$gskh_model->where("raccount=$account")->save($datar);
+	$gszp_model->where("waccount=$account")->save($dataw);
+	$gszp_model->where("raccount=$account")->save($datar);
+	$interact_model->where("waccount=$account")->save($dataw);
+	$interact_model->where("raccount=$account")->save($datar);
+	$login_model->where("account=$account")->save($data);
+	$person_model->where("account=$account")->save($data);
+	$president_model->where("account=$account")->save($data);
+	$qt_model->where("account=$account")->save($data);
+	$resource_model->where("account=$account")->save($data);
+	$resource_model->where("waccount=$account")->save($dataw);
+	$rlgj_model->where("account=$account")->save($data);
+	$timetable_model->where("account=$account")->save($data);
+	$tuiyou_model->where("waccount=$account")->save($dataw);
+	$tuiyou_model->where("raccount=$account")->save($datar);
+	$wdcs_model->where("account=$account")->save($data);
+	$yxbz_model->where("waccount=$account")->save($dataw);
+	$yxbz_model->where("raccount=$account")->save($datar);
+	$yxbzhx_model->where("HX=$account")->save($dataHX);
+	$yxchxz_model->where("account=$account")->save($data);
+	return 0;
+ }
+ //人力干事跟进部门初始化
   private function initRlgj()
   {
     $rlgj_model=new Model("Rlgj");

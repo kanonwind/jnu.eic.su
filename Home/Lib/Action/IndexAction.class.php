@@ -100,8 +100,12 @@ class IndexAction extends Action
 	for($i=0;$i<count($latest_info);$i++)
 	{
 		$id=$latest_info[$i]['id'];
-		$news_info=$news_model->where("id=$id")->find();
-		$abst=mb_substr($news_info['text'], 0, 20, 'utf-8');  
+		$news_info=$news_model->where("id=$id and type=1")->find();
+		//var_dump($news_info);
+		//$abst=mb_substr($news_info['text'], 0, 20, 'utf-8');  
+		$abst=$news_info['title'];
+		if(empty($news_info['author']))
+			$news_info['author']=" ";
 		$arrNewsInfo[]=Array(
 			'title'=>$news_info['title'],
 			'author'=>$news_info['author'],
@@ -109,11 +113,14 @@ class IndexAction extends Action
 			'picpath'=>$news_info['url'],
 			'newslink'=>__URL__."/show?id=".$news_info['id'],		
 		);
+		//var_dump($arrNewsInfo);
 	}
+
 	$arr=Array(
 		"arrNewsInfo"=>$arrNewsInfo,
 	);
 	echo $this->_encode($arr);
+	//echo $arr;
   }
   
   //新闻中心页面
@@ -135,7 +142,6 @@ class IndexAction extends Action
 		$person_info=$person_model->where("account=$account")->find();
 		$name=$person_info['name'];
 		$link="<a class=\"user_info\" id=\"login_info_user_name\" href=\"#\">".$name."</a>";
-		$link.="<a class=\"user_info\" id=\"login_info_user_id\" href=\"#\">".$account."</a>";
 		$link.="<a class=\"user_info\" id=\"login_info_user_center\" href=\"".__APP__."/Center/index\">个人中心</a>";
 		$link.="<a class=\"user_info\" id=\"login_info_log_out\" href=\"".__APP__."/Login/logout\">注销</a>";
 		$this->assign('link',$link);
@@ -170,7 +176,6 @@ class IndexAction extends Action
 		$person_info=$person_model->where("account=$account")->find();
 		$name=$person_info['name'];
 		$link="<a class=\"user_info\" id=\"login_info_user_name\" href=\"#\">".$name."</a>";
-		$link.="<a class=\"user_info\" id=\"login_info_user_id\" href=\"#\">".$account."</a>";
 		$link.="<a class=\"user_info\" id=\"login_info_user_center\" href=\"".__APP__."/Center/index\">个人中心</a>";
 		$link.="<a class=\"user_info\" id=\"login_info_log_out\" href=\"".__APP__."/Login/logout\">注销</a>";
 		$this->assign('link',$link);
@@ -205,7 +210,6 @@ class IndexAction extends Action
 		$person_info=$person_model->where("account=$account")->find();
 		$name=$person_info['name'];
 		$link="<a class=\"user_info\" id=\"login_info_user_name\" href=\"#\">".$name."</a>";
-		$link.="<a class=\"user_info\" id=\"login_info_user_id\" href=\"#\">".$account."</a>";
 		$link.="<a class=\"user_info\" id=\"login_info_user_center\" href=\"".__APP__."/Center/index\">个人中心</a>";
 		$link.="<a class=\"user_info\" id=\"login_info_log_out\" href=\"".__APP__."/Login/logout\">注销</a>";
 		$this->assign('link',$link);
@@ -240,7 +244,6 @@ class IndexAction extends Action
 		$person_info=$person_model->where("account=$account")->find();
 		$name=$person_info['name'];
 		$link="<a class=\"user_info\" id=\"login_info_user_name\" href=\"#\">".$name."</a>";
-		$link.="<a class=\"user_info\" id=\"login_info_user_id\" href=\"#\">".$account."</a>";
 		$link.="<a class=\"user_info\" id=\"login_info_user_center\" href=\"".__APP__."/Center/index\">个人中心</a>";
 		$link.="<a class=\"user_info\" id=\"login_info_log_out\" href=\"".__APP__."/Login/logout\">注销</a>";
 		$this->assign('link',$link);
@@ -256,10 +259,11 @@ class IndexAction extends Action
 	$this->assign('view',"files");
 	$this->display(); 
   }
-    //获取新闻、活动、学生工作、现行制度等各种数据
+    //获取新闻、活动、学生工作、现行制度等各种数据,参数$type
 	private function getData($type)
 	{
-		$limit=2;
+		
+		$limit=4;
 		//获取新闻最新最新的四篇（当前数据库不足，以后调整）
 		$news_model=new Model("News");
 		$news_info=$news_model->where("type=$type")->select();
@@ -279,6 +283,8 @@ class IndexAction extends Action
 		{
 			
 			$create_time=$arr[$num-$i-1]['create_time'];
+			if(empty($create_time))
+				continue;
 			$news_info=$news_model->where("create_time=$create_time")->find();
 			$newsArr[]=Array(
 				'id'=>$news_info['id'],
@@ -286,6 +292,8 @@ class IndexAction extends Action
 				'create_time'=>$news_info['create_time'],
 			);
 		}
+		
+		
 		//获取新闻剩余的新闻
 		rsort($arr);
 		for($i=$limit;$i<$num;$i++)
@@ -299,6 +307,7 @@ class IndexAction extends Action
 				'create_time'=>$news_info['create_time'],
 			);
 		}
+		
 		//执行分页任务
 		$pageSize=4;
 		//获取页面数量
@@ -370,13 +379,14 @@ class IndexAction extends Action
 		$person_info=$person_model->where("account=$account")->find();
 		$name=$person_info['name'];
 		$link="<a class=\"user_info\" id=\"login_info_user_name\" href=\"#\">".$name."</a>";
-		$link.="<a class=\"user_info\" id=\"login_info_user_id\" href=\"#\">".$account."</a>";
 		$link.="<a class=\"user_info\" id=\"login_info_user_center\" href=\"".__APP__."/Center/index\">个人中心</a>";
 		$link.="<a class=\"user_info\" id=\"login_info_log_out\" href=\"".__APP__."/Login/logout\">注销</a>";
 		$this->assign('link',$link);
 	}
-	//拒绝访问：没有$_GET['id']值
+	//拒绝访问：没有$_GET['id']值，不是整数
 	if(empty($_GET['id']))
+		$this->redirect("Index/newscenter");
+	if(!is_numeric($_GET['id']))
 		$this->redirect("Index/newscenter");
 	$id=$_GET['id'];
 	$news_model=new Model("News");
@@ -451,7 +461,7 @@ class IndexAction extends Action
 		return $judgelog;
 	}
   //调用—_encode()函数，将数组进行编码转哈
-   public  function _encode($arr)
+   private  function _encode($arr)
   {
     $na = array();
     foreach ( $arr as $k => $value ) {  
@@ -460,7 +470,7 @@ class IndexAction extends Action
     //return addcslashes(urldecode(json_encode($na)),"\\r");
 	return urldecode(json_encode($na));
   }
-   public function _urlencode($elem)
+   private function _urlencode($elem)
   {
     if(is_array($elem)){
     foreach($elem as $k=>$v){

@@ -66,10 +66,18 @@ class AllocateAction extends Action
 			$allocResent=$resource_info['code'];
 			
 		}
-		$monthNow=date("n");
-		$yearNow=date("Y");
-		$resource_info=$resource_model->where("account=$account and month=$monthNow and year=$yearNow")->select();
-		//累计外调次数
+		//$monthNow=date("n");
+		//$yearNow=date("Y");
+		//$resource_info=$resource_model->where("account=$account and month=$monthNow and year=$yearNow")->select();
+		//本月累计外调次数
+		//获取上次外调时间
+		$arrLastTime=$this->getLastTime();
+		$yearLast=$arrLastTime['year'];
+		$monthLast=$arrLastTime['month'];
+		$control_model=new Model("Control");
+		$control_info=$control_model->where("year=$yearLast and month=$monthLast")->find();
+		$timestamp=$control_info['beginstamp'];
+		$resource_info=$resource_model->where("account=$account and endstamp>$timestamp")->select();
 		$timeNow=count($resource_info);
 		
 		
@@ -252,10 +260,19 @@ class AllocateAction extends Action
 					if(($person_info['sex']==$sex || $sex==0)){
 					if($person_info['apartment']!=$apartment)
 					{
+						//获取上次外调时间
+						$arrLastTime=$this->getLastTime();
+						$yearLast=$arrLastTime['year'];
+						$monthLast=$arrLastTime['month'];
+						$control_model=new Model("Control");
+						$control_info=$control_model->where("year=$yearLast and month=$monthLast")->find();
+						$timestamp=$control_info['beginstamp'];
+						$resource_info=$resource_model->where("account=$account and endstamp>$timestamp")->select();
+						$recently_alloc_time=count($resource_info);
 						//今年本月
-						$monthNow=date("n");
-						$yearNow=date("Y");
-						$recently_alloc_time=$resource_model->where("account=$account and year=$yearNow and month=$monthNow")->select();
+						//$monthNow=date("n");
+						//$yearNow=date("Y");
+						//$recently_alloc_time=$resource_model->where("account=$account and year=$yearNow and month=$monthNow")->select();
 						$total_alloc_time=$resource_model->where("account=$account")->select();
 						$data['conformity']=$num/count($arrKK);
 						$data['userID']=$account;
@@ -266,7 +283,7 @@ class AllocateAction extends Action
 						$data['gender']=$person_info['sex'];
 						$data['longPhoneNumber']=empty($person_info['phone'])?" ":$person_info['phone'];
 						$data['shortPhoneNumber']=empty($person_info['short'])?" ":$person_info['short'];
-						$data['recently_alloc_time']=count($recently_alloc_time);
+						$data['recently_alloc_time']=$recently_alloc_time;
 						$data['total_alloc_time']=count($total_alloc_time);
 						//echo $this->_encode($data);
 						$arrAnsPerInfo[]=$data;
@@ -455,11 +472,9 @@ class AllocateAction extends Action
 	{
 		$arrAllocedPerf=$_POST['arrAllocedPerf'];
 		$AlloCode=$_POST['AllocCode'];
-		//$back="不要爆粗口";
 		
 		
 			$resource_model=new Model("Resource");
-			//$back.="不想再这么辛苦了";
 			for($k=0;$k<count($arrAllocedPerf);$k++)
 			{
 				
@@ -467,7 +482,6 @@ class AllocateAction extends Action
 				$data['assess']=$arrAllocedPerf[$k]['BX'];
 				
 				unset($condition);
-				//$back.="最后一战".$AlloCode.$arrAllocedPerf[$k]['ID'].$arrAllocedPerf[$k]['BX'];
 				$condition['code']=$AlloCode;
 				$condition['account']=$arrAllocedPerf[$k]['ID'];
 				$resource_info=$resource_model->where($condition)->data($data)->save();
@@ -527,7 +541,33 @@ class AllocateAction extends Action
 		);
 		echo $this->_encode($arr);
 	}
-
+	//获取上次考核时间
+  public  function getLastTime()
+  {
+	//获取最后一次考核的时间
+	$control_model=new Model("Control");
+	$control_info=$control_model->where("is_over=1")->select();
+	$tempyear=$control_info[0]['year'];
+	$tempmonth=$control_info[0]['month'];
+	$tempstamp=mktime(1, 1, 1, $tempmonth, 1, $tempyear);
+	//echo "asdf".$tempmonth;
+	for($i=0;$i<count($control_info);$i++)
+	{
+		if($tempstamp>mktime(1, 1, 1, $control_info[$i]['month'],1,$control_info[$i]['year']))
+			continue;
+		else
+		{
+			$tempyear=$control_info[$i]['year'];
+			$tempmonth=$control_info[$i]['month'];
+			$tempstamp=mktime(1, 1, 1, $tempmonth, 1, $tempyear);
+		}
+	}
+	$arrLastTime=Array(
+		'year'=>$tempyear,
+		'month'=>$tempmonth,
+	);
+	return $arrLastTime;
+  }
  //每个需要用到判断用户是否登录的地方，都要调用这个方法，每个控制器都有相同的一个
   public function judgelog()
   {
