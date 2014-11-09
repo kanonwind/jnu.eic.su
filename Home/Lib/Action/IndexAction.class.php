@@ -30,10 +30,10 @@ class IndexAction extends Action
 	//获取最新3篇热点新闻
 	$news_model=new Model("News");
 	$latest_model=new Model("Latest");
-	$latest_info=$latest_model->where("type=1 and rank>5")->select();
+	$latest_info=$latest_model->where("type=1 and rank<4")->select();
 	for($i=0;$i<count($latest_info);$i++)
 	{
-		$rank=$latest_info[count($latest_info)-$i-1]['rank'];
+		$rank=$latest_info[$i]['rank'];
 		$latest_info2=$latest_model->where("type=1 and rank=$rank")->find();
 		$id=$latest_info2['id'];
 		$news_info=$news_model->where("id=$id")->find();
@@ -104,8 +104,8 @@ class IndexAction extends Action
 		//var_dump($news_info);
 		//$abst=mb_substr($news_info['text'], 0, 20, 'utf-8');  
 		$abst=$news_info['title'];
-		if(empty($news_info['author']))
-			$news_info['author']=" ";
+		if(empty($news_info['author'])||$news_info['author']==" ")
+			$news_info['author']="-";
 		$arrNewsInfo[]=Array(
 			'title'=>$news_info['title'],
 			'author'=>$news_info['author'],
@@ -119,8 +119,9 @@ class IndexAction extends Action
 	$arr=Array(
 		"arrNewsInfo"=>$arrNewsInfo,
 	);
+	//header("Content-type: text/html; charset=utf-8"); 
 	echo $this->_encode($arr);
-	//echo $arr;
+	
   }
   
   //新闻中心页面
@@ -263,8 +264,8 @@ class IndexAction extends Action
 	private function getData($type)
 	{
 		
-		$limit=4;
-		//获取新闻最新最新的四篇（当前数据库不足，以后调整）
+		$limit=8;
+		//获取新闻最新最新的8篇
 		$news_model=new Model("News");
 		$news_info=$news_model->where("type=$type")->select();
 		//将所有创建时间转存到数组中,并进行排序
@@ -309,7 +310,7 @@ class IndexAction extends Action
 		}
 		
 		//执行分页任务
-		$pageSize=4;
+		$pageSize=32;
 		//获取页面数量
 		$pageNum=count($moreArr)/$pageSize;
 		$pageNum=ceil($pageNum);

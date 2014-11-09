@@ -518,14 +518,14 @@ class InitAction extends Action
 	//修改学号
 	//$this->personUpdate("2012052308","2012052309");//原来的学号+更新后的学号
 	//删除一般干事
-	//$this->personDelete("");
+	//$this->personDelete("2014050241");
   }
  //删除一般干事 
   private function personDelete()
   {
     //判断是否满足删除条件：非人力干事，不是部门违规负责人（如果是，得先去修改部门违规负责人）
 	//tbl_person,tbl_timetable,
-	$account=" 2014052395";
+	$account="2014052548";
 	$person_model=new Model("Person");
 	$person_info=$person_model->where("account=$account")->find();
 	if(false==$person_info)
@@ -581,7 +581,7 @@ class InitAction extends Action
 	echo "新增干事信息初始化开始</br>";
 	$flagInitPerson=1;
 	//添加非人力干事
-	$this->initPersonCrud("2014052858","刘馨月",1,4,$flagInitPerson);
+	$this->initPersonCrud("2014052499","黄会燕",1,1,$flagInitPerson);
 /* 	$this->initPersonCrud("2014050551","聂梦桥",1,9,$flagInitPerson);
 	$this->initPersonCrud("2014052590"," 郭锐",1,9,$flagInitPerson);	
 	$this->initPersonCrud("2014053006","蒋元青",1,7,$flagInitPerson);
