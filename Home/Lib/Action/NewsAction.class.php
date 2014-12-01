@@ -286,7 +286,7 @@ class NewsAction extends Action{
 			//获取将要操作的id
 			$announcement_info=$announcement_model->where("create_time=$create_time")->find();
 			$id=$announcement_info['id'];
-			$this->rankLatest($id,5,1);
+			$this->rankLatest($id,5,1,$create_time);
 			$this->Success("添加成功，正在返回......",__APP__."/News/create");
 		}
 	}
@@ -319,7 +319,7 @@ class NewsAction extends Action{
 			//获取将要操作的id
 			$activity_info=$activity_model->where("create_time=$create_time")->find();
 			$id=$activity_info['id'];
-			$this->rankLatest($id,6,1);
+			$this->rankLatest($id,6,1,$create_time);
 			$this->Success("添加成功，正在返回......",__APP__."/News/create");
 		}
 	}
