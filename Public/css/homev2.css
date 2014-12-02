@@ -40,9 +40,7 @@ div#coming_activity_main_post{float:right;}
 
 div#coming_activity_info{width:400px;float:left;text-align:center;margin-top:50px;}
 
-div#coming_activity_small_post{width:180px;height:250px;background:white;position:relative;left:570px;top:65px;border-style:solid;border-width:2px;}
- 
-div#coming_activity_small_post{position:relative;left:570px;top:65px;}
+div#coming_activity_small_post{width:180px;height:290px;background:white;position:relative;left:570px;top:45px;border-style:solid;border-width:2px;}
 
 div#small_post_img{width:160px;height:180px;margin-left:auto;margin-right:auto;position:relative;bottom:140px;}
 
@@ -70,7 +68,7 @@ p#when_the_activity_hold,p#where_the_activity_hold{line-height:50%;}
 
 p#activity_slogan,p#activity_sponsor{text-align:center;}
 
-p#activity_slogan{font-weight:bold;}
+p#activity_slogan{font-weight:bold;padding-top:20px;}
 
 p#activity_sponsor{font-size:12px;color:#888888;line-height:50%;}
 
@@ -83,6 +81,7 @@ p#when_the_activity_hold,p#where_the_activity_hold,p#activity_slogan,div#news p 
 /*图片样式*/
 		
 div#hot_stuwork img,div#hot_activity img{vertical-align:middle;}
+div#coming_activity_main_post img:hover{z-index:4;}
 
 
 /*连接样式*/
