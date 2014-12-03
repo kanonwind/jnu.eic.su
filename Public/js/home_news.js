@@ -63,9 +63,9 @@ function get_news()
     */
 	//请求数据
 		var newsData;
-		console.log("地址："+"http://jnu.eicsu.com/index.php/Index/newsData");
+		console.log("地址："+URL+"/sendTime");
 	    $.ajax({
-		url:"http://jnu.eicsu.com/index.php/Index/newsData",//请求用户类型
+		url:URL+"/newsData",//请求用户类型
 		data:{"a":"1"},
 		async:false,
 		dataType:"json",
