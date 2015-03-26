@@ -22,16 +22,17 @@ div#allocate_system{float:left;border-left-style:solid;border-right-style:solid;
 
 div#secretariat{float:right;}
 
-div#hot_and_notice{width:350px;height:222px;margin-top:16px;}
-
+div#hot_and_notice{width:350px;/*margin-top:16px;*/height:342px;}
+div#hot_and_notice_login{width:350px;height:222px;margin-top:16px;}
 div#division{height:10px;clear:both;padding-top:20px;border-bottom-color:#dedfe0;}
 
-div#hot_and_notice{font-size:14px;}
+div#hot_and_notice,div#hot_and_notice_login{font-size:14px;}
 
 div#what_s_hot,div#notice{padding-left:20px;padding-right:20px;}
+div#notice p{margin-bottom:1em;}
 
-div#hot_key_word,div#hot_stuwork,div#hot_activity{height:25px;border-bottom-style:dotted;border-width:1px;border-bottom-color:#dedfe0;}
-
+div#hot_key_word,div#hot_stuwork,div#hot_activity{ vertical-align:middle;/*height:25px;*/border-bottom-style:dotted;border-width:1px;border-bottom-color:#dedfe0;}
+div#hot_key_word_login,div#hot_stuwork_login,div#hot_activity_login{vertical-align:middle;border-bottom-style:dotted;border-width:1px;border-bottom-color:#dedfe0;}
 div#coming_soon{width:100%;height:440px;}
 
 div#coming_soon_body{height:380px;background:#d0e5ff;}
@@ -109,7 +110,8 @@ p#news_text h2{font-weight:normal;color:white;font-size:24px;}
 p.sys_alt,h2,a.hot_a,div#hot_and_notice,div#coming_soon h1,p#activity_slogan{color:#444444;}
 
 div#coming_soon h1{font-weight:normal;font-size:24px;line-height:50%;}
-
+#hot_activity ul,#hot_stuwork ul{list-style:none;padding:0px;} 
+#hot_activity_login ul,#hot_stuwork_login ul{list-style:none;padding:0px;margin:0px;}
 
 
 /*滑动新闻*/
