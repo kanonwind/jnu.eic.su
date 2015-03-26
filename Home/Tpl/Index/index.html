@@ -28,7 +28,7 @@
 	<link href="__PUBLIC__/css/stdindex_title.css" type="text/css" rel="stylesheet" />
 	<link href="__PUBLIC__/css/homev2.css" type="text/css" rel="stylesheet" />
 	
-	<script type="text/javascript" src="__PUBLIC__/js/jquery-2.0.3.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/js/jquery-1.11.1.min.js"></script>
     <script type="text/javascript" src="__PUBLIC__/js/searchbutton.js"></script>
     <script type="text/javascript" src="__PUBLIC__/js/home_news.js"></script>
 	
@@ -37,8 +37,10 @@
 	<script type="text/javascript">
 		var imgURL="<?php echo $imgURL;?>";
 		var newsImgURL="<?php echo $newsImgURL;?>";
-		var APP="__APP__";
-		var URL = "__URL__";
+        var URL = "__URL__";
+        var APP = "__APP__";
+        var ROOT = "__ROOT__";
+		var PUBLIC="__PUBLIC__";
 	</script>
 	</head>
 	<body>
@@ -50,13 +52,19 @@
                     <img src="<?php echo $imgURL;?>Preloader_5.gif" id="loadinggif" alt="加载中" width="128px" height="128px"/>
                 </div>
 			</div>
+			<?php
+				unset($str);
+				$perform_url=$imgURL."performance_system_logo.png";
+				$allocate_url=$imgURL."allocate_system_logo.png";
+				$secretariat_url=$imgURL."secretariat_logo.png";
+				$str=<<<str
 			<div id="main_stu_sys" class="main_right_top">
 				<div id="inner_border" >
 					
 					<div id="performance_system">
 						<div class="center_the_logo">
 							<a href="__APP__/Perform/index" class="sys_logo_img" id="logo_of_per_sys">
-								<img src="<?php echo $imgURL;?>performance_system_logo.png" width="50px" height="50px" alt="绩效考核系统的徽标" />
+								<img src="$perform_url" width="50px" height="50px" alt="绩效考核系统的徽标" />
 							</a>
 						</div>
 						<p class="sys_alt">
@@ -66,7 +74,7 @@
 					<div id="allocate_system">
 						<div class="center_the_logo">
 							<a href="__APP__/Allocate/index" class="sys_logo_img" id="logo_of_alloc_sys">
-								<img src="<?php echo $imgURL;?>allocate_system_logo.png" width="50px" height="50px" alt="人员调配系统的徽标" />
+								<img src="$allocate_url" width="50px" height="50px" alt="人员调配系统的徽标" />
 							</a>
 						</div>
 						<p class="sys_alt">
@@ -77,7 +85,7 @@
 					<div id="secretariat">
 						<div class="center_the_logo">
 							<a href="#" class="sys_logo_img" id="logo_of_secr_sys">
-								<img src="<?php echo $imgURL;?>secretariat_logo.png" width="50px" height="50px" alt="秘书处的徽标" />
+								<img src="$secretariat_url" width="50px" height="50px" alt="秘书处的徽标" />
 							</a>
 						</div>
 						<p class="sys_alt">
@@ -86,19 +94,31 @@
 					</div>
 				</div>
 			</div>
-			<div id="hot_and_notice" class="main_right_top">
+str;
+			if($login==1)
+			{
+				echo $str;
+			}
+			
+			if($login==1)
+			{
+				$is_logined="_login";//这个字符串用来动态改变某些div的id
+			}
+			
+			?>
+			<div id="hot_and_notice<?php echo $is_logined; ?>" class="main_right_top">
 				<div id="what_s_hot">
 					<h2>热点</h2>
 					
 					<!--这里是热点的几个链接，其中新版首页反馈是基本固定的，其余3个就从新闻、活动的数据库里面检索文章的
 					关键词，以访问量和更新日期最好最新的3篇生成链接，锚标签的class是"hot_a"是决定样式的,下面仅举例-->
-					<div id="hot_key_word">
+					<div id="hot_key_word<?php echo $is_logined; ?>">
 						<a href="#" class="hot_a">
 							新版首页反馈
 						</a>
 						<?php
 						unset($str);
-						for($i=0;$i<3;$i++)
+						for($i=0;$i<count($hot);$i++)
 						{
 							$link=__URL__."/show?id=".$hot[$i]['id'];
 							$keyword=$hot[$i]['keyword'];
@@ -120,37 +140,54 @@ str;
 					</div>
 					
 					<!--这里是热点活动，从活动的数据库你选取最新的活动文章，生成链接，标签的样式依旧是“hot_a",下面仅举例-->
-					<div id="hot_activity">
-<!-- 						<a href="#" class="hot_a">
-							KSC程序设计大赛完满落幕
+			
+					<div id="hot_activity<?php echo $is_logined; ?>">
+<!-- 					<a href="#" class="hot_a">
+						KSC程序设计大赛完满落幕
 						</a> -->
+						<ul>
 						<?php 
 							unset($str);
-							$link=__URL__."/show?id=".$activity['id'];
-							$keyword=$activity['keyword'];
-							$str=<<<str
-								<a class="hot_a" href="$link">$keyword</a>
+							
+							$src=$imgURL."hot_activity.png";
+							for($i=0;$i<count($activity);$i++){
+							$link=__URL__."/show?id=".$activity[$i]['id'];
+							$keyword=$activity[$i]['keyword'];
+							
+							$str.=<<<str
+								<li><a class="hot_a" href="$link">$keyword</a>
+								<img src="$src" width="36px" height="20px" alt="热点活动" />
+								</li>
 str;
+							}
 							echo $str;
 						?>
-						<img src="<?php echo $imgURL;?>hot_activity.png" width="36px" height="20px" alt="热点活动" />
+						</ul>
+						
 					</div>
 					<!--这里是取学生工作的数据库中最新的文章-->
 						
-					<div id="hot_stuwork">
+					<div id="hot_stuwork<?php echo $is_logined; ?>">
 <!-- 						<a href="#" class="hot_a">
 							学长交流会，师生趣味活动
 						</a> -->
+						<ul>
 						<?php 
-							unset($str);
-							$link=__URL__."/show?id=".$work['id'];
-							$keyword=$work['keyword'];
-							$str=<<<str
-								<a class="hot_a" href="$link">$keyword</a>
+							unset($str);	
+							$src=$imgURL."hot_stuwork.png";							
+							for($i=0;$i<count($work);$i++){
+							$link=__URL__."/show?id=".$work[$i]['id'];
+							$keyword=$work[$i]['keyword'];
+							$str.=<<<str
+								<li><a class="hot_a" href="$link">$keyword</a>
+								<img src="$src" width="59px" height="20px" alt="热点学生工作" />
+								</li>
 str;
+							}
 							echo $str;
 						?>
-						<img src="<?php echo $imgURL;?>hot_stuwork.png" width="59px" height="20px" alt="热点学生工作" />
+						
+						</ul>
 					</div>
 				</div>
 				
@@ -162,7 +199,7 @@ str;
 				<div id="notice">
 					<h2>公告</h2>
 					<!-- 新版首页已正式上线，请使用mozilla firefox或google chrome最新版浏览器以获得最好使用体验. -->
-					<?php echo $announcement; ?>
+					<p><?php echo $announcement; ?></p>
 				</div>		
 			</div>
 			
@@ -224,6 +261,3 @@ str;
 		<include file="./Public/layout/footer.html" />
 	</body>
 </html>
-			
-			
-			

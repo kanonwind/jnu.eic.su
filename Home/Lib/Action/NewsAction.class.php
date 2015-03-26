@@ -160,24 +160,22 @@ class NewsAction extends Action{
 		}
 		else
 		{
-			unset($data);
-			//获取将要操作的id
-			$news_info=$news_model->where("create_time=$create_time and type=$type")->find();
-			//echo "根据创建时间".$create_time."获取id";
-			//var_dump($news_info);
-			$id=$news_info['id'];
-			$create_time=$news_info['create_time'];
 			//最新新闻上限是8篇，活动等其他的最新就只有一篇
-			if($type==1)
+			$latest_model=new Model("Latest");
+			$news_info=$news_model->query("select id, create_time from tbl_news where type=$type order by create_time DESC limit 8");
+			//先删除tbl_latest中type为1的数据
+			$latest_model->where("type=$type")->delete();
+			//添加最新记录数据
+			unset($data);
+			$i=1;
+			foreach($news_info as $v)
 			{
-				if($url!="#")
-				{
-					$this->rankLatest($id,$type,8,$create_time);
-				}
-			}
-			else
-			{
-				$this->rankLatest($id,$type,1,$create_time);
+				$data['id']=$v['id'];
+				$data['create_time']=$v['create_time'];
+				$data['type']=$type;
+				$data['rank']=$i;
+				$i++;
+				$latest_model->add($data);
 			}
 			$this->Success("添加成功，正在返回......",__APP__."/News/create");
 		} 
@@ -282,11 +280,23 @@ class NewsAction extends Action{
 		}
 		else
 		{
+			$type=5;
+			$latest_model=new Model("Latest");
+			$announcement_info=$announcement_model->query("select id, create_time from tbl_announcement order by create_time DESC limit 8");
+			//先删除tbl_announcement中type为5的数据
+			$latest_model->where("type=$type")->delete();
+			//添加最新记录数据
 			unset($data);
-			//获取将要操作的id
-			$announcement_info=$announcement_model->where("create_time=$create_time")->find();
-			$id=$announcement_info['id'];
-			$this->rankLatest($id,5,1,$create_time);
+			$i=1;
+			foreach($announcement_info as $v)
+			{
+				$data['id']=$v['id'];
+				$data['create_time']=$v['create_time'];
+				$data['type']=$type;
+				$data['rank']=$i;
+				$i++;
+				$latest_model->add($data);
+			}
 			$this->Success("添加成功，正在返回......",__APP__."/News/create");
 		}
 	}
@@ -315,11 +325,23 @@ class NewsAction extends Action{
 		}
 		else
 		{
+			$type=6;	
+			$latest_model=new Model("Latest");
+			$activity_info=$activity_model->query("select id, create_time from tbl_activity order by create_time DESC limit 8");
+			//先删除tbl_latest中type为1的数据
+			$latest_model->where("type=$type")->delete();
+			//添加最新记录数据
 			unset($data);
-			//获取将要操作的id
-			$activity_info=$activity_model->where("create_time=$create_time")->find();
-			$id=$activity_info['id'];
-			$this->rankLatest($id,6,1,$create_time);
+			$i=1;
+			foreach($activity_info as $v)
+			{
+				$data['id']=$v['id'];
+				$data['create_time']=$v['create_time'];
+				$data['type']=$type;
+				$data['rank']=$i;
+				$i++;
+				$latest_model->add($data);
+			}
 			$this->Success("添加成功，正在返回......",__APP__."/News/create");
 		}
 	}
@@ -413,5 +435,7 @@ class NewsAction extends Action{
 		}
 		return $judgelog;
 	}
+
 }
+
 ?>

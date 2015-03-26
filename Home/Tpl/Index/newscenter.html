@@ -49,19 +49,28 @@
 				<!--此链接为新闻标题和链接到该新闻的url，学生工作，活动，现行制度也如此-->
 				<?php 
 				//定界符特殊要求，不能有注释，结束标记前面不能有任何字符
+
 				for($i=0;$i<count($lastArr);$i++)
 				{
 					$link=__URL__."/show"."?id=".$lastArr[$i]['id'];
+					$deleteLink="\"".__URL__."/deleteNews"."?type=1&id=".$lastArr[$i]['id']."\"";
+					if($deleteFlag==1)
+					{
+						$deleteStr="&nbsp;&nbsp;<a href=".$deleteLink." >[删除]</a>";
+					}else{
+						$deleteStr="";
+					}
 					$title=$lastArr[$i]['title'];
 					$create_time=$lastArr[$i]['create_time'];
 					$create_time=date("Y/m/d",$create_time);
+
 					$str.=<<<str
 					<tr>
 						<td>	
 							<div>
 								<p class="xxxc_t_l">
 									
-									<a href="$link" class="xxxcenter_a">$title</a>
+									<a href="$link" class="xxxcenter_a">$title</a>$deleteStr
 								</p>
 								<p class="xxxc_t_r">
 									[$create_time]
@@ -93,6 +102,13 @@ str;
 				{
 				$title=$moreArr[$i]['title'];
 				$link=__URL__."/show"."?id=".$moreArr[$i]['id'];
+				$deleteLink="\"".__URL__."/deleteNews"."?type=1&id=".$moreArr[$i]['id']."\"";
+				if($deleteFlag==1)
+				{
+					$deleteStr="&nbsp;&nbsp;<a href=".$deleteLink." >[删除]</a>";
+				}else{
+					$deleteStr="";
+				}
 				$create_time=$moreArr[$i]['create_time'];
 				$create_time=date("Y/m/d",$create_time);
 				$str.=<<<str
@@ -100,7 +116,7 @@ str;
 						<td>	
 							<div>
 								<p class="xxxc_t_l">
-									<a href="$link" class="xxxcenter_a">$title</a>
+									<a href="$link" class="xxxcenter_a">$title</a>$deleteStr
 								</p>
 								<p class="xxxc_t_r">
 									
@@ -144,6 +160,3 @@ str;
 	<include file="./Public/layout/footer.html" />
 	</body>
 </html>
-			
-			
-			

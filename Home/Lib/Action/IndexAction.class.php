@@ -4,6 +4,17 @@
 */
 class IndexAction extends Action
 {
+  //数据获取测试
+  public function getNews()
+  {
+	$news_model=new Model("News");
+	$type=1;
+	$news_info=$news_model->query("select id, title, create_time from tbl_news where type=$type order by create_time DESC limit 8");
+	foreach($news_info as $v)
+	{
+		echo $v['create_time'].$v['title']."</br>";
+	}
+  }
   //首页
   public function index()
   {
@@ -15,6 +26,7 @@ class IndexAction extends Action
 		//尚未登录
 		$link="<a class=\"user_info\" id=\"login_info_user_log_in\" href=\"".__APP__."/Login/index\">登录</a>";
 		$this->assign('link',$link);
+		$loginFlag=0;
 	}
 	else{
 		//个人信息
@@ -26,11 +38,12 @@ class IndexAction extends Action
 		$link.="<a class=\"user_info\" id=\"login_info_user_center\" href=\"".__APP__."/Center/index\">个人中心</a>&nbsp;";
 		$link.="<a class=\"user_info\" id=\"login_info_log_out\" href=\"".__APP__."/Login/logout\">注销</a>";
 		$this->assign('link',$link);
+		$loginFlag=1;
 	}
 	//获取最新3篇热点新闻
 	$news_model=new Model("News");
 	$latest_model=new Model("Latest");
-	$latest_info=$latest_model->where("type=1 and rank<4")->select();
+	$latest_info=$latest_model->where("type=1 and rank<7")->select();
 	for($i=0;$i<count($latest_info);$i++)
 	{
 		$rank=$latest_info[$i]['rank'];
@@ -43,24 +56,36 @@ class IndexAction extends Action
 			'id'=>$id,
 		);//最新新闻存储完毕
 	}
+    if($loginFlag==1)
+    {
+        $rankNum=2;
+    }else{
+        $rankNum=3;
+    }
 	//获取最新活动	
-	$latest_info=$latest_model->where("type=3 and rank=1")->find();
-	$id=$latest_info['id'];
-	$news_info=$news_model->where("id=$id")->find();
-	$keyword=explode("|",$news_info['keyword']);
-	$activity=Array(
-		'keyword'=>$keyword[0],
-		'id'=>$id,
-	);
+	$latest_info=$latest_model->where("type=3 and rank<$rankNum")->select();
+	for($i=0;$i<count($latest_info);$i++)
+	{
+		$id=$latest_info[$i]['id'];
+		$news_info=$news_model->where("id=$id")->find();
+		$keyword=explode("|",$news_info['keyword']);
+		$activity[]=Array(
+			'keyword'=>$keyword[0],
+			'id'=>$id,
+		);
+	}
 	//获取最新学生工作
-	$latest_info=$latest_model->where("type=2 and rank=1")->find();
-	$id=$latest_info['id'];
-	$news_info=$news_model->where("id=$id")->find();
-	$keyword=explode("|",$news_info['keyword']);
-	$work=Array(
-		'keyword'=>$keyword[0],
-		'id'=>$id,
-	);
+	$latest_info=$latest_model->where("type=2 and rank<$rankNum")->select();
+	for($i=0;$i<count($latest_info);$i++)
+	{
+		$id=$latest_info[$i]['id'];
+		$news_info=$news_model->where("id=$id")->find();
+		$keyword=explode("|",$news_info['keyword']);
+		$work[]=Array(
+			'keyword'=>$keyword[0],
+			'id'=>$id,
+		);
+	}
 	//获取公告
 	$announcement_model=new Model("Announcement");
 	$latest_info=$latest_model->where("type=5 and rank=1")->find();
@@ -88,6 +113,7 @@ class IndexAction extends Action
 	$this->assign('work',$work);
 	$this->assign('announcement',$announcement);
 	$this->assign('activityExpected',$activityExpected);
+	$this->assign('login',$loginFlag);
 	$this->display();
   }
   //AJAX请求新闻数据
@@ -103,6 +129,8 @@ class IndexAction extends Action
 		$news_info=$news_model->where("id=$id and type=1")->find();
 		//var_dump($news_info);
 		//$abst=mb_substr($news_info['text'], 0, 20, 'utf-8');  
+		if($news_info['url']=='#')
+			continue;
 		$abst=$news_info['title'];
 		if(empty($news_info['author'])||$news_info['author']==" ")
 			$news_info['author']="-";
@@ -113,21 +141,18 @@ class IndexAction extends Action
 			'picpath'=>$news_info['url'],
 			'newslink'=>__URL__."/show?id=".$news_info['id'],		
 		);
-		//var_dump($arrNewsInfo);
 	}
 
 	$arr=Array(
 		"arrNewsInfo"=>$arrNewsInfo,
 	);
-	//header("Content-type: text/html; charset=utf-8"); 
-	echo $this->_encode($arr);
-	
+	//echo $this->_encode($arr);
+	echo $this->JSON($arr);
   }
   
   //新闻中心页面
   public function newscenter()
   {
-
     session_name('LOGIN');
     session_start();
     if(!$this->judgelog())
@@ -147,6 +172,17 @@ class IndexAction extends Action
 		$link.="<a class=\"user_info\" id=\"login_info_log_out\" href=\"".__APP__."/Login/logout\">注销</a>";
 		$this->assign('link',$link);
 	}
+	//是否提供删除按钮
+	$deleteFlag=0;
+	if(!empty($_SESSION['account']))
+	{
+		$account=$_SESSION['account'];
+		$person_info=$person_model->where("account=$account")->find();
+		if($person_info['apartment']==4 && $person_info['type']==3)
+		{
+			$deleteFlag=1;
+		}
+	}
 	$type=1;
 	$data=$this->getData($type);
 	$this->assign('lastArr',$data['lastArr']);
@@ -156,6 +192,7 @@ class IndexAction extends Action
 	$this->assign('prePage',$data['prePage']);
 	$this->assign('nexPage',$data['nexPage']);
 	$this->assign('view',"newscenter");
+	$this->assign('deleteFlag',$deleteFlag);
 	$this->display();
   }
   //学生工作页面
@@ -181,6 +218,17 @@ class IndexAction extends Action
 		$link.="<a class=\"user_info\" id=\"login_info_log_out\" href=\"".__APP__."/Login/logout\">注销</a>";
 		$this->assign('link',$link);
 	}
+	//是否提供删除按钮
+	$deleteFlag=0;
+	if(!empty($_SESSION['account']))
+	{
+		$account=$_SESSION['account'];
+		$person_info=$person_model->where("account=$account")->find();
+		if($person_info['apartment']==4 && $person_info['type']==3)
+		{
+			$deleteFlag=1;
+		}
+	}
 	$type=2;
 	$data=$this->getData($type);
 	$this->assign('lastArr',$data['lastArr']);
@@ -189,6 +237,7 @@ class IndexAction extends Action
 	$this->assign('pageNum',$data['pageNum']);
 	$this->assign('prePage',$data['prePage']);
 	$this->assign('nexPage',$data['nexPage']);
+	$this->assign('deleteFlag',$deleteFlag);
 	$this->assign('view',"work");
 	$this->display();	
   }
@@ -215,6 +264,17 @@ class IndexAction extends Action
 		$link.="<a class=\"user_info\" id=\"login_info_log_out\" href=\"".__APP__."/Login/logout\">注销</a>";
 		$this->assign('link',$link);
 	}
+	//是否提供删除按钮
+	$deleteFlag=0;
+	if(!empty($_SESSION['account']))
+	{
+		$account=$_SESSION['account'];
+		$person_info=$person_model->where("account=$account")->find();
+		if($person_info['apartment']==4 && $person_info['type']==3)
+		{
+			$deleteFlag=1;
+		}
+	}
 	$type=3;
 	$data=$this->getData($type);
 	$this->assign('lastArr',$data['lastArr']);
@@ -223,6 +283,7 @@ class IndexAction extends Action
 	$this->assign('pageNum',$data['pageNum']);
 	$this->assign('prePage',$data['prePage']);
 	$this->assign('nexPage',$data['nexPage']);
+	$this->assign('deleteFlag',$deleteFlag);
 	$this->assign('view',"activity");
 	$this->display();
   }
@@ -249,6 +310,17 @@ class IndexAction extends Action
 		$link.="<a class=\"user_info\" id=\"login_info_log_out\" href=\"".__APP__."/Login/logout\">注销</a>";
 		$this->assign('link',$link);
 	}
+	//是否提供删除按钮
+	$deleteFlag=0;
+	if(!empty($_SESSION['account']))
+	{
+		$account=$_SESSION['account'];
+		$person_info=$person_model->where("account=$account")->find();
+		if($person_info['apartment']==4 && $person_info['type']==3)
+		{
+			$deleteFlag=1;
+		}
+	}
 	$type=4;
 	$data=$this->getData($type);
 	$this->assign('lastArr',$data['lastArr']);
@@ -257,6 +329,7 @@ class IndexAction extends Action
 	$this->assign('pageNum',$data['pageNum']);
 	$this->assign('prePage',$data['prePage']);
 	$this->assign('nexPage',$data['nexPage']);
+	$this->assign('deleteFlag',$deleteFlag);
 	$this->assign('view',"files");
 	$this->display(); 
   }
@@ -267,48 +340,28 @@ class IndexAction extends Action
 		$limit=8;
 		//获取新闻最新最新的8篇
 		$news_model=new Model("News");
-		$news_info=$news_model->where("type=$type")->select();
-		//将所有创建时间转存到数组中,并进行排序
+		$i=0;
+		$news_info=$news_model->query("select id, title, create_time from tbl_news where type=$type order by create_time DESC");
 		foreach($news_info as $v)
 		{
-			$arr[]=Array(
-				'create_time'=>$v['create_time'],
-			);
+			if($i<8)
+			{
+				$newsArr[]=Array(
+					'id'=>$v['id'],
+					'title'=>$v['title'],
+					'create_time'=>$v['create_time'],
+				);
+			}else{
+			//获取新闻剩余的新闻
+				$moreArr[]=Array(
+					'id'=>$v['id'],
+					'title'=>$v['title'],
+					'create_time'=>$v['create_time'],
+				);	
+			}
+			$i++;
 		}
-		
-		sort($arr);
-		
-		//找到四篇最新的
-		$num=count($arr);
-		for($i=0;$i<$limit;$i++)
-		{
-			
-			$create_time=$arr[$num-$i-1]['create_time'];
-			if(empty($create_time))
-				continue;
-			$news_info=$news_model->where("create_time=$create_time")->find();
-			$newsArr[]=Array(
-				'id'=>$news_info['id'],
-				'title'=>$news_info['title'],
-				'create_time'=>$news_info['create_time'],
-			);
-		}
-		
-		
-		//获取新闻剩余的新闻
-		rsort($arr);
-		for($i=$limit;$i<$num;$i++)
-		{
-			
-			$create_time=$arr[$i]['create_time'];
-			$news_info=$news_model->where("create_time=$create_time")->find();
-			$moreArr[]=Array(
-				'id'=>$news_info['id'],
-				'title'=>$news_info['title'],
-				'create_time'=>$news_info['create_time'],
-			);
-		}
-		
+
 		//执行分页任务
 		$pageSize=32;
 		//获取页面数量
@@ -361,6 +414,51 @@ class IndexAction extends Action
 		$this->assign('nexPage',$nexPage); */
 		
 	}
+  //删除单条新闻
+  public function deleteNews()
+  {
+	  //只有编辑部部长才有权访问
+      session_name('LOGIN');
+      session_start();
+      if(!$this->judgelog())
+      {
+		  //尚未登录
+		 $this->error("无法访问......");
+		 return;
+	  }
+	if(!empty($_SESSION['account']))
+	{
+		$person_model=new Model("Person");
+		$account=$_SESSION['account'];
+		$person_info=$person_model->where("account=$account")->find();
+		if($person_info['apartment']==4 && $person_info['type']==3)
+		{
+			if(!empty($_GET['id']) && !empty($_GET['type']))
+			{
+				$id=$_GET['id'];
+				$type=$_GET['type'];
+				$news_model=new Model("News");
+				$latest_model=new Model("Latest");
+				$news_model->where("type=$type and id=$id")->delete();
+				$news_info=$news_model->query("select id, create_time from tbl_news where type=$type order by create_time DESC limit 8");
+				$latest_model->where("type=$type")->delete();
+				//添加最新记录数据
+				unset($data);
+				$i=1;
+				foreach($news_info as $v)
+				{
+					$data['id']=$v['id'];
+					$data['create_time']=$v['create_time'];
+					$data['type']=$type;
+					$data['rank']=$i;
+					$i++;
+					$latest_model->add($data);
+				}
+				$this->Success("删除成功，正在返回......",__APP__."/Index/newscenter");
+			}
+		}
+	}
+  }
   //新闻中心单条新闻
   public function show()
   {
@@ -424,6 +522,8 @@ class IndexAction extends Action
 			$editFlag=1;
 		}
 	}
+	
+
 	$newsArr=Array(
 		'id'=>$news_info['id'],
 		'title'=>$news_info['title'],
@@ -481,5 +581,32 @@ class IndexAction extends Action
   }
   return urlencode($elem);
   }
+  //另一个JSON 中文乱码处理函数
+  private function JSON($array) { 
+	$this->arrayRecursive($array, 'urlencode', true); 
+    $json = json_encode($array); 
+    return urldecode($json); 
+  } 
+  private function arrayRecursive(&$array, $function, $apply_to_keys_also = false){ 
+    static $recursive_counter = 0; 
+    if (++$recursive_counter > 1000) { 
+        die('possible deep recursion attack'); 
+    } 
+    foreach ($array as $key => $value) { 
+        if (is_array($value)) { 
+            $this->arrayRecursive($array[$key], $function, $apply_to_keys_also); 
+        } else { 
+            $array[$key] = $function($value); 
+        }                                        
+        if ($apply_to_keys_also && is_string($key)) { 
+            $new_key = $function($key); 
+            if ($new_key != $key) { 
+                $array[$new_key] = $array[$key]; 
+                unset($array[$key]); 
+            } 
+        } 
+    } 
+    $recursive_counter--; 
+  }                                                                                      
 }
 ?>
