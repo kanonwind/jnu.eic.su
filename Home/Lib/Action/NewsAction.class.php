@@ -44,10 +44,10 @@ class NewsAction extends Action{
 		{
 			case "image/jpeg":
 				$pic_type=".jpg";break;
-/* 			case "image/png" :
+ 			case "image/png" :
 				$pic_type=".png";break;
 			case "image/bmp" :
-				$pic_type=".bmp";break; */
+				$pic_type=".bmp";break; 
 			default:
 				$flag=0;
 		}
@@ -85,7 +85,7 @@ class NewsAction extends Action{
 		}
 		else
 		{
-			echo "upload failed";
+			echo "upload failed!(only support for jpg/png/bmp)";
 		}		
 	}
 

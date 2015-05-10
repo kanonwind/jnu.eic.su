@@ -132,10 +132,17 @@ class IndexAction extends Action
 		if($news_info['url']=='#')
 			continue;
 		$abst=$news_info['title'];
+		$title_len=mb_strlen($news_info['title'],'utf-8');
+		if($title_len>20){
+			$title_len=20;
+			$title=mb_substr($news_info['title'],0,$title_len,'utf-8')."....";
+		}else{
+			$title=$news_info['title'];
+		}
 		if(empty($news_info['author'])||$news_info['author']==" ")
 			$news_info['author']="-";
 		$arrNewsInfo[]=Array(
-			'title'=>$news_info['title'],
+			'title'=>$title,
 			'author'=>$news_info['author'],
 			'abst'=>$abst,
 			'picpath'=>$news_info['url'],
@@ -522,7 +529,20 @@ class IndexAction extends Action
 			$editFlag=1;
 		}
 	}
-	
+	//判断当前是哪种类型，1（新闻），2（学生工作），3（活动），4（现行制度）
+	switch($news_info['type'])
+	{
+		case 1:
+			$mainType="新闻中心";$mainTypeEn="News Center";break;
+		case 2:
+			$mainType="学生工作";$mainTypeEn="Student Work";break;
+		case 3:
+			$mainType="活动";$mainTypeEn="Activities";break;
+		case 4:
+			$mainType="现行制度";$mainTypeEn="Regulations";break;
+		default:
+			$mainType="新闻中心";$mainTypeEn="News Center";
+	}
 
 	$newsArr=Array(
 		'id'=>$news_info['id'],
@@ -532,6 +552,8 @@ class IndexAction extends Action
 		'keyword'=>$keyword,
 		'text'=>$news_info['text'],
 		'editFlag'=>$editFlag,
+		'mainType'=>$mainType,
+		'mainTypeEn'=>$mainTypeEn,
 	);
 	$this->assign('newsArr',$newsArr);
 	$this->display();

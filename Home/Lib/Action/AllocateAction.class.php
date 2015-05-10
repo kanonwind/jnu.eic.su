@@ -34,7 +34,7 @@ class AllocateAction extends Action
 		$resource_model=new Model("Resource");
 		
 		$arrDepartName=Array("秘书处","人力资源部","宣传部","信息编辑部","学术部",
-"体育部","KSC联盟","组织部","文娱部","公关部","心理服务部","主席团");
+"体育部","JDC","组织部","文娱部","公关部","心理服务部","主席团");
 		$arrTypeName=Array("干事","人力干事","部长级","主席团");
 		$person_info=$person_model->where("account=$account")->find();
 

@@ -1533,18 +1533,21 @@ function Get_ZTKHJGFK()
 			this.arrObjYXBM.push(new obj_YXBM(json_Get_ZTKHJGFK.arrYXBM[i].bm, json_Get_ZTKHJGFK.arrYXBM[i].df));
 		}
 		
-		
-		function obj_YXBZ(bzmz, account, ssbm, df)//优秀部长
+		// Anqur
+		function obj_YXBZ(bzmz, account, ssbm, df, rank, ps)//优秀部长
 		{
 			this.bzmz = bzmz;//部长名字
 			this.account = account;//学号
 			this.ssbm = arrDepartName[ssbm-1];//所属部门
 			this.df = df;//得分
+            this.rank = rank;//排名
+            this.ps = ps;//票数
 		}
 		this.arrObjYXBZ = new Array();//保存优秀部长的数组
 		for(var i = 0; i < json_Get_ZTKHJGFK.arrYXBZ.length; ++i)
 		{
-			this.arrObjYXBZ.push(new obj_YXBZ(json_Get_ZTKHJGFK.arrYXBZ[i].bm, json_Get_ZTKHJGFK.arrYXBZ[i].account, json_Get_ZTKHJGFK.arrYXBZ[i].ssbm, json_Get_ZTKHJGFK.arrYXBZ[i].df));
+            // Anqur
+			this.arrObjYXBZ.push(new obj_YXBZ(json_Get_ZTKHJGFK.arrYXBZ[i].bm, json_Get_ZTKHJGFK.arrYXBZ[i].account, json_Get_ZTKHJGFK.arrYXBZ[i].ssbm, json_Get_ZTKHJGFK.arrYXBZ[i].df, json_Get_ZTKHJGFK.arrYXBZ[i].rank, json_Get_ZTKHJGFK.arrYXBZ[i].ps));
 		}
 		
 		
@@ -4615,8 +4618,21 @@ function Show_ZTKHJGFK()
 	
 	strHTML += "<p class=\"fill_in_tips\">优秀部长</p>\n"
 			+"	<ol>\n"
-	for(var i = 0; i < obj_ZTKHJGFK.arrObjYXBZ.length; ++i)
-		strHTML += "<li>" + obj_ZTKHJGFK.arrObjYXBZ[i].bzmz + "&emsp;<span>所属部门：</span>" + obj_ZTKHJGFK.arrObjYXBZ[i].ssbm + "&emsp;<span>得分：</span>" + obj_ZTKHJGFK.arrObjYXBZ[i].df + "</li>\n";
+    //deng
+	console.log("deng");
+	// Anqur
+    var opt = 0;
+    var i;
+    while (opt < 3) {
+        for (i = 0; i < obj_ZTKHJGFK.arrObjYXBZ.length; i++) {
+            if (obj_ZTKHJGFK.arrObjYXBZ[i].rank == (opt + 1)) {
+                strHTML += "<li>" + obj_ZTKHJGFK.arrObjYXBZ[i].bzmz + "&emsp;<span>所属部门：</span>" + obj_ZTKHJGFK.arrObjYXBZ[i].ssbm + "&emsp;<span>得分：</span>" + obj_ZTKHJGFK.arrObjYXBZ[i].df + "&emsp;<span>票数：</span>" + obj_ZTKHJGFK.arrObjYXBZ[i].ps + "</li>\n";
+        		opt += 1;
+                break;
+           }
+        }        
+    }
+    console.log("zuoheng");
 	strHTML += "</ol>\n";
 	
 	strHTML += "<p class=\"fill_in_tips\">各部门优秀干事</p>\n"

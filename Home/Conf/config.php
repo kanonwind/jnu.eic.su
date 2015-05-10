@@ -4,7 +4,7 @@ return array(
     //'配置项'=>'配置值'
 
 
-    'SHOW_PAGE_TRACE'=>true,
+    'SHOW_PAGE_TRACE'=>false,
     'URL_HTML_SUFFIX'=>'.html',
 	'DB_TYPE'=>'mysql',   //设置数据库类型
 	'DB_PREFIX'=>'tbl_',  //设置表前缀

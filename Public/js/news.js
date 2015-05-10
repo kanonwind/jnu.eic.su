@@ -82,7 +82,7 @@ $(document).ready(function()
             tinymce.init({
                 selector: "textarea#article_text",
                 theme: "modern",
-                language:"zh_CN",
+                language_url : "/Public/js/tinymce/langs/zh_CN.js",
                 height:"920px",
                 width:"920px",
                 plugins: [

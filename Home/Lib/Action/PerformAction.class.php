@@ -1952,9 +1952,12 @@ class PerformAction extends Action
    }
   //echo "三名优秀部长分别是：".$account1."	".$account2."	".$account3;
   //将三名优秀部长存入tbl_bzfk中
+     // Anqur
   $data['yxbz']=1;
   $bzfk_model->where("(year=$year and month=$month) and account=$account1")->data($data)->save();
+  $data['yxbz']=2;
   $bzfk_model->where("(year=$year and month=$month) and account=$account2")->data($data)->save();
+  $data['yxbz']=3;
   $bzfk_model->where("(year=$year and month=$month) and account=$account3")->data($data)->save();
 
  }
@@ -2955,6 +2958,7 @@ class PerformAction extends Action
     $bzfk_model=new Model("Bzfk");
     $bmfk_model=new Model("Bmfk");
 	$resource_model=new Model("Resource");
+    $yxbz_model=new Model("Yxbz");
 	$arrTime=$this->getTime();
 	$year=$arrTime['year'];
 	$month=$arrTime['month'];
@@ -2970,19 +2974,25 @@ class PerformAction extends Action
 	}
     //echo json_encode($arrYXBM,JSON_UNESCAPED_UNICODE);    
 	//获取优秀部长
-	$bzfk_info=$bzfk_model->where("(year=$year and month=$month) and yxbz=1")->select();
+     // Anqur
+	$bzfk_info=$bzfk_model->where("(year=$year and month=$month) and (yxbz=1 or yxbz=2 or yxbz=3)")->select();
 	foreach($bzfk_info as $v)
 	{
 	  $yxbz_account=$v['account'];
 	  $person_info=$person_model->where("account=$yxbz_account")->find();
+      $yxbz_info=$yxbz_model->where("(year=$year and month=$month) and raccount=$yxbz_account")->select();
+	  $ps=count($yxbz_info);
 	  $yxbz_name=$person_info['name'];
 	  $ssbm=$person_info['apartment'];
 	  $df=$v['total'];
+      $rank=$v['yxbz'];
 	  $arrYXBZ[]=Array(
 	    'account'=>$yxbz_account,
 		'bm'=>$yxbz_name,
 		'ssbm'=>$ssbm,
 		'df'=>$df,
+        'rank'=>$rank,
+         'ps'=>$ps,
 	  );
 	}
 	//echo json_encode($arrYXBZ,JSON_UNESCAPED_UNICODE);  

@@ -63,14 +63,15 @@ function get_news()
     */
 	//请求数据
 		var newsData;
-		console.log("地址："+URL+"/sendTime");
+		console.log("地址："+URL+"/sendTime"+APP);
 	    $.ajax({
-		url:URL+"/newsData",//请求用户类型
-		data:{"a":"1"},
+		url:URL+"/newsData",
 		async:false,
 		dataType:"json",
 		type:"POST",
-		success:function(result){newsData=result;}
+		beforeSend:function(){console.log("Before send");},
+		success:function(result){newsData=result;},
+		error:function(){console.log("Error");},
 		});	
 		json_Get=newsData;
         console.log(json_Get);

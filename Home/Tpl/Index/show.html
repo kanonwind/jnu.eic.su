@@ -19,10 +19,7 @@
 	<meta name="description" content="电气信息学院团委学生会门户网站" /><!--网站概述-->
 	<meta name="keywords" content="暨大 暨南大学 电气院 电气信息学院 团委学生会 暨南大学电气信息学院团委学生会 团委学生会首页" /><!--关键词-->
 	<meta name="keywords" content="Electrcal and Information College of Jinan University Youth League Committee Student Union" />
-	<script type="text/javascript" src="__PUBLIC__/js/jquery-2.0.3.js"></script>
-    <script type="text/javascript" src="__PUBLIC__/js/tinymce/tinymce.min.js"></script>
-    <script type="text/javascript" src="__PUBLIC__/js/news.js"></script>
-	<script src="__PUBLIC__/js/jquery_form.js"></script>
+	
 	<link rel="shortcut icon" href="<?php echo $imgURL;?>logo.jpg" />
 	<link href="__PUBLIC__/css/stdindex_footer.css" 	type="text/css" 	rel="stylesheet" />
 	<link href="__PUBLIC__/css/stdindex_title.css" 	type="text/css" 	rel="stylesheet" />
@@ -37,8 +34,8 @@
 		
 		<div class="xxxcenter_title">
 			<div>
-				<h1>新闻中心</h1><!--标题依旧小心英语-->
-				<h4>News Center</h4>
+				<h1><?php echo $newsArr['mainType'];?></h1><!--标题依旧小心英语-->
+				<h4><?php echo $newsArr['mainTypeEn'];?></h4>
 			</div>
 		</div>
 		<hr class="xxxcenter_hr" />
@@ -113,7 +110,6 @@ str;
 str;
 						echo $str;
 						}
-						
 						?>
                     </div>
                 </div>
@@ -133,6 +129,10 @@ str;
 			</div>  
 			<div id="status"></div>
 		</div>
+    <script type="text/javascript" src="http://cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script>
+    <script type="text/javascript" src="http://cdn.bootcss.com/tinymce/4.1.9/tinymce.min.js"></script>
+    <script type="text/javascript" src="http://cdn.bootcss.com/jquery.form/3.51/jquery.form.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/news.js"></script>
  <script>
 (function() {
     
@@ -169,6 +169,3 @@ $('#uploadphoto').ajaxForm({
         
  	</body>
 </html>
-			
-			
-			

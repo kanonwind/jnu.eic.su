@@ -5,12 +5,16 @@ function GetObjById(strId)
 
 window.onload=function()
 {
+    
 	GetObjById("articles").onclick=function()
 	{
 			
-        initArticles();
+        //initArticles();
+        //15/4/20 deng:采用最暴力的方法
+        window.location.href = "http://jnu.eicsu.com/index.php/News/create";
 		
 	}
+    
 	GetObjById("announcement").onclick=function()
 	{
 		
@@ -82,8 +86,8 @@ function initArticles()
         GetObjById("main_input_area").innerHTML="<textarea id=\"article_text\" name=\"article_text\"></textarea>";
         tinymce.init({
 			selector: "textarea#article_text",
+            language_url : "/Public/js/tinymce/langs/zh_CN.js",
 			theme: "modern",
-			language:"zh_CN",
 			height:"920px",
 			width:"920px",
 			plugins: [
