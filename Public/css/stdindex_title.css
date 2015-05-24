@@ -37,6 +37,18 @@ p#chs_title{font-size:28px;line-height:0;}
 
 p#eng_title{font-size:12px;line-height:0;}
 
+p#chs_title{
+    margin-bottom: 28px;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-top: 28px;
+}
+
+p#eng_title{
+    margin-bottom:12px;
+    margin-top:12px;
+}
+
 /*连接样式*/
 a.head_help_nav{font-size:14px;text-decoration:none;padding-right:2em;}
 a.head_help_nav:active{color:#FFFFFF;}
@@ -66,9 +78,20 @@ a.user_info:link{color:#BBBBBB;}
 a.user_info:hover{color:#FFFFFF;}
 
 /*table样式*/
-table#main_guide{padding-left:64px;}
+table#main_guide {margin-top:2px;margin-left:64px;}
 
-table#main_guide td{margin:0px;width:9em;}
+table#main_guide td{width:9em;}
+table#main_guide tbody{
+    margin:2px;
+    padding:2px;
+}
+.about_us_td{
+    margin:2px;
+    width:144px !important;
+    padding:1px;
+    font-size: 16px;
+    line-height: 20px;
+}
 
 /*搜索按钮样式*/
 button#searchsubmit{float:right;border:none;margin:0px;padding:0px;}

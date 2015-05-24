@@ -180,17 +180,20 @@ class IndexAction extends Action
 		$this->assign('link',$link);
 	}
 	//是否提供删除按钮
-	$deleteFlag=0;
+	$deleteFlag=1;
 	if(!empty($_SESSION['account']))
 	{
 		$account=$_SESSION['account'];
 		$person_info=$person_model->where("account=$account")->find();
-		if($person_info['apartment']==4 && $person_info['type']==3)
-		{
-			$deleteFlag=1;
-		}
+        //设置文档删除权限:只有信编部部长\秘书部长\主席团才有资格删除
+        $type=$person_info['type'];
+        $apartment=$person_info['apartment'];
+        if($type==1||$type==2)
+            $deleteFlag=0;
+        if($apartment!=1 && $apartment!=4 && $apartment!=12)
+            $deleteFlag=0;
 	}
-	$type=1;
+	$type="(1,2,3)";
 	$data=$this->getData($type);
 	$this->assign('lastArr',$data['lastArr']);
 	$this->assign('moreArr',$data['moreArr']);
@@ -236,7 +239,7 @@ class IndexAction extends Action
 			$deleteFlag=1;
 		}
 	}
-	$type=2;
+	$type="(2)";
 	$data=$this->getData($type);
 	$this->assign('lastArr',$data['lastArr']);
 	$this->assign('moreArr',$data['moreArr']);
@@ -282,7 +285,7 @@ class IndexAction extends Action
 			$deleteFlag=1;
 		}
 	}
-	$type=3;
+	$type="(3)";
 	$data=$this->getData($type);
 	$this->assign('lastArr',$data['lastArr']);
 	$this->assign('moreArr',$data['moreArr']);
@@ -293,6 +296,54 @@ class IndexAction extends Action
 	$this->assign('deleteFlag',$deleteFlag);
 	$this->assign('view',"activity");
 	$this->display();
+  }
+  //通知公示
+  public function notice()
+  {
+    session_name('LOGIN');
+    session_start();
+    if(!$this->judgelog())
+    {
+		//尚未登录
+		$link="<a class=\"user_info\" id=\"login_info_user_log_in\" href=\"".__APP__."/Login/index\">登录</a>";
+		$this->assign('link',$link);
+	}
+	else{
+		//个人信息
+		$account=$_SESSION['account'];
+		$person_model=new Model("Person");
+		$person_info=$person_model->where("account=$account")->find();
+		$name=$person_info['name'];
+		$link="<a class=\"user_info\" id=\"login_info_user_name\" href=\"#\">".$name."</a>";
+		$link.="<a class=\"user_info\" id=\"login_info_user_center\" href=\"".__APP__."/Center/index\">个人中心</a>";
+		$link.="<a class=\"user_info\" id=\"login_info_log_out\" href=\"".__APP__."/Login/logout\">注销</a>";
+		$this->assign('link',$link);
+	}
+	//是否提供删除按钮
+	$deleteFlag=1;
+	if(!empty($_SESSION['account']))
+	{
+		$account=$_SESSION['account'];
+		$person_info=$person_model->where("account=$account")->find();
+        //设置文档删除权限:只有信编部部长\秘书部长\主席团才有资格删除
+        $type=$person_info['type'];
+        $apartment=$person_info['apartment'];
+        if($type==1||$type==2)
+            $deleteFlag=0;
+        if($apartment!=1 && $apartment!=4 && $apartment!=12)
+            $deleteFlag=0;
+	}
+	$type="(7)";
+	$data=$this->getData($type);
+	$this->assign('lastArr',$data['lastArr']);
+	$this->assign('moreArr',$data['moreArr']);
+	$this->assign('page',$data['page']);
+	$this->assign('pageNum',$data['pageNum']);
+	$this->assign('prePage',$data['prePage']);
+	$this->assign('nexPage',$data['nexPage']);
+	$this->assign('deleteFlag',$deleteFlag);
+	$this->assign('view',"files");
+	$this->display();      
   }
   //现行制度页面
   public function files()
@@ -318,17 +369,20 @@ class IndexAction extends Action
 		$this->assign('link',$link);
 	}
 	//是否提供删除按钮
-	$deleteFlag=0;
+	$deleteFlag=1;
 	if(!empty($_SESSION['account']))
 	{
 		$account=$_SESSION['account'];
 		$person_info=$person_model->where("account=$account")->find();
-		if($person_info['apartment']==4 && $person_info['type']==3)
-		{
-			$deleteFlag=1;
-		}
+        //设置文档删除权限:只有信编部部长\秘书部长\主席团才有资格删除
+        $type=$person_info['type'];
+        $apartment=$person_info['apartment'];
+        if($type==1||$type==2)
+            $deleteFlag=0;
+        if($apartment!=1 && $apartment!=4 && $apartment!=12)
+            $deleteFlag=0;
 	}
-	$type=4;
+	$type="(4)";
 	$data=$this->getData($type);
 	$this->assign('lastArr',$data['lastArr']);
 	$this->assign('moreArr',$data['moreArr']);
@@ -340,6 +394,54 @@ class IndexAction extends Action
 	$this->assign('view',"files");
 	$this->display(); 
   }
+    //团学简介
+    public function introduce()
+    {
+        session_name('LOGIN');
+        session_start();
+        if(!$this->judgelog())
+        {
+            //尚未登录
+            $link="<a class=\"user_info\" id=\"login_info_user_log_in\" href=\"".__APP__."/Login/index\">登录</a>";
+            $this->assign('link',$link);
+        }
+        else{
+            //个人信息
+            $account=$_SESSION['account'];
+            $person_model=new Model("Person");
+            $person_info=$person_model->where("account=$account")->find();
+            $name=$person_info['name'];
+            $link="<a class=\"user_info\" id=\"login_info_user_name\" href=\"#\">".$name."</a>";
+            $link.="<a class=\"user_info\" id=\"login_info_user_center\" href=\"".__APP__."/Center/index\">个人中心</a>";
+            $link.="<a class=\"user_info\" id=\"login_info_log_out\" href=\"".__APP__."/Login/logout\">注销</a>";
+            $this->assign('link',$link);
+        }
+        //是否提供删除按钮
+        $deleteFlag=1;
+        if(!empty($_SESSION['account']))
+        {
+            $account=$_SESSION['account'];
+            $person_info=$person_model->where("account=$account")->find();
+            //设置文档删除权限:只有信编部部长\秘书部长\主席团才有资格删除
+            $type=$person_info['type'];
+            $apartment=$person_info['apartment'];
+            if($type==1||$type==2)
+                $deleteFlag=0;
+            if($apartment!=1 && $apartment!=4 && $apartment!=12)
+                $deleteFlag=0;
+        }
+        $type="(8)";
+        $data=$this->getData($type);
+        $this->assign('lastArr',$data['lastArr']);
+        $this->assign('moreArr',$data['moreArr']);
+        $this->assign('page',$data['page']);
+        $this->assign('pageNum',$data['pageNum']);
+        $this->assign('prePage',$data['prePage']);
+        $this->assign('nexPage',$data['nexPage']);
+        $this->assign('deleteFlag',$deleteFlag);
+        $this->assign('view',"files");
+        $this->display();          
+    }
     //获取新闻、活动、学生工作、现行制度等各种数据,参数$type
 	private function getData($type)
 	{
@@ -348,7 +450,7 @@ class IndexAction extends Action
 		//获取新闻最新最新的8篇
 		$news_model=new Model("News");
 		$i=0;
-		$news_info=$news_model->query("select id, title, create_time from tbl_news where type=$type order by create_time DESC");
+		$news_info=$news_model->query("select id, title, create_time from tbl_news where type IN $type order by create_time DESC");
 		foreach($news_info as $v)
 		{
 			if($i<8)
@@ -424,7 +526,6 @@ class IndexAction extends Action
   //删除单条新闻
   public function deleteNews()
   {
-	  //只有编辑部部长才有权访问
       session_name('LOGIN');
       session_start();
       if(!$this->judgelog())
@@ -433,38 +534,48 @@ class IndexAction extends Action
 		 $this->error("无法访问......");
 		 return;
 	  }
-	if(!empty($_SESSION['account']))
-	{
-		$person_model=new Model("Person");
-		$account=$_SESSION['account'];
-		$person_info=$person_model->where("account=$account")->find();
-		if($person_info['apartment']==4 && $person_info['type']==3)
-		{
-			if(!empty($_GET['id']) && !empty($_GET['type']))
-			{
-				$id=$_GET['id'];
-				$type=$_GET['type'];
-				$news_model=new Model("News");
-				$latest_model=new Model("Latest");
-				$news_model->where("type=$type and id=$id")->delete();
-				$news_info=$news_model->query("select id, create_time from tbl_news where type=$type order by create_time DESC limit 8");
-				$latest_model->where("type=$type")->delete();
-				//添加最新记录数据
-				unset($data);
-				$i=1;
-				foreach($news_info as $v)
-				{
-					$data['id']=$v['id'];
-					$data['create_time']=$v['create_time'];
-					$data['type']=$type;
-					$data['rank']=$i;
-					$i++;
-					$latest_model->add($data);
-				}
-				$this->Success("删除成功，正在返回......",__APP__."/Index/newscenter");
-			}
-		}
-	}
+      $account=$_SESSION['account'];
+      $person_model=new Model("Person");
+      $person_info=$person_model->where("account=$account")->find();
+      //设置文档删除权限:只有信编部部长\秘书部长\主席团才有资格删除
+        $type=$person_info['type'];
+        $apartment=$person_info['apartment'];
+        if($type==1||$type==2)
+        {
+            $this->error("无法访问......");
+            return;
+        }
+        if($apartment!=1 && $apartment!=4 && $apartment!=12)
+        {
+            $this->error("无法访问......");
+            return;
+        }
+
+        if(!empty($_GET['id']) && !empty($_GET['type']))
+        {
+            $id=$_GET['id'];
+            $type=$_GET['type'];
+            $news_model=new Model("News");
+            $latest_model=new Model("Latest");
+            $news_model->where("type=$type and id=$id")->delete();
+            $news_info=$news_model->query("select id, create_time from tbl_news where type=$type order by create_time DESC limit 8");
+            $latest_model->where("type=$type")->delete();
+            //添加最新记录数据
+            unset($data);
+            $i=1;
+            foreach($news_info as $v)
+            {
+                $data['id']=$v['id'];
+                $data['create_time']=$v['create_time'];
+                $data['type']=$type;
+                $data['rank']=$i;
+                $i++;
+                $latest_model->add($data);
+            }
+            $this->Success("删除成功，正在返回......",__APP__."/Index/newscenter");
+        }
+		
+	
   }
   //新闻中心单条新闻
   public function show()
@@ -519,33 +630,34 @@ class IndexAction extends Action
 		}
 	}
 	//是否提供编辑按钮
-	$editFlag=0;
+	$editFlag=1;
 	if(!empty($_SESSION['account']))
 	{
 		$account=$_SESSION['account'];
 		$person_info=$person_model->where("account=$account")->find();
-		if($person_info['apartment']==4)
-		{
-			$editFlag=1;
-		}
+        //设置文档编辑权限:只有信编部部长\秘书部长\主席团才有资格编辑
+        $type=$person_info['type'];
+        $apartment=$person_info['apartment'];
+        if($type==1||$type==2)
+            $editFlag=0;
+        if($apartment!=1 && $apartment!=4 && $apartment!=12)
+            $editFlag=0;
 	}
-	//判断当前是哪种类型，1（新闻），2（学生工作），3（活动），4（现行制度）
-	switch($news_info['type'])
+	//判断当前是哪种类型，1（新闻），2（学生工作），3（活动），4（现行制度）,5(首页公告) 6(即将举办的活动) 7(通知公示) 8(团学简介)
+ 	switch($news_info['type'])
 	{
-		case 1:
-			$mainType="新闻中心";$mainTypeEn="News Center";break;
-		case 2:
-			$mainType="学生工作";$mainTypeEn="Student Work";break;
-		case 3:
-			$mainType="活动";$mainTypeEn="Activities";break;
+        case 8:
+            $mainType="团学简介";$mainTypeEn="About the League";break;
+		case 7:
+			$mainType="通知公示";$mainTypeEn="Notification";break;
 		case 4:
 			$mainType="现行制度";$mainTypeEn="Regulations";break;
 		default:
 			$mainType="新闻中心";$mainTypeEn="News Center";
-	}
-
+	} 
 	$newsArr=Array(
 		'id'=>$news_info['id'],
+        'type'=>$news_info['type'],
 		'title'=>$news_info['title'],
 		'author'=>$news_info['author'],
 		'create_time'=>$create_time,

@@ -62,9 +62,9 @@ form#article_form tr{width:800px;}
 
 form#article_form td{min-width:100px;padding:0px;}
 
-form#article_form input{width:810px;outline:none;}
+/*form#article_form input{width:810px;outline:none;}*/
 
-button.publish_center_button{cursor:pointer;height:30px;width:200px;border:none;margin:0px;padding:0px;font-size:20px;color:white;}
+button.publish_center_button{cursor:pointer;height:30px;width:200px;border:none;margin:0px;padding:0px;font-size:16px;color:white;}
 
 button#articles,button#announcement,button#coming_soon{background:#888888;}
 
@@ -80,3 +80,19 @@ button#submitbutton,button#cancel{margin-top:30px;}
 .progress { position:relative; width:400px; border: 1px solid #ddd; padding: 1px; border-radius: 3px; }
 .bar { background-color: #B4F5B4; width:0%; height:20px; border-radius: 3px; }
 .percent { position:absolute; display:inline-block; top:3px; left:48%; }
+
+p#chs_title{
+    margin-bottom: 28px;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-top: 28px;
+}
+
+p#eng_title{
+    margin-bottom:12px;
+    margin-top:12px;
+}
+
+body{
+    background:white;
+}

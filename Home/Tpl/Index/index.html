@@ -9,20 +9,7 @@
 			$newsImgURL="/".$newsImgURL;
 		}
 	?>
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml" lang="EN" xml:lang="EN">
-	<head>
-	<meta http-equiv="content-type" content="text/html;charset=utf-8"/><!--说明字符集-->
-	<meta http-equiv="content-language" content="zh-CN" /><!--说明语言-->
-	<meta name="author" content="ZuohengDeng" /><!--作者-->
-	<meta name="copyright" content="jnu.ksc" /><!--声明版权-->
-	<meta name="description" content="电气信息学院团委学生会门户网站" /><!--网站概述-->
-	<meta name="keywords" content="暨大 暨南大学 电气院 电气信息学院 团委学生会 暨南大学电气信息学院团委学生会 团委学生会首页" /><!--关键词-->
-	<meta name="keywords" content="Electrcal and Information College of Jinan University Youth League Committee Student Union" />
-	
-	<link rel="shortcut icon" href="<?php echo $imgURL;?>logo.jpg" />
+<include file="./Public/layout/meta.html" />
 	
 	<link href="__PUBLIC__/css/stdindex_footer.css" type="text/css" rel="stylesheet" />
 	<link href="__PUBLIC__/css/stdindex_title.css" type="text/css" rel="stylesheet" />
@@ -84,12 +71,12 @@
 					
 					<div id="secretariat">
 						<div class="center_the_logo">
-							<a href="#" class="sys_logo_img" id="logo_of_secr_sys">
+							<a href="__APP__/Archive/index" class="sys_logo_img" id="logo_of_secr_sys">
 								<img src="$secretariat_url" width="50px" height="50px" alt="秘书处的徽标" />
 							</a>
 						</div>
 						<p class="sys_alt">
-							秘书处
+							活动存档
 						</p>
 					</div>
 				</div>
@@ -309,28 +296,6 @@ str;
 		
 	
 		<include file="./Public/layout/footer.html" />
-        <div class="div_right_bottom">
-            <p>
-                <img src="http://img.paigu.com/assets/qrcode/77/JNU-EISU.jpg" width="102px" height="102px" ></img>
-            </p>
-            <p>扫描并关注<br />微信公众平台:<br />暨大EISC</p>
-        </div>
-        <style type="text/css">
-        .div_right_bottom {
-            background-color: #fff;
-            width:130px;
-            float:right;
-            position:fixed;
-            right:0px;
-            bottom:0px;
-            z-index:20;
-            border:1px solid #ccc;
-            border-radius:2px;
-            _position:absolute; /* position fixed for IE6 */
-            text-align: center;
-            color: #717375;
-            font-size: 12px;
-        }
-</style>
+        
 	</body>
 </html>

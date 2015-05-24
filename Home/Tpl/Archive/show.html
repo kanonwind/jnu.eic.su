@@ -8,12 +8,11 @@
 		}
 	?>
 <include file="./Public/layout/meta.html" />
-
-    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.2/css/bootstrap.min.css">
+	<link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="__PUBLIC__/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css">
-	<link href="__PUBLIC__/css/stdindex_footer.css" type="text/css" rel="stylesheet" />
-	<link href="__PUBLIC__/css/stdindex_title.css" type="text/css" rel="stylesheet" />
-	<link href="__PUBLIC__/css/newscenter.css" type="text/css" rel="stylesheet" />
+    <link href="__PUBLIC__/css/stdindex_footer.css" type="text/css" rel="stylesheet" />
+    <link href="__PUBLIC__/css/stdindex_title.css" type="text/css" rel="stylesheet" />
+    <link href="__PUBLIC__/css/newscenter.css" type="text/css" rel="stylesheet" />
 	<script type="text/javascript">
 	var APP = "__APP__";
 	</script>
@@ -29,7 +28,7 @@
 			</div>
 		</div>
 		<hr class="xxxcenter_hr" />
-            <form id="article_form" name="article_form" method="post" action="<?php echo __APP__."/News/update?id=".$newsArr['id'];?>" ><!--这是为了提交准备的，因为一开始就要携带一些信息，直接放到一个form里比较好-->
+            <form id="article_form" name="article_form" method="post" action="<?php echo __APP__."/Archive/update?id=".$newsArr['id'];?>" ><!--这是为了提交准备的，因为一开始就要携带一些信息，直接放到一个form里比较好-->
             <input type="hidden" value="<?php echo $newsArr['id'];?>" id="article_id" name="article_id"/>
             <!--这个input的value就是这篇文章的id-->
             <input type="hidden" value="<?php echo $newsArr['type'];?>" id="article_type_init" name="article_type_init"/>
@@ -72,14 +71,21 @@ str;
 						}
 						echo $str;
 						?>
-
+<!--                         <span>关键词1</span>
+                        <span>关键词2</span>
+                        <span>关键词3</span> -->
                     </p>
                     <hr class="article_hr" />
                 </div>
                 <div class="art_body_div"><!--文章内容-->
                     <div id="article_text">
 					<?php echo $newsArr['text'];?>
-
+<!--                         <p>
+                            新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容
+                        </p>
+                        <p>
+                            新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容
+                        </p> -->
                     </div>
                     <hr class="article_hr" />
                     <div id="edit_button">

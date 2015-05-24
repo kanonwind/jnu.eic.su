@@ -1,0 +1,191 @@
+﻿	<?php 
+		$sto=new SaeStorage();
+		$domain="upload";
+		$imgURL=$sto->getUrl($domain,"image/");
+		if(!IS_SAE)
+		{
+			$imgURL="/".$imgURL;
+		}
+	?>
+<include file="./Public/layout/meta.html" />
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.2/css/bootstrap.min.css">
+
+	<link rel="stylesheet" href="__PUBLIC__/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css">
+	<link href="__PUBLIC__/css/stdindex_footer.css" type="text/css" rel="stylesheet" />
+	<link href="__PUBLIC__/css/stdindex_title.css" type="text/css" rel="stylesheet" />
+	<link href="__PUBLIC__/css/homev2.css" type="text/css" rel="stylesheet" />
+	<link href="__PUBLIC__/css/distributioncenter.css" type="text/css" rel="stylesheet" />
+	<title>团委学生会活动存档中心</title>
+    <script type="text/javascript">
+        var URL = "__URL__";
+        var APP = "__APP__";
+        var ROOT = "__ROOT__";
+		var PUBLIC="__PUBLIC__";
+		var imgURL="<?php echo $imgURL;?>";
+
+    </script>
+
+ </head>
+<!-- Place this in the body of the page content -->
+	<body>
+		<div id="hdr">
+			<div id="hdr_main">
+				<div id="hdr_top">
+					<!--表头徽标-->
+					<div id="logo">
+						<img src="<?php echo $imgURL;?>std_title_logo.png" width="54px" height="54px" alt="团委学生会的徽标"/>
+					</div>
+					<!--标题-->
+					<div id="title">
+						<p id="chs_title">
+							暨南大学电气信息学院团委学生会<span class="subtitle">|活动存档</span>
+						</p>
+						<p id="eng_title">
+							Electrcal and Information College of Jinan University Youth League Committee &#38; Student Union<span class="subtitle">|publish</span>
+						</p>
+						<div id="help_nav">
+							<a class="head_help_nav" href="liaojie.html">了解团委学生会</a>
+							<a class="head_help_nav" href="caozuofangfa.html">操作方法</a>
+							<a class="head_help_nav" href="zhichi.html">支持</a>
+						</div>		
+					</div>
+					
+					<div id="search_and_info">
+						<div id="login_info">
+<!-- 							<a class="user_info" id="login_info_user_name" href="#">邓作恒</a>
+							<a class="user_info" id="login_info_user_id" href="#">2012052207</a>
+							<a class="user_info" id="login_info_log_out" href="#">注销</a> -->
+							<?php echo $link; ?>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+			<div id="hdr_guide">
+				<div id="guide">		
+					<button type="button" class="publish_center_button" id="articles" name="articles" title="活动存档">
+						活动存档
+					</button>
+				</div>
+			</div>
+		</div>
+		<div id="main">
+			<div >
+	            <div class="lead"></div>
+	            <form method="post" action="<?php echo __APP__."/Archive/addarchive";?>" name="article_form" id="article_form" enctype="multipart/form-data">
+	                <div class="form-group">
+	                    <label for="article_title">标题</label>
+	                    <input type="text" class="form-control" name="article_title" id="earticle_title" placeholder="标题">
+	                </div>
+	                <div class="form-group">
+	                    <label for="article_author">作者</label>
+	                    <input type="text" class="form-control" name="article_author" id="article_author" placeholder="作者">
+	                </div>
+	                <div class="form-group">
+	                    <label for="article_datetime">时间</label>
+	                    <div class="input-group date form_datetime" data-date="" data-link-field="article_datetime">
+	                        <input class="form-control" type="text" value="" placeholder="格式: YYYY-MM-DD HH-II-SS 从右边的控件选就可以了">
+	                        <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+	                        <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+	                    </div>
+	                    <input type="hidden" id="article_datetime" name="article_datetime" value="" />
+	                </div>
+	                <div class="form-group">
+	                    <label for="exampleInputPassword1">正文</label>
+	                    <textarea class="form-control" name="article_text" id="main_input_area"></textarea>
+	                </div>
+	                <button type="submit" class="btn btn-block btn-primary" id="submitbutton">发表</button>
+                </form>
+            </div>
+		</div>
+		
+		<!--图片上传-->
+
+		<div id="uploadPhotoArea">
+			<form id="uploadphoto" action="__URL__/uploadpic" method="post" enctype="multipart/form-data">
+				<input type="file" name="myfile"><br>
+				<input type="submit" value="Upload File to Server">
+			</form> 
+			<div class="progress">
+				<div class="bar"></div >
+				<div class="percent">0%</div >
+			</div>  
+			<div id="status"></div>
+		</div>
+ 	<script type="text/javascript" src="http://cdn.bootcss.com/jquery/1.11.0/jquery.min.js"></script>
+	<script type="text/javascript" src="http://cdn.bootcss.com/jquery.form/3.51/jquery.form.js"></script>
+    <script type="text/javascript" src="http://cdn.bootcss.com/tinymce/4.1.9/tinymce.min.js"></script>
+    <script type="text/javascript" src="http://cdn.bootcss.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+<script>
+(function() {
+    
+	var bar = $('.bar');
+	var percent = $('.percent');
+	var status = $('#status');
+	   
+	$('#uploadphoto').ajaxForm({
+	    beforeSend: function() {
+	        status.empty();
+	        var percentVal = '0%';
+	        bar.width(percentVal)
+	        percent.html(percentVal);
+	    },
+	    uploadProgress: function(event, position, total, percentComplete) {
+	        var percentVal = percentComplete + '%';
+	        bar.width(percentVal)
+	        percent.html(percentVal);
+			//console.log(percentVal, position, total);
+	    },
+	    success: function() {
+	        var percentVal = '100%';
+	        bar.width(percentVal)
+	        percent.html(percentVal);
+	    },
+		complete: function(xhr) {
+			status.html(xhr.responseText);
+		}
+	}); 
+
+})();  
+	tinymce.init({
+		selector: "textarea#main_input_area",
+        language_url : "/Public/js/tinymce/langs/zh_CN.js",
+		theme: "modern",
+		height:"520px",
+		width:"920px",
+		plugins: [
+			"advlist autolink lists link image charmap hr anchor pagebreak",
+			"searchreplace wordcount visualblocks visualchars code",
+			"insertdatetime media nonbreaking save table contextmenu directionality",
+			"emoticons template paste textcolor colorpicker textpattern"
+		],
+		toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent |media link image| forecolor backcolor emoticons",
+		image_advtab: true,
+		templates: [
+			{title: 'Test template 1', content: 'Test 1'},
+			{title: 'Test template 2', content: 'Test 2'}
+		],
+        //init_instance_callback :"initcallback",
+	});
+ 
+    $('.form_datetime').datetimepicker({
+        //language:  'fr',
+        weekStart: 1,
+        todayBtn:  1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        forceParse: 0,
+        //showMeridian: 1,
+        language:'zh-CN',
+        format:'yyyy-mm-dd hh:ii:ss'
+    });     
+</script>			
+
+       <include file="./Public/layout/footer.html" />
+	</body>
+</html>
+			
+	
+	

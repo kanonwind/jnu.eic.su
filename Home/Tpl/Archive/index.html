@@ -17,67 +17,24 @@
 	</head>
 	<body>
 		<include file="./Public/layout/header.html" />	
-		
+		<?php
+            	if($deleteFlag==1)
+				{
+					$addStr="&nbsp;&nbsp;<a href=__APP__/Archive/create >[添加]</a>";
+				}else{
+					$addStr="";
+				}
+        ?>
 		<!--标题,新闻，学生工作，活动，现行制度-->
 		<div class="xxxcenter_title">
 			<div>
-				<h1>现行制度</h1>
-				<h4>Regulations</h4><!--英语要注意，写错了就丢大了-->
+				<h1>活动存档</h1>
+				<h4>Archive<?php echo $addStr;?></h4><!--英语要注意，写错了就丢大了-->
 			</div>
 		</div>
 		<hr class="xxxcenter_hr"/>
 		<div class="center_part" id="the_latest_news">
-			<div class="xxxc_latest_title">
-				<h2>最新</h2>
-				<h4>The Latest news</h4><!--英语注意，新闻，学生工作，活动，现行制度可能不同-->
-			</div>
-			<div>
-				<table class="xxxc_table"><!--这是新闻列表-->
-				<!--此链接为新闻标题和链接到该新闻的url，学生工作，活动，现行制度也如此-->
-				<?php 
-				//定界符特殊要求，不能有注释，结束标记前面不能有任何字符
-				for($i=0;$i<count($lastArr);$i++)
-				{
-					$link=__URL__."/show"."?id=".$lastArr[$i]['id'];
-					$deleteLink="\"".__URL__."/deleteNews"."?type=4&id=".$lastArr[$i]['id']."\"";
-					if($deleteFlag==1)
-					{
-						$deleteStr="&nbsp;&nbsp;<a href=".$deleteLink." >[删除]</a>";
-					}else{
-						$deleteStr="";
-					}
-					$title=$lastArr[$i]['title'];
-					$create_time=$lastArr[$i]['create_time'];
-					$create_time=date("Y/m/d",$create_time);
-					$str.=<<<str
-					<tr>
-						<td>	
-							<div>
-								<p class="xxxc_t_l">
-									
-									<a href="$link" class="xxxcenter_a">$title</a>$deleteStr
-								</p>
-								<p class="xxxc_t_r">
-									[$create_time]
-								</p>								
-							</div>
-						</td>
-					</tr>
-str;
-				}
-					echo $str;
-				?>
-				</table>
-				
-			</div>
-		</div>
-		<hr class="xxxcenter_hr" />
-		
 		<div class="center_part" id="more_news">
-			<div class="xxxc_more_title">
-				<h2>更多</h2>
-				<h4>More News</h4>
-			</div>
 			<div>
 				<table class="xxxc_table">
 				<!--现行制度的这里要加一个下载链接，点击就保存就行了，不用跳到什么页面的--><!-- <a href="#" class="xxxcenter_a">[下载]&nbsp;</a> -->
@@ -87,7 +44,7 @@ str;
 				{
 				$title=$moreArr[$i]['title'];
 				$link=__URL__."/show"."?id=".$moreArr[$i]['id'];
-				$deleteLink="\"".__URL__."/deleteNews"."?type=4&id=".$moreArr[$i]['id']."\"";
+				$deleteLink="\"".__URL__."/deleteNews"."?type=9&id=".$moreArr[$i]['id']."\"";
 				if($deleteFlag==1)
 				{
 					$deleteStr="&nbsp;&nbsp;<a href=".$deleteLink." >[删除]</a>";
@@ -141,7 +98,8 @@ str;
 			</div>
 					
 		</div>
+	</div>
 		
-		<include file="./Public/layout/footer.html" />
+	<include file="./Public/layout/footer.html" />
 	</body>
 </html>

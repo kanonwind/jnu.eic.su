@@ -45,50 +45,56 @@ function initArticles()
     GetObjById("announcement").style.backgroundColor="#888888";
 	GetObjById("coming_soon").style.backgroundColor="#888888";
     strInnerHTML=new String();
-    strInnerHTML+="<form method=\"post\" action=\""+APP+"/News/createNews"+"\" name=\"article_form\" id=\"article_form\" enctype=\"multipart/form-data\"> "
-				+"<table>"
-				+"	<tr>"
-				+"		<td><label for=\"article_title\">标题：</label></td>"
-				+"		<td><input type=\"text\" name=\"article_title\" id=\"article_title\" title=\"输入文章标题\"/></td>"
-				+"	</tr>"
-				+"		<td><label for=\"article_author\">作者：</label></td>"
-				+"		<td><input type=\"text\" name=\"article_author\" id=\"article_author\" title=\"输入文章作者\" /></td>"
-				+"	<tr>"
-				+"		<td><label for=\"artcle_key_word\">关键词：</label></td>"
-				+"		<td><input type=\"text\" name=\"artcle_key_word\" id=\"artcle_key_word\" value=\"不同关键词请使用|隔开，如“关键词1|关键词2”\" title=\"输入文章关键词\"/></td>"
-				+"	</tr>"
-				+"	<tr>"
-				+"		<td><label for=\"article_type\">类别：</label></td>"
-				+"		<td>"
-				+"			<select name=\"article_type\" id=\"article_type\">"
-				+"				<option value=\"1\" selected=\"selected\">新闻</option>"
-				+"				<option value=\"2\">学生工作</option>"
-				+"				<option value=\"3\">活动</option>"
-				+"				<option value=\"4\">现行制度</option>"
-				+"			</select>"
-				+"		</td>"
-				+"	</tr>"
-				+"	<tr>"
-				+"		<td><label for=\"article_text_type\">正文：</label></td>"
-				+"		<td>"
-				+"			<button type=\"button\" id=\"artcle_type_online\">在线编辑</button>"
-				+"			<button type=\"button\" id=\"artcle_type_upload\">上传文件</button>"
-				+"		</td>"
-				+"	</tr>"		
-				+"</table>"
-                +"<div id=\"main_input_area\"></div>"
-                +"  <button type=\"submit\" id=\"submitbutton\">发表</button>"
-                +"  <button type=\"button\" id=\"cancel\">取消</button>";
+    strInnerHTML+='<div >\
+                        <div class="lead"></div>\
+                        <form method="post" action="'+APP+'/News/createNews" name="article_form" id="article_form" enctype="multipart/form-data">\
+                            <div class="form-group">\
+                                <label for="article_title">标题</label>\
+                                <input type="text" class="form-control" name="article_title" id="earticle_title" placeholder="标题">\
+                            </div>\
+                            <div class="form-group">\
+                                <label for="article_type">类别</label>\
+                                <select class="form-control" name="article_type">\
+                                    <option value="1" selected="selected">新闻中心</option>\
+                                    <option value="7">通知公示</option>\
+                                    <option value="4">现行制度</option>\
+                                    <option value="8">团学简介</option>\
+                                </select>\
+                            </div>\
+                            <div class="form-group">\
+                                <label for="article_author">作者</label>\
+                                <input type="text" class="form-control" name="article_author" id="article_author" placeholder="作者">\
+                            </div>\
+                            <div class="form-group">\
+                                <label for="article_datetime">时间</label>\
+                                <div class="input-group date form_datetime" data-date="" data-link-field="article_datetime">\
+                                    <input class="form-control" type="text" value="" placeholder="格式: YYYY-MM-DD HH-II-SS 从右边的控件选就可以了">\
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>\
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>\
+                                </div>\
+                                <input type="hidden" id="article_datetime" name="article_datetime" value="" />\
+                            </div>\
+                            <div class="form-group">\
+                                <label for="artcle_key_word">关键词</label>\
+                                <input type="text" class="form-control" name="artcle_key_word" id="artcle_key_word" placeholder="不同关键词请使用|隔开，如“关键词1|关键词2”">\
+                            </div>\
+                            <div class="form-group">\
+                                <label for="exampleInputPassword1">正文</label>\
+                                <textarea class="form-control" name="article_text" id="main_input_area"></textarea>\
+                            </div>\
+                            <button type="submit" class="btn btn-block btn-primary" id="submitbutton">发表</button>\
+                            </form>\
+                        </div>';
                 
     GetObjById("main").innerHTML=strInnerHTML;
     function OnlineEditInit()
     {
-        GetObjById("main_input_area").innerHTML="<textarea id=\"article_text\" name=\"article_text\"></textarea>";
+        //GetObjById("main_input_area").innerHTML="<textarea id=\"article_text\" name=\"article_text\"></textarea>";
         tinymce.init({
-			selector: "textarea#article_text",
+			selector: "textarea#main_input_area",
             language_url : "/Public/js/tinymce/langs/zh_CN.js",
 			theme: "modern",
-			height:"920px",
+			height:"520px",
 			width:"920px",
 			plugins: [
 				"advlist autolink lists link image charmap hr anchor pagebreak",
@@ -104,15 +110,28 @@ function initArticles()
 			],
             //init_instance_callback :"initcallback",
 		});
-        //TODO:进入到公告或即将到来后再回来，tinymce就不工作了
+ 
+        $('.form_datetime').datetimepicker({
+            //language:  'fr',
+            weekStart: 1,
+            todayBtn:  1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            forceParse: 0,
+            //showMeridian: 1,
+            language:'zh-CN',
+            format:'yyyy-mm-dd hh:ii:ss'
+        });
         
     }
     OnlineEditInit();
-    
+    /*
     GetObjById("artcle_type_online").onclick=function()
     {
         OnlineEditInit();
     }
+    */
     function UploadFileInit()
     {
         
@@ -122,10 +141,12 @@ function initArticles()
             +"<br /><br /><br /><br /><br /><br /><br /><br />";
         GetObjById("main_input_area").innerHTML=str;
     }
+    /*
     GetObjById("artcle_type_upload").onclick=function()
     {
         UploadFileInit();
     }
+    */
         
 }
 
@@ -134,13 +155,25 @@ function initAnnouce()
     GetObjById("articles").style.backgroundColor="#888888";
 	GetObjById("announcement").style.backgroundColor="#242424";
 	GetObjById("coming_soon").style.backgroundColor="#888888";
-    var str="<p>*填写公告内容，注意不要找过45字<p>"
+    /*
+    var str="<p>*填写公告内容，注意不要超过45字<p>"
 			+"<form method=\"post\" action=\""+APP+"/News/createAnnouncement"+"\">"
 			+"<textarea name=\"gonggao\" id=\"gonggao\"></textarea><br />"
             +"  <button type=\"submit\" id=\"submitbutton\">发表</button>"
             +"  <button type=\"button\" id=\"cancel\">取消</button>"
 			+"</form>";
     str+="<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />";
+    */
+    var str ='<div >\
+                <div class="lead"></div>\
+                <form method="post" action="'+APP+'/News/createAnnouncement" name="article_form" id="article_form" enctype="multipart/form-data">\
+                    <div class="form-group">\
+                        <label for="article_title">新公告</label>\
+                        <textarea class="form-control" name="gonggao" id="gonggao" placeholder="填写公告内容，注意不要超过45字"></textarea>\
+                    </div>\
+                    <button type="submit" class="btn btn-block btn-primary" id="submitbutton">发表</button>\
+                </form>\
+            </div>';
     GetObjById("main").innerHTML=str;
 }
 
@@ -151,6 +184,7 @@ function initComing()
 	GetObjById("announcement").style.backgroundColor="#888888";
 	GetObjById("coming_soon").style.backgroundColor="#242424"; 
     var strInnerHTML=new String();
+    /*
     strInnerHTML+="<form method=\"post\" action=\""+APP+"/News/createActivity"+"\">"
 				+"<table>"
 				+"		<tr>"
@@ -178,6 +212,41 @@ function initComing()
                 +"  <button type=\"submit\" id=\"submitbutton\">发表</button>"
 				+"  <button type=\"button\" id=\"cancel\">取消</button>"
 				+"</form>";
+    */
+    strInnerHTML+=  '<div >\
+                        <div class="lead"></div>\
+                        <form method="post" action="'+APP+'/News/createActivity" name="article_form" id="article_form" enctype="multipart/form-data">\
+                            <div class="form-group">\
+                                <label for="act_name">活动名称: </label>\
+                                <input type="text" class="form-control" name="act_name" id="act_name" placeholder="活动名称">\
+                            </div>\
+                            <div class="form-group">\
+                                <label for="act_time">举办时间: </label>\
+                                <input type="text" class="form-control" name="act_time" id="act_time" placeholder="举办时间">\
+                            </div>\
+                            <div class="form-group">\
+                                <label for="act_address">举办地点: </label>\
+                                <input type="text" class="form-control" name="act_address" id="act_address" placeholder="举办地点">\
+                            </div>\
+                            <div class="form-group">\
+                                <label for="act_apartment">举办部门: </label>\
+                                <input type="text" class="form-control" name="act_apartment" id="act_apartment" placeholder="举办部门">\
+                            </div>\
+                            <div class="form-group">\
+                                <label for="act_slogan">活动口号: </label>\
+                                <input type="text" class="form-control" name="act_slogan" id="act_slogan" placeholder="活动口号">\
+                            </div>\
+                            <div class="form-group">\
+                                <label for="act_bigposter">大海报(520x380): </label>\
+                                <input type="text" class="form-control" name="act_bigposter" id="act_bigposter" placeholder="填写图片地址, 图片可以用下面的控件上传">\
+                            </div>\
+                            <div class="form-group">\
+                                <label for="act_smallposter">小海报(160x200): </label>\
+                                <input type="text" class="form-control" name="act_smallposter" id="act_smallposter" placeholder="填写图片地址, 图片可以用下面的控件上传">\
+                            </div>\
+                            <button type="submit" class="btn btn-block btn-primary" id="submitbutton">发表</button>\
+                            </form>\
+                        </div>';
     GetObjById("main").innerHTML=strInnerHTML;
 }
 	

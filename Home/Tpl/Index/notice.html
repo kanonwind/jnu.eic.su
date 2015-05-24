@@ -7,6 +7,9 @@
 			$imgURL="/".$imgURL;
 		}
 	?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
 <include file="./Public/layout/meta.html" />
 	
 	<link href="__PUBLIC__/css/stdindex_footer.css" 	type="text/css" 	rel="stylesheet" />
@@ -21,8 +24,8 @@
 		<!--标题,新闻，学生工作，活动，现行制度-->
 		<div class="xxxcenter_title">
 			<div>
-				<h1>现行制度</h1>
-				<h4>Regulations</h4><!--英语要注意，写错了就丢大了-->
+				<h1>通知公示</h1>
+				<h4>Notification</h4><!--英语要注意，写错了就丢大了-->
 			</div>
 		</div>
 		<hr class="xxxcenter_hr"/>
@@ -39,7 +42,7 @@
 				for($i=0;$i<count($lastArr);$i++)
 				{
 					$link=__URL__."/show"."?id=".$lastArr[$i]['id'];
-					$deleteLink="\"".__URL__."/deleteNews"."?type=4&id=".$lastArr[$i]['id']."\"";
+					$deleteLink="\"".__URL__."/deleteNews"."?type=7&id=".$lastArr[$i]['id']."\"";
 					if($deleteFlag==1)
 					{
 						$deleteStr="&nbsp;&nbsp;<a href=".$deleteLink." >[删除]</a>";
@@ -87,7 +90,7 @@ str;
 				{
 				$title=$moreArr[$i]['title'];
 				$link=__URL__."/show"."?id=".$moreArr[$i]['id'];
-				$deleteLink="\"".__URL__."/deleteNews"."?type=4&id=".$moreArr[$i]['id']."\"";
+				$deleteLink="\"".__URL__."/deleteNews"."?type=7&id=".$moreArr[$i]['id']."\"";
 				if($deleteFlag==1)
 				{
 					$deleteStr="&nbsp;&nbsp;<a href=".$deleteLink." >[删除]</a>";
